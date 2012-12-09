@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appacitive.Sdk", "Appacitive.Sdk\Appacitive.Sdk.csproj", "{FE1A9DB5-A965-43FC-A558-DCF6C615F6E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{D8CCB120-7FFE-406E-A4FF-2935383FECE0}"
+	ProjectSection(SolutionItems) = preProject
+		Library\Moq.dll = Library\Moq.dll
+		Library\Newtonsoft.Json.dll = Library\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sdk", "Sdk", "{8D65A14F-B4CF-4885-B79B-17169B075295}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E92E9852-053E-4363-8AB1-0D5B4A95AA31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appacitive.Sdk.Tests", "Appacitive.Sdk.Tests\Appacitive.Sdk.Tests.csproj", "{1017D234-A3B0-4346-B4E0-B814922CAC0F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE1A9DB5-A965-43FC-A558-DCF6C615F6E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE1A9DB5-A965-43FC-A558-DCF6C615F6E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE1A9DB5-A965-43FC-A558-DCF6C615F6E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE1A9DB5-A965-43FC-A558-DCF6C615F6E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FE1A9DB5-A965-43FC-A558-DCF6C615F6E1} = {8D65A14F-B4CF-4885-B79B-17169B075295}
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F} = {E92E9852-053E-4363-8AB1-0D5B4A95AA31}
+	EndGlobalSection
+EndGlobal
