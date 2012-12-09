@@ -1,4 +1,10 @@
-appacitive-dotnet-sdk
+.NET SDK for appacitive
 =====================
 
-Appacitive .NET SDK
+This open source library allows you to integrate applications built using Microsoft.NET with the Appacitive platform.
+
+To learn more about the Appacitive platform, please visit [www.appacitive.com](https://www.appacitive.com).
+
+LICENSE
+
+Except as otherwise noted, the .NET SDK for Appacitive is licensed under the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html).
