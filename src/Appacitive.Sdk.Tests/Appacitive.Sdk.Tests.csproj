@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Moq">
       <HintPath>..\Library\Moq.dll</HintPath>
     </Reference>
@@ -53,7 +54,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ArticleFixture.cs" />
+    <Compile Include="HttpFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueFixture.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Appacitive.Sdk\Appacitive.Sdk.csproj">
+      <Project>{fe1a9db5-a965-43fc-a558-dcf6c615f6e1}</Project>
+      <Name>Appacitive.Sdk</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

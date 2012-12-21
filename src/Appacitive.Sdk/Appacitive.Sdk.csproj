@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Library\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -39,8 +42,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Appacitive.cs" />
+    <Compile Include="Articles.cs" />
+    <Compile Include="Connector\ArticleService.cs" />
+    <Compile Include="Connector\IArticleService.cs" />
+    <Compile Include="Connector\Model.cs" />
+    <Compile Include="Connector\Serializers.cs" />
+    <Compile Include="Entity.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="HttpClient.cs" />
+    <Compile Include="Interfaces\IObjectFactory.cs" />
+    <Compile Include="Interfaces\Urls.cs" />
+    <Compile Include="Interfaces\IArticleDataSource.cs" />
+    <Compile Include="Interfaces\IArticles.cs" />
+    <Compile Include="Interfaces\IJsonSerializer.cs" />
+    <Compile Include="Model\AppacitiveException.cs" />
+    <Compile Include="Model\Article.cs" />
+    <Compile Include="Model\Article.Dynamic.cs" />
+    <Compile Include="Model\Article.Extensions.cs" />
+    <Compile Include="Model\ErrorSpace.cs" />
+    <Compile Include="Model\Guard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Users.cs" />
+    <Compile Include="Model\Value.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
