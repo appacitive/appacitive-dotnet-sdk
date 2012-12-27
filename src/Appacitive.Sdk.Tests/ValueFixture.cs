@@ -229,6 +229,118 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(value != value2, "Equality test Value == Value test failed.");
         }
 
+        [TestMethod]
+        public void ImplicitIntConversionTest()
+        {
+            var data = 10;
+            var value = new Value(data);
+            int result = value;
+            Assert.IsTrue(result == data, "Value to " + data.GetType().Name + " conversion failed.");
+            Value value2 = data;
+            Assert.IsTrue(data.ToString() == value2.StringValue, data.GetType().Name + " to value conversion failed.");
+        }
+
+
+        [TestMethod]
+        public void ImplicitLongConversionTest()
+        {
+            var data = 10L;
+            var value = new Value(data);
+            long result = value;
+            Assert.IsTrue(result == data, "Value to " + data.GetType().Name + " conversion failed.");
+            Value value2 = data;
+            Assert.IsTrue(data.ToString() == value2.StringValue, data.GetType().Name + " to value conversion failed.");
+        }
+
+        [TestMethod]
+        public void ImplicitDecimalConversionTest()
+        {
+            var data = 10M;
+            var value = new Value(data);
+            decimal result = value;
+            Assert.IsTrue(result == data, "Value to " + data.GetType().Name + " conversion failed.");
+            Value value2 = data;
+            Assert.IsTrue(data.ToString() == value2.StringValue, data.GetType().Name + " to value conversion failed.");
+        }
+
+        [TestMethod]
+        public void ImplicitFloatConversionTest()
+        {
+            var data = 10f;
+            var value = new Value(data);
+            float result = value;
+            Assert.IsTrue(result == data, "Value to " + data.GetType().Name + " conversion failed.");
+            Value value2 = data;
+            Assert.IsTrue(data.ToString() == value2.StringValue, data.GetType().Name + " to value conversion failed.");
+        }
+
+        [TestMethod]
+        public void ImplicitDoubleConversionTest()
+        {
+            var data = 10d;
+            var value = new Value(data);
+            double result = value;
+            Assert.IsTrue(result == data, "Value to " + data.GetType().Name + " conversion failed.");
+            Value value2 = data;
+            Assert.IsTrue(data.ToString() == value2.StringValue, data.GetType().Name + " to value conversion failed.");
+        }
+
+        [TestMethod]
+        public void ImplicitDateConversionTest()
+        {
+            var value = new Value("2010-10-10");
+            DateTime date = value;
+            Assert.IsTrue(date == new DateTime(2010,10,10));
+        }
+
+        [TestMethod]
+        public void ImplicitTimeConversionTest()
+        {
+            var value = new Value("10:45:35.1234567");
+            DateTime date = value;
+        }
+
+        [TestMethod]
+        public void IntegerAdditionTest()
+        {
+            int a = 10;
+            Value b = new Value(15);
+            Value c = new Value(20);
+            int d = a + b;
+            Assert.IsTrue(d == 25);
+            int e = b + a;
+            Assert.IsTrue(e == 25);
+            int f = b + c;
+            Assert.IsTrue(f == 35);
+        }
+
+        [TestMethod]
+        public void LongAdditionTest()
+        {
+            long a = 10;
+            Value b = new Value(15L);
+            Value c = new Value(20L);
+            long d = a + b;
+            Assert.IsTrue(d == 25);
+            long e = b + a;
+            Assert.IsTrue(e == 25);
+            long f = b + c;
+            Assert.IsTrue(f == 35);
+        }
+
+        [TestMethod]
+        public void DecimalAdditionTest()
+        {
+            decimal a = 10;
+            Value b = new Value(15M);
+            Value c = new Value(20M);
+            decimal d = a + b;
+            Assert.IsTrue(d == 25M);
+            decimal e = b + a;
+            Assert.IsTrue(e == 25M);
+            decimal f = b + c;
+            Assert.IsTrue(f == 35M);
+        }
 
     }
 }

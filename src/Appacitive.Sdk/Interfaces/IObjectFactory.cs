@@ -8,26 +8,29 @@ namespace Appacitive.Sdk
 {
     public interface IObjectFactory
     {
-        IEnumerable<T> BuildAll<T>();
+        IEnumerable<T> BuildAll<T>() where T : class;
 
-        T Build<T>();
+        T Build<T>() where T : class;
 
-        T Build<T>(string name);
+        T Build<T>(string name) where T : class;
     }
 
     public static class ObjectFactory
     {
         public static IEnumerable<T> BuildAll<T>()
+            where T : class
         {
             return AppacitiveContext.ObjectFactory.BuildAll<T>();
         }
 
         public static T Build<T>()
+            where T : class
         {
             return AppacitiveContext.ObjectFactory.Build<T>();
         }
 
         public static T Build<T>(string name)
+            where T : class
         {
             return AppacitiveContext.ObjectFactory.Build<T>(name);
         }

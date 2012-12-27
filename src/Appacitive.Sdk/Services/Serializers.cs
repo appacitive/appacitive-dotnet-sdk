@@ -3,60 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Appacitive.Sdk.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Appacitive.Sdk.Connector
+namespace Appacitive.Sdk.Services
 {
-
-    public class StatusConverter : JsonConverter
-    {
-        public override bool CanConvert(Type objectType)
-        {
-            return typeof(Status) == objectType;
-        }
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            /*
-                "status": {
-		        "code": "200",
-		        "message": "Successful",
-		        "faulttype": null,
-		        "version": null,
-		        "referenceid": "b0db3686-97e3-4517-8d29-ab46cdb70e42",
-		        "additionalmessages": []
-	        }
-             */
-            var json = JObject.ReadFrom(reader) as JObject;
-            if (json == null || json.Type == JTokenType.Null)
-                return null;
-            var status = new Status();
-            JToken value;
-            // Code
-            if (json.TryGetValue("code", out value) == true && value.Type != JTokenType.Null)
-                status.Code = value.ToString();
-            // Message
-            if (json.TryGetValue("message", out value) == true && value.Type != JTokenType.Null)
-                status.Message = value.ToString();
-            // Fault type
-            if (json.TryGetValue("faulttype", out value) == true && value.Type != JTokenType.Null)
-                status.FaultType = value.ToString();
-            // Reference id
-            if (json.TryGetValue("referenceid", out value) == true && value.Type != JTokenType.Null)
-                status.ReferenceId = value.ToString();
-            // Additional messages
-            if (json.TryGetValue("referenceid", out value) == true && value.Type != JTokenType.Null)
-                status.AdditionalMessages.AddRange(value.Values<string>());
-            return status;
-
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            throw new NotImplementedException("Cannot serialize Status.");
-        }
-    }
 
     public class ArticleConverter : JsonConverter
     {
@@ -88,6 +40,7 @@ namespace Appacitive.Sdk.Connector
             {"__createdby", true},
             {"__createdate", true},
             {"__lastmodifiedby", true},
+            {"__utcdatecreated", true },
             {"__utclastupdateddate", true},
             {"__tags", true},
             {"__schematype", true},
@@ -118,16 +71,16 @@ namespace Appacitive.Sdk.Connector
                 article.CreatedBy = value.ToString();
             // Create date
             if (json.TryGetValue("__createdate", out value) == true && value.Type != JTokenType.Null)
-                article.UtcCreateDate = DateTime.ParseExact(value.ToString(), "o", null);
+                article.UtcCreateDate = DateTime.ParseExact(((DateTime)value).ToString("o"), "o", null);
             // Last updated by
             if (json.TryGetValue("__lastmodifiedby", out value) == true && value.Type != JTokenType.Null)
                 article.LastUpdatedBy = value.ToString();
             // Last update date
             if (json.TryGetValue("__utclastupdateddate", out value) == true && value.Type != JTokenType.Null)
-                article.UtcCreateDate = DateTime.ParseExact(value.ToString(), "o", null);
+                article.UtcLastUpdated = DateTime.ParseExact(((DateTime)value).ToString("o"), "o", null);
             // tags
             if (json.TryGetValue("__tags", out value) == true && value.Type != JTokenType.Null)
-                article.Tags.AddRange(value.Values<string>());
+                article.AddTags(value.Values<string>());
             
             // properties
             foreach (var property in json.Properties())
@@ -178,9 +131,13 @@ namespace Appacitive.Sdk.Connector
 
             writer
                 .StartObject()
-                .WriteProperty("__id", article.Id)
+                .WriteProperty("__schematype", article.Type)
+                .WithWriter( w => 
+                    {
+                        if (string.IsNullOrWhiteSpace(article.Id) == false)
+                            w.WriteProperty("__id", article.Id);
+                    })
                 .WriteProperty("__createdby", article.CreatedBy)
-                .WriteProperty("__lastmodifiedby", article.LastUpdatedBy)
                 .WithWriter( w => 
                     {
                         // Write properties
@@ -201,7 +158,11 @@ namespace Appacitive.Sdk.Connector
                         }
                             
                     })
-                .WriteArray("__tags", article.Tags.Count > 0 ? article.Tags : null )
+                .WithWriter( w => 
+                    {
+                        if( article.Tags.Count() > 0 )
+                            w.WriteArray("__tags", article.Tags);
+                    })
                 .EndObject();
         }
 
@@ -209,6 +170,68 @@ namespace Appacitive.Sdk.Connector
         {
             bool value;
             return _internal.TryGetValue(property, out value);
+        }
+    }
+
+    public class UpdateArticleRequestConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return typeof(UpdateArticleRequest) == objectType;
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var request = value as UpdateArticleRequest;
+            if (request == null)
+            {
+                writer.WriteNull();
+                return;
+            }
+            var properties = new List<KeyValuePair<string, string>>();
+            var attributes = new List<KeyValuePair<string, string>>();
+            foreach (var key in request.PropertyUpdates.Keys)
+            {
+                if (key.StartsWith("@") == false)
+                    properties.Add(new KeyValuePair<string, string>(key.ToLower(), request.PropertyUpdates[key]));
+                else
+                    properties.Add(new KeyValuePair<string, string>(key.Substring(1).ToLower(), request.PropertyUpdates[key]));
+            }
+            
+
+            writer
+                .StartObject()
+                // Write properties
+                .WithWriter( w => properties.ForEach( p => w.WriteProperty(p.Key, p.Value)))
+                // Write atttributes
+                .WithWriter( w => 
+                    {
+                        if (attributes.Count > 0)
+                        {
+                            w.WriteProperty("__attributes")
+                             .StartObject()
+                             .WithWriter(w2 => attributes.ForEach(a => w2.WriteProperty(a.Key, a.Value)))
+                             .EndObject();
+                        }
+                    })
+                // Write add tags
+                .WithWriter( w => 
+                    {
+                        if (request.AddedTags.Count > 0)
+                            w.WriteArray("__addtags", request.AddedTags);
+                    })
+                // Write remove tags
+                .WithWriter(w =>
+                {
+                    if (request.RemovedTags.Count > 0)
+                        w.WriteArray("__removetags", request.RemovedTags);
+                })
+                .EndObject();
         }
     }
 

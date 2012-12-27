@@ -13,7 +13,15 @@ namespace Appacitive.Sdk
     {
         public static class For
         {
-            private static readonly string ArticleServiceBase = "https://apis.appacitive.com/articles";
+            private static readonly string ArticleServiceBase = "https://apis.appacitive.com/article";
+            private static readonly string SessionServiceBase = "https://apis.appacitive.com/application/session";
+
+            public static string CreateSession(bool enableDebug, Verbosity verbosity)
+            {
+                var url = new Url(SessionServiceBase);
+                HandleDefaults(url, null, enableDebug, verbosity);
+                return url.ToString();
+            }
 
             public static string UpdateArticleUrl(string type, string id, Geocode userLocation = null)
             {
@@ -40,7 +48,27 @@ namespace Appacitive.Sdk
                 return url;
             }
 
+            public static string CreateArticle(string type, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            {
+                var url = new Url(ArticleServiceBase);
+                url.Append(type);
+                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                return url.ToString();
+            }
 
+            public static string DeleteArticle(string type, string id, Geocode location, bool enableDebug, Verbosity verbosity)
+            {
+                var url = new Url(ArticleServiceBase).Append(type).Append(id);
+                HandleDefaults(url, location, enableDebug, verbosity);
+                return url.ToString();
+            }
+
+            public static string UpdateArticle(string type, string id, Geocode geocode, bool enableDebug, Verbosity verbosity)
+            {
+                var url = new Url(ArticleServiceBase).Append(type).Append(id);
+                HandleDefaults(url, geocode, enableDebug, verbosity);
+                return url.ToString();
+            }
         }
     }
 

@@ -30,6 +30,8 @@ namespace Appacitive.Sdk
         private TypeCode TypeCode { get; set; }
         public string StringValue { get; private set; }
 
+        #region Implicit conversions 
+
         // decimal representation
         public static implicit operator decimal(Value value)
         {
@@ -74,6 +76,16 @@ namespace Appacitive.Sdk
             return new Value(d);
         }
 
+        // double rep
+        public static implicit operator double(Value value)
+        {
+            return double.Parse(value.StringValue);
+        }
+
+        public static implicit operator Value(double d)
+        {
+            return new Value(d);
+        }
 
         // bool rep
         private static bool IsTrue(string value)
@@ -98,7 +110,7 @@ namespace Appacitive.Sdk
         // date time
         public static implicit operator DateTime(Value value)
         {
-            return DateTime.ParseExact(value.StringValue, "o", null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            return DateTime.ParseExact(value.StringValue, new [] { "o","yyyy-MM-dd","HH:mm:ss.fffffff" }, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
         }
 
         public static implicit operator Value(DateTime d)
@@ -106,40 +118,9 @@ namespace Appacitive.Sdk
             return new Value(d);
         }
 
-        public static Value operator +(Value a, decimal b)
-        {
-            decimal num = a;
-            return new Value(num + b);
-        }
+        #endregion
 
-        public static Value operator +(Value a, long b)
-        {
-            long num = a;
-            return new Value(num + b);
-        }
-
-        public static Value operator +(Value a, double b)
-        {
-            decimal num = a;
-            return new Value(num + Convert.ToDecimal(b));
-        }
-
-        public static Value operator +(Value a, string str)
-        {   
-            return new Value(a.StringValue + str);
-        }
-
-        // ++ operator
-        public static Value operator ++(Value v)
-        {
-            return ((decimal)v) + 1;
-        }
-
-        // -- operator
-        public static Value operator --(Value v)
-        {
-            return ((decimal)v) - 1;
-        }
+        #region Equality operator
 
         // decimal equality
         public static bool operator ==(Value v1, decimal num)
@@ -327,27 +308,16 @@ namespace Appacitive.Sdk
             return v1.Equals(v2) == false;
         }
 
+        #endregion
+
         public override bool Equals(object obj)
         {
             if (obj == null || obj is Value == false || this.StringValue == null)
                 return false;
             var other = (Value)obj;
-            // Match as number
-            if (this.TypeCode == TypeCode.Decimal || this.TypeCode == TypeCode.Int64 ||
-                other.TypeCode == TypeCode.Decimal || other.TypeCode == TypeCode.Int64)
-                return decimal.Parse(this.StringValue).Equals(decimal.Parse(other.StringValue));
-
-            // Match as bool
-            else if (this.TypeCode == TypeCode.Boolean || other.TypeCode == TypeCode.Boolean)
-                return bool.Parse(this.StringValue).Equals(bool.Parse(other.StringValue));
-
-            // Match as date
-            else if (this.TypeCode == TypeCode.DateTime || other.TypeCode == TypeCode.DateTime)
-                return DateTime.ParseExact(this.StringValue, "o", null).Equals(DateTime.ParseExact(other.StringValue, "o", null));
-
-            // Compare as string
-            else 
-                return this.StringValue.Equals(other.StringValue);
+            if (this.StringValue == null || other.StringValue == null)
+                return false;
+            return this.StringValue.Equals(other.StringValue);
         }
 
         public override int GetHashCode()

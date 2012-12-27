@@ -45,6 +45,16 @@ namespace Appacitive.Sdk
             return Execute("GET", null);
         }
 
+        public byte[] Post(byte[] data)
+        {
+            return Execute("POST", data);
+        }
+
+        public byte[] Put(byte[] data)
+        {
+            return Execute("PUT", data);
+        }
+
         public async Task<byte[]> PostAsyc(byte[] data)
         {
             return await ExecuteAsync("POST", data);
@@ -121,7 +131,20 @@ namespace Appacitive.Sdk
                 else
                     request.ContentType = this.ContentType;
             }
+            // set the headers
+            foreach (var header in this.Headers.Keys)
+                request.Headers[header] = this.Headers[header];
             return request;
+        }
+
+        public byte[] Delete(byte[] data)
+        {
+            return Execute("DELETE", data);
+        }
+
+        public Task<byte[]> DeleteAsync(byte[] data)
+        {
+            return ExecuteAsync("DELETE", data);
         }
     }
 }

@@ -55,8 +55,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ArticleFixture.cs" />
+    <Compile Include="ArticleServiceFixture.cs" />
     <Compile Include="HttpFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SessionServiceFixture.cs" />
     <Compile Include="ValueFixture.cs" />
   </ItemGroup>
   <ItemGroup>

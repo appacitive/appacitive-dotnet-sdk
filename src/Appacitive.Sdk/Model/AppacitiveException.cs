@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
@@ -29,5 +30,13 @@ namespace Appacitive.Sdk
             : base(info, context)
         {
         }
+
+        public string Code { get; set; }
+
+        public string FaultType { get; set; }
+
+        public string ReferenceId { get; set; }
+
+        public string[] AdditionalMessages { get; set; }
     }
 }

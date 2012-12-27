@@ -10,6 +10,8 @@ namespace Appacitive.Sdk
     {
         byte[] Serialize(object o);
 
+        object Deserialize(Type type, byte[] stream);
+
         T Deserialize<T>(byte[] stream);
     }
 }
