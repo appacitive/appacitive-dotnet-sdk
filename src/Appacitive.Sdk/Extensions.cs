@@ -19,6 +19,14 @@ namespace Appacitive.Sdk
             removed = oldList.Except(common);
         }
 
+
+        public static IDictionary<string, string> GetModifications(this IDictionary<string, string> current, IDictionary<string, string> old)
+        {
+            var newClone = new Dictionary<string, string>(current);
+            var oldClone = new Dictionary<string, string>(old);
+            return new DictionaryDifference().GetDifferences(newClone, oldClone);
+        }
+
         public static void For<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
             List<T> list = enumerable as List<T>;
@@ -58,7 +66,7 @@ namespace Appacitive.Sdk
         public static HttpClient WithUserToken(this HttpClient client, string userToken)
         {       
             if( userToken != null )
-                client.WithHeader("Appacitive-Auth", userToken);
+                client.WithHeader("Appacitive-User-Auth", userToken);
             return client;
         }
 

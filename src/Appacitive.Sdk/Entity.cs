@@ -7,12 +7,5 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
-    public class Entity
-    {
-        private ConcurrentDictionary<string, string> _current = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        
-        private ConcurrentDictionary<string, string> _lastKnown = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-        
-    }
+    
 }

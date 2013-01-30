@@ -14,6 +14,7 @@ namespace Appacitive.Sdk
         public static class For
         {
             private static readonly string ArticleServiceBase = "https://apis.appacitive.com/article";
+            private static readonly string UserServiceBase = "https://apis.appacitive.com/user";
             private static readonly string SessionServiceBase = "https://apis.appacitive.com/application/session";
 
             public static string CreateSession(bool enableDebug, Verbosity verbosity)
@@ -67,6 +68,106 @@ namespace Appacitive.Sdk
             {
                 var url = new Url(ArticleServiceBase).Append(type).Append(id);
                 HandleDefaults(url, geocode, enableDebug, verbosity);
+                return url.ToString();
+            }
+
+            public static string CreateUser(Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            {
+                var url = new Url(UserServiceBase);
+                url.Append("create");
+                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                return url.ToString();
+            }
+
+            public static string GetUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            {
+                var url = new Url(UserServiceBase);
+                if( string.IsNullOrWhiteSpace(idType) )
+                {
+                    url.Append(userId);
+                }
+                else if( idType.Equals("token", StringComparison.OrdinalIgnoreCase) == true )
+                {
+                    url.Append("me");
+                    url.QueryString["useridtype"] = "token";
+                }
+                else
+                {
+                    url.Append(userId);
+                    url.QueryString["useridtype"] = "username";
+                }
+                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                return url.ToString();
+            }
+
+            public static string AuthenticateUser(Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            {
+                var url = new Url(UserServiceBase);
+                url.Append("authenticate");
+                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                return url.ToString();
+            }
+
+            public static string UpdateUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            {
+                var url = new Url(UserServiceBase);
+                if (string.IsNullOrWhiteSpace(idType))
+                {
+                    url.Append(userId);
+                }
+                else if (idType.Equals("token", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    url.Append("me");
+                    url.QueryString["useridtype"] = "token";
+                }
+                else
+                {
+                    url.Append(userId);
+                    url.QueryString["useridtype"] = "username";
+                }
+                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                return url.ToString();
+            }
+
+            public static string ChangePassword(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            {
+                var url = new Url(UserServiceBase);
+                if (string.IsNullOrWhiteSpace(idType))
+                {
+                    url.Append(userId).Append("changepassword");
+                }
+                else if (idType.Equals("token", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    url.Append("me").Append("changepassword");
+                    url.QueryString["useridtype"] = "token";
+                }
+                else
+                {
+                    url.Append(userId).Append("changepassword");
+                    url.QueryString["useridtype"] = "username";
+                }
+                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                return url.ToString();
+            }
+
+            public static string DeleteUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            {
+                var url = new Url(UserServiceBase);
+                if (string.IsNullOrWhiteSpace(idType))
+                {
+                    url.Append(userId);
+                }
+                else if (idType.Equals("token", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    url.Append("me");
+                    url.QueryString["useridtype"] = "token";
+                }
+                else
+                {
+                    url.Append(userId);
+                    url.QueryString["useridtype"] = "username";
+                }
+                HandleDefaults(url, geocode, debugEnabled, verbosity);
                 return url.ToString();
             }
         }

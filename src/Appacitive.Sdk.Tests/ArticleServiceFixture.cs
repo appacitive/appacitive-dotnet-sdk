@@ -12,17 +12,7 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class ArticleServiceFixture
     {
-        // Configuration
-        public static readonly string ApiKey = "up8+oWrzVTVIxl9ZiKtyamVKgBnV5xvmV95u1mEVRrM=";
-        public static readonly Environment Env = Environment.Sandbox;
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            App.Initialize(ApiKey, Env);
-            var token = AppacitiveContext.SessionToken;
-        }
-
+        
         [TestMethod]
         public void CreateArticleTest()
         {
@@ -45,12 +35,12 @@ namespace Appacitive.Sdk.Tests
             CreateArticleResponse response = null;
             var timeTaken = Measure.TimeFor(() =>
                 {
-                    response = service.CreateArticle(new CreateArticleRequest()
+                    response = service.CreateArticle(new CreateArticleRequest() 
                     {
                         Article = obj,
                         SessionToken = AppacitiveContext.SessionToken,
                         UserToken = AppacitiveContext.UserToken,
-                        Environment = Env
+                        Environment = Environment.Sandbox
                     });
                 });
             Console.WriteLine("Time taken for call: {0} seconds", timeTaken);
@@ -65,8 +55,6 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void CreateArticleAsyncTest()
         {
-            // Initialize the app
-            App.Initialize(ApiKey, Env);
             // Create article
             var now = DateTime.Now;
             dynamic obj = new Article("object");
@@ -85,12 +73,12 @@ namespace Appacitive.Sdk.Tests
             var waitHandle = new ManualResetEvent(false);
             Action action = async () =>
             {
-                response = await service.CreateArticleAsync(new CreateArticleRequest()
+                response = await service.CreateArticleAsync(new CreateArticleRequest() 
                 {
                     Article = obj,
                     SessionToken = AppacitiveContext.SessionToken,
                     UserToken = AppacitiveContext.UserToken,
-                    Environment = Env
+                    Environment = TestConfiguration.Environment
                 });
                 waitHandle.Set();
             };
@@ -122,12 +110,11 @@ namespace Appacitive.Sdk.Tests
 
             var service = ObjectFactory.Build<IArticleService>();
             CreateArticleResponse response = null;
-            response = service.CreateArticle(new CreateArticleRequest()
+            response = service.CreateArticle(new CreateArticleRequest() 
             {
                 Article = obj,
                 SessionToken = AppacitiveContext.SessionToken,
-                UserToken = AppacitiveContext.UserToken,
-                Environment = Env
+                UserToken = AppacitiveContext.UserToken
             });
 
             Assert.IsNotNull(response);
@@ -141,7 +128,7 @@ namespace Appacitive.Sdk.Tests
             // Get the article
             GetArticleResponse getResponse = null;
             getResponse = service.GetArticle(
-                new GetArticleRequest()
+                new GetArticleRequest() 
                 {
                     SessionToken = AppacitiveContext.SessionToken,
                     Id = response.Article.Id,
@@ -185,8 +172,7 @@ namespace Appacitive.Sdk.Tests
                         {
                             Article = obj,
                             SessionToken = AppacitiveContext.SessionToken,
-                            UserToken = AppacitiveContext.UserToken,
-                            Environment = Env
+                            UserToken = AppacitiveContext.UserToken
                         });
 
                         Assert.IsNotNull(response);
@@ -200,7 +186,7 @@ namespace Appacitive.Sdk.Tests
                         // Get the article
                         GetArticleResponse getResponse = null;
                         getResponse = await service.GetArticleAsync(
-                            new GetArticleRequest()
+                            new GetArticleRequest() 
                             {
                                 SessionToken = AppacitiveContext.SessionToken,
                                 Id = response.Article.Id,
@@ -256,8 +242,7 @@ namespace Appacitive.Sdk.Tests
                 {
                     Article = obj,
                     SessionToken = AppacitiveContext.SessionToken,
-                    UserToken = AppacitiveContext.UserToken,
-                    Environment = Env
+                    UserToken = AppacitiveContext.UserToken
                 });
             });
             Console.WriteLine("Time taken for call: {0} seconds", timeTaken);
@@ -324,8 +309,7 @@ namespace Appacitive.Sdk.Tests
                         {
                             Article = obj,
                             SessionToken = AppacitiveContext.SessionToken,
-                            UserToken = AppacitiveContext.UserToken,
-                            Environment = Env
+                            UserToken = AppacitiveContext.UserToken
                         });
                         Assert.IsNotNull(response);
                         Assert.IsNotNull(response.Status);
@@ -497,6 +481,52 @@ namespace Appacitive.Sdk.Tests
             Assert.IsNull(fault);
 
         }
-        
+
+        [TestMethod]
+        public void BugId14Test()
+        {
+            // Ref: https://github.com/appacitive/Gossamer/issues/14
+            // Updating a null property with a null value fails 
+            // Create an article
+            var now = DateTime.Now;
+            dynamic obj = new Article("object");
+            obj.intfield = 1;
+            obj.decimalfield = 10.0m;
+            obj.stringfield = null;
+
+            var service = ObjectFactory.Build<IArticleService>();
+            var createdResponse = service.CreateArticle(new CreateArticleRequest()
+            {
+                Article = obj,
+                Environment = AppacitiveContext.Environment,
+                SessionToken = AppacitiveContext.SessionToken
+            });
+            Assert.IsNotNull(createdResponse, "Article creation failed.");
+            Assert.IsNotNull(createdResponse.Status, "Status is null.");
+            Assert.IsTrue(createdResponse.Status.IsSuccessful, createdResponse.Status.Message ?? "Create article failed.");
+            var created = createdResponse.Article;
+
+            // Update the article twice
+            for (int i = 0; i < 2; i++)
+            {
+                var updateRequest = new UpdateArticleRequest()
+                {
+                    Id = created.Id,
+                    Type = created.Type,
+                    SessionToken = AppacitiveContext.SessionToken,
+                    Environment = AppacitiveContext.Environment
+                };
+                updateRequest.PropertyUpdates["stringfield"] = null;
+                var updatedResponse = service.UpdateArticle(updateRequest);
+
+                Assert.IsNotNull(updatedResponse, "Update article response is null.");
+                Assert.IsNotNull(updatedResponse.Status, "Update article response status is null.");
+                Assert.IsTrue(updatedResponse.Status.IsSuccessful, updatedResponse.Status.Message ?? "NULL");
+                Assert.IsNotNull(updatedResponse.Article, "Updated article is null.");
+                var updated = updatedResponse.Article;
+                Assert.IsTrue(updated["stringfield"] == null);   
+            }
+        }
+
     }
 }

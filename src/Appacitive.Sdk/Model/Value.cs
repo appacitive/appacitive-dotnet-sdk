@@ -76,6 +76,17 @@ namespace Appacitive.Sdk
             return new Value(d);
         }
 
+        // string rep
+        public static implicit operator string(Value value)
+        {
+            return value.StringValue;
+        }
+
+        public static implicit operator Value(string s)
+        {
+            return new Value(s);
+        }
+
         // double rep
         public static implicit operator double(Value value)
         {
@@ -110,7 +121,7 @@ namespace Appacitive.Sdk
         // date time
         public static implicit operator DateTime(Value value)
         {
-            return DateTime.ParseExact(value.StringValue, new [] { "o","yyyy-MM-dd","HH:mm:ss.fffffff" }, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            return DateTime.ParseExact(value.StringValue, new [] { "o",Formats.BirthDate,Formats.Time }, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
         }
 
         public static implicit operator Value(DateTime d)

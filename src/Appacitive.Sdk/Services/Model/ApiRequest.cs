@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+
+namespace Appacitive.Sdk.Services
+{
+    public abstract class ApiRequest
+    {
+        protected ApiRequest(string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info)
+        {
+            this.SessionToken = sessionToken;
+            this.CurrentLocation = location;
+            this.Verbosity = verbosity;
+            this.UserToken = userToken;
+            this.Environment = environment;
+        }
+
+        [JsonIgnore]
+        public string SessionToken { get; set; }
+
+        [JsonIgnore]
+        public string UserToken { get; set; }
+
+        [JsonIgnore]
+        public Environment Environment { get; set; }
+
+        [JsonIgnore]
+        public bool DebugEnabled { get; set; }
+
+        [JsonIgnore]
+        public Geocode CurrentLocation { get; set; }
+
+        [JsonIgnore]
+        public Verbosity Verbosity { get; set; }
+
+        public virtual byte[] ToBytes()
+        {
+            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
+            return serializer.Serialize(this);
+        }
+    }
+}

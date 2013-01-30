@@ -7,18 +7,23 @@ using Newtonsoft.Json;
 
 namespace Appacitive.Sdk.Services
 {
-    public class Session
+    public class CreateSessionRequest : ApiRequest
     {
-        [JsonProperty("sessionkey")]
-        public string SessionKey { get; set; }
+        public CreateSessionRequest()
+            : base(null, Environment.Sandbox, null)
+        {
+        }
 
-        [JsonProperty("usagecount")]
-        public long UsageCount { get; set; }
+        [JsonProperty("apikey")]
+        public string ApiKey { get; set; }
 
         [JsonProperty("isnonsliding")]
         public bool IsNonSliding { get; set; }
 
         [JsonProperty("windowtime")]
         public int WindowTime { get; set; }
+
+        [JsonProperty("usagecount")]
+        public int UsageCount { get; set; }
     }
 }

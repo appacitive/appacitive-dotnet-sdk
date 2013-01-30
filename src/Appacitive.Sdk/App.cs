@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
@@ -23,12 +24,19 @@ namespace Appacitive.Sdk
             AppacitiveContext.ObjectFactory = factory;
         }
 
+        public static void SetLoggedInUser(string userToken)
+        {
+            AppacitiveContext.UserToken = userToken;
+        }
+
         private static void RegisterDefaults()
         {
             InProcContainer.Instance
-                            .Register<ISessionService, SessionService>( () => SessionService.Instance )
-                            .Register<IArticleService, ArticleService>( () => new ArticleServiceWithTiming(ArticleService.Instance) )
-                            .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer());
+                            .Register<ISessionService, SessionService>(() => SessionService.Instance)
+                            .Register<IArticleService, ArticleService>(() => new ArticleServiceWithTiming(ArticleService.Instance))
+                            .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer())
+                            .Register<IUserService, UserService>(() => UserService.Instance)
+                            ;
         }
     }
 
@@ -49,8 +57,9 @@ namespace Appacitive.Sdk
 
         public static Environment Environment { get; set; }
 
-        private static ReaderWriterLockSlim _sessionLock = new ReaderWriterLockSlim();
+        private static ReaderWriterLockSlim _sessionLock = new ReaderWriterLockSlim( LockRecursionPolicy.SupportsRecursion );
         private static string _sessionToken;
+
         public static string SessionToken
         {
             get
@@ -80,11 +89,11 @@ namespace Appacitive.Sdk
             }
         }
 
-        public static string UserToken { get; set; }
+        public static string UserToken { get; internal set; }
 
-        public static Geocode UserLocation { get; set; }
+        public static Geocode UserLocation { get; internal set; }
 
-        public static IObjectFactory ObjectFactory { get; set; }
+        public static IObjectFactory ObjectFactory { get; internal set; }
 
         internal static void MarkSessionInvalid()
         {
@@ -103,6 +112,8 @@ namespace Appacitive.Sdk
         }
 
         public static Verbosity Verbosity { get; set; }
+
+        public static bool EnableDebugging { get; set; }
     }
 
     public enum Environment
@@ -111,12 +122,7 @@ namespace Appacitive.Sdk
         Live
     }
 
-    public class Geocode
-    {
-        public decimal Latitude { get; set; }
-
-        public decimal Longitude { get; set; }
-    }
+    
 
     public enum Verbosity
     {

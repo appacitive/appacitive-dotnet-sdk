@@ -83,7 +83,7 @@ namespace Appacitive.Sdk.Services
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
-                .Delete(request.ToBytes());
+                .Delete();
             var response = Status.Parse(bytes);
             return response;
         }
@@ -96,7 +96,7 @@ namespace Appacitive.Sdk.Services
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
-                .DeleteAsync(request.ToBytes());
+                .DeleteAsync();
             var response = Status.Parse(bytes);
             return response;
         }

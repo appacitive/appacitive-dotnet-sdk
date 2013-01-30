@@ -299,48 +299,5 @@ namespace Appacitive.Sdk.Tests
             var value = new Value("10:45:35.1234567");
             DateTime date = value;
         }
-
-        [TestMethod]
-        public void IntegerAdditionTest()
-        {
-            int a = 10;
-            Value b = new Value(15);
-            Value c = new Value(20);
-            int d = a + b;
-            Assert.IsTrue(d == 25);
-            int e = b + a;
-            Assert.IsTrue(e == 25);
-            int f = b + c;
-            Assert.IsTrue(f == 35);
-        }
-
-        [TestMethod]
-        public void LongAdditionTest()
-        {
-            long a = 10;
-            Value b = new Value(15L);
-            Value c = new Value(20L);
-            long d = a + b;
-            Assert.IsTrue(d == 25);
-            long e = b + a;
-            Assert.IsTrue(e == 25);
-            long f = b + c;
-            Assert.IsTrue(f == 35);
-        }
-
-        [TestMethod]
-        public void DecimalAdditionTest()
-        {
-            decimal a = 10;
-            Value b = new Value(15M);
-            Value c = new Value(20M);
-            decimal d = a + b;
-            Assert.IsTrue(d == 25M);
-            decimal e = b + a;
-            Assert.IsTrue(e == 25M);
-            decimal f = b + c;
-            Assert.IsTrue(f == 35M);
-        }
-
     }
 }

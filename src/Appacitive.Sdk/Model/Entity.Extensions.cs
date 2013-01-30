@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
-    public partial class Article : DynamicObject
+    public partial class Entity
     {
         public long AsInt(string property)
         {
@@ -26,14 +26,14 @@ namespace Appacitive.Sdk
 
         public DateTime AsDateTime(string property)
         {
-            return DateTime.ParseExact(this[property], "o", null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            return DateTime.ParseExact(this[property], Formats.DateTime, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
         }
 
         public DateTime AsDate(string property)
         {
             //TODO: Confirm date format string
             var value = this[property];
-            return DateTime.ParseExact(value, new [] {"o", "yyyy-mm-dd" }, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            return DateTime.ParseExact(value, new [] {Formats.DateTime, Formats.BirthDate }, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
@@ -60,6 +61,7 @@ namespace Appacitive.Sdk
             return await ExecuteAsync("POST", data);
         }
 
+        
         public async Task<byte[]> PutAsyc(byte[] data)
         {
             return await ExecuteAsync("PUT", data);
@@ -110,7 +112,7 @@ namespace Appacitive.Sdk
                 {
                     using (var buffer = new MemoryStream())
                     {
-                        await responseStream.CopyToAsync(buffer);
+                        await responseStream.CopyToAsync(buffer, 4096);
                         return buffer.ToArray();
                     }
                 }
@@ -137,14 +139,14 @@ namespace Appacitive.Sdk
             return request;
         }
 
-        public byte[] Delete(byte[] data)
+        public byte[] Delete()
         {
-            return Execute("DELETE", data);
+            return Execute("DELETE", null);
         }
 
-        public Task<byte[]> DeleteAsync(byte[] data)
+        public Task<byte[]> DeleteAsync()
         {
-            return ExecuteAsync("DELETE", data);
+            return ExecuteAsync("DELETE", null);
         }
     }
 }
