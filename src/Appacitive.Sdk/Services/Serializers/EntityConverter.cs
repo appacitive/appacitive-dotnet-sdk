@@ -29,10 +29,6 @@ namespace Appacitive.Sdk.Services
             var json = JObject.ReadFrom(reader) as JObject;
             if (json == null || json.Type == JTokenType.Null)
                 return null;
-            JToken value;
-            if (json.TryGetValue("__schematype", out value) == false || value.Type == JTokenType.Null)
-                throw new Exception("Schema type missing.");
-            var type = value.ToString();
             var entity = CreateEntity(json);
             return ReadJson(entity, objectType, json);
         }
@@ -99,6 +95,9 @@ namespace Appacitive.Sdk.Services
             {
                 entity.Id = value.ToString();
             }
+            // Revision
+            if (json.TryGetValue("__revision", out value) == true && value.Type != JTokenType.Null)
+                entity.Revision = int.Parse(value.ToString());
             // Created by
             if (json.TryGetValue("__createdby", out value) == true && value.Type != JTokenType.Null)
                 entity.CreatedBy = value.ToString();

@@ -14,6 +14,7 @@ namespace Appacitive.Sdk
         public static class For
         {
             private static readonly string ArticleServiceBase = "https://apis.appacitive.com/article";
+            private static readonly string ConnectionServiceBase = "https://apis.appacitive.com/connection";
             private static readonly string UserServiceBase = "https://apis.appacitive.com/user";
             private static readonly string SessionServiceBase = "https://apis.appacitive.com/application/session";
 
@@ -170,6 +171,14 @@ namespace Appacitive.Sdk
                 HandleDefaults(url, geocode, debugEnabled, verbosity);
                 return url.ToString();
             }
+
+            public static string CreateConnection(string connectionType, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            {
+                var url = new Url(ConnectionServiceBase);
+                url.Append(connectionType);
+                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                return url.ToString();
+            }
         }
     }
 
@@ -215,56 +224,5 @@ namespace Appacitive.Sdk
         }
     }
 
-    public class ArticleTranslator
-    {
-        internal byte[] GetUpdateRequest(string type, IDictionary<string, string> differences)
-        {
-            IDictionary<string, string> properties = new Dictionary<string, string>();
-            IDictionary<string, string> attributes = new Dictionary<string, string>();
-            differences.For(x =>
-                {
-                    if (x.Key.StartsWith("@") == true)
-                        attributes[x.Key.Substring(1).ToLower()] = x.Value;
-                    else
-                        properties[x.Key.ToLower()] = x.Value;
-                });
-
-            using( var stream = new MemoryStream() )
-            {
-                using( var textWriter = new StreamWriter(stream, Encoding.UTF8))
-                {
-                    using(var writer = new JsonTextWriter(textWriter))
-                    {
-                        writer.WriteStartObject();
-                        writer.WritePropertyName("__type");
-                        writer.WriteValue(type);
-                        foreach (var key in properties.Keys)
-                        {
-                            writer.WritePropertyName(key);
-                            writer.WriteValue(properties[key]);
-                        }
-                        if (attributes.Count > 0)
-                        {
-                            writer.WritePropertyName("__attributes");
-                            writer.WriteStartObject();
-                            foreach (var key in attributes.Keys)
-                            {
-                                writer.WritePropertyName(key);
-                                writer.WriteValue(attributes[key]);
-                            }
-                            writer.WriteEndObject();
-                        }
-                        writer.WriteEndObject();
-                    }
-                }
-                return stream.ToArray();
-            }
-            
-        }
-
-        internal static Article GetUpdateResponse(byte[] response)
-        {
-            throw new NotImplementedException();
-        }
-    }
+   
 }

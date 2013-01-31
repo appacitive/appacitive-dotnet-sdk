@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using HttpClient2 = System.Net.Http.HttpClient;
 
 namespace Appacitive.Sdk
 {
@@ -14,7 +16,7 @@ namespace Appacitive.Sdk
         public HttpClient(string url )
         {
             this.Url = url;
-            this.ContentType = "application/json";
+            this.ContentType = "application/json; charset=utf-8";
             this.Headers = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
 
@@ -94,30 +96,28 @@ namespace Appacitive.Sdk
         }
 
         private async Task<byte[]> ExecuteAsync(string httpMethod, byte[] data)
-        {   
-            var request = CreateRequest(httpMethod);
-            if (data != null && data.Length > 0)
+        {
+            var client = new HttpClient2();
+            HttpResponseMessage response = null;
+            var content = data == null ? null : new ByteArrayContent(data);
+            this.Headers.For(h => content.Headers.Add(h.Key, h.Value));
+            
+            switch (httpMethod)
             {
-                var requestStream = await request.GetRequestStreamAsync();
-                using (requestStream)
-                {
-                    await requestStream.WriteAsync(data, 0, data.Length);
-                }
+                case "GET":
+                    response = await client.GetAsync(this.Url);
+                    break;
+                case "PUT":
+                    response = await client.PutAsync(this.Url, content);
+                    break;
+                case "POST":
+                    response = await client.PostAsync(this.Url, content);
+                    break;
+                case "DELETE":
+                    response = await client.DeleteAsync(this.Url);
+                    break;
             }
-
-            var response = await request.GetResponseAsync();
-            using (response)
-            {
-                using (var responseStream = response.GetResponseStream())
-                {
-                    using (var buffer = new MemoryStream())
-                    {
-                        await responseStream.CopyToAsync(buffer, 4096);
-                        return buffer.ToArray();
-                    }
-                }
-            }
-
+            return await response.Content.ReadAsByteArrayAsync();
         }
 
         private HttpWebRequest CreateRequest(string method)

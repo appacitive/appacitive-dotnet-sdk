@@ -35,6 +35,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,11 +46,13 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Model\AuthenticationToken.cs" />
+    <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\Constants.cs" />
     <Compile Include="Model\Entity.cs" />
     <Compile Include="Model\Geocode.cs" />
     <Compile Include="Services\ArticleService.cs" />
     <Compile Include="Services\ArticleServiceWithTiming.cs" />
+    <Compile Include="Services\IConnectionService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\Model\ApiRequest.cs" />
     <Compile Include="Services\Model\ApiResponse.cs" />
@@ -56,6 +60,8 @@
     <Compile Include="Services\Model\AuthenticateUserResponse.cs" />
     <Compile Include="Services\Model\ChangePasswordRequest.cs" />
     <Compile Include="Services\Model\ChangePasswordResponse.cs" />
+    <Compile Include="Services\Model\CreateConnectionResponse.cs" />
+    <Compile Include="Services\Model\CreateConnectionRequest.cs" />
     <Compile Include="Services\Model\DeleteUserRequest.cs" />
     <Compile Include="Services\Model\DeleteUserResponse.cs" />
     <Compile Include="Services\Model\CreateArticleRequest.cs" />
@@ -74,6 +80,8 @@
     <Compile Include="Services\Model\UpdateArticleResponse.cs" />
     <Compile Include="Services\Model\UpdateUserRequest.cs" />
     <Compile Include="Services\Model\UpdateUserResponse.cs" />
+    <Compile Include="Services\Serializers\ConnectionConverter.cs" />
+    <Compile Include="Services\ConnectionService.cs" />
     <Compile Include="Services\Serializers\EntityConverter.cs" />
     <Compile Include="Services\Serializers\ArticleConverter.cs" />
     <Compile Include="Services\Serializers\UpdateArticleRequestConverter.cs" />
