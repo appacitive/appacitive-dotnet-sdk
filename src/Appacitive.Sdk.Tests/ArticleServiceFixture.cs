@@ -528,5 +528,67 @@ namespace Appacitive.Sdk.Tests
             }
         }
 
+        [TestMethod]
+        public void FindAllArticleAsyncFixture()
+        {
+            var waitHandle = new ManualResetEvent(false);
+            Exception fault = null;
+            Action action = new Action(async () =>
+                {
+                    try
+                    {
+                        // Create atleast one article
+                        var now = DateTime.Now;
+                        dynamic obj = new Article("object");
+                        obj.intfield = 66666;
+                        obj.decimalfield = 98765.0m;
+                        obj.datefield = "2012-12-20";
+                        obj.datetimefield = now.ToString("o");
+                        obj.stringfield = "Frank";
+                        obj.textfield = "Frand Sinatra was an amazing singer.";
+                        obj.boolfield = false;
+                        obj.geofield = "11.5,12.5";
+                        obj.listfield = "a";
+
+
+                        var service = ObjectFactory.Build<IArticleService>();
+                        CreateArticleResponse response = null;
+                        response = await service.CreateArticleAsync(new CreateArticleRequest()
+                        {
+                            Article = obj,
+                            SessionToken = AppacitiveContext.SessionToken,
+                            UserToken = AppacitiveContext.UserToken
+                        });
+
+                        ApiHelper.EnsureValidResponse(response);
+
+                        // Find all articles
+                        var findRequest = new FindAllArticleRequest() { Type = "object" };
+                        var findResponse = await service.FindAllAsync(findRequest);
+                        ApiHelper.EnsureValidResponse(findResponse);
+                        findResponse.Articles.ForEach(x => Console.WriteLine("Found article id {0}.", x.Id));
+                        Assert.IsNotNull(findResponse.PagingInfo);
+                        Assert.IsTrue(findResponse.PagingInfo.PageNumber == 1);
+                        Assert.IsTrue(findResponse.PagingInfo.TotalRecords > 0);
+                        Console.WriteLine("Paging info => pageNumber: {0}, pageSize: {1}, totalRecords: {2}",
+                            findResponse.PagingInfo.PageNumber,
+                            findResponse.PagingInfo.PageSize,
+                            findResponse.PagingInfo.TotalRecords);
+                    }
+                    catch (Exception ex)
+                    {
+                        fault = ex;
+                    }
+                    finally
+                    {
+                        waitHandle.Set();
+                    }
+                });
+            action();
+            waitHandle.WaitOne();
+            if (fault != null)
+                throw fault;
+        }
+
     }
 }

@@ -21,6 +21,31 @@ namespace Appacitive.Sdk
         {
         }
 
+
+        public static async Task<User> GetAsync(string id)
+        {
+            var service = ObjectFactory.Build<IUserService>();
+            var response = await service.GetUserAsync(new GetUserRequest()
+            {
+                UserId = id
+            });
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            Debug.Assert(response.User != null, "For a successful get call, article should always be returned.");
+            return response.User;
+        }
+
+        public static async Task DeleteUserAsync(string id)
+        {
+            var service = ObjectFactory.Build<IUserService>();
+            var response = await service.DeleteUserAsync(new DeleteUserRequest()
+            {
+                UserId = id
+            });
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+        }
+
         internal string SchemaId { get; set; }
 
         public string Username 

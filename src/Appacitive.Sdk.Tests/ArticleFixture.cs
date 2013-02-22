@@ -299,6 +299,201 @@ namespace Appacitive.Sdk.Tests
             if (fault != null)
                 throw fault;
         }
+
+
+        [TestMethod]
+        public void FindAllArticlesTest()
+        {
+            var waitHandle = new ManualResetEvent(false);
+            Exception fault = null;
+            Action action = async () =>
+                {
+                    try
+                    {
+                        // Create the article
+                        dynamic obj = new Article("object");
+                        obj.stringfield = Unique.String;
+                        await obj.SaveAsync();
+                        var saved = obj as Article;
+                        Console.WriteLine("Created articled with id {0}", saved.Id);
+
+                        // Search
+                        var articles = await Article.FindAllAsync("object");
+                        articles.ForEach(a => Console.WriteLine(a.Id));
+                        Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+                    }
+                    catch (Exception ex)
+                    {
+                        fault = ex;
+                    }
+                    finally
+                    {
+                        waitHandle.Set();
+                    }
+                };
+            action();
+            waitHandle.WaitOne();
+            if (fault != null)
+                throw fault;
+        }
+
+
+        [TestMethod]
+        public void FindAllArticlesWithQueryTest()
+        {
+            var waitHandle = new ManualResetEvent(false);
+            Exception fault = null;
+            Action action = async () =>
+            {
+                try
+                {
+                    // Create the article
+                    dynamic obj = new Article("object");
+                    obj.stringfield = Unique.String;
+                    await obj.SaveAsync();
+                    var saved = obj as Article;
+                    Console.WriteLine("Created articled with id {0}", saved.Id);
+
+                    // Search
+                    string stringToSearch = obj.stringfield;
+                    var articles = await Article.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch));
+                    Assert.IsNotNull(articles);
+                    Assert.IsTrue(articles.Count == 1);
+                    Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+                }
+                catch (Exception ex)
+                {
+                    fault = ex;
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            };
+            action();
+            waitHandle.WaitOne();
+            if (fault != null)
+                throw fault;
+        }
+
+        [TestMethod]
+        public void FindAllArticlesWithNestedQueryTest()
+        {
+            var waitHandle = new ManualResetEvent(false);
+            Exception fault = null;
+            Action action = async () =>
+            {
+                try
+                {
+                    // Create the article
+                    dynamic obj = new Article("object");
+                    obj.stringfield = Unique.String;
+                    obj.intfield = 10;
+                    await obj.SaveAsync();
+                    var saved = obj as Article;
+                    Console.WriteLine("Created articled with id {0}", saved.Id);
+
+                    // Search
+                    string stringToSearch = obj.stringfield;
+                    var query = BooleanOperator.And(new[] 
+                        {
+                            Query.Property("stringfield").IsEqualTo(stringToSearch),
+                            Query.Property("intfield").IsEqualTo(10)
+                        });
+
+                    var articles = await Article.FindAllAsync("object", query);
+                    Assert.IsNotNull(articles);
+                    Assert.IsTrue(articles.Count == 1);
+                    Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+                }
+                catch (Exception ex)
+                {
+                    fault = ex;
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            };
+            action();
+            waitHandle.WaitOne();
+            if (fault != null)
+                throw fault;
+        }
+
+        [TestMethod]
+        public void FindNonExistantPageTest()
+        {
+            var waitHandle = new ManualResetEvent(false);
+            Exception fault = null;
+            Action action = async () =>
+            {
+                try
+                {
+                    // Search
+                    var articles = await Article.FindAllAsync("object", 10000, 500);
+                    Assert.IsNotNull(articles);
+                    Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+                }
+                catch (Exception ex)
+                {
+                    fault = ex;
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            };
+            action();
+            waitHandle.WaitOne();
+            if (fault != null)
+                throw fault;
+        }
+
+        [TestMethod]
+        public void FindAndDisplayAllArticlesTest()
+        {
+            var waitHandle = new ManualResetEvent(false);
+            Exception fault = null;
+            Action action = async () =>
+            {
+                try
+                {
+                    // Create the article
+                    dynamic obj = new Article("object");
+                    obj.stringfield = Unique.String;
+                    await obj.SaveAsync();
+                    var saved = obj as Article;
+                    Console.WriteLine("Created articled with id {0}", saved.Id);
+                    var index = 1;
+                    // Search
+                    var articles = await Article.FindAllAsync("object", 1, 100);
+                    do
+                    {   
+                        articles.ForEach(a => Console.WriteLine("{0}) {1}", index++, a.Id));
+                        Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+                        if (articles.IsLastPage == false)
+                            articles = await articles.NextPageAsync();
+                        else
+                            break;
+                    } while (true);
+                    Console.WriteLine("Finished.");
+                }
+                catch (Exception ex)
+                {
+                    fault = ex;
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            };
+            action();
+            waitHandle.WaitOne();
+            if (fault != null)
+                throw fault;
+        }
+     
         
     }
 

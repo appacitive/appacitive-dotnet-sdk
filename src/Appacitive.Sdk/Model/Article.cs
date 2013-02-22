@@ -52,6 +52,37 @@ namespace Appacitive.Sdk
             return response.Article;
         }
 
+        public async static Task<PagedArticleList> FindAllAsync(string type, int page = 1, int pageSize = 20)
+        {
+            string query = null;
+            return await Article.FindAllAsync(type, query, page, pageSize);
+        }
+
+        public async static Task<PagedArticleList> FindAllAsync(string type, IQuery query, int page = 1, int pageSize = 20)
+        {
+            return await Article.FindAllAsync(type, query.AsString(), page, pageSize);
+        }
+
+        public async static Task<PagedArticleList> FindAllAsync(string type, string query, int page = 1, int pageSize = 20)
+        {
+            var service = ObjectFactory.Build<IArticleService>();
+            var request = new FindAllArticleRequest() { Type = type, Query = query, PageNumber = page, PageSize = pageSize };
+            var response = await service.FindAllAsync(request);
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            var articles = new PagedArticleList()
+            {
+                PageNumber = response.PagingInfo.PageNumber,
+                PageSize = response.PagingInfo.PageSize,
+                TotalRecords = response.PagingInfo.TotalRecords,
+                Query = query,
+                ArticleType = type
+            };
+            articles.AddRange(response.Articles);
+            return articles;
+            
+        }
+
         public static void Delete(string type, string id)
         {
             var service = ObjectFactory.Build<IArticleService>();

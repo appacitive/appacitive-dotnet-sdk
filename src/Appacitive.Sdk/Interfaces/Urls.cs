@@ -179,6 +179,19 @@ namespace Appacitive.Sdk
                 HandleDefaults(url, geocode, debugEnabled, verbosity);
                 return url.ToString();
             }
+
+            internal static string FindAllArticles(string type, string query, int pageNumber, int pageSize, Geocode location, bool enableDebug, Verbosity verbosity)
+            {
+                var url = new Url(ArticleServiceBase).Append(type).Append("find").Append("all");
+                if (string.IsNullOrWhiteSpace(query) == false)
+                    url.QueryString["query"] = query;
+                if (pageNumber > 0)
+                    url.QueryString["pnum"] = pageNumber.ToString();
+                if (pageSize > 0)
+                    url.QueryString["psize"] = pageSize.ToString();
+                HandleDefaults(url, location, enableDebug, verbosity);
+                return url.ToString();
+            }
         }
     }
 

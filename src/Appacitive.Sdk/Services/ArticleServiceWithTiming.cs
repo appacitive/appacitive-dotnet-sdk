@@ -83,5 +83,11 @@ namespace Appacitive.Sdk.Services
         {
             return ExecuteWithTiming(request, this.Inner.UpdateArticleAsync);
         }
+
+
+        public Task<FindAllArticleResponse> FindAllAsync(FindAllArticleRequest request)
+        {
+            return ExecuteWithTiming(request, this.Inner.FindAllAsync);
+        }
     }
 }

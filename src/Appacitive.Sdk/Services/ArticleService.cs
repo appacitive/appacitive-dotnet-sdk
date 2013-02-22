@@ -127,6 +127,20 @@ namespace Appacitive.Sdk.Services
             var response = UpdateArticleResponse.Parse(bytes);
             return response;
         }
-        
+
+
+
+        public async Task<FindAllArticleResponse> FindAllAsync(FindAllArticleRequest request)
+        {
+            byte[] bytes = null;
+            bytes = await HttpClient
+                        .WithUrl(Urls.For.FindAllArticles(request.Type, request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithAppacitiveSession(request.SessionToken)
+                        .WithEnvironment(request.Environment)
+                        .WithUserToken(request.UserToken)
+                        .GetAsync();
+            var response = FindAllArticleResponse.Parse(bytes);
+            return response;
+        }
     }
 }

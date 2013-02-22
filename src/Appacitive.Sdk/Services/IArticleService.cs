@@ -23,6 +23,8 @@ namespace Appacitive.Sdk.Services
         UpdateArticleResponse UpdateArticle(UpdateArticleRequest request);
 
         Task<UpdateArticleResponse> UpdateArticleAsync(UpdateArticleRequest request);
+
+        Task<FindAllArticleResponse> FindAllAsync(FindAllArticleRequest request);
     }
 
     

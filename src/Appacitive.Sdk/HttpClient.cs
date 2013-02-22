@@ -95,16 +95,19 @@ namespace Appacitive.Sdk
             }
         }
 
+        private static readonly byte[] Empty = new byte[0];
         private async Task<byte[]> ExecuteAsync(string httpMethod, byte[] data)
         {
             var client = new HttpClient2();
             HttpResponseMessage response = null;
-            var content = data == null ? null : new ByteArrayContent(data);
+            var content = new ByteArrayContent(data ?? Empty);
+            
             this.Headers.For(h => content.Headers.Add(h.Key, h.Value));
             
             switch (httpMethod)
             {
                 case "GET":
+                    this.Headers.For(h => client.DefaultRequestHeaders.Add(h.Key, h.Value));
                     response = await client.GetAsync(this.Url);
                     break;
                 case "PUT":

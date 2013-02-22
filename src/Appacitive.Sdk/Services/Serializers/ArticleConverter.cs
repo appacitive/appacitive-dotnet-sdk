@@ -36,7 +36,6 @@ namespace Appacitive.Sdk.Services
                 // Schema Id
                 if (json.TryGetValue("__schemaid", out value) == true && value.Type != JTokenType.Null)
                     article.SchemaId = value.ToString();
-                
             }
             return article;
         }
