@@ -32,6 +32,8 @@ namespace Appacitive.Sdk.Services
         DeleteUserResponse DeleteUser(DeleteUserRequest request);
 
         Task<DeleteUserResponse> DeleteUserAsync(DeleteUserRequest request);
+
+        Task<FindAllUsersResponse> FindAllAsync(FindAllUsersRequest request);
     }
 
     

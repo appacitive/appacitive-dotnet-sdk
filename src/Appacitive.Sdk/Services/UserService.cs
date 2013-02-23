@@ -180,5 +180,18 @@ namespace Appacitive.Sdk.Services
             var response = DeleteUserResponse.Parse(bytes);
             return response;
         }
+
+        public async Task<FindAllUsersResponse> FindAllAsync(FindAllUsersRequest request)
+        {
+            byte[] bytes = null;
+            bytes = await HttpClient
+                        .WithUrl(Urls.For.FindAllArticles("user", request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithAppacitiveSession(request.SessionToken)
+                        .WithEnvironment(request.Environment)
+                        .WithUserToken(request.UserToken)
+                        .GetAsync();
+            var response = FindAllUsersResponse.Parse(bytes);
+            return response;
+        }
     }
 }

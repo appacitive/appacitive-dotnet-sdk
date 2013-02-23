@@ -89,6 +89,8 @@
     <Compile Include="Services\Model\DeleteArticleRequest.cs" />
     <Compile Include="Services\Model\FindAllArticleRequest.cs" />
     <Compile Include="Services\Model\FindAllArticleResponse.cs" />
+    <Compile Include="Services\Model\FindAllUserResponse.cs" />
+    <Compile Include="Services\Model\FindAllUsersRequest.cs" />
     <Compile Include="Services\Model\GetArticleRequest.cs" />
     <Compile Include="Services\Model\GetArticleResponse.cs" />
     <Compile Include="Services\Model\GetUserRequest.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="Services\Model\UpdateArticleResponse.cs" />
     <Compile Include="Services\Model\UpdateUserRequest.cs" />
     <Compile Include="Services\Model\UpdateUserResponse.cs" />
+    <Compile Include="Services\Model\UserList.cs" />
     <Compile Include="Services\Serializers\ConnectionConverter.cs" />
     <Compile Include="Services\ConnectionService.cs" />
     <Compile Include="Services\Serializers\EntityConverter.cs" />

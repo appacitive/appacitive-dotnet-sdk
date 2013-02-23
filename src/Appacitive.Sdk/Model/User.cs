@@ -46,6 +46,35 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
         }
 
+        public async static Task<PagedUserList> FindAllAsync(int page = 1, int pageSize = 20)
+        {
+            string query = null;
+            return await User.FindAllAsync(query, page, pageSize);
+        }
+
+        public async static Task<PagedUserList> FindAllAsync(IQuery query, int page = 1, int pageSize = 20)
+        {
+            return await User.FindAllAsync(query.AsString(), page, pageSize);
+        }
+
+        public async static Task<PagedUserList> FindAllAsync(string query, int page = 1, int pageSize = 20)
+        {
+            IUserService service = ObjectFactory.Build<IUserService>();
+            var request = new FindAllUsersRequest() { Query = query, PageNumber = page, PageSize = pageSize };
+            var response = await service.FindAllAsync(request);
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            var users = new PagedUserList()
+            {
+                PageNumber = response.PagingInfo.PageNumber,
+                PageSize = response.PagingInfo.PageSize,
+                TotalRecords = response.PagingInfo.TotalRecords,
+                Query = query
+            };
+            users.AddRange(response.Articles);
+            return users;
+        }
+
         internal string SchemaId { get; set; }
 
         public string Username 
