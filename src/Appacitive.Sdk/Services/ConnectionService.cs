@@ -56,5 +56,19 @@ namespace Appacitive.Sdk.Services
             var response = DeleteConnectionResponse.Parse(bytes);
             return response;
         }
+
+
+        public async Task<FindConnectedArticlesResponse> FindConnectedArticlesAsync(FindConnectedArticlesRequest request)
+        {
+            byte[] bytes = null;
+            bytes = await HttpClient
+                        .WithUrl(Urls.For.FindConnectedArticles(request.Relation, request.ArticleId, request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithAppacitiveSession(request.SessionToken)
+                        .WithEnvironment(request.Environment)
+                        .WithUserToken(request.UserToken)
+                        .GetAsync();
+            var response = FindConnectedArticlesResponse.Parse(bytes);
+            return response;
+        }
     }
 }

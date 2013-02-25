@@ -493,7 +493,48 @@ namespace Appacitive.Sdk.Tests
             if (fault != null)
                 throw fault;
         }
-     
+
+
+        [TestMethod]
+        public void GetConnectedArticlesTest()
+        {
+            var waitHandle = new ManualResetEvent(false);
+            Exception fault = null;
+            Action action = async () =>
+                {
+                    try
+                    {
+                        // Create objects
+                        var obj1 = ObjectHelper.CreateNew();
+                        var obj2 = ObjectHelper.CreateNew();
+                        var obj3 = ObjectHelper.CreateNew();
+                        var obj4 = ObjectHelper.CreateNew();
+                        var obj5 = ObjectHelper.CreateNew();
+                        // Create connections
+                        await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj2.Id).SaveAsync();
+                        await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj3.Id).SaveAsync();
+                        await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj4.Id).SaveAsync();
+                        await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj5.Id).SaveAsync();
+                        // Get connected
+                        var connectedArticles = await obj1.GetConnectedArticlesAsync("sibling");
+                        Assert.IsTrue(connectedArticles != null);
+                        Assert.IsTrue(connectedArticles.TotalRecords == 4);
+                        Assert.IsTrue(connectedArticles.Select(x => x.Id).Intersect(new[] { obj2.Id, obj3.Id, obj4.Id, obj5.Id }).Count() == 4);
+                    }
+                    catch (Exception ex)
+                    {
+                        fault = ex;
+                    }
+                    finally
+                    {
+                        waitHandle.Set();
+                    }
+                };
+            action();
+            waitHandle.WaitOne();
+            if (fault != null)
+                throw fault;
+        }
         
     }
 

@@ -93,12 +93,15 @@
     <Compile Include="Services\Model\FindAllArticleResponse.cs" />
     <Compile Include="Services\Model\FindAllUserResponse.cs" />
     <Compile Include="Services\Model\FindAllUsersRequest.cs" />
+    <Compile Include="Services\Model\FindConnectedArticlesRequest.cs" />
+    <Compile Include="Services\Model\FindConnectedArticlesResponse.cs" />
     <Compile Include="Services\Model\GetArticleRequest.cs" />
     <Compile Include="Services\Model\GetArticleResponse.cs" />
     <Compile Include="Services\Model\GetConnectionRequest.cs" />
     <Compile Include="Services\Model\GetConnectionResponse.cs" />
     <Compile Include="Services\Model\GetUserRequest.cs" />
     <Compile Include="Services\Model\GetUserResponse.cs" />
+    <Compile Include="Services\Model\PagedConnectionList.cs" />
     <Compile Include="Services\Model\Status.cs" />
     <Compile Include="Services\Model\UpdateArticleRequest.cs" />
     <Compile Include="Services\Model\UpdateArticleResponse.cs" />

@@ -200,6 +200,19 @@ namespace Appacitive.Sdk
                 HandleDefaults(url, geocode, enableDebug, verbosity);
                 return url.ToString();
             }
+
+            public static string FindConnectedArticles(string relation, string articleId, string query, int pageNumber, int pageSize, Geocode location, bool debugEnabled, Verbosity verbosity)
+            {
+                var url = new Url(ConnectionServiceBase).Append(relation).Append(articleId).Append("find");
+                if (string.IsNullOrWhiteSpace(query) == false)
+                    url.QueryString["query"] = query;
+                if (pageNumber > 0)
+                    url.QueryString["pnum"] = pageNumber.ToString();
+                if (pageSize > 0)
+                    url.QueryString["psize"] = pageSize.ToString();
+                HandleDefaults(url, location, debugEnabled, verbosity);
+                return url.ToString();
+            }
         }
     }
 

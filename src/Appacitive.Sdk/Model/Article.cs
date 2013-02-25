@@ -75,8 +75,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                Query = query,
-                ArticleType = type
+                GetNextPage = async skip => await FindAllAsync(type, query, page+skip+1, pageSize)
             };
             articles.AddRange(response.Articles);
             return articles;
@@ -224,6 +223,57 @@ namespace Appacitive.Sdk
             return response.Article;
         }
 
-        
+        public async Task<PagedArticleList> GetConnectedArticlesAsync(string relation, IQuery query = null, int pageNumber = 1, int pageSize = 20)
+        {
+            string queryString = query == null ? null : query.ToString();
+            return await Article.GetConnectedArticlesAsync(relation, this.Id, queryString, pageNumber, pageSize);
+        }
+
+        public async Task<PagedArticleList> GetConnectedArticlesAsync(string relation, string query = null, int pageNumber = 1, int pageSize = 20)
+        {
+            return await Article.GetConnectedArticlesAsync(relation, this.Id, query, pageNumber, pageSize);
+        }
+
+        public async static Task<PagedArticleList> GetConnectedArticlesAsync(string relation, string articleId, IQuery query = null, int pageNumber = 1, int pageSize = 20)
+        {
+            string queryString = query == null ? null : query.ToString();
+            return await Article.GetConnectedArticlesAsync(relation, articleId, queryString, pageNumber, pageSize);
+        }
+
+        public async static Task<PagedArticleList> GetConnectedArticlesAsync(string relation, string articleId, string query = null, int pageNumber = 1, int pageSize = 20)
+        {
+            IConnectionService connService = ObjectFactory.Build<IConnectionService>();
+            var response = await connService.FindConnectedArticlesAsync(
+                new FindConnectedArticlesRequest
+                {
+                    Relation = relation, ArticleId = articleId, Query = query,
+                    PageNumber = pageNumber, PageSize = pageSize
+                });
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+
+            Func<int, Task<PagedArticleList>> nextPage = async skip => 
+                {
+                    return await GetConnectedArticlesAsync(relation, articleId, query, pageNumber + skip + 1, pageSize);
+                };
+
+            var articles = response.Connections.Select(c =>
+                {
+                    if (c.EndpointA.ArticleId == articleId)
+                        return c.EndpointB.Content;
+                    else 
+                        return c.EndpointA.Content;
+                });
+
+            var list = new PagedArticleList()
+            {
+                PageNumber = response.PagingInfo.PageNumber,
+                PageSize = response.PagingInfo.PageSize,
+                TotalRecords = response.PagingInfo.TotalRecords,
+                GetNextPage = nextPage
+            };
+            list.AddRange(articles);
+            return list;
+        }
     }
 }

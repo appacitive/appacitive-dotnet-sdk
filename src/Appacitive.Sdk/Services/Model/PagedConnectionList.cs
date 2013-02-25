@@ -4,21 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk.Services
+namespace Appacitive.Sdk.Services.Model
 {
-    public class PagedArticleList : List<Article>
+    public class PagedConnectionList : List<Connection>
     {
         internal string ArticleType { get; set; }
-
-        internal string Query { get; set; }
-
-        internal Func<int, Task<PagedArticleList>> GetNextPage { get; set; }
 
         public int PageNumber { get; set; }
 
         public int PageSize { get; set; }
 
         public int TotalRecords { get; set; }
+
+        internal Func<int, Task<PagedConnectionList>> GetNextPage { get; set; }
 
         public bool IsLastPage
         {
@@ -29,10 +27,9 @@ namespace Appacitive.Sdk.Services
             }
         }
 
-        public async Task<PagedArticleList> NextPageAsync(int skip = 0)
+        public async Task<PagedConnectionList> NextPageAsync(int skipPages = 0)
         {
-            return await GetNextPage(skip);
-            // return await Article.FindAllAsync(this.ArticleType, this.Query, this.PageNumber + 1, this.PageSize);
+            return await GetNextPage(skipPages);
         }
     }
 }
