@@ -32,6 +32,7 @@ namespace Appacitive.Sdk
         private static void RegisterDefaults()
         {
             InProcContainer.Instance
+                            .Register<IConnectionService, ConnectionService>( () => new ConnectionService() )
                             .Register<ISessionService, SessionService>(() => SessionService.Instance)
                             .Register<IArticleService, ArticleService>(() => new ArticleServiceWithTiming(ArticleService.Instance))
                             .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer())

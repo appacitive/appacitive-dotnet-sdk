@@ -16,7 +16,7 @@ namespace Appacitive.Sdk.Services
             return objectType == typeof(Connection);
         }
 
-        protected override void WriteJson(Entity entity, JsonWriter writer)
+        protected override void WriteJson(Entity entity, JsonWriter writer, JsonSerializer serializer)
         {
             var conn = entity as Connection;
             if (conn == null)
@@ -40,7 +40,7 @@ namespace Appacitive.Sdk.Services
                     .StartObject()
                     .WriteProperty("label", conn.EndpointA.Label)
                     .WriteProperty("article")
-                    .WithWriter( w => WriteArticle(w, conn.EndpointAContent) )
+                    .WithWriter( w => WriteArticle(w, conn.EndpointA.Content) )
                     .EndObject();
             }
 
@@ -61,7 +61,7 @@ namespace Appacitive.Sdk.Services
                     .StartObject()
                     .WriteProperty("label", conn.EndpointB.Label)
                     .WriteProperty("article")
-                    .WithWriter(w => WriteArticle(w, conn.EndpointBContent))
+                    .WithWriter(w => WriteArticle(w, conn.EndpointB.Content))
                     .EndObject();
             }
         }
@@ -75,9 +75,9 @@ namespace Appacitive.Sdk.Services
             return new Connection(type);
         }
 
-        protected override Entity ReadJson(Entity entity, Type objectType, Newtonsoft.Json.Linq.JObject json)
+        protected override Entity ReadJson(Entity entity, Type objectType, Newtonsoft.Json.Linq.JObject json, JsonSerializer serializer)
         {
-            var conn = base.ReadJson(entity, objectType, json) as Connection;
+            var conn = base.ReadJson(entity, objectType, json, serializer) as Connection;
             if (conn == null)
                 return null;
             // Parse the relation information
@@ -88,29 +88,41 @@ namespace Appacitive.Sdk.Services
 
             // Parse the endpoints
             if (json.TryGetValue("__endpointa", out value) == true && value.Type == JTokenType.Object)
-                conn.EndpointA = ParseEndpoint(value as JObject);
+                conn.EndpointA = ParseEndpoint(value as JObject, serializer);
             else throw new Exception(string.Format("Endpoint A for connection with id {0} is invalid.", conn.Id));
             if (json.TryGetValue("__endpointb", out value) == true && value.Type == JTokenType.Object)
-                conn.EndpointB = ParseEndpoint(value as JObject);
+                conn.EndpointB = ParseEndpoint(value as JObject, serializer);
             else throw new Exception(string.Format("Endpoint B for connection with id {0} is invalid.", conn.Id));
             return conn;
         }
 
-        private Endpoint ParseEndpoint(JObject json)
+        private Endpoint ParseEndpoint(JObject json, JsonSerializer serializer)
         {
             if (json == null)
                 return null;
             string label = null, articleId = null;
             JToken value;
+            // Parse the label
             if (json.TryGetValue("label", out value) == true && value.Type != JTokenType.Null)
                 label = value.ToString();
+            // Parse the article id
             if (json.TryGetValue("articleid", out value) == true && value.Type != JTokenType.Null)
                 articleId = value.ToString();
+            // Parse the article
+            Article article = null;
+            if (json.TryGetValue("article", out value) == true && value.Type != JTokenType.Null && value.Type == JTokenType.Object)
+            {
+                using (var reader = value.CreateReader())
+                {
+                    article = serializer.Deserialize<Article>(value.CreateReader());
+                }
+            }
             if( string.IsNullOrWhiteSpace(label) == true )
                 throw new Exception("Endpoint lable is missing.");
             if (string.IsNullOrWhiteSpace(articleId) == true)
                 throw new Exception("Endpoint article id is missing.");
-            return new Endpoint(label, articleId);
+
+            return new Endpoint(label, articleId) { Content = article };
         }
 
         private void WriteArticle(JsonWriter writer, Article article)
@@ -135,7 +147,6 @@ namespace Appacitive.Sdk.Services
                 return true;
             else
                 return _internal.ContainsKey(property);
-
         }
     }
 

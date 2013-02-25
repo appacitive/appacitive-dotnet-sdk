@@ -20,6 +20,13 @@ namespace Appacitive.Sdk.Services
                         .WithUserToken(request.UserToken)
                         .PutAsyc(request.ToBytes());
             var response = CreateConnectionResponse.Parse(bytes);
+
+            // Update the ids if any new articles were passed in the request.
+            if (request.Connection.CreateEndpointA == true)
+                request.Connection.EndpointA.Content.Id = response.Connection.EndpointA.ArticleId;
+            if (request.Connection.CreateEndpointB == true)
+                request.Connection.EndpointB.Content.Id = response.Connection.EndpointA.ArticleId;
+
             return response;
         }
     }

@@ -148,6 +148,11 @@ namespace Appacitive.Sdk
             return response.Article;
         }
 
+        internal bool IsNewInstance
+        {
+            get { return string.IsNullOrWhiteSpace(this.Id) == true || this.Id == "0"; }
+        }
+
         protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags)
         {
             var articleService = ObjectFactory.Build<IArticleService>();

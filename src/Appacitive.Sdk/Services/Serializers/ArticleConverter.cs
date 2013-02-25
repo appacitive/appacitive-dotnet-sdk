@@ -23,14 +23,14 @@ namespace Appacitive.Sdk.Services
                 throw new Exception("Schema type missing.");
             var type = value.ToString();
             return new Article(type);
-        } 
+        }
 
-        protected override Entity ReadJson(Entity entity, Type objectType, JObject json)
+        protected override Entity ReadJson(Entity entity, Type objectType, JObject json, JsonSerializer serializer)
         {
             if (json == null || json.Type == JTokenType.Null)
                 return null;
             JToken value;
-            var article = base.ReadJson(entity, objectType, json) as Article;
+            var article = base.ReadJson(entity, objectType, json, serializer) as Article;
             if (article != null)
             {
                 // Schema Id
@@ -39,8 +39,8 @@ namespace Appacitive.Sdk.Services
             }
             return article;
         }
-        
-        protected override void WriteJson(Entity entity, JsonWriter writer)
+
+        protected override void WriteJson(Entity entity, JsonWriter writer, JsonSerializer serializer)
         {
             if (entity == null)
                 return;

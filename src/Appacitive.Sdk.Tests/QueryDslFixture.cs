@@ -75,7 +75,7 @@ namespace Appacitive.Sdk.Tests
                         Query.Property("name").IsEqualTo("nikhil"),
                         Query.Property("age").IsGreaterThanEqualTo(10),
                     }),
-                    Query.Property("location").WithinCircle(new Geocode(10, 10), 15),
+                    Query.Property("location").WithinCircle(new Geocode(10, 10), 15, DistanceUnit.Kilometers),
                     Query.Property("location").WithinPolygon( 
                     new [] 
                     {

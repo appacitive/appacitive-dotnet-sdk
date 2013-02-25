@@ -30,7 +30,7 @@ namespace Appacitive.Sdk.Services
             if (json == null || json.Type == JTokenType.Null)
                 return null;
             var entity = CreateEntity(json);
-            return ReadJson(entity, objectType, json);
+            return ReadJson(entity, objectType, json, serializer);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -59,7 +59,7 @@ namespace Appacitive.Sdk.Services
                     foreach (var property in entity.Properties)
                         w.WriteProperty(property.Key, property.Value);
                 })
-                .WithWriter( w => WriteJson(entity, w) )
+                .WithWriter( w => WriteJson(entity, w, serializer) )
                 .WithWriter(w =>
                 {
                     var attr = entity.Attributes.ToArray();
@@ -84,7 +84,7 @@ namespace Appacitive.Sdk.Services
 
         protected abstract Entity CreateEntity(JObject json);
         
-        protected virtual Entity ReadJson(Entity entity, Type objectType, JObject json)
+        protected virtual Entity ReadJson(Entity entity, Type objectType, JObject json, JsonSerializer serializer)
         {
 
             if (json == null || json.Type == JTokenType.Null)
@@ -152,7 +152,7 @@ namespace Appacitive.Sdk.Services
             return entity;
         }
 
-        protected virtual void WriteJson(Entity entity, JsonWriter writer)
+        protected virtual void WriteJson(Entity entity, JsonWriter writer, JsonSerializer serializer)
         {
             return;
         }

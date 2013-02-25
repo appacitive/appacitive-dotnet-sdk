@@ -14,6 +14,7 @@ namespace Appacitive.Sdk.Tests
         public static void Init(TestContext context)
         {
             App.Initialize(TestConfiguration.ApiKey, TestConfiguration.Environment);
+            App.SetLoggedInUser("");
             var token = AppacitiveContext.SessionToken;
         }
     }

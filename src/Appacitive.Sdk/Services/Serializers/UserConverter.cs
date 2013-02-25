@@ -20,12 +20,12 @@ namespace Appacitive.Sdk.Services
             return new User();
         }
 
-        protected override Entity ReadJson(Entity entity, Type objectType, JObject json)
+        protected override Entity ReadJson(Entity entity, Type objectType, JObject json, JsonSerializer serializer)
         {
             if (json == null || json.Type == JTokenType.Null)
                 return null;
             JToken value;
-            var user = base.ReadJson(entity, objectType, json) as User;
+            var user = base.ReadJson(entity, objectType, json, serializer) as User;
             if (user != null)
             {
                 // Schema Id
@@ -38,7 +38,7 @@ namespace Appacitive.Sdk.Services
             return user;
         }
 
-        protected override void WriteJson(Entity entity, JsonWriter writer)
+        protected override void WriteJson(Entity entity, JsonWriter writer, JsonSerializer serializer)
         {
             if (entity == null)
                 return;
