@@ -130,8 +130,77 @@ namespace Appacitive.Sdk.Tests
             waitHandle.WaitOne();
             if (fault != null)
                 throw fault;
+        }
 
+        [TestMethod]
+        public void GetConnectionTest()
+        {
+            var waitHandle = new ManualResetEvent(false);
+            Exception fault = null;
+            Action action = async () =>
+            {
+                try
+                {
+                    // Create a new connection
+                    var conn = await ConnectionHelper.CreateNew();
+                    var read = await Connection.Get(conn.Type, conn.Id);
+                    Assert.IsTrue(read != null);
+                    Assert.IsTrue(read.Id == conn.Id);
+                    Assert.IsTrue(read.EndpointA.ArticleId == conn.EndpointA.ArticleId || read.EndpointA.ArticleId == conn.EndpointB.ArticleId);
+                    Assert.IsTrue(read.EndpointB.ArticleId == conn.EndpointA.ArticleId || read.EndpointB.ArticleId == conn.EndpointB.ArticleId);
+                }
+                catch (Exception ex)
+                {
+                    fault = ex;
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            };
+            action();
+            waitHandle.WaitOne();
+            if (fault != null)
+                throw fault;
+        }
 
+        [TestMethod]
+        public void DeleteConnectionTest()
+        {
+            var waitHandle = new ManualResetEvent(false);
+            Exception fault = null;
+            Action action = async () =>
+            {
+                try
+                {
+                    // Create a new connection
+                    var conn = await ConnectionHelper.CreateNew();
+                    // Delete the connection
+                    await Connection.DeleteAsync(conn.Type, conn.Id);
+                    // Try and get the connection
+                    try
+                    {
+                        var read = await Connection.Get(conn.Type, conn.Id);
+                        Assert.Fail("No exception was raised on reading deleted connection.");
+                    }
+                    catch (AppacitiveException aex)
+                    {
+                        Assert.IsTrue(aex.Code == "404");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    fault = ex;
+                }
+                finally
+                {
+                    waitHandle.Set();
+                }
+            };
+            action();
+            waitHandle.WaitOne();
+            if (fault != null)
+                throw fault;
         }
     }
 }

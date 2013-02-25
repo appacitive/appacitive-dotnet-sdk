@@ -8,6 +8,10 @@ namespace Appacitive.Sdk.Services
 {
     public interface IConnectionService
     {
-        Task<CreateConnectionResponse> CreateConnectionAsync(CreateConnectionRequest request); 
+        Task<CreateConnectionResponse> CreateConnectionAsync(CreateConnectionRequest request);
+
+        Task<GetConnectionResponse> GetConnectionAsync(GetConnectionRequest request);
+
+        Task<DeleteConnectionResponse> DeleteConnectionAsync(DeleteConnectionRequest request);
     }
 }

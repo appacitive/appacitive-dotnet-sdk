@@ -129,6 +129,31 @@ namespace Appacitive.Sdk
             return new Connect(relationName);
         }
 
+        public async static Task<Connection> Get(string relation, string id)
+        {
+            IConnectionService connService = ObjectFactory.Build<IConnectionService>();
+            var response = await connService.GetConnectionAsync(new GetConnectionRequest
+                                                        {
+                                                            Relation = relation,
+                                                            Id = id
+                                                        });
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            else return response.Connection;
+        }
+
+        public async static Task DeleteAsync(string relation, string id)
+        {
+            IConnectionService connService = ObjectFactory.Build<IConnectionService>();
+            var response = await connService.DeleteConnectionAsync (new DeleteConnectionRequest
+            {
+                Relation = relation,
+                Id = id
+            });
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+        }
+
         internal bool IsNewInstance
         {
             get 
@@ -170,6 +195,14 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
             Debug.Assert(response.Connection != null, "If status is successful, then created connection should not be null.");
             return response.Connection;
+        }
+
+        protected override void UpdateState(Entity entity)
+        {
+            var other = entity as Connection;
+            if (other == null) return;
+            this.EndpointA = other.EndpointA;
+            this.EndpointB = other.EndpointB;
         }
 
         protected override Entity Update(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags)

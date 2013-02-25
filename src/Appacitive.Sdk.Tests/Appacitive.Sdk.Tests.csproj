@@ -64,6 +64,7 @@
     <Compile Include="ConnectionServiceFixture.cs" />
     <Compile Include="GeocodeFixture.cs" />
     <Compile Include="Helpers\ApiHelper.cs" />
+    <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\Unique.cs" />
     <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="HttpFixture.cs" />

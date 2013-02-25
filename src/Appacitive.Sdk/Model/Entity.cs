@@ -203,7 +203,7 @@ namespace Appacitive.Sdk
         }
 
         private void UpdateLastKnown(Entity entity)
-        {
+        {   
             var newLastKnownFields = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             var newCurrentFields = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             entity.Properties.For(x => 
@@ -233,7 +233,12 @@ namespace Appacitive.Sdk
                 _currentFields = newCurrentFields;
                 _currentAttributes = newCurrentAttributes;
                 _lastKnownTags = entity.Tags.ToList();
+                UpdateState(entity);
             }
+        }
+
+        protected virtual void UpdateState(Entity entity)
+        {
         }
 
         private IDictionary<string, string> Clone(IDictionary<string, string> map)

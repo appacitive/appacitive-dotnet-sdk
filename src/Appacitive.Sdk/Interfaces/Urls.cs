@@ -180,7 +180,7 @@ namespace Appacitive.Sdk
                 return url.ToString();
             }
 
-            internal static string FindAllArticles(string type, string query, int pageNumber, int pageSize, Geocode location, bool enableDebug, Verbosity verbosity)
+            public static string FindAllArticles(string type, string query, int pageNumber, int pageSize, Geocode location, bool enableDebug, Verbosity verbosity)
             {
                 var url = new Url(ArticleServiceBase).Append(type).Append("find").Append("all");
                 if (string.IsNullOrWhiteSpace(query) == false)
@@ -190,6 +190,14 @@ namespace Appacitive.Sdk
                 if (pageSize > 0)
                     url.QueryString["psize"] = pageSize.ToString();
                 HandleDefaults(url, location, enableDebug, verbosity);
+                return url.ToString();
+            }
+
+            public static string GetConnection(string relationName, string connectionId, Geocode geocode, bool enableDebug, Verbosity verbosity)
+            {
+                var url = new Url(ConnectionServiceBase);
+                url.Append(relationName).Append(connectionId);
+                HandleDefaults(url, geocode, enableDebug, verbosity);
                 return url.ToString();
             }
         }

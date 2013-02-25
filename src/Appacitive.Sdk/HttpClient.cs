@@ -100,14 +100,20 @@ namespace Appacitive.Sdk
         {
             var client = new HttpClient2();
             HttpResponseMessage response = null;
-            var content = new ByteArrayContent(data ?? Empty);
-            
-            this.Headers.For(h => content.Headers.Add(h.Key, h.Value));
+            ByteArrayContent content = null;
+            if (data != null)
+            {
+                content = new ByteArrayContent(data);
+                this.Headers.For(h => content.Headers.Add(h.Key, h.Value));
+            }
+            else
+            {
+                this.Headers.For(h => client.DefaultRequestHeaders.Add(h.Key, h.Value));
+            }
             
             switch (httpMethod)
             {
                 case "GET":
-                    this.Headers.For(h => client.DefaultRequestHeaders.Add(h.Key, h.Value));
                     response = await client.GetAsync(this.Url);
                     break;
                 case "PUT":

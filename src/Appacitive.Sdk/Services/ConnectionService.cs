@@ -29,5 +29,32 @@ namespace Appacitive.Sdk.Services
 
             return response;
         }
+
+
+        public async Task<GetConnectionResponse> GetConnectionAsync(GetConnectionRequest request)
+        {
+            byte[] bytes = null;
+            bytes = await HttpClient
+                        .WithUrl(Urls.For.GetConnection(request.Relation, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithAppacitiveSession(request.SessionToken)
+                        .WithEnvironment(request.Environment)
+                        .WithUserToken(request.UserToken)
+                        .GetAsync();
+            var response = GetConnectionResponse.Parse(bytes);
+            return response;
+        }
+
+        public async Task<DeleteConnectionResponse> DeleteConnectionAsync(DeleteConnectionRequest request)
+        {
+            byte[] bytes = null;
+            bytes = await HttpClient
+                        .WithUrl(Urls.For.GetConnection(request.Relation, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithAppacitiveSession(request.SessionToken)
+                        .WithEnvironment(request.Environment)
+                        .WithUserToken(request.UserToken)
+                        .DeleteAsync();
+            var response = DeleteConnectionResponse.Parse(bytes);
+            return response;
+        }
     }
 }
