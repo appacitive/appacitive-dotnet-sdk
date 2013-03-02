@@ -150,22 +150,6 @@ namespace Appacitive.Sdk
             }
         }
 
-        protected override Entity CreateNew()
-        {
-            // Create a new article
-            var service = ObjectFactory.Build<IUserService>();
-            var response = service.CreateUser(new CreateUserRequest()
-            {
-                User = this
-            });
-            if (response.Status.IsSuccessful == false)
-                throw response.Status.ToFault();
-
-            // 3. Update the last known state based on the differences
-            Debug.Assert(response.User != null, "If status is successful, then created user should not be null.");
-            return response.User;
-        }
-
         protected override async Task<Entity> CreateNewAsync()
         {
             // Create a new article
@@ -179,44 +163,6 @@ namespace Appacitive.Sdk
 
             // 3. Update the last known state based on the differences
             Debug.Assert(response.User != null, "If status is successful, then created user should not be null.");
-            return response.User;
-        }
-
-        protected override Entity Update(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags)
-        {
-            var userService = ObjectFactory.Build<IUserService>();
-            var request = new UpdateUserRequest()
-            {
-                SessionToken = AppacitiveContext.SessionToken,
-                Environment = AppacitiveContext.Environment,
-                UserToken = AppacitiveContext.UserToken,
-                Verbosity = AppacitiveContext.Verbosity,
-                UserId = this.Id
-            };
-
-            if (propertyUpdates != null && propertyUpdates.Count > 0)
-                propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
-            if (attributeUpdates != null && attributeUpdates.Count > 0)
-                attributeUpdates.For(x => request.AttributeUpdates[x.Key] = x.Value);
-
-            if (addedTags != null)
-                request.AddedTags.AddRange(addedTags);
-            if (removedTags != null)
-                request.RemovedTags.AddRange(removedTags);
-
-            // Check if an update is needed.
-            if (request.PropertyUpdates.Count == 0 &&
-                request.AttributeUpdates.Count == 0 &&
-                request.AddedTags.Count == 0 &&
-                request.RemovedTags.Count == 0)
-                return null;
-
-            var response = userService.UpdateUser(request);
-            if (response.Status.IsSuccessful == false)
-                throw response.Status.ToFault();
-
-            // 3. Update the last known state based on the differences
-            Debug.Assert(response.User != null, "If status is successful, then updated user should not be null.");
             return response.User;
         }
 

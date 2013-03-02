@@ -130,48 +130,12 @@ namespace Appacitive.Sdk
             }
         }
 
-        public void Save()
-        {
-            if (string.IsNullOrWhiteSpace(this.Id) == true)
-                CreateNewEntity();
-            else
-                UpdateEntity();
-        }
-
         public async Task SaveAsync()
         {
             if (string.IsNullOrWhiteSpace(this.Id) == true)
                 await CreateNewEntityAsync();
             else
                 await UpdateEntityAsync();
-        }
-
-        public void UpdateEntity()
-        {
-            // 1. Get property differences
-            var propertyDifferences = _currentFields.GetModifications(_lastKnownFields);
-            
-            // 2. Get attribute differences
-            var attributeDifferences = _currentAttributes.GetModifications(_lastKnownAttributes);
-
-            // 2. Get tags changes
-            IEnumerable<string> addedTags, removedTags;
-            _lastKnownTags.GetDifferences(_currentTags, out addedTags, out removedTags);
-            
-            // 3. update the article
-            var updated = Update(propertyDifferences, attributeDifferences, addedTags, removedTags);
-            if (updated != null)
-            {
-                // 4. Update the last known state based on the differences
-                UpdateLastKnown(updated);
-            }
-        }
-
-        private void CreateNewEntity()
-        {
-            // create new
-            var entity = CreateNew();
-            UpdateLastKnown(entity);
         }
 
         private async Task CreateNewEntityAsync()
@@ -296,11 +260,7 @@ namespace Appacitive.Sdk
         }
 
 
-        protected abstract Entity CreateNew();
-
         protected abstract Task<Entity> CreateNewAsync();
-
-        protected abstract Entity Update(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags);
 
         protected abstract Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags);
     }

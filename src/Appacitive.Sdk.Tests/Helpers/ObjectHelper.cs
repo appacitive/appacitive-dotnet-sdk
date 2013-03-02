@@ -10,27 +10,30 @@ namespace Appacitive.Sdk.Tests
 {
     internal static class ObjectHelper
     {
-        public static Article CreateNew(Article article = null)
+        public static async Task<Article> CreateNewAsync(Article article = null)
         {
             Console.WriteLine("Creating new article");
             var now = DateTime.Now;
             dynamic obj = article ?? new Article("object");
-            obj.intfield = 1;
-            obj.decimalfield = 10.0m;
-            obj.datefield = "2012-12-20";
-            obj.datetimefield = now.ToString("o");
-            obj.stringfield = "string value";
-            obj.textfield = "text value";
-            obj.boolfield = false;
-            obj.geofield = "11.5,12.5";
-            obj.listfield = "a";
-            obj.SetAttribute("attr1", "value1");
-            obj.SetAttribute("attr2", "value2");
+            if (article == null)
+            {
+                obj.intfield = 1;
+                obj.decimalfield = 10.0m;
+                obj.datefield = "2012-12-20";
+                obj.datetimefield = now.ToString("o");
+                obj.stringfield = "string value";
+                obj.textfield = "text value";
+                obj.boolfield = false;
+                obj.geofield = "11.5,12.5";
+                obj.listfield = "a";
+                obj.SetAttribute("attr1", "value1");
+                obj.SetAttribute("attr2", "value2");
+            }
 
             var service = ObjectFactory.Build<IArticleService>();
             CreateArticleResponse response = null;
 
-            response = service.CreateArticle(new CreateArticleRequest()
+            response = await service.CreateArticleAsync(new CreateArticleRequest()
             {
                 Article = obj,
                 SessionToken = AppacitiveContext.SessionToken,

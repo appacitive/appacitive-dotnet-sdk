@@ -15,7 +15,7 @@ namespace Appacitive.Sdk.Tests
     {
 
         [TestMethod]
-        public void CreateUserTest()
+        public async Task CreateUserAsyncTest()
         {
             var user = new User()
             {
@@ -29,78 +29,36 @@ namespace Appacitive.Sdk.Tests
                 Location = new Geocode(18, 19)
             };
             user.SetAttribute("attr1", "value1");
-            user.Save();
-            user.Save();
+            await user.SaveAsync();
         }
 
 
         [TestMethod]
-        public void FindAllUsersAsyncTest()
+        public async Task FindAllUsersAsyncTest()
         {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-                {
-                    try
-                    {
-                        // Create a new user
-                        var newUser = await UserHelper.CreateNewUserAsync();
-                        // Get list of users
-                        var users = await User.FindAllAsync();
-                        users.ForEach(x => Console.WriteLine("id: {0} username: {1}",
-                            x.Id,
-                            x.Username));
-                    }
-                    catch (Exception ex)
-                    {
-                        fault = ex;
-                    }
-                    finally
-                    {
-                        waitHandle.Set();
-                    }
-                };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
+            // Create a new user
+            var newUser = await UserHelper.CreateNewUserAsync();
+            // Get list of users
+            var users = await User.FindAllAsync();
+            users.ForEach(x => Console.WriteLine("id: {0} username: {1}",
+                x.Id,
+                x.Username));
         }
 
         [TestMethod]
-        public void FindAllUsersWithQueryAsyncTest()
+        public async Task FindAllUsersWithQueryAsyncTest()
         {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-            {
-                try
-                {
-                    // Create a new user
-                    var newUser = await UserHelper.CreateNewUserAsync();
-                    // Get list of users
-                    var users = await User.FindAllAsync(
-                        Query.Property("username").IsEqualTo(newUser.Username)
-                        );
-                    Assert.IsTrue(users != null && users.Count == 1);
-                    Assert.IsTrue(users[0].Id == newUser.Id);
-                    users.ForEach(x => Console.WriteLine("id: {0} username: {1}",
-                        x.Id,
-                        x.Username));
-                    
-                }
-                catch (Exception ex)
-                {
-                    fault = ex;
-                }
-                finally
-                {
-                    waitHandle.Set();
-                }
-            };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
+            // Create a new user
+            var newUser = await UserHelper.CreateNewUserAsync();
+            // Get list of users
+            var users = await User.FindAllAsync(
+                Query.Property("username").IsEqualTo(newUser.Username)
+                );
+            Assert.IsTrue(users != null && users.Count == 1);
+            Assert.IsTrue(users[0].Id == newUser.Id);
+            users.ForEach(x => Console.WriteLine("id: {0} username: {1}",
+                x.Id,
+                x.Username));
         }
     }
 }

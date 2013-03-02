@@ -13,28 +13,15 @@ namespace Appacitive.Sdk.Tests
     public class SessionServiceFixture
     {
         [TestMethod]
-        public void CreateSessionTest()
-        {
-            var service = ObjectFactory.Build<ISessionService>();
-            var response = service.CreateSession(new CreateSessionRequest() { ApiKey = TestConfiguration.ApiKey });
-            Assert.IsNotNull(response, "Response cannot be null.");
-            Assert.IsNotNull(response.Session, "Response.Session is null.");
-            Assert.IsNotNull(response.Status, "Response.Status is null.");
-            Console.WriteLine("Time taken: {0} seconds", response.TimeTaken);
-        }
-
-        [TestMethod]
-        public void CreateSessionAsyncTest()
+        public async Task CreateSessionAsyncTest()
         {
             var waitHandle = new ManualResetEvent(false);
             var service = ObjectFactory.Build<ISessionService>();
             CreateSessionResponse response = null;
-            Action action = async () =>
-            {
-                response = await service.CreateSessionAsync(new CreateSessionRequest() { ApiKey = TestConfiguration.ApiKey });
-                waitHandle.Set();
-            };
-            action();
+
+            response = await service.CreateSessionAsync(new CreateSessionRequest() { ApiKey = TestConfiguration.ApiKey });
+            waitHandle.Set();
+
             var isTimedOut = waitHandle.WaitOne(10000);
             Assert.IsTrue(isTimedOut, "Operation timed out.");
             Assert.IsNotNull(response, "Response cannot be null.");

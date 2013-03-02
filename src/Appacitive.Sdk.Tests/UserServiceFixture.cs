@@ -14,12 +14,11 @@ namespace Appacitive.Sdk.Tests
     public class UserServiceFixture
     {
         [TestMethod]
-        public void CreateUserTest()
+        public async Task CreateUserAsyncTest()
         {
-            
             var user = new User()
             {
-                Username = "john.doe_" + Unique.String,                  // ensure unique user name
+                Username = "john.doe_async_" + Unique.String,                  // ensure unique user name
                 Email = "john.doe@" + Unique.String + ".com",           // unique but useless email address
                 Password = "p@ssw0rd",
                 DateOfBirth = DateTime.Today.AddYears(-25),
@@ -33,129 +32,54 @@ namespace Appacitive.Sdk.Tests
 
             // Create user
             var request = new CreateUserRequest() { User = user };
-            CreateUserResponse response = userService.CreateUser(request);
+            var response = await userService.CreateUserAsync(request);
             ApiHelper.EnsureValidResponse(response);
             Assert.IsNotNull(response.User, "User in response is null.");
-            Assert.IsTrue(string.IsNullOrWhiteSpace(response.User.Id) == false );
+            Assert.IsTrue(string.IsNullOrWhiteSpace(response.User.Id) == false);
             Console.WriteLine("Created user with id {0}.", response.User.Id);
         }
 
         [TestMethod]
-        public void CreateUserAsyncTest()
+        public async Task AuthenticateWithUsernamePasswordTestAsync()
         {
-            var waitHandle = new ManualResetEvent(false);
-            Action action = async () =>
-                    {
-                        try
-                        {
-                            var user = new User()
-                            {
-                                Username = "john.doe_async_" + Unique.String,                  // ensure unique user name
-                                Email = "john.doe@" + Unique.String + ".com",           // unique but useless email address
-                                Password = "p@ssw0rd",
-                                DateOfBirth = DateTime.Today.AddYears(-25),
-                                FirstName = "John",
-                                LastName = "Doe",
-                                Phone = "987-654-3210",
-                                Location = new Geocode(18, 19)
-                            };
 
-                            IUserService userService = new UserService();
-
-                            // Create user
-                            var request = new CreateUserRequest() { User = user };
-                            var response = await userService.CreateUserAsync(request);
-                            ApiHelper.EnsureValidResponse(response);
-                            Assert.IsNotNull(response.User, "User in response is null.");
-                            Assert.IsTrue(string.IsNullOrWhiteSpace(response.User.Id) == false);
-                            Console.WriteLine("Created user with id {0}.", response.User.Id);
-                        }
-                        finally
-                        {
-                            waitHandle.Set();
-                        }
-                    };
-            action();
-            waitHandle.WaitOne();
-        }
-
-        [TestMethod]
-        public void AuthenticateWithUsernamePasswordTest()
-        {
             // Create the user
-            var user = UserHelper.CreateNewUser();
-
+            var user = await UserHelper.CreateNewUserAsync();
+            IUserService userService = new UserService();
             var authRequest = new AuthenticateUserRequest();
             authRequest["username"] = user.Username;
             authRequest["password"] = user.Password;
-            IUserService userService = new UserService();
-            var authResponse = userService.Authenticate(authRequest);
+            var authResponse = await userService.AuthenticateAsync(authRequest);
             ApiHelper.EnsureValidResponse(authResponse);
             Assert.IsTrue(string.IsNullOrWhiteSpace(authResponse.Token) == false, "Auth token is not valid.");
             Assert.IsNotNull(authResponse.User, "Authenticated user is null.");
             Console.WriteLine("Logged in user id: {0}", authResponse.User.Id);
             Console.WriteLine("Session token: {0}", authResponse.Token);
-
         }
 
         [TestMethod]
-        public void AuthenticateWithUsernamePasswordTestAsync()
+        public async Task GetUserByIdAsyncTest()
         {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            AuthenticateUserResponse authResponse = null;
-            Action action = async () =>
-                {
-                    try
-                    {
-                        // Create the user
-                        var user = await UserHelper.CreateNewUserAsync();
-                        IUserService userService = new UserService();
-                        var authRequest = new AuthenticateUserRequest();
-                        authRequest["username"] = user.Username;
-                        authRequest["password"] = user.Password;
-                        authResponse = await userService.AuthenticateAsync(authRequest);
-                        ApiHelper.EnsureValidResponse(authResponse);
-                        Assert.IsTrue(string.IsNullOrWhiteSpace(authResponse.Token) == false, "Auth token is not valid.");
-                        Assert.IsNotNull(authResponse.User, "Authenticated user is null.");
-                        Console.WriteLine("Logged in user id: {0}", authResponse.User.Id);
-                        Console.WriteLine("Session token: {0}", authResponse.Token);
-                    }
-                    catch (Exception ex)
-                    {
-                        fault = ex;
-                    }
-                    finally
-                    {
-                        waitHandle.Set();
-                    }
-                };
-            action();
-            waitHandle.WaitOne();
-        }
 
-        [TestMethod]
-        public void GetUserByIdTest()
-        {
             // Create the user
-            var user = UserHelper.CreateNewUser();
-
+            var created = await UserHelper.CreateNewUserAsync();
             // Setup user token
-            var token = UserHelper.Authenticate(user.Username, user.Password);
+            string token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
             App.SetLoggedInUser(token);
 
             // Get the created user
             IUserService userService = new UserService();
-            var getUserRequest = new GetUserRequest() { UserId = user.Id };
-            var getUserResponse = userService.GetUser(getUserRequest);
+            var getUserRequest = new GetUserRequest() { UserId = created.Id };
+            var getUserResponse = await userService.GetUserAsync(getUserRequest);
             ApiHelper.EnsureValidResponse(getUserResponse);
             Assert.IsNotNull(getUserResponse.User);
-            Assert.IsTrue(getUserResponse.User.Username == user.Username);
-            Assert.IsTrue(getUserResponse.User.FirstName == user.FirstName);
-            Assert.IsTrue(getUserResponse.User.LastName == user.LastName);
-            Assert.IsTrue(getUserResponse.User.Email == user.Email);
-            Assert.IsTrue(getUserResponse.User.DateOfBirth == user.DateOfBirth);
-            Assert.IsTrue(getUserResponse.User.Phone == user.Phone);
+
+            Assert.IsTrue(getUserResponse.User.Username == created.Username);
+            Assert.IsTrue(getUserResponse.User.FirstName == created.FirstName);
+            Assert.IsTrue(getUserResponse.User.LastName == created.LastName);
+            Assert.IsTrue(getUserResponse.User.Email == created.Email);
+            Assert.IsTrue(getUserResponse.User.DateOfBirth == created.DateOfBirth);
+            Assert.IsTrue(getUserResponse.User.Phone == created.Phone);
             var user2 = getUserResponse.User;
             Console.WriteLine("Username: {0}", user2.Username);
             Console.WriteLine("Firstname: {0}", user2.FirstName);
@@ -167,71 +91,20 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public void GetUserByIdAsyncTest()
-        {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-                {
-                    try
-                    {
-                        // Create the user
-                        var created = await UserHelper.CreateNewUserAsync();
-                        // Setup user token
-                        string token = await AuthenticateAsync(created.Username, created.Password);
-                        App.SetLoggedInUser(token);
-
-                        // Get the created user
-                        IUserService userService = new UserService();
-                        var getUserRequest = new GetUserRequest() { UserId = created.Id };
-                        var getUserResponse = await userService.GetUserAsync(getUserRequest);
-                        ApiHelper.EnsureValidResponse(getUserResponse);
-                        Assert.IsNotNull(getUserResponse.User);
-                        
-                        Assert.IsTrue(getUserResponse.User.Username == created.Username);
-                        Assert.IsTrue(getUserResponse.User.FirstName == created.FirstName);
-                        Assert.IsTrue(getUserResponse.User.LastName == created.LastName);
-                        Assert.IsTrue(getUserResponse.User.Email == created.Email);
-                        Assert.IsTrue(getUserResponse.User.DateOfBirth == created.DateOfBirth);
-                        Assert.IsTrue(getUserResponse.User.Phone == created.Phone);
-                        var user2 = getUserResponse.User;
-                        Console.WriteLine("Username: {0}", user2.Username);
-                        Console.WriteLine("Firstname: {0}", user2.FirstName);
-                        Console.WriteLine("Lastname: {0}", user2.LastName);
-                        Console.WriteLine("Email: {0}", user2.Email);
-                        Console.WriteLine("Birthdate: {0}", user2.DateOfBirth);
-                        Console.WriteLine("Phone: {0}", user2.Phone);
-                    }
-                    catch (Exception ex)
-                    {
-                        fault = ex;
-                    }
-                    finally
-                    {
-                        waitHandle.Set();
-                    }
-                };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
-        }
-
-        [TestMethod]
-        public void GetUserByUsernameTest()
+        public async Task GetUserByUsernameAsyncTest()
         {
             // Create the user
-            var created = UserHelper.CreateNewUser();
+            var created = await UserHelper.CreateNewUserAsync();
 
             // Setup user token
-            string token = UserHelper.Authenticate(created.Username, created.Password);
+            string token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
             App.SetLoggedInUser(token);
 
             // Get the created user
             IUserService userService = new UserService();
             // Get the created user
             var getUserRequest = new GetUserRequest() { UserId = created.Username, UserIdType = "username" };
-            var getUserResponse = userService.GetUser(getUserRequest);
+            var getUserResponse = await userService.GetUserAsync(getUserRequest);
             ApiHelper.EnsureValidResponse(getUserResponse);
             Assert.IsNotNull(getUserResponse.User);
             
@@ -251,19 +124,19 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public void GetUserByTokenTest()
+        public async Task GetUserByTokenAsyncTest()
         {
             // Create the user
-            var created = UserHelper.CreateNewUser();
+            var created = await UserHelper.CreateNewUserAsync();
 
             // Setup user token
-            var token = UserHelper.Authenticate(created.Username, created.Password);
+            var token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
             App.SetLoggedInUser(token);
 
             // Get the created user
             IUserService userService = new UserService();
             var getUserRequest = new GetUserRequest() { UserId = token, UserIdType = "token" };
-            var getUserResponse = userService.GetUser(getUserRequest);
+            var getUserResponse = await userService.GetUserAsync(getUserRequest);
             ApiHelper.EnsureValidResponse(getUserResponse);
             Assert.IsNotNull(getUserResponse.User);
             Assert.IsTrue(getUserResponse.User.Username == created.Username);
@@ -283,37 +156,14 @@ namespace Appacitive.Sdk.Tests
         }
 
         
-        private async Task<string> AuthenticateAsync(string username, string password)
-        {
-            Console.WriteLine("Authenticating user with username {0} and password {1}", username, password);
-            IUserService userService = new UserService();
-            var authRequest = new AuthenticateUserRequest();
-            authRequest["username"] = username;
-            authRequest["password"] = password;
-            var authResponse = await userService.AuthenticateAsync(authRequest);
-
-            Assert.IsNotNull(authResponse, "Authenticate() response is null.");
-            Assert.IsNotNull(authResponse.Status, "Status of authenticate response is null.");
-            if (authResponse.Status.IsSuccessful == true)
-            {
-                return authResponse.Token;
-            }
-            else
-            {
-                return string.Empty;
-            }
-
-        }
-
         [TestMethod]
-        public void UpdateUserTest()
+        public async Task UpdateUserAsyncTest()
         {
             // Create user
-            var created = UserHelper.CreateNewUser();
+            var created = await UserHelper.CreateNewUserAsync();
 
             // Get auth token
-            var token = string.Empty;
-            token = UserHelper.Authenticate(created.Username, created.Password);
+            var token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
             App.SetLoggedInUser(token);
 
             // Update user
@@ -334,266 +184,110 @@ namespace Appacitive.Sdk.Tests
             updateRequest.PropertyUpdates["location"] = created.Location.ToString();
             updateRequest.PropertyUpdates["birthdate"] = created.DateOfBirth.Value.ToString(Formats.BirthDate);
             IUserService userService = new UserService();
-            var response = userService.UpdateUser(updateRequest);
+            var response = await userService.UpdateUserAsync(updateRequest);
 
             // Ensure fields are updated
-            ApiHelper.EnsureValidResponse(response);
+            Assert.IsNotNull(response, "Update user response is null.");
+            Assert.IsNotNull(response.Status, "Update user response.status is null.");
+            if (response.Status.IsSuccessful == false)
+                Assert.Fail(response.Status.Message);
             Assert.IsNotNull(response.User);
 
 
             // Get updated user (just to be sure)
-            var updated = UserHelper.GetExistingUser(created.Id);
+            var updated = await UserHelper.GetExistingUserAsync(created.Id);
             Console.WriteLine("Matching existing with updated user.");
             UserHelper.MatchUsers(updated, created);
         }
 
         [TestMethod]
-        public void UpdateUserAsyncTest()
-        {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-                {
-                    try
-                    {
-                        // Create user
-                        var created = await UserHelper.CreateNewUserAsync();
-
-                        // Get auth token
-                        var token = await AuthenticateAsync(created.Username, created.Password);
-                        App.SetLoggedInUser(token);
-
-                        // Update user
-                        created.Username = "john.doe_" + Unique.String;
-                        created.Email = "john.doe@" + Unique.String + ".com";
-                        created.DateOfBirth = DateTime.Today.AddYears(-30);
-                        created.FirstName = "John_updated";
-                        created.LastName = "Doe_updated";
-                        created.Phone = "999-888-1234";
-                        created.Location = new Geocode(20, 21);
-
-                        var updateRequest = new UpdateUserRequest() { UserId = created.Id };
-                        updateRequest.PropertyUpdates["username"] = created.Username;
-                        updateRequest.PropertyUpdates["email"] = created.Email;
-                        updateRequest.PropertyUpdates["firstname"] = created.FirstName;
-                        updateRequest.PropertyUpdates["lastname"] = created.LastName;
-                        updateRequest.PropertyUpdates["phone"] = created.Phone;
-                        updateRequest.PropertyUpdates["location"] = created.Location.ToString();
-                        updateRequest.PropertyUpdates["birthdate"] = created.DateOfBirth.Value.ToString(Formats.BirthDate);
-                        IUserService userService = new UserService();
-                        var response = await userService.UpdateUserAsync(updateRequest);
-
-                        // Ensure fields are updated
-                        Assert.IsNotNull(response, "Update user response is null.");
-                        Assert.IsNotNull(response.Status, "Update user response.status is null.");
-                        if (response.Status.IsSuccessful == false)
-                            Assert.Fail(response.Status.Message);
-                        Assert.IsNotNull(response.User);
-
-
-                        // Get updated user (just to be sure)
-                        var updated = await UserHelper.GetExistingUserAsync(created.Id);
-                        Console.WriteLine("Matching existing with updated user.");
-                        UserHelper.MatchUsers(updated, created);
-                    }
-                    catch (Exception ex)
-                    {
-                        fault = ex;
-                    }
-                    finally
-                    {
-                        waitHandle.Set();
-                    }
-                };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
-
-        }
-
-        [TestMethod]
-        public void ChangePasswordTest()
+        public async Task ChangePasswordAsyncTest()
         {
             // Create user
-            var newUser = UserHelper.CreateNewUser();
+            var newUser = await UserHelper.CreateNewUserAsync();
 
             // Authenticate with existing password
-            var token = UserHelper.Authenticate(newUser.Username, newUser.Password);
+            var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
             App.SetLoggedInUser(token);
 
             // Change password
             var newPassword = "p@ssw0rd2";
-            var request = new ChangePasswordRequest() { UserId=newUser.Id, OldPassword = newUser.Password, NewPassword = newPassword };
+            var request = new ChangePasswordRequest() { UserId = newUser.Id, OldPassword = newUser.Password, NewPassword = newPassword };
             IUserService userService = new UserService();
-            var response = userService.ChangePassword(request);
+            var response = await userService.ChangePasswordAsync(request);
             ApiHelper.EnsureValidResponse(response);
 
             // Authenticate with new password
-            token = UserHelper.Authenticate(newUser.Username, newPassword);
+            token = await UserHelper.AuthenticateAsync(newUser.Username, newPassword);
             Assert.IsTrue(string.IsNullOrWhiteSpace(token) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
         }
 
         [TestMethod]
-        public void ChangePasswordAsyncTest()
-        {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-                {
-                    try
-                    {
-                        // Create user
-                        var newUser = await UserHelper.CreateNewUserAsync();
-
-                        // Authenticate with existing password
-                        var token = await AuthenticateAsync(newUser.Username, newUser.Password);
-                        App.SetLoggedInUser(token);
-
-                        // Change password
-                        var newPassword = "p@ssw0rd2";
-                        var request = new ChangePasswordRequest() { UserId = newUser.Id, OldPassword = newUser.Password, NewPassword = newPassword };
-                        IUserService userService = new UserService();
-                        var response = await userService.ChangePasswordAsync(request);
-                        ApiHelper.EnsureValidResponse(response);
-
-                        // Authenticate with new password
-                        token = await AuthenticateAsync(newUser.Username, newPassword);
-                        Assert.IsTrue(string.IsNullOrWhiteSpace(token) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
-                    }
-                    catch (Exception ex)
-                    {
-                        fault = ex;
-                    }
-                    finally
-                    {
-                        waitHandle.Set();
-                    }
-                };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
-        }
-
-        [TestMethod]
-        public void ChangePasswordWithUsernameTest()
+        public async Task ChangePasswordWithUsernameAsyncTest()
         {
             // Create user
-            var newUser = UserHelper.CreateNewUser();
+            var newUser = await UserHelper.CreateNewUserAsync();
 
             // Authenticate with existing password
-            var token = UserHelper.Authenticate(newUser.Username, newUser.Password);
+            var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
             App.SetLoggedInUser(token);
 
             // Change password
             var newPassword = "p@ssw0rd2";
             var request = new ChangePasswordRequest() { UserId = newUser.Username, IdType="username", OldPassword = newUser.Password, NewPassword = newPassword };
             IUserService userService = new UserService();
-            var response = userService.ChangePassword(request);
+            var response = await userService.ChangePasswordAsync(request);
             ApiHelper.EnsureValidResponse(response);
 
             // Authenticate with new password
-            token = UserHelper.Authenticate(newUser.Username, newPassword);
+            token = await UserHelper.AuthenticateAsync(newUser.Username, newPassword);
             Assert.IsTrue(string.IsNullOrWhiteSpace(token) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
         }
 
         [TestMethod]
-        public void ChangePasswordWithTokenTest()
+        public async Task ChangePasswordWithTokenTest()
         {
             // Create user
-            var newUser = UserHelper.CreateNewUser();
+            var newUser = await UserHelper.CreateNewUserAsync();
 
             // Authenticate with existing password
-            var token = UserHelper.Authenticate(newUser.Username, newUser.Password);
+            var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
             App.SetLoggedInUser(token);
 
             // Change password
             var newPassword = "p@ssw0rd2";
             var request = new ChangePasswordRequest() { UserId = token, IdType = "token", OldPassword = newUser.Password, NewPassword = newPassword };
             IUserService userService = new UserService();
-            var response = userService.ChangePassword(request);
+            var response = await userService.ChangePasswordAsync(request);
             ApiHelper.EnsureValidResponse(response);
 
             // Authenticate with new password
-            token = UserHelper.Authenticate(newUser.Username, newPassword);
+            token = await UserHelper.AuthenticateAsync(newUser.Username, newPassword);
             Assert.IsTrue(string.IsNullOrWhiteSpace(token) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
         }
 
         [TestMethod]
-        public void DeleteUserTest()
+        public async Task DeleteUserAsyncTest()
         {
             // Create new user
-            var newUser = UserHelper.CreateNewUser();
+            var newUser = await UserHelper.CreateNewUserAsync();
 
             // Authenticate the user
-            var token = UserHelper.Authenticate(newUser.Username, newUser.Password);
+            var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
             App.SetLoggedInUser(token);
 
             // Delete the user
             var request = new DeleteUserRequest() { UserId = newUser.Id };
             IUserService userService = new UserService();
-            var response = userService.DeleteUser(request);
+            var response = await userService.DeleteUserAsync(request);
             ApiHelper.EnsureValidResponse(response);
 
             // Try to get the user
-            var getResponse = userService.GetUser( new GetUserRequest() { UserId = newUser.Id } );
+            var getResponse = await userService.GetUserAsync(new GetUserRequest() { UserId = newUser.Id });
             ApiHelper.EnsureValidResponse(getResponse, false);
             Assert.IsFalse(getResponse.Status.IsSuccessful, "Get for an non-existant user did not fail.");
             Console.WriteLine("Get user error message: {0}", getResponse.Status.Message);
         }
-
-        [TestMethod]
-        public void DeleteUserAsyncTest()
-        {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-            {
-                try
-                {
-                    // Create new user
-                    var newUser = await UserHelper.CreateNewUserAsync();
-
-                    // Authenticate the user
-                    var token = await AuthenticateAsync(newUser.Username, newUser.Password);
-                    App.SetLoggedInUser(token);
-
-                    // Delete the user
-                    var request = new DeleteUserRequest() { UserId = newUser.Id };
-                    IUserService userService = new UserService();
-                    var response = await userService.DeleteUserAsync(request);
-                    ApiHelper.EnsureValidResponse(response);
-
-                    // Try to get the user
-                    var getResponse = await userService.GetUserAsync(new GetUserRequest() { UserId = newUser.Id });
-                    ApiHelper.EnsureValidResponse(getResponse, false);
-                    Assert.IsFalse(getResponse.Status.IsSuccessful, "Get for an non-existant user did not fail.");
-                    Console.WriteLine("Get user error message: {0}", getResponse.Status.Message);
-                }
-                catch (Exception ex)
-                {
-                    fault = ex;
-                }
-                finally
-                {
-                    waitHandle.Set();
-                }
-            };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
-
-        }
-
-        
-
-        
-
-        
-
-        
     }
 
     

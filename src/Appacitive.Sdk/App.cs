@@ -74,7 +74,10 @@ namespace Appacitive.Sdk
                         try
                         {
                             if (string.IsNullOrWhiteSpace(_sessionToken) == true)
-                                CreateSession();
+                            {
+                                CreateSessionAsync().Wait();
+                            }
+                            
                         }
                         finally
                         {
@@ -103,12 +106,12 @@ namespace Appacitive.Sdk
 
         private static object _syncroot = new object();
 
-        private static void CreateSession()
+        private static async Task CreateSessionAsync()
         {
             //TODO: Add validation and failure handling
             var request = new CreateSessionRequest() { ApiKey = AppacitiveContext.ApiKey };
             var service = ObjectFactory.Build<ISessionService>();
-            var response = service.CreateSession(request);
+            var response = await service.CreateSessionAsync(request);
             _sessionToken = response.Session.SessionKey;
         }
 

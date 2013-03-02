@@ -12,12 +12,12 @@ namespace Appacitive.Sdk.Tests
     public class ArticleFixture
     {
         [TestMethod]
-        public void CreateArticleTest()
+        public async Task CreateArticleAsyncTest()
         {
             dynamic obj = new Article("object");
             obj.intfield = 1;
             obj.decimalfield = 22m / 7m;
-            obj.Save();
+            await obj.SaveAsync();
             var saved = obj as Article;
             Assert.IsNotNull(saved);
             Assert.IsTrue(string.IsNullOrWhiteSpace(saved.Id) == false);
@@ -25,121 +25,39 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public void CreateArticleAsyncTest()
+        public async Task GetArticleAsyncTest()
         {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-                {
-                    try
-                    {
-                        dynamic obj = new Article("object");
-                        obj.intfield = 1;
-                        obj.decimalfield = 22m / 7m;
-                        await obj.SaveAsync();
-                        var saved = obj as Article;
-                        Assert.IsNotNull(saved);
-                        Assert.IsTrue(string.IsNullOrWhiteSpace(saved.Id) == false);
-                        Console.WriteLine("Created article with id {0}.", saved.Id);
-                    }
-                    catch (Exception ex)
-                    {
-                        fault = ex;
-                    }
-                    finally
-                    {
-                        waitHandle.Set();
-                    }
-                };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
-        }
+            // Create new article
+            dynamic article = new Article("object");
+            decimal pi = 22.0m/7.0m;
+            article.intfield = 1;
+            article.decimalfield = pi;
+            var saved = await ObjectHelper.CreateNewAsync( article as Article );
 
-        [TestMethod]
-        public void GetArticleTest()
-        {
-            dynamic obj = new Article("object");
-            obj.intfield = 1;
-            var pi = 22m / 7;
-            obj.decimalfield = pi;
-            obj.Save();
-            var saved = obj as Article;
-            Assert.IsNotNull(saved);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(saved.Id) == false);
-            Console.WriteLine("Created article with id {0}.", saved.Id);
-
-            dynamic copy = Article.Get("object", saved.Id);
+            // Get the created article
+            dynamic copy = await Article.GetAsync("object", saved.Id);
             Assert.IsNotNull(copy);
             int intfield = copy.intfield;
             decimal decimalField = copy.decimalfield;
             Assert.IsTrue(intfield == 1);
             Assert.IsTrue(decimalField == pi);
+
         }
 
         [TestMethod]
-        public void GetArticleAsyncTest()
+        public async Task DeleteArticleAsyncTest()
         {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-                {
-                    try
-                    {
-                        dynamic obj = new Article("object");
-                        obj.intfield = 1;
-                        var pi = 22m / 7;
-                        obj.decimalfield = pi;
-                        await obj.SaveAsync();
-                        var saved = obj as Article;
-                        Assert.IsNotNull(saved);
-                        Assert.IsTrue(string.IsNullOrWhiteSpace(saved.Id) == false);
-                        Console.WriteLine("Created article with id {0}.", saved.Id);
 
-                        dynamic copy = await Article.GetAsync("object", saved.Id);
-                        Assert.IsNotNull(copy);
-                        int intfield = copy.intfield;
-                        decimal decimalField = copy.decimalfield;
-                        Assert.IsTrue(intfield == 1);
-                        Assert.IsTrue(decimalField == pi);
-                    }
-                    catch (Exception ex)
-                    {
-                        fault = ex;
-                    }
-                    finally
-                    {
-                        waitHandle.Set();
-                    }
-                };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
-        }
-
-        [TestMethod]
-        public void DeleteArticleTest()
-        {
             // Create the article
-            dynamic obj = new Article("object");
-            obj.intfield = 1;
-            var pi = 22m / 7;
-            obj.decimalfield = pi;
-            obj.Save();
-            var saved = obj as Article;
-            Assert.IsNotNull(saved);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(saved.Id) == false);
-            Console.WriteLine("Created article with id {0}.", saved.Id);
+            var saved = await ObjectHelper.CreateNewAsync();
 
             // Delete the article
-            Article.Delete("object", saved.Id);
+            await Article.DeleteAsync("object", saved.Id);
 
             // Try and get and confirm that the article is deleted.
             try
             {
-                var copy = Article.Get("object", saved.Id);
+                var copy = await Article.GetAsync("object", saved.Id);
                 Assert.Fail("Operation should have faulted since the article has been deleted.");
             }
             catch (AppacitiveException ex)
@@ -147,75 +65,22 @@ namespace Appacitive.Sdk.Tests
                 var msg = string.Format("Cannot locate article of type 'object' and id {0}.", saved.Id);
                 Assert.IsTrue(ex.Message == msg);
             }
+
         }
 
         [TestMethod]
-        public void DeleteArticleAsyncTest()
-        {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-                        {
-                            try
-                            {
-                                // Create the article
-                                dynamic obj = new Article("object");
-                                obj.intfield = 1;
-                                var pi = 22m / 7;
-                                obj.decimalfield = pi;
-                                await obj.SaveAsync();
-                                var saved = obj as Article;
-                                Assert.IsNotNull(saved);
-                                Assert.IsTrue(string.IsNullOrWhiteSpace(saved.Id) == false);
-                                Console.WriteLine("Created article with id {0}.", saved.Id);
-
-                                // Delete the article
-                                await Article.DeleteAsync("object", saved.Id);
-
-                                // Try and get and confirm that the article is deleted.
-                                try
-                                {
-                                    var copy = await Article.GetAsync("object", saved.Id);
-                                    Assert.Fail("Operation should have faulted since the article has been deleted.");
-                                }
-                                catch (AppacitiveException ex)
-                                {
-                                    var msg = string.Format("Cannot locate article of type 'object' and id {0}.", saved.Id);
-                                    Assert.IsTrue(ex.Message == msg);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                fault = ex;
-                            }
-                            finally
-                            {
-                                waitHandle.Set();
-                            }
-
-                        };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
-        }
-
-        [TestMethod]
-        public void UpdateArticleTest()
+        public async Task UpdateArticleAsyncTest()
         {
             // Create the article
-            dynamic obj = new Article("object");
-            obj.intfield = 1;
-            var pi = 22m / 7;
-            obj.decimalfield = pi;
-            obj.Save();
-            var saved = obj as Article;
-            Assert.IsNotNull(saved);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(saved.Id) == false);
-            Console.WriteLine("Created article with id {0}.", saved.Id);
+            dynamic article = new Article("object");
+            decimal pi = 22.0m / 7.0m;
+            article.intfield = 1;
+            article.decimalfield = pi;
+            var saved = await ObjectHelper.CreateNewAsync(article as Article);
+            
 
             // Get the newly created article
-            dynamic copy = Article.Get("object", saved.Id);
+            dynamic copy = await Article.GetAsync("object", saved.Id);
             Assert.IsNotNull(copy);
             int intfield = copy.intfield;
             decimal decimalField = copy.decimalfield;
@@ -226,10 +91,10 @@ namespace Appacitive.Sdk.Tests
             copy.intfield = 2;
             copy.decimalfield = 30m;
             copy.stringfield = "Test";
-            copy.Save();
+            await copy.SaveAsync();
 
             // Get updated copy and verify
-            dynamic updated = Article.Get("object", saved.Id);
+            dynamic updated = await Article.GetAsync("object", saved.Id);
             Assert.IsNotNull(updated);
             intfield = updated.intfield;
             decimalField = updated.decimalfield;
@@ -238,324 +103,124 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(intfield == 2, "intfield not updated.");
             Assert.IsTrue(decimalField == 30, "decimal field not updated.");
             Assert.IsTrue(stringField == "Test", "stringfield not updated.");
-        }
 
-        [TestMethod]
-        public void UpdateArticleAsyncTest()
-        {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-            {
-                try
-                {
-                    // Create the article
-                    dynamic obj = new Article("object");
-                    obj.intfield = 1;
-                    var pi = 22m / 7;
-                    obj.decimalfield = pi;
-                    await obj.SaveAsync();
-                    var saved = obj as Article;
-                    Assert.IsNotNull(saved);
-                    Assert.IsTrue(string.IsNullOrWhiteSpace(saved.Id) == false);
-                    Console.WriteLine("Created article with id {0}.", saved.Id);
-
-                    // Get the newly created article
-                    dynamic copy = await Article.GetAsync("object", saved.Id);
-                    Assert.IsNotNull(copy);
-                    int intfield = copy.intfield;
-                    decimal decimalField = copy.decimalfield;
-                    Assert.IsTrue(intfield == 1);
-                    Assert.IsTrue(decimalField == pi);
-
-                    // Update the article
-                    copy.intfield = 2;
-                    copy.decimalfield = 30m;
-                    copy.stringfield = "Test";
-                    await copy.SaveAsync();
-
-                    // Get updated copy and verify
-                    dynamic updated = await Article.GetAsync("object", saved.Id);
-                    Assert.IsNotNull(updated);
-                    intfield = updated.intfield;
-                    decimalField = updated.decimalfield;
-                    string stringField = updated.stringfield;
-
-                    Assert.IsTrue(intfield == 2, "intfield not updated.");
-                    Assert.IsTrue(decimalField == 30, "decimal field not updated.");
-                    Assert.IsTrue(stringField == "Test", "stringfield not updated.");
-                }
-                catch (Exception ex)
-                {
-                    fault = ex;
-                }
-                finally
-                {
-                    waitHandle.Set();
-                }
-            };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
         }
 
 
         [TestMethod]
-        public void FindAllArticlesTest()
+        public async Task FindAllArticlesAsyncTest()
         {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-                {
-                    try
-                    {
-                        // Create the article
-                        dynamic obj = new Article("object");
-                        obj.stringfield = Unique.String;
-                        await obj.SaveAsync();
-                        var saved = obj as Article;
-                        Console.WriteLine("Created articled with id {0}", saved.Id);
+            // Create the article
+            var saved = await ObjectHelper.CreateNewAsync();
 
-                        // Search
-                        var articles = await Article.FindAllAsync("object");
-                        articles.ForEach(a => Console.WriteLine(a.Id));
-                        Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
-                    }
-                    catch (Exception ex)
-                    {
-                        fault = ex;
-                    }
-                    finally
-                    {
-                        waitHandle.Set();
-                    }
-                };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
+            // Search
+            var articles = await Article.FindAllAsync("object");
+            articles.ForEach(a => Console.WriteLine(a.Id));
+            Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+
         }
 
 
         [TestMethod]
-        public void FindAllArticlesWithQueryTest()
+        public async Task FindAllArticlesAsyncWithQueryTest()
         {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-            {
-                try
-                {
-                    // Create the article
-                    dynamic obj = new Article("object");
-                    obj.stringfield = Unique.String;
-                    await obj.SaveAsync();
-                    var saved = obj as Article;
-                    Console.WriteLine("Created articled with id {0}", saved.Id);
+            // Create the article
+            dynamic article = new Article("object");
+            article.stringfield = Unique.String;
+            dynamic obj = await ObjectHelper.CreateNewAsync(article as Article);
 
-                    // Search
-                    string stringToSearch = obj.stringfield;
-                    var articles = await Article.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch));
-                    Assert.IsNotNull(articles);
-                    Assert.IsTrue(articles.Count == 1);
-                    Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
-                }
-                catch (Exception ex)
-                {
-                    fault = ex;
-                }
-                finally
-                {
-                    waitHandle.Set();
-                }
-            };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
+            // Search
+            string stringToSearch = obj.stringfield;
+            var articles = await Article.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch));
+            Assert.IsNotNull(articles);
+            Assert.IsTrue(articles.Count == 1);
+            Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+
         }
 
         [TestMethod]
-        public void FindAllArticlesWithNestedQueryTest()
+        public async Task FindAllArticlesAsyncWithNestedQueryTest()
         {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-            {
-                try
-                {
-                    // Create the article
-                    dynamic obj = new Article("object");
-                    obj.stringfield = Unique.String;
-                    obj.intfield = 10;
-                    await obj.SaveAsync();
-                    var saved = obj as Article;
-                    Console.WriteLine("Created articled with id {0}", saved.Id);
 
-                    // Search
-                    string stringToSearch = obj.stringfield;
-                    var query = BooleanOperator.And(new[] 
+            // Create the article
+            dynamic article = new Article("object");
+            article.stringfield = Unique.String;
+            article.intfield = 10;
+            dynamic obj = await ObjectHelper.CreateNewAsync(article as Article);
+
+            // Search
+            string stringToSearch = obj.stringfield;
+            var query = BooleanOperator.And(new[] 
                         {
                             Query.Property("stringfield").IsEqualTo(stringToSearch),
                             Query.Property("intfield").IsEqualTo(10)
                         });
 
-                    var articles = await Article.FindAllAsync("object", query);
-                    Assert.IsNotNull(articles);
-                    Assert.IsTrue(articles.Count == 1);
-                    Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
-                }
-                catch (Exception ex)
-                {
-                    fault = ex;
-                }
-                finally
-                {
-                    waitHandle.Set();
-                }
-            };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
+            var articles = await Article.FindAllAsync("object", query);
+            Assert.IsNotNull(articles);
+            Assert.IsTrue(articles.Count == 1);
+            Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+
         }
 
         [TestMethod]
-        public void FindNonExistantPageTest()
+        public async Task FindNonExistantPageTest()
+        {
+            // Search
+            var articles = await Article.FindAllAsync("object", 10000, 500);
+            Assert.IsNotNull(articles);
+            Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+        }
+
+        [TestMethod]
+        public async Task FindAndDisplayAllArticlesTest()
         {
             var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
+            
+            // Create the article
+            dynamic obj = new Article("object");
+            obj.stringfield = Unique.String;
+            await obj.SaveAsync();
+            var saved = obj as Article;
+            Console.WriteLine("Created articled with id {0}", saved.Id);
+            var index = 1;
+            // Search
+            var articles = await Article.FindAllAsync("object", 1, 100);
+            do
             {
-                try
-                {
-                    // Search
-                    var articles = await Article.FindAllAsync("object", 10000, 500);
-                    Assert.IsNotNull(articles);
-                    Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
-                }
-                catch (Exception ex)
-                {
-                    fault = ex;
-                }
-                finally
-                {
-                    waitHandle.Set();
-                }
-            };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
-        }
-
-        [TestMethod]
-        public void FindAndDisplayAllArticlesTest()
-        {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-            {
-                try
-                {
-                    // Create the article
-                    dynamic obj = new Article("object");
-                    obj.stringfield = Unique.String;
-                    await obj.SaveAsync();
-                    var saved = obj as Article;
-                    Console.WriteLine("Created articled with id {0}", saved.Id);
-                    var index = 1;
-                    // Search
-                    var articles = await Article.FindAllAsync("object", 1, 100);
-                    do
-                    {   
-                        articles.ForEach(a => Console.WriteLine("{0}) {1}", index++, a.Id));
-                        Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
-                        if (articles.IsLastPage == false)
-                            articles = await articles.NextPageAsync();
-                        else
-                            break;
-                    } while (true);
-                    Console.WriteLine("Finished.");
-                }
-                catch (Exception ex)
-                {
-                    fault = ex;
-                }
-                finally
-                {
-                    waitHandle.Set();
-                }
-            };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
+                articles.ForEach(a => Console.WriteLine("{0}) {1}", index++, a.Id));
+                Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+                if (articles.IsLastPage == false)
+                    articles = await articles.NextPageAsync();
+                else
+                    break;
+            } while (true);
+            Console.WriteLine("Finished.");
         }
 
 
         [TestMethod]
-        public void GetConnectedArticlesTest()
+        public async Task GetConnectedArticlesAsyncTest()
         {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
-                {
-                    try
-                    {
-                        // Create objects
-                        var obj1 = ObjectHelper.CreateNew();
-                        var obj2 = ObjectHelper.CreateNew();
-                        var obj3 = ObjectHelper.CreateNew();
-                        var obj4 = ObjectHelper.CreateNew();
-                        var obj5 = ObjectHelper.CreateNew();
-                        // Create connections
-                        await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj2.Id).SaveAsync();
-                        await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj3.Id).SaveAsync();
-                        await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj4.Id).SaveAsync();
-                        await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj5.Id).SaveAsync();
-                        // Get connected
-                        var connectedArticles = await obj1.GetConnectedArticlesAsync("sibling");
-                        Assert.IsTrue(connectedArticles != null);
-                        Assert.IsTrue(connectedArticles.TotalRecords == 4);
-                        Assert.IsTrue(connectedArticles.Select(x => x.Id).Intersect(new[] { obj2.Id, obj3.Id, obj4.Id, obj5.Id }).Count() == 4);
-                    }
-                    catch (Exception ex)
-                    {
-                        fault = ex;
-                    }
-                    finally
-                    {
-                        waitHandle.Set();
-                    }
-                };
-            action();
-            waitHandle.WaitOne();
-            if (fault != null)
-                throw fault;
+
+            // Create objects
+            var obj1 = await ObjectHelper.CreateNewAsync();
+            var obj2 = await ObjectHelper.CreateNewAsync();
+            var obj3 = await ObjectHelper.CreateNewAsync();
+            var obj4 = await ObjectHelper.CreateNewAsync();
+            var obj5 = await ObjectHelper.CreateNewAsync();
+            // Create connections
+            await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj2.Id).SaveAsync();
+            await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj3.Id).SaveAsync();
+            await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj4.Id).SaveAsync();
+            await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj5.Id).SaveAsync();
+            // Get connected
+            var connectedArticles = await obj1.GetConnectedArticlesAsync("sibling");
+            Assert.IsTrue(connectedArticles != null);
+            Assert.IsTrue(connectedArticles.TotalRecords == 4);
+            Assert.IsTrue(connectedArticles.Select(x => x.Id).Intersect(new[] { obj2.Id, obj3.Id, obj4.Id, obj5.Id }).Count() == 4);
+
         }
         
-    }
-
-    public static class Async
-    {
-        public static void Run(Action run)
-        {
-            var waitHandle = new ManualResetEvent(false);
-            Action action = () =>
-            {
-                try
-                {
-                    run();
-                }
-                finally
-                {
-                    waitHandle.Set();
-                }
-            };
-            action();
-            waitHandle.WaitOne();
-        }
     }
 }

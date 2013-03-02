@@ -24,20 +24,6 @@ namespace Appacitive.Sdk
         {
         }
 
-        public static Article Get(string type, string id)
-        {
-            var service = ObjectFactory.Build<IArticleService>();
-            var response = service.GetArticle(new GetArticleRequest() 
-            {
-                Id = id, 
-                Type = type 
-            });
-            if (response.Status.IsSuccessful == false)
-                throw response.Status.ToFault();
-            Debug.Assert(response.Article != null, "For a successful get call, article should always be returned.");
-            return response.Article;
-        }
-
         public async static Task<Article> GetAsync(string type, string id)
         {
             var service = ObjectFactory.Build<IArticleService>();
@@ -82,18 +68,6 @@ namespace Appacitive.Sdk
             
         }
 
-        public static void Delete(string type, string id)
-        {
-            var service = ObjectFactory.Build<IArticleService>();
-            var status = service.DeleteArticle(new DeleteArticleRequest()
-            {
-                Id = id, 
-                Type = type 
-            });
-            if (status.IsSuccessful == false)
-                throw status.ToFault();
-        }
-
         public async static Task DeleteAsync(string type, string id)
         {
             var service = ObjectFactory.Build<IArticleService>();
@@ -108,44 +82,6 @@ namespace Appacitive.Sdk
 
 
         internal string SchemaId { get; set; }
-
-        protected override Entity Update(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags)
-        {
-            var articleService = ObjectFactory.Build<IArticleService>();
-            var request = new UpdateArticleRequest()
-            {
-                SessionToken = AppacitiveContext.SessionToken,
-                Environment = AppacitiveContext.Environment,
-                UserToken = AppacitiveContext.UserToken,
-                Verbosity = AppacitiveContext.Verbosity,
-                Id = this.Id,
-                Type = this.Type
-            };
-
-            if( propertyUpdates != null && propertyUpdates.Count > 0 )
-                propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
-            if (attributeUpdates != null && attributeUpdates.Count > 0)
-                attributeUpdates.For(x => request.AttributeUpdates[x.Key] = x.Value);
-            if( addedTags != null )
-                request.AddedTags.AddRange(addedTags);
-            if( removedTags != null )
-                request.RemovedTags.AddRange(removedTags);
-
-            // Check if an update is needed.
-            if (request.PropertyUpdates.Count == 0 &&
-                request.AttributeUpdates.Count == 0 &&
-                request.AddedTags.Count == 0 &&
-                request.RemovedTags.Count == 0)
-                return null;
-
-            var response = articleService.UpdateArticle(request);
-            if (response.Status.IsSuccessful == false)
-                throw response.Status.ToFault();
-
-            // 3. Update the last known state based on the differences
-            Debug.Assert(response.Article != null, "If status is successful, then updated article should not be null.");
-            return response.Article;
-        }
 
         internal bool IsNewInstance
         {
@@ -190,23 +126,6 @@ namespace Appacitive.Sdk
             return response.Article;
         }
 
-        protected override Entity CreateNew()
-        {
-            // Create a new article
-            var service = ObjectFactory.Build<IArticleService>();
-            var response = service.CreateArticle(new CreateArticleRequest() 
-                {
-                    Article = this
-                });
-            if (response.Status.IsSuccessful == false)
-                throw response.Status.ToFault();
-
-            // 3. Update the last known state based on the differences
-            
-            Debug.Assert(response.Article != null, "If status is successful, then created article should not be null.");
-            return response.Article;
-        }
-
         protected override async Task<Entity> CreateNewAsync()
         {
             // Create a new article
@@ -229,7 +148,7 @@ namespace Appacitive.Sdk
             return await Article.GetConnectedArticlesAsync(relation, this.Id, queryString, pageNumber, pageSize);
         }
 
-        public async Task<PagedArticleList> GetConnectedArticlesAsync(string relation, string query = null, int pageNumber = 1, int pageSize = 20)
+        public async Task<PagedArticleList> GetConnectedArticlesAsync(string relation, string query, int pageNumber = 1, int pageSize = 20)
         {
             return await Article.GetConnectedArticlesAsync(relation, this.Id, query, pageNumber, pageSize);
         }

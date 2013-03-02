@@ -8,8 +8,6 @@ namespace Appacitive.Sdk.Services
 {
     public interface ISessionService
     {
-        CreateSessionResponse CreateSession(CreateSessionRequest request);
-
         Task<CreateSessionResponse> CreateSessionAsync(CreateSessionRequest request);
     }
 

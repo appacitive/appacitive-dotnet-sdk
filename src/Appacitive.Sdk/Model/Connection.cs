@@ -178,11 +178,6 @@ namespace Appacitive.Sdk
             get { return string.IsNullOrWhiteSpace(this.EndpointB.ArticleId); }
         }
 
-        protected override Entity CreateNew()
-        {
-            throw new NotImplementedException();
-        }
-
         protected async override Task<Entity> CreateNewAsync()
         {
             // Create a new article
@@ -203,11 +198,6 @@ namespace Appacitive.Sdk
             if (other == null) return;
             this.EndpointA = other.EndpointA;
             this.EndpointB = other.EndpointB;
-        }
-
-        protected override Entity Update(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags)
-        {
-            throw new NotImplementedException();
         }
 
         protected override Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags)

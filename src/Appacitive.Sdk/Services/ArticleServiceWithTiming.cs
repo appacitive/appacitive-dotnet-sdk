@@ -16,21 +16,12 @@ namespace Appacitive.Sdk.Services
 
         public IArticleService Inner { get; set; }
 
-        public GetArticleResponse GetArticle(GetArticleRequest request)
-        {
-            return ExecuteWithTiming(request, this.Inner.GetArticle);
-        }
-
         public Task<GetArticleResponse> GetArticleAsync(GetArticleRequest request)
         {
             return ExecuteWithTiming(request, this.Inner.GetArticleAsync);
         }
 
-        public CreateArticleResponse CreateArticle(CreateArticleRequest request)
-        {
-            return ExecuteWithTiming(request, this.Inner.CreateArticle);
-        }
-
+        
         public Task<CreateArticleResponse> CreateArticleAsync(CreateArticleRequest request)
         {
             return ExecuteWithTiming(request, this.Inner.CreateArticleAsync);
@@ -63,21 +54,11 @@ namespace Appacitive.Sdk.Services
             });
         }
         
-        public Status DeleteArticle(DeleteArticleRequest request)
-        {
-            return this.Inner.DeleteArticle(request);
-        }
-
         public Task<Status> DeleteArticleAsync(DeleteArticleRequest request)
         {
             return this.Inner.DeleteArticleAsync(request);
         }
 
-
-        public UpdateArticleResponse UpdateArticle(UpdateArticleRequest request)
-        {
-            return ExecuteWithTiming(request, this.Inner.UpdateArticle);
-        }
 
         public Task<UpdateArticleResponse> UpdateArticleAsync(UpdateArticleRequest request)
         {

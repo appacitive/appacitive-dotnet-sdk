@@ -9,7 +9,7 @@ namespace Appacitive.Sdk.Services
 {
     public class GetUserResponse : ApiResponse
     {
-        [JsonProperty("article")]
+        [JsonProperty("user")]
         public User User { get; set; }
 
         public static GetUserResponse Parse(byte[] bytes)
