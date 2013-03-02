@@ -16,10 +16,14 @@ namespace Appacitive.Sdk.Services
             this.Verbosity = verbosity;
             this.UserToken = userToken;
             this.Environment = environment;
+            this.Fields = new List<string>();
         }
 
         [JsonIgnore]
         public string SessionToken { get; set; }
+
+        [JsonIgnore]
+        public List<string> Fields { get; private set; }
 
         [JsonIgnore]
         public string UserToken { get; set; }

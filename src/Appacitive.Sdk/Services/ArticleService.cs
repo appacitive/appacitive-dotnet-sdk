@@ -11,29 +11,12 @@ namespace Appacitive.Sdk.Services
     {
         internal static ArticleService Instance = new ArticleService();
 
-        public GetArticleResponse GetArticle(GetArticleRequest request)
-        {
-            byte[] bytes = null;
-            var timeTaken = Measure.TimeFor(() =>
-                {
-                    bytes = HttpClient
-                        .WithUrl(Urls.For.GetArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
-                        .WithAppacitiveSession(request.SessionToken)
-                        .WithEnvironment(request.Environment)
-                        .WithUserToken(request.UserToken)
-                        .Get();
-                });
-            var response = GetArticleResponse.Parse(bytes);
-            response.TimeTaken = timeTaken;
-            return response;
-        }
-
         public async Task<GetArticleResponse> GetArticleAsync(GetArticleRequest request)
         {
             byte[] bytes = null;
             var timer = Stopwatch.StartNew();
             bytes = await HttpClient
-                .WithUrl(Urls.For.GetArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.GetArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -45,25 +28,11 @@ namespace Appacitive.Sdk.Services
             return response;
         }
 
-        public CreateArticleResponse CreateArticle(CreateArticleRequest request)
-        {
-            byte[] bytes = null;
-
-            bytes = HttpClient
-                        .WithUrl(Urls.For.CreateArticle(request.Article.Type, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
-                        .WithAppacitiveSession(request.SessionToken)
-                        .WithEnvironment(request.Environment)
-                        .WithUserToken(request.UserToken)
-                        .Put(request.ToBytes());
-            var response = CreateArticleResponse.Parse(bytes);
-            return response;
-        }
-
         public async Task<CreateArticleResponse> CreateArticleAsync(CreateArticleRequest request)
         {
             var timer = Stopwatch.StartNew();
             var bytes = await HttpClient
-                            .WithUrl(Urls.For.CreateArticle(request.Article.Type, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                            .WithUrl(Urls.For.CreateArticle(request.Article.Type, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                             .WithAppacitiveSession(request.SessionToken)
                             .WithEnvironment(request.Environment)
                             .WithUserToken(request.UserToken)
@@ -74,25 +43,11 @@ namespace Appacitive.Sdk.Services
             return response;
         }
 
-
-        public Status DeleteArticle(DeleteArticleRequest request)
-        {
-            byte[] bytes = null;
-            bytes = HttpClient
-                .WithUrl(Urls.For.DeleteArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
-                .WithAppacitiveSession(request.SessionToken)
-                .WithEnvironment(request.Environment)
-                .WithUserToken(request.UserToken)
-                .Delete();
-            var response = Status.Parse(bytes);
-            return response;
-        }
-
         public async Task<Status> DeleteArticleAsync(DeleteArticleRequest request)
         {
             byte[] bytes = null;
             bytes = await HttpClient
-                .WithUrl(Urls.For.DeleteArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.DeleteArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -101,25 +56,11 @@ namespace Appacitive.Sdk.Services
             return response;
         }
 
-
-        public UpdateArticleResponse UpdateArticle(UpdateArticleRequest request)
-        {
-            byte[] bytes = null;
-            bytes = HttpClient
-                        .WithUrl(Urls.For.UpdateArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
-                        .WithAppacitiveSession(request.SessionToken)
-                        .WithEnvironment(request.Environment)
-                        .WithUserToken(request.UserToken)
-                        .Post(request.ToBytes());
-            var response = UpdateArticleResponse.Parse(bytes);
-            return response;
-        }
-
         public async Task<UpdateArticleResponse> UpdateArticleAsync(UpdateArticleRequest request)
         {
             byte[] bytes = null;
             bytes = await HttpClient
-                        .WithUrl(Urls.For.UpdateArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithUrl(Urls.For.UpdateArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)
                         .WithUserToken(request.UserToken)
@@ -128,13 +69,11 @@ namespace Appacitive.Sdk.Services
             return response;
         }
 
-
-
         public async Task<FindAllArticleResponse> FindAllAsync(FindAllArticleRequest request)
         {
             byte[] bytes = null;
             bytes = await HttpClient
-                        .WithUrl(Urls.For.FindAllArticles(request.Type, request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithUrl(Urls.For.FindAllArticles(request.Type, request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)
                         .WithUserToken(request.UserToken)

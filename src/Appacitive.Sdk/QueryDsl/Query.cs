@@ -8,6 +8,8 @@ namespace Appacitive.Sdk
 {
     public static class Query
     {
+        public static readonly string None = string.Empty;
+
         public static PropertyExpression Property(string name)
         {
             return new PropertyExpression(name);

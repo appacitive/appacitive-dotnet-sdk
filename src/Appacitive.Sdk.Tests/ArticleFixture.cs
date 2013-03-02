@@ -131,7 +131,7 @@ namespace Appacitive.Sdk.Tests
 
             // Search
             string stringToSearch = obj.stringfield;
-            var articles = await Article.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch));
+            var articles = await Article.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch).AsString());
             Assert.IsNotNull(articles);
             Assert.IsTrue(articles.Count == 1);
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
@@ -156,7 +156,7 @@ namespace Appacitive.Sdk.Tests
                             Query.Property("intfield").IsEqualTo(10)
                         });
 
-            var articles = await Article.FindAllAsync("object", query);
+            var articles = await Article.FindAllAsync("object", query.AsString());
             Assert.IsNotNull(articles);
             Assert.IsTrue(articles.Count == 1);
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
@@ -167,7 +167,7 @@ namespace Appacitive.Sdk.Tests
         public async Task FindNonExistantPageTest()
         {
             // Search
-            var articles = await Article.FindAllAsync("object", 10000, 500);
+            var articles = await Article.FindAllAsync("object", Query.None, Article.AllFields, 10000, 500);
             Assert.IsNotNull(articles);
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
         }
@@ -185,7 +185,7 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Created articled with id {0}", saved.Id);
             var index = 1;
             // Search
-            var articles = await Article.FindAllAsync("object", 1, 100);
+            var articles = await Article.FindAllAsync("object", Query.None, Article.AllFields, 1, 100);
             do
             {
                 articles.ForEach(a => Console.WriteLine("{0}) {1}", index++, a.Id));

@@ -16,7 +16,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
 
             bytes = HttpClient
-                .WithUrl(Urls.For.CreateUser(request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.CreateUser(request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -31,7 +31,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
 
             bytes = await HttpClient
-                .WithUrl(Urls.For.CreateUser(request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.CreateUser(request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -46,7 +46,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
 
             bytes = HttpClient
-                .WithUrl(Urls.For.GetUser(request.UserId, request.UserIdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.GetUser(request.UserId, request.UserIdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -61,7 +61,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
 
             bytes = HttpClient
-                .WithUrl(Urls.For.AuthenticateUser(request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.AuthenticateUser(request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -75,7 +75,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
 
             bytes = await HttpClient
-                .WithUrl(Urls.For.AuthenticateUser(request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.AuthenticateUser(request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -89,7 +89,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
 
             bytes = await HttpClient
-                .WithUrl(Urls.For.GetUser(request.UserId, request.UserIdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.GetUser(request.UserId, request.UserIdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -103,7 +103,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = HttpClient
-                .WithUrl(Urls.For.UpdateUser(request.UserId, request.IdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.UpdateUser(request.UserId, request.IdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -116,7 +116,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = await HttpClient
-                .WithUrl(Urls.For.UpdateUser(request.UserId, request.IdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.UpdateUser(request.UserId, request.IdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -129,7 +129,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = HttpClient
-                .WithUrl(Urls.For.ChangePassword(request.UserId, request.IdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.ChangePassword(request.UserId, request.IdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -142,7 +142,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = await HttpClient
-                .WithUrl(Urls.For.ChangePassword(request.UserId, request.IdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.ChangePassword(request.UserId, request.IdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -156,7 +156,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
 
             bytes = HttpClient
-                .WithUrl(Urls.For.DeleteUser(request.UserId, request.UserIdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.DeleteUser(request.UserId, request.UserIdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -171,7 +171,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
 
             bytes = await HttpClient
-                .WithUrl(Urls.For.DeleteUser(request.UserId, request.UserIdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithUrl(Urls.For.DeleteUser(request.UserId, request.UserIdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
@@ -185,7 +185,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = await HttpClient
-                        .WithUrl(Urls.For.FindAllArticles("user", request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithUrl(Urls.For.FindAllArticles("user", request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)
                         .WithUserToken(request.UserToken)

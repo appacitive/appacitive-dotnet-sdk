@@ -14,7 +14,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = await HttpClient
-                        .WithUrl(Urls.For.CreateConnection(request.Connection.Type, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithUrl(Urls.For.CreateConnection(request.Connection.Type, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)
                         .WithUserToken(request.UserToken)
@@ -35,7 +35,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = await HttpClient
-                        .WithUrl(Urls.For.GetConnection(request.Relation, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithUrl(Urls.For.GetConnection(request.Relation, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)
                         .WithUserToken(request.UserToken)
@@ -48,7 +48,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = await HttpClient
-                        .WithUrl(Urls.For.GetConnection(request.Relation, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithUrl(Urls.For.GetConnection(request.Relation, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)
                         .WithUserToken(request.UserToken)
@@ -62,7 +62,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = await HttpClient
-                        .WithUrl(Urls.For.FindConnectedArticles(request.Relation, request.ArticleId, request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                        .WithUrl(Urls.For.FindConnectedArticles(request.Relation, request.ArticleId, request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)
                         .WithUserToken(request.UserToken)

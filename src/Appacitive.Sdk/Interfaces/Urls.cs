@@ -21,23 +21,23 @@ namespace Appacitive.Sdk
             public static string CreateSession(bool enableDebug, Verbosity verbosity)
             {
                 var url = new Url(SessionServiceBase);
-                HandleDefaults(url, null, enableDebug, verbosity);
+                HandleDefaults(url, null, enableDebug, verbosity, null);
                 return url.ToString();
             }
 
-            public static string UpdateArticleUrl(string type, string id, Geocode userLocation = null)
+            public static string UpdateArticleUrl(string type, string id, Geocode userLocation, List<string> fields)
             {
                 return string.Format("{0}/{1}/{2}", ArticleServiceBase, type, id);
             }
 
-            public static string GetArticle(string type, string id, Geocode location, bool enableDebug, Verbosity verbosity)
+            public static string GetArticle(string type, string id, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
             {   
                 var url = new Url(ArticleServiceBase).Append(type).Append(id);
-                HandleDefaults(url, location, enableDebug, verbosity);
+                HandleDefaults(url, location, enableDebug, verbosity, fields);
                 return url.ToString();
             }
 
-            private static Url HandleDefaults(Url url, Geocode location, bool enableDebug, Verbosity verbosity)
+            private static Url HandleDefaults(Url url, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 if (enableDebug == true)
                 {
@@ -47,40 +47,42 @@ namespace Appacitive.Sdk
                 }
                 if (location != null)
                     url.QueryString["location"] = location.ToString();
+                if (fields != null && fields.Count > 0)
+                    url.QueryString["fields"] = fields.Select(x => x.ToLower() ).ToDelimitedList(",");
                 return url;
             }
 
-            public static string CreateArticle(string type, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            public static string CreateArticle(string type, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ArticleServiceBase);
                 url.Append(type);
-                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string DeleteArticle(string type, string id, Geocode location, bool enableDebug, Verbosity verbosity)
+            public static string DeleteArticle(string type, string id, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ArticleServiceBase).Append(type).Append(id);
-                HandleDefaults(url, location, enableDebug, verbosity);
+                HandleDefaults(url, location, enableDebug, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string UpdateArticle(string type, string id, Geocode geocode, bool enableDebug, Verbosity verbosity)
+            public static string UpdateArticle(string type, string id, Geocode geocode, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ArticleServiceBase).Append(type).Append(id);
-                HandleDefaults(url, geocode, enableDebug, verbosity);
+                HandleDefaults(url, geocode, enableDebug, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string CreateUser(Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            public static string CreateUser(Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(UserServiceBase);
                 url.Append("create");
-                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string GetUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            public static string GetUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(UserServiceBase);
                 if( string.IsNullOrWhiteSpace(idType) )
@@ -97,19 +99,19 @@ namespace Appacitive.Sdk
                     url.Append(userId);
                     url.QueryString["useridtype"] = "username";
                 }
-                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string AuthenticateUser(Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            public static string AuthenticateUser(Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(UserServiceBase);
                 url.Append("authenticate");
-                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string UpdateUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            public static string UpdateUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(UserServiceBase);
                 if (string.IsNullOrWhiteSpace(idType))
@@ -126,11 +128,11 @@ namespace Appacitive.Sdk
                     url.Append(userId);
                     url.QueryString["useridtype"] = "username";
                 }
-                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string ChangePassword(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            public static string ChangePassword(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(UserServiceBase);
                 if (string.IsNullOrWhiteSpace(idType))
@@ -147,11 +149,11 @@ namespace Appacitive.Sdk
                     url.Append(userId).Append("changepassword");
                     url.QueryString["useridtype"] = "username";
                 }
-                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string DeleteUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            public static string DeleteUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(UserServiceBase);
                 if (string.IsNullOrWhiteSpace(idType))
@@ -168,19 +170,19 @@ namespace Appacitive.Sdk
                     url.Append(userId);
                     url.QueryString["useridtype"] = "username";
                 }
-                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string CreateConnection(string connectionType, Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            public static string CreateConnection(string connectionType, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ConnectionServiceBase);
                 url.Append(connectionType);
-                HandleDefaults(url, geocode, debugEnabled, verbosity);
+                HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string FindAllArticles(string type, string query, int pageNumber, int pageSize, Geocode location, bool enableDebug, Verbosity verbosity)
+            public static string FindAllArticles(string type, string query, int pageNumber, int pageSize, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ArticleServiceBase).Append(type).Append("find").Append("all");
                 if (string.IsNullOrWhiteSpace(query) == false)
@@ -189,19 +191,19 @@ namespace Appacitive.Sdk
                     url.QueryString["pnum"] = pageNumber.ToString();
                 if (pageSize > 0)
                     url.QueryString["psize"] = pageSize.ToString();
-                HandleDefaults(url, location, enableDebug, verbosity);
+                HandleDefaults(url, location, enableDebug, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string GetConnection(string relationName, string connectionId, Geocode geocode, bool enableDebug, Verbosity verbosity)
+            public static string GetConnection(string relationName, string connectionId, Geocode geocode, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ConnectionServiceBase);
                 url.Append(relationName).Append(connectionId);
-                HandleDefaults(url, geocode, enableDebug, verbosity);
+                HandleDefaults(url, geocode, enableDebug, verbosity, fields);
                 return url.ToString();
             }
 
-            public static string FindConnectedArticles(string relation, string articleId, string query, int pageNumber, int pageSize, Geocode location, bool debugEnabled, Verbosity verbosity)
+            public static string FindConnectedArticles(string relation, string articleId, string query, int pageNumber, int pageSize, Geocode location, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ConnectionServiceBase).Append(relation).Append(articleId).Append("find");
                 if (string.IsNullOrWhiteSpace(query) == false)
@@ -210,7 +212,7 @@ namespace Appacitive.Sdk
                     url.QueryString["pnum"] = pageNumber.ToString();
                 if (pageSize > 0)
                     url.QueryString["psize"] = pageSize.ToString();
-                HandleDefaults(url, location, debugEnabled, verbosity);
+                HandleDefaults(url, location, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
         }

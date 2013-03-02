@@ -10,6 +10,19 @@ namespace Appacitive.Sdk
     internal static class Extensions
     {
 
+        public static string ToDelimitedList(this IEnumerable<string> list, string delimiter)
+        {
+            StringBuilder buffer = new StringBuilder();
+            list.For(item =>
+                {
+                    if (buffer.Length == 0)
+                        buffer.Append(item);
+                    else
+                        buffer.Append(delimiter).Append(item);
+                });
+            return buffer.ToString();
+        }
+
         public static void GetDifferences<T>(this IEnumerable<T> existing, IEnumerable<T> updated, out IEnumerable<T> added, out IEnumerable<T> removed)
         {
             var oldList = existing.ToList();

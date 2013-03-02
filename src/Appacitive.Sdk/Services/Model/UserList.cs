@@ -12,6 +12,8 @@ namespace Appacitive.Sdk.Services
 
         public int PageNumber { get; set; }
 
+        internal Func<int, Task<PagedUserList>> GetNextPage { get; set; }
+
         public int PageSize { get; set; }
 
         public int TotalRecords { get; set; }
@@ -25,9 +27,10 @@ namespace Appacitive.Sdk.Services
             }
         }
 
-        public async Task<PagedArticleList> NextPageAsync()
+        public async Task<PagedUserList> NextPageAsync(int skip = 0)
         {
-            return await Article.FindAllAsync("user", this.Query, this.PageNumber + 1, this.PageSize);
+            return await GetNextPage(skip);
+            // return await Article.FindAllAsync(this.ArticleType, this.Query, this.PageNumber + 1, this.PageSize);
         }
     }
 }

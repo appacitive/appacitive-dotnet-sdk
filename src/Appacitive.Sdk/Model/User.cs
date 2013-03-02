@@ -22,13 +22,14 @@ namespace Appacitive.Sdk
         }
 
 
-        public static async Task<User> GetAsync(string id)
+        public static async Task<User> GetAsync(string id, IEnumerable<string> fields = null)
         {
             var service = ObjectFactory.Build<IUserService>();
-            var response = await service.GetUserAsync(new GetUserRequest()
-            {
-                UserId = id
-            });
+            var request = new GetUserRequest { UserId = id };
+            if (fields != null)
+                request.Fields.AddRange(fields);
+
+            var response = await service.GetUserAsync(request);
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             Debug.Assert(response.User != null, "For a successful get call, article should always be returned.");
@@ -46,21 +47,14 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
         }
 
-        public async static Task<PagedUserList> FindAllAsync(int page = 1, int pageSize = 20)
-        {
-            string query = null;
-            return await User.FindAllAsync(query, page, pageSize);
-        }
+        
 
-        public async static Task<PagedUserList> FindAllAsync(IQuery query, int page = 1, int pageSize = 20)
-        {
-            return await User.FindAllAsync(query.AsString(), page, pageSize);
-        }
-
-        public async static Task<PagedUserList> FindAllAsync(string query, int page = 1, int pageSize = 20)
+        public async static Task<PagedUserList> FindAllAsync(string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20)
         {
             IUserService service = ObjectFactory.Build<IUserService>();
             var request = new FindAllUsersRequest() { Query = query, PageNumber = page, PageSize = pageSize };
+            if (fields != null)
+                request.Fields.AddRange(fields);
             var response = await service.FindAllAsync(request);
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
@@ -69,7 +63,8 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                Query = query
+                Query = query,
+                GetNextPage = async skip => await FindAllAsync(query, fields, page + skip + 1, pageSize)
             };
             users.AddRange(response.Articles);
             return users;
