@@ -128,7 +128,7 @@ namespace Appacitive.Sdk
         /// <param name="id">Id of the user article</param>
         /// <param name="fields">Optional fields that you want to get. </param>
         /// <returns>The user with the specified id</returns>
-        public static async Task<User> GetAsync(string id, IEnumerable<string> fields = null)
+        public static async Task<User> GetByIdAsync(string id, IEnumerable<string> fields = null)
         {
             var service = ObjectFactory.Build<IUserService>();
             var request = new GetUserRequest { UserId = id };
@@ -141,6 +141,28 @@ namespace Appacitive.Sdk
             Debug.Assert(response.User != null, "For a successful get call, article should always be returned.");
             return response.User;
         }
+
+        /// <summary>
+        /// Get user by id.
+        /// </summary>
+        /// <param name="id">Id of the user article</param>
+        /// <param name="fields">Optional fields that you want to get. </param>
+        /// <returns>The user with the specified id</returns>
+        public static async Task<User> GetByUsernameAsync(string username, IEnumerable<string> fields = null)
+        {
+            var service = ObjectFactory.Build<IUserService>();
+            var request = new GetUserRequest { UserId = username, UserIdType = "username" };
+            if (fields != null)
+                request.Fields.AddRange(fields);
+
+            var response = await service.GetUserAsync(request);
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            Debug.Assert(response.User != null, "For a successful get call, article should always be returned.");
+            return response.User;
+        }
+
+
 
         /// <summary>
         /// Delete the user with the specified id
@@ -166,7 +188,7 @@ namespace Appacitive.Sdk
         /// <param name="page">Page number</param>
         /// <param name="pageSize">Page size</param>
         /// <returns>A paged list of users.</returns>
-        public async static Task<PagedUserList> FindAllAsync(string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20)
+        public async static Task<PagedList<User>> FindAllAsync(string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20)
         {
             IUserService service = ObjectFactory.Build<IUserService>();
             var request = new FindAllUsersRequest() { Query = query, PageNumber = page, PageSize = pageSize };
@@ -175,12 +197,11 @@ namespace Appacitive.Sdk
             var response = await service.FindAllAsync(request);
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
-            var users = new PagedUserList()
+            var users = new PagedList<User>()
             {
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                Query = query,
                 GetNextPage = async skip => await FindAllAsync(query, fields, page + skip + 1, pageSize)
             };
             users.AddRange(response.Articles);

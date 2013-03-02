@@ -10,6 +10,8 @@ namespace Appacitive.Sdk.Services
 {
     public class ConnectionService : IConnectionService
     {
+        public static readonly IConnectionService Instance = new ConnectionService();
+
         public async Task<CreateConnectionResponse> CreateConnectionAsync(CreateConnectionRequest request)
         {
             byte[] bytes = null;

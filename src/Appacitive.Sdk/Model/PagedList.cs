@@ -4,15 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk.Services
+namespace Appacitive.Sdk
 {
-    public class PagedArticleList : List<Article>
+    public class PagedList<T> : List<T>
     {
-        internal string ArticleType { get; set; }
-
-        internal string Query { get; set; }
-
-        internal Func<int, Task<PagedArticleList>> GetNextPage { get; set; }
+        internal Func<int, Task<PagedList<T>>> GetNextPage { get; set; }
 
         public int PageNumber { get; set; }
 
@@ -29,10 +25,10 @@ namespace Appacitive.Sdk.Services
             }
         }
 
-        public async Task<PagedArticleList> NextPageAsync(int skip = 0)
+        public async Task<PagedList<T>> NextPageAsync(int skip = 0)
         {
             return await GetNextPage(skip);
-            // return await Article.FindAllAsync(this.ArticleType, this.Query, this.PageNumber + 1, this.PageSize);
         }
+
     }
 }

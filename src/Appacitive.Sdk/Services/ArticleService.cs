@@ -14,17 +14,13 @@ namespace Appacitive.Sdk.Services
         public async Task<GetArticleResponse> GetArticleAsync(GetArticleRequest request)
         {
             byte[] bytes = null;
-            var timer = Stopwatch.StartNew();
             bytes = await HttpClient
                 .WithUrl(Urls.For.GetArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
                 .GetAsync();
-            timer.Stop();
-            decimal timeTaken = (decimal)timer.ElapsedTicks / Stopwatch.Frequency;
             var response = GetArticleResponse.Parse(bytes);
-            response.TimeTaken = timeTaken;
             return response;
         }
 
@@ -79,6 +75,19 @@ namespace Appacitive.Sdk.Services
                         .WithUserToken(request.UserToken)
                         .GetAsync();
             var response = FindAllArticleResponse.Parse(bytes);
+            return response;
+        }
+
+        public async Task<MultiGetArticleResponse> MultiGetArticleAsync(MultiGetArticleRequest request)
+        {
+            byte[] bytes = null;
+            bytes = await HttpClient
+                .WithUrl(Urls.For.MultiGetArticle(request.Type, request.IdList, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
+                .WithAppacitiveSession(request.SessionToken)
+                .WithEnvironment(request.Environment)
+                .WithUserToken(request.UserToken)
+                .GetAsync();
+            var response = MultiGetArticleResponse.Parse(bytes);
             return response;
         }
     }

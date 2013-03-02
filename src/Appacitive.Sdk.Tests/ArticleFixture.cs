@@ -45,6 +45,23 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
+        public async Task MultiGetArticleAsyncTest()
+        {
+            // Create new article
+            var obj1 = await ObjectHelper.CreateNewAsync();
+            var obj2 = await ObjectHelper.CreateNewAsync();
+
+            // Get the created article
+            var enumerable = await Article.MultiGetAsync("object", new[] { obj1.Id, obj2.Id });
+            
+            // Asserts
+            Assert.IsNotNull(enumerable);
+            var list = enumerable.Select(x => x.Id);
+            Assert.IsTrue(list.Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
+
+        }
+
+        [TestMethod]
         public async Task DeleteArticleAsyncTest()
         {
 

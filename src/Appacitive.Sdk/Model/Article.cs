@@ -24,6 +24,13 @@ namespace Appacitive.Sdk
         {
         }
 
+        internal string SchemaId { get; set; }
+
+        internal bool IsNewInstance
+        {
+            get { return string.IsNullOrWhiteSpace(this.Id) == true || this.Id == "0"; }
+        }
+
         public static readonly IEnumerable<string> AllFields = new string[0];
 
         public async static Task<Article> GetAsync(string type, string id, IEnumerable<string> fields = null)
@@ -39,14 +46,27 @@ namespace Appacitive.Sdk
             return response.Article;
         }
 
-        public async static Task<PagedArticleList> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20)
+        public async static Task<IEnumerable<Article>> MultiGetAsync(string type, IEnumerable<string> idList, IEnumerable<string> fields = null)
+        {
+            var service = ObjectFactory.Build<IArticleService>();
+            var request = new MultiGetArticleRequest() { Type = type, };
+            request.IdList.AddRange(idList);
+            if (fields != null)
+                request.Fields.AddRange(fields);
+            var response = await service.MultiGetArticleAsync(request);
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            return response.Articles;
+        }
+
+        public async static Task<PagedList<Article>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20)
         {
             var service = ObjectFactory.Build<IArticleService>();
             var request = new FindAllArticleRequest() { Type = type, Query = query, PageNumber = page, PageSize = pageSize };
             var response = await service.FindAllAsync(request);
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
-            var articles = new PagedArticleList()
+            var articles = new PagedList<Article>()
             {
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
@@ -68,14 +88,6 @@ namespace Appacitive.Sdk
             });
             if (status.IsSuccessful == false)
                 throw status.ToFault();
-        }
-
-
-        internal string SchemaId { get; set; }
-
-        internal bool IsNewInstance
-        {
-            get { return string.IsNullOrWhiteSpace(this.Id) == true || this.Id == "0"; }
         }
 
         protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags)
@@ -132,39 +144,27 @@ namespace Appacitive.Sdk
             return response.Article;
         }
 
-        public async Task<PagedArticleList> GetConnectedArticlesAsync(string relation, IQuery query = null, int pageNumber = 1, int pageSize = 20)
+        public async Task<PagedList<Article>> GetConnectedArticlesAsync(string relation, string query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
-            string queryString = query == null ? null : query.ToString();
-            return await Article.GetConnectedArticlesAsync(relation, this.Id, queryString, pageNumber, pageSize);
+            return await Article.GetConnectedArticlesAsync(relation, this.Id, query, fields, pageNumber, pageSize);
         }
 
-        public async Task<PagedArticleList> GetConnectedArticlesAsync(string relation, string query, int pageNumber = 1, int pageSize = 20)
-        {
-            return await Article.GetConnectedArticlesAsync(relation, this.Id, query, pageNumber, pageSize);
-        }
-
-        public async static Task<PagedArticleList> GetConnectedArticlesAsync(string relation, string articleId, IQuery query = null, int pageNumber = 1, int pageSize = 20)
-        {
-            string queryString = query == null ? null : query.ToString();
-            return await Article.GetConnectedArticlesAsync(relation, articleId, queryString, pageNumber, pageSize);
-        }
-
-        public async static Task<PagedArticleList> GetConnectedArticlesAsync(string relation, string articleId, string query = null, int pageNumber = 1, int pageSize = 20)
+        public async static Task<PagedList<Article>> GetConnectedArticlesAsync(string relation, string articleId, string query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
             IConnectionService connService = ObjectFactory.Build<IConnectionService>();
-            var response = await connService.FindConnectedArticlesAsync(
-                new FindConnectedArticlesRequest
-                {
-                    Relation = relation, ArticleId = articleId, Query = query,
-                    PageNumber = pageNumber, PageSize = pageSize
-                });
+            var request = new FindConnectedArticlesRequest
+            {
+                Relation = relation,
+                ArticleId = articleId,
+                Query = query,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+            if (fields != null)
+                request.Fields.AddRange(fields);
+            var response = await connService.FindConnectedArticlesAsync(request);
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
-
-            Func<int, Task<PagedArticleList>> nextPage = async skip => 
-                {
-                    return await GetConnectedArticlesAsync(relation, articleId, query, pageNumber + skip + 1, pageSize);
-                };
 
             var articles = response.Connections.Select(c =>
                 {
@@ -174,14 +174,47 @@ namespace Appacitive.Sdk
                         return c.EndpointA.Content;
                 });
 
-            var list = new PagedArticleList()
+            var list = new PagedList<Article>()
             {
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = nextPage
+                GetNextPage = async skip => await GetConnectedArticlesAsync(relation, articleId, query, fields, pageNumber + skip + 1, pageSize)
             };
             list.AddRange(articles);
+            return list;
+        }
+
+        public async Task<PagedList<Connection>> GetConnectionsAsync(string relation, string query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
+        {
+            return await Article.GetConnectionsAsync(relation, this.Id, query, fields, pageNumber, pageSize);
+        }
+
+        public async static Task<PagedList<Connection>> GetConnectionsAsync(string relation, string articleId, string query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
+        {
+            IConnectionService connService = ObjectFactory.Build<IConnectionService>();
+            var request = new FindConnectedArticlesRequest
+            {
+                Relation = relation,
+                ArticleId = articleId,
+                Query = query,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+            if (fields != null)
+                request.Fields.AddRange(fields);
+            var response = await connService.FindConnectedArticlesAsync(request);
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+
+            var list = new PagedList<Connection>
+            {
+                PageNumber = response.PagingInfo.PageNumber,
+                PageSize = response.PagingInfo.PageSize,
+                TotalRecords = response.PagingInfo.TotalRecords,
+                GetNextPage = async skip => await GetConnectionsAsync(relation, articleId, query, fields, pageNumber + skip + 1, pageSize)
+            };
+            list.AddRange(response.Connections);
             return list;
         }
     }

@@ -9,7 +9,6 @@ namespace Appacitive.Sdk
 {
     internal static class Extensions
     {
-
         public static string ToDelimitedList(this IEnumerable<string> list, string delimiter)
         {
             StringBuilder buffer = new StringBuilder();

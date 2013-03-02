@@ -71,9 +71,9 @@ parameter *CreateUserIfNotExists* as true.
 
 ``` C#
 var facebookCreds = new OAuth2Credentials(facebookAccessToken, "facebook")
-    {
-        CreateUserIfNotExists = true    // optional, create new user if user does not exist in system. 
-    };
+{
+    CreateUserIfNotExists = true    // optional, create new user if user does not exist in system. 
+};
 var result = await facebookCreds.AuthenticateAsync();
 ```
 

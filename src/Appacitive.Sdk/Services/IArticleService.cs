@@ -10,6 +10,8 @@ namespace Appacitive.Sdk.Services
     {
         Task<GetArticleResponse> GetArticleAsync(GetArticleRequest request);
 
+        Task<MultiGetArticleResponse> MultiGetArticleAsync(MultiGetArticleRequest request);
+
         Task<CreateArticleResponse> CreateArticleAsync(CreateArticleRequest request);
 
         Task<Status> DeleteArticleAsync(DeleteArticleRequest request);

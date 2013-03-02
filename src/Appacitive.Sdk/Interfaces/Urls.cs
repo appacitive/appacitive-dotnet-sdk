@@ -215,6 +215,13 @@ namespace Appacitive.Sdk
                 HandleDefaults(url, location, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
+
+            public static string MultiGetArticle(string type, List<string> idList, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
+            {
+                var url = new Url(ArticleServiceBase).Append(type).Append("multiget").Append( idList.ToDelimitedList(","));
+                HandleDefaults(url, location, enableDebug, verbosity, fields);
+                return url.ToString();
+            }
         }
     }
 
