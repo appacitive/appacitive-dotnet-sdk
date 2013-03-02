@@ -48,6 +48,7 @@
     <Compile Include="Model\AuthenticationToken.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\Constants.cs" />
+    <Compile Include="Model\Credentials.cs" />
     <Compile Include="Model\Entity.cs" />
     <Compile Include="Model\Geocode.cs" />
     <Compile Include="QueryDsl\AggregateExpression.cs" />

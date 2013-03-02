@@ -24,6 +24,9 @@ namespace Appacitive.Sdk.Services
         [JsonProperty("type", NullValueHandling = NullValueHandling.Ignore)]
         public string Type { get; set; }
 
+        [JsonProperty("createnew")]
+        public bool CreateUserIfNotExists { get; set; }
+
         [JsonProperty("attempts", NullValueHandling = NullValueHandling.Ignore)]
         public int MaxAttempts { get; set; }
 

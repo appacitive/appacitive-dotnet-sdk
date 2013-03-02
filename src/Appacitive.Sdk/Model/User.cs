@@ -21,7 +21,113 @@ namespace Appacitive.Sdk
         {
         }
 
+        internal string SchemaId { get; set; }
 
+
+        /// <summary>
+        /// Username of the user
+        /// </summary>
+        public string Username 
+        {
+            get { return base["username"]; }
+            set { base["username"] = value; }
+        }
+
+        /// <summary>
+        /// Password of the user.
+        /// </summary>
+        public string Password
+        {
+            get { return base["password"]; }
+            set { base["password"] = value; }
+        }
+
+        /// <summary>
+        /// Date of birth of the user.
+        /// </summary>
+        public DateTime? DateOfBirth
+        {
+            get 
+            {
+                DateTime date;
+                var dob = base["birthdate"];
+                if (DateTime.TryParseExact(dob, Formats.BirthDate, null, DateTimeStyles.None, out date) == true)
+                    return date;
+                else return null;
+                
+            }
+            set 
+            { 
+                if( value != null || value.HasValue == true )
+                    base["birthdate"] = value.Value.ToString(Formats.BirthDate); 
+            }
+        }
+
+        /// <summary>
+        /// Email address of the user
+        /// </summary>
+        public string Email
+        {
+            get { return base["email"]; }
+            set { base["email"] = value; }
+        }
+
+        /// <summary>
+        /// First name of the user
+        /// </summary>
+        public string FirstName
+        {
+            get { return base["firstname"]; }
+            set { base["firstname"] = value; }
+        }
+
+        /// <summary>
+        /// Last name of the user
+        /// </summary>
+        public string LastName
+        {
+            get { return base["lastname"]; }
+            set { base["lastname"] = value; }
+        }
+
+
+        /// <summary>
+        /// Phone number of the user
+        /// </summary>
+        public string Phone
+        {
+            get { return base["phone"]; }
+            set { base["phone"] = value; }
+        }
+
+        /// <summary>
+        /// Location of the user
+        /// </summary>
+        public Geocode Location
+        {
+            get
+            {
+                Geocode geo;
+                var geocode = base["location"];
+                if (string.IsNullOrWhiteSpace(geocode) == true)
+                    return null;
+                if (Geocode.TryParse(geocode, out geo) == true)
+                    return geo;
+                else throw new AppacitiveException(string.Format("Location property ({0}) is not a valid geocode.", geocode));
+            }
+            set
+            {
+                if (value != null)
+                    base["location"] = value.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Get user by id.
+        /// </summary>
+        /// <param name="id">Id of the user article</param>
+        /// <param name="fields">Optional fields that you want to get. </param>
+        /// <returns>The user with the specified id</returns>
         public static async Task<User> GetAsync(string id, IEnumerable<string> fields = null)
         {
             var service = ObjectFactory.Build<IUserService>();
@@ -36,6 +142,11 @@ namespace Appacitive.Sdk
             return response.User;
         }
 
+        /// <summary>
+        /// Delete the user with the specified id
+        /// </summary>
+        /// <param name="id">Id of the user article to delete</param>
+        /// <returns>Void</returns>
         public static async Task DeleteUserAsync(string id)
         {
             var service = ObjectFactory.Build<IUserService>();
@@ -47,8 +158,14 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
         }
 
-        
-
+        /// <summary>
+        /// Gets a paged list of all matching users.
+        /// </summary>
+        /// <param name="query">Filter query to filter out a specific list of users. </param>
+        /// <param name="fields">List of fields to return</param>
+        /// <param name="page">Page number</param>
+        /// <param name="pageSize">Page size</param>
+        /// <returns>A paged list of users.</returns>
         public async static Task<PagedUserList> FindAllAsync(string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20)
         {
             IUserService service = ObjectFactory.Build<IUserService>();
@@ -70,81 +187,10 @@ namespace Appacitive.Sdk
             return users;
         }
 
-        internal string SchemaId { get; set; }
-
-        public string Username 
-        {
-            get { return base["username"]; }
-            set { base["username"] = value; }
-        }
-
-        public string Password
-        {
-            get { return base["password"]; }
-            set { base["password"] = value; }
-        }
-
-        public DateTime? DateOfBirth
-        {
-            get 
-            {
-                DateTime date;
-                var dob = base["birthdate"];
-                if (DateTime.TryParseExact(dob, Formats.BirthDate, null, DateTimeStyles.None, out date) == true)
-                    return date;
-                else return null;
-                
-            }
-            set 
-            { 
-                if( value != null || value.HasValue == true )
-                    base["birthdate"] = value.Value.ToString(Formats.BirthDate); 
-            }
-        }
-
-        public string Email
-        {
-            get { return base["email"]; }
-            set { base["email"] = value; }
-        }
-
-        public string FirstName
-        {
-            get { return base["firstname"]; }
-            set { base["firstname"] = value; }
-        }
-
-        public string LastName
-        {
-            get { return base["lastname"]; }
-            set { base["lastname"] = value; }
-        }
-
-        public string Phone
-        {
-            get { return base["phone"]; }
-            set { base["phone"] = value; }
-        }
-
-        public Geocode Location
-        {
-            get
-            {
-                Geocode geo;
-                var geocode = base["location"];
-                if (string.IsNullOrWhiteSpace(geocode) == true)
-                    return null;
-                if (Geocode.TryParse(geocode, out geo) == true)
-                    return geo;
-                else throw new AppacitiveException(string.Format("Location property ({0}) is not a valid geocode.", geocode));
-            }
-            set
-            {
-                if (value != null)
-                    base["location"] = value.ToString();
-            }
-        }
-
+        /// <summary>
+        /// Creates a new user
+        /// </summary>
+        /// <returns>The newly created user</returns>
         protected override async Task<Entity> CreateNewAsync()
         {
             // Create a new article
@@ -199,64 +245,7 @@ namespace Appacitive.Sdk
             return response.User;
         }
 
-        public static bool TryAuthenticate(AuthenticationToken authToken, out string sessionToken)
-        {
-            return authToken.TryAuthenticate(out sessionToken);
-        }
-
-        public static bool TryAuthenticateUsernamePassword(string username, string password, out string sessionToken)
-        {
-            return TryAuthenticateUsernamePassword(username, password, null, out sessionToken);
-        }
-
-        public static bool TryAuthenticateUsernamePassword(string type, string username, string password, out string sessionToken)
-        {
-            return TryAuthenticate(new UsernamePasswordToken(username, password, type), out sessionToken);
-        }
-
-        public static bool TryAuthenticateOAuth2(string type, string oauth2AccessToken, out string sessionToken)
-        {
-            return TryAuthenticate( new OAuth2Token(type, oauth2AccessToken), out sessionToken);
-        }
-
-        public static bool TryAuthenticateOAuth1(string type, string oauth1ConsumerKey, string oauth1ConsumerSecret, string oauth1AccessToken, string oauth1AccessTokenSecret, out string sessionToken)
-        {
-            return TryAuthenticate(new OAuth1Token(oauth1ConsumerKey, oauth1ConsumerSecret, oauth1AccessToken, oauth1AccessTokenSecret, type), out sessionToken);
-        }
-
-        public static async Task<Tuple<bool, string>> AuthenticateAsync(AuthenticationToken authToken)
-        {
-            var result = await authToken.AuthenticateAsync();
-            return result;
-        }
-
-        public static async Task<Tuple<bool, string>> AuthenticateUsernamePasswordAsync(string username, string password)
-        {
-            AuthenticationToken authToken = new UsernamePasswordToken(username, password, null);
-            var result = await authToken.AuthenticateAsync();
-            return result;
-        }
-
-        public static async Task<Tuple<bool, string>> AuthenticateUsernamePasswordAsync(string type, string username, string password)
-        {
-            AuthenticationToken authToken = new UsernamePasswordToken(username, password, type);
-            var result = await authToken.AuthenticateAsync();
-            return result;
-        }
-
-        public static async Task<Tuple<bool, string>> AuthenticateOAuth2Async(string type, string accessToken)
-        {
-            AuthenticationToken authToken = new OAuth2Token(accessToken, type);
-            var result = await authToken.AuthenticateAsync();
-            return result;
-        }
-
-        public static async Task<Tuple<bool, string>> AuthenticateOAuth1Async(string type, string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret)
-        {
-            AuthenticationToken authToken = new OAuth1Token(consumerKey, consumerSecret, accessToken, accessTokenSecret, type);
-            var result = await authToken.AuthenticateAsync();
-            return result;
-        }
+        
 
     }
 }
