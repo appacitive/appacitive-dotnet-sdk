@@ -48,8 +48,11 @@
     <Compile Include="Model\AuthenticationToken.cs" />
     <Compile Include="Model\Connection.cs" />
     <Compile Include="Model\Constants.cs" />
+    <Compile Include="Model\FileDownload.cs" />
     <Compile Include="Model\Credentials.cs" />
     <Compile Include="Model\Entity.cs" />
+    <Compile Include="Model\FileUpload.cs" />
+    <Compile Include="Model\FileUrl.cs" />
     <Compile Include="Model\Geocode.cs" />
     <Compile Include="Model\PagedList.cs" />
     <Compile Include="QueryDsl\AggregateExpression.cs" />
@@ -68,6 +71,7 @@
     <Compile Include="QueryDsl\RadialSearchQuery.cs" />
     <Compile Include="QueryDsl\TimeFieldValue.cs" />
     <Compile Include="Services\ArticleService.cs" />
+    <Compile Include="Services\FileService.cs" />
     <Compile Include="Services\IConnectionService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\Model\ApiRequest.cs" />
@@ -76,6 +80,11 @@
     <Compile Include="Services\Model\AuthenticateUserResponse.cs" />
     <Compile Include="Services\Model\ChangePasswordRequest.cs" />
     <Compile Include="Services\Model\ChangePasswordResponse.cs" />
+    <Compile Include="Services\Model\GetDownloadUrlResponse.cs" />
+    <Compile Include="Services\Model\GetDownloadUrlRequest.cs" />
+    <Compile Include="Services\Model\GetUploadUrlResponse.cs" />
+    <Compile Include="Services\Model\GetUploadUrlRequest.cs" />
+    <Compile Include="Services\Model\IFileService.cs" />
     <Compile Include="Services\Model\MultiGetArticleResponse.cs" />
     <Compile Include="Services\Model\DeleteConnectionRequest.cs" />
     <Compile Include="Services\Model\DeleteConnectionResponse.cs" />

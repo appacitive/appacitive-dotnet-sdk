@@ -63,9 +63,11 @@
     <Compile Include="AuthenticationFixture.cs" />
     <Compile Include="ConnectionFixture.cs" />
     <Compile Include="ConnectionServiceFixture.cs" />
+    <Compile Include="FileFixture.cs" />
     <Compile Include="GeocodeFixture.cs" />
     <Compile Include="Helpers\ApiHelper.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\Unique.cs" />
     <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="HttpFixture.cs" />
@@ -84,6 +86,9 @@
       <Project>{fe1a9db5-a965-43fc-a558-dcf6c615f6e1}</Project>
       <Name>Appacitive.Sdk</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\logo.png" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

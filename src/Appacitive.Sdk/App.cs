@@ -33,6 +33,7 @@ namespace Appacitive.Sdk
         {
             InProcContainer.Instance
                             .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer())
+                            .Register<IFileService, FileService>(() => FileService.Instance)
                             .Register<IConnectionService, ConnectionService>( () => ConnectionService.Instance )
                             .Register<ISessionService, SessionService>(() => SessionService.Instance)
                             .Register<IArticleService, ArticleService>(() => ArticleService.Instance)

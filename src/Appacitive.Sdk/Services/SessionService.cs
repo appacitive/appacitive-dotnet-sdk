@@ -11,20 +11,6 @@ namespace Appacitive.Sdk.Services
     {
         internal static SessionService Instance = new SessionService();
 
-        public CreateSessionResponse CreateSession(CreateSessionRequest request)
-        {
-            byte[] bytes = null;
-            var timeTaken = Measure.TimeFor(() =>
-                {
-                    bytes = HttpClient
-                        .WithUrl(Urls.For.CreateSession(request.DebugEnabled, request.Verbosity))
-                        .Put(request.ToBytes());
-                });
-            var response = CreateSessionResponse.Parse(bytes);
-            response.TimeTaken = timeTaken;
-            return response;
-        }
-
         public async Task<CreateSessionResponse> CreateSessionAsync(CreateSessionRequest request)
         {
             var timer = Stopwatch.StartNew();

@@ -43,24 +43,19 @@ namespace Appacitive.Sdk
             return await ExecuteAsync("GET", null);
         }
 
-        public byte[] Get()
-        {   
-            return Execute("GET", null);
-        }
-
-        public byte[] Post(byte[] data)
+        public async Task<Stream> GetAsStreamAsync()
         {
-            return Execute("POST", data);
-        }
-
-        public byte[] Put(byte[] data)
-        {
-            return Execute("PUT", data);
+            return await ExecuteAsStreamAsync("GET", null);
         }
 
         public async Task<byte[]> PostAsyc(byte[] data)
         {
             return await ExecuteAsync("POST", data);
+        }
+
+        public async Task<Stream> PostAsStreamAsync(byte[] data)
+        {
+            return await ExecuteAsStreamAsync("POST", data);
         }
 
         
@@ -127,6 +122,39 @@ namespace Appacitive.Sdk
                     break;
             }
             return await response.Content.ReadAsByteArrayAsync();
+        }
+
+        private async Task<Stream> ExecuteAsStreamAsync(string httpMethod, byte[] data)
+        {
+            var client = new HttpClient2();
+            HttpResponseMessage response = null;
+            ByteArrayContent content = null;
+            if (data != null)
+            {
+                content = new ByteArrayContent(data);
+                this.Headers.For(h => content.Headers.Add(h.Key, h.Value));
+            }
+            else
+            {
+                this.Headers.For(h => client.DefaultRequestHeaders.Add(h.Key, h.Value));
+            }
+
+            switch (httpMethod)
+            {
+                case "GET":
+                    response = await client.GetAsync(this.Url);
+                    break;
+                case "PUT":
+                    response = await client.PutAsync(this.Url, content);
+                    break;
+                case "POST":
+                    response = await client.PostAsync(this.Url, content);
+                    break;
+                case "DELETE":
+                    response = await client.DeleteAsync(this.Url);
+                    break;
+            }
+            return await response.Content.ReadAsStreamAsync();
         }
 
         private HttpWebRequest CreateRequest(string method)

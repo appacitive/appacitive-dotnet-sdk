@@ -14,6 +14,7 @@ namespace Appacitive.Sdk
         public static class For
         {
             private static readonly string ArticleServiceBase = "https://apis.appacitive.com/article";
+            private static readonly string FileServiceBase = "https://apis.appacitive.com/file";
             private static readonly string ConnectionServiceBase = "https://apis.appacitive.com/connection";
             private static readonly string UserServiceBase = "https://apis.appacitive.com/user";
             private static readonly string SessionServiceBase = "https://apis.appacitive.com/application/session";
@@ -220,6 +221,25 @@ namespace Appacitive.Sdk
             {
                 var url = new Url(ArticleServiceBase).Append(type).Append("multiget").Append( idList.ToDelimitedList(","));
                 HandleDefaults(url, location, enableDebug, verbosity, fields);
+                return url.ToString();
+            }
+
+            public static string GetUploadUrl(string mimeType, string filename, int expiry)
+            {
+                // e.g., .../uploadurl?contenttype={contenttype}&filename={filename}&expires={minutes}
+                var url = new Url(FileServiceBase).Append("uploadurl");
+                url.QueryString["contenttype"] = mimeType;
+                if (string.IsNullOrWhiteSpace(filename) == false)
+                    url.QueryString["filename"] = filename;
+                url.QueryString["expires"] = expiry.ToString();
+                return url.ToString();
+            }
+
+            public static string GetDownloadUrl(string filename, int expiry)
+            {
+                // e.g., ../download/{fileid}?expires={minutes}
+                var url = new Url(FileServiceBase).Append("download").Append(filename);
+                url.QueryString["expires"] = expiry.ToString();
                 return url.ToString();
             }
         }
