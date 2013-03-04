@@ -124,7 +124,7 @@ namespace Appacitive.Sdk
                 this.EndpointB = new Endpoint(labelA, articleB.Id);
         }
 
-        public static Connect Create(string relationName)
+        public static Connect New(string relationName)
         {
             return new Connect(relationName);
         }

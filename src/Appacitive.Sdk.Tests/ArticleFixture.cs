@@ -227,10 +227,10 @@ namespace Appacitive.Sdk.Tests
             var obj4 = await ObjectHelper.CreateNewAsync();
             var obj5 = await ObjectHelper.CreateNewAsync();
             // Create connections
-            await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj2.Id).SaveAsync();
-            await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj3.Id).SaveAsync();
-            await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj4.Id).SaveAsync();
-            await Connection.Create("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj5.Id).SaveAsync();
+            await Connection.New("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj2.Id).SaveAsync();
+            await Connection.New("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj3.Id).SaveAsync();
+            await Connection.New("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj4.Id).SaveAsync();
+            await Connection.New("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj5.Id).SaveAsync();
             // Get connected
             var connectedArticles = await obj1.GetConnectedArticlesAsync("sibling");
             Assert.IsTrue(connectedArticles != null);

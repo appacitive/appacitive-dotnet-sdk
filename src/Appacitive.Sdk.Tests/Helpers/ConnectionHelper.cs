@@ -14,7 +14,7 @@ namespace Appacitive.Sdk.Tests
             if (conn == null)
             {
                 conn = Connection
-                    .Create("sibling")
+                    .New("sibling")
                     .FromNewArticle("object", ObjectHelper.NewInstance())
                     .ToNewArticle("object", ObjectHelper.NewInstance());
             }

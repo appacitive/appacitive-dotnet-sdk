@@ -163,10 +163,12 @@ for the specified file which will be available for a specified time only (by def
 of the public url based on the specific usecase.
 
 ``` C#
+
 // To generate a public url for a file
 var filename = ...;							// File name of the file to download.
 var expiryInMinutes = 20 * 365 * 24 * 60;	// Public url that will be active for next 20 years
 
 // Get download url
 string publicUrl = await new FileDownload(filename).GetDownloadUrlAsync(expiryInMinutes);
+
 ```
