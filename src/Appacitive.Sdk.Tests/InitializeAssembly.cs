@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Appacitive.Sdk.WinRT;
 
 namespace Appacitive.Sdk.Tests
 {
@@ -13,7 +14,7 @@ namespace Appacitive.Sdk.Tests
         [AssemblyInitialize]
         public static void Init(TestContext context)
         {
-            App.Initialize(TestConfiguration.ApiKey, TestConfiguration.Environment);
+            App.Initialize(WindowsRT.Host, TestConfiguration.ApiKey, TestConfiguration.Environment);
             App.SetLoggedInUser("");
             
             var token = AppacitiveContext.SessionToken;

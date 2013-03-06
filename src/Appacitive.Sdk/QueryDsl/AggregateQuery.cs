@@ -29,7 +29,7 @@ namespace Appacitive.Sdk
             var padding = " ";
             var buffer = new StringBuilder();
             buffer.Append("(");
-            this.InnerQueries.ForEach(q =>
+            this.InnerQueries.For(q =>
             {
                 if (buffer.Length == 1)
                     buffer.Append(padding).Append(q.ToString());

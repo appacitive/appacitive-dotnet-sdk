@@ -82,13 +82,17 @@
     <Compile Include="ValueFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Appacitive.Sdk\Appacitive.Sdk.csproj">
-      <Project>{fe1a9db5-a965-43fc-a558-dcf6c615f6e1}</Project>
-      <Name>Appacitive.Sdk</Name>
-    </ProjectReference>
+    <Content Include="Data\logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\logo.png" />
+    <ProjectReference Include="..\Appacitive.Sdk.WinRT\Appacitive.Sdk.WinRT.csproj">
+      <Project>{df28e8e5-2601-4ee5-b02a-1a59e12fbfec}</Project>
+      <Name>Appacitive.Sdk.WinRT</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Appacitive.Sdk\Appacitive.Sdk.csproj">
+      <Project>{ef1615f3-fb52-4662-91a1-70ed08203d33}</Project>
+      <Name>Appacitive.Sdk</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

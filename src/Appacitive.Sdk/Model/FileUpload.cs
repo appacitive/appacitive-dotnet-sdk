@@ -16,43 +16,29 @@ namespace Appacitive.Sdk
         {
             this.MimeType = mimeType;
             this.FileName = filename;
+            this.FileHandler = ObjectFactory.Build<IHttpFileHandler>();
         }
 
         public string MimeType { get; private set; }
 
         public string FileName { get; private set; }
 
+        public IHttpFileHandler FileHandler { get; set; }
+
         public async Task<string> UploadAsync(byte[] data)
         {
-            var fileUrl = await GetUploadUrlAsync();
-            var uri = new Uri(fileUrl.Url);
-            var client = new WebClient();
-            // Set content type
-            client.Headers[HttpRequestHeader.ContentType] = this.MimeType;
-            await client.UploadDataTaskAsync(uri, "PUT", data);
-            return fileUrl.FileName;
+            var result = await this.GetUploadUrlAsync();
+            var headers = new Dictionary<string, string> { {"Content-Type", this.MimeType } };
+            await this.FileHandler.UploadAsync(result.Url, headers, "PUT", data);
+            return result.FileName;
         }
 
         public async Task<string> UploadFileAsync(string file)
         {
-            byte[] data = null;
-            // Read file contents
-            using (var memStream = new MemoryStream())
-            {
-                using (var fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read, 1024, true))
-                {
-                    await fileStream.CopyToAsync(memStream);
-                }
-                data = memStream.ToArray();
-            }
-
-            var fileUrl = await GetUploadUrlAsync();
-            var uri = new Uri(fileUrl.Url);
-            var client = new WebClient();
-            // Set content type
-            client.Headers[HttpRequestHeader.ContentType] = this.MimeType;
-            await client.UploadDataTaskAsync(uri, "PUT", data);
-            return fileUrl.FileName;
+            var result = await this.GetUploadUrlAsync();
+            var headers = new Dictionary<string, string> { { "Content-Type", this.MimeType } };
+            await this.FileHandler.UploadAsync(result.Url, headers, "PUT", file);
+            return result.FileName;
         }
 
         public async Task<FileUrl> GetUploadUrlAsync(int expiryInMinutes = 5)

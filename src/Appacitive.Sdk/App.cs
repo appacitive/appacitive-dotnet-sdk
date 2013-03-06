@@ -11,34 +11,22 @@ namespace Appacitive.Sdk
 {
     public static class App
     {
-        public static void Initialize(string apiKey, Environment environment, AppacitiveSettings settings = null)
+        public static void Initialize(IApplicationHost host, string apiKey, Environment environment, AppacitiveSettings settings = null)
         {
-            RegisterDefaults();
             settings = settings ?? AppacitiveSettings.Default;
             // Set the api key
             AppacitiveContext.ApiKey = apiKey;
             // Set the environment
             AppacitiveContext.Environment = environment;
             // Set the factory
-            var factory = settings.Factory ?? AppacitiveSettings.Default.Factory;
-            AppacitiveContext.ObjectFactory = factory;
+            AppacitiveContext.ObjectFactory = settings.Factory ?? AppacitiveSettings.Default.Factory;
+            // Initialize host
+            host.InitializeContainer(AppacitiveContext.ObjectFactory);
         }
 
         public static void SetLoggedInUser(string userToken)
         {
             AppacitiveContext.UserToken = userToken;
-        }
-
-        private static void RegisterDefaults()
-        {
-            InProcContainer.Instance
-                            .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer())
-                            .Register<IFileService, FileService>(() => FileService.Instance)
-                            .Register<IConnectionService, ConnectionService>( () => ConnectionService.Instance )
-                            .Register<ISessionService, SessionService>(() => SessionService.Instance)
-                            .Register<IArticleService, ArticleService>(() => ArticleService.Instance)
-                            .Register<IUserService, UserService>(() => UserService.Instance)
-                            ;
         }
     }
 
@@ -47,10 +35,23 @@ namespace Appacitive.Sdk
         internal static readonly AppacitiveSettings Default = new AppacitiveSettings
         {
             // Register defaults
-            Factory = InProcContainer.Instance
+            Factory = GetDefaultContainer()
         };
 
-        public IObjectFactory Factory { get; set; }
+        public IDependencyContainer Factory { get; set; }
+
+        private static IDependencyContainer GetDefaultContainer()
+        {
+            InProcContainer.Instance
+                            .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer())
+                            .Register<IFileService, FileService>(() => FileService.Instance)
+                            .Register<IConnectionService, ConnectionService>(() => ConnectionService.Instance)
+                            .Register<ISessionService, SessionService>(() => SessionService.Instance)
+                            .Register<IArticleService, ArticleService>(() => ArticleService.Instance)
+                            .Register<IUserService, UserService>(() => UserService.Instance)
+                            ;
+            return InProcContainer.Instance;
+        }
     }
 
     public static class AppacitiveContext
@@ -59,38 +60,24 @@ namespace Appacitive.Sdk
 
         public static Environment Environment { get; set; }
 
-        private static ReaderWriterLockSlim _sessionLock = new ReaderWriterLockSlim( LockRecursionPolicy.SupportsRecursion );
+        private static object _syncRoot = new object();
         private static string _sessionToken;
 
         public static string SessionToken
         {
             get
             {
-                _sessionLock.EnterUpgradeableReadLock();
-                try
+                if (string.IsNullOrWhiteSpace(_sessionToken) == true)
                 {
-                    if (string.IsNullOrWhiteSpace(_sessionToken) == true)
+                    lock (_syncroot)
                     {
-                        _sessionLock.EnterWriteLock();
-                        try
+                        if (string.IsNullOrWhiteSpace(_sessionToken) == true)
                         {
-                            if (string.IsNullOrWhiteSpace(_sessionToken) == true)
-                            {
-                                CreateSessionAsync().Wait();
-                            }
-                            
-                        }
-                        finally
-                        {
-                            _sessionLock.ExitWriteLock();
+                            CreateSessionAsync().Wait();
                         }
                     }
-                    return _sessionToken;
                 }
-                finally
-                {
-                    _sessionLock.ExitUpgradeableReadLock();
-                }
+                return _sessionToken;
             }
         }
 
@@ -98,7 +85,7 @@ namespace Appacitive.Sdk
 
         public static Geocode UserLocation { get; internal set; }
 
-        public static IObjectFactory ObjectFactory { get; internal set; }
+        public static IDependencyContainer ObjectFactory { get; internal set; }
 
         internal static void MarkSessionInvalid()
         {

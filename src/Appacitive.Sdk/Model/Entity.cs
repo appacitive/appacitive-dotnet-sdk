@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -28,10 +27,10 @@ namespace Appacitive.Sdk
 
         
         // Represents the saved state of the article
-        private ConcurrentDictionary<string, string> _currentFields = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        private ConcurrentDictionary<string, string> _lastKnownFields = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        private ConcurrentDictionary<string, string> _currentAttributes = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        private ConcurrentDictionary<string, string> _lastKnownAttributes = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private IDictionary<string, string> _currentFields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private IDictionary<string, string> _lastKnownFields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private IDictionary<string, string> _currentAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private IDictionary<string, string> _lastKnownAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private List<string> _currentTags = new List<string>();
         private List<string> _lastKnownTags = new List<string>();
         private readonly object _syncRoot = new object();
@@ -100,11 +99,10 @@ namespace Appacitive.Sdk
 
         public void RemoveAttribute(string name)
         {
-            string value;
-            _currentFields.TryRemove("@" + name, out value);
+            _currentAttributes.Remove(name);
         }
 
-        private void FirePropertyChanged([CallerMemberName] string propertyName = "")
+        private void FirePropertyChanged(string propertyName)
         {
             var privateCopy = _properyChanged;
             if (privateCopy != null)
@@ -126,7 +124,7 @@ namespace Appacitive.Sdk
                 _currentFields[name] = value;
                 // Raise property changed event
                 if (oldValue != value)
-                    FirePropertyChanged();
+                    FirePropertyChanged(name);
             }
         }
 
@@ -168,15 +166,15 @@ namespace Appacitive.Sdk
 
         private void UpdateLastKnown(Entity entity)
         {   
-            var newLastKnownFields = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            var newCurrentFields = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var newLastKnownFields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var newCurrentFields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             entity.Properties.For(x => 
                 {
                     newLastKnownFields[x.Key] = x.Value;
                     newCurrentFields[x.Key] = x.Value;
                 });
-            var newLastKnownAttributes = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            var newCurrentAttributes = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var newLastKnownAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var newCurrentAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             entity.Attributes.For(x =>
                 {
                     newLastKnownAttributes[x.Key] = x.Value;
@@ -209,7 +207,7 @@ namespace Appacitive.Sdk
         {
             lock (_syncRoot)
             {
-                return new ConcurrentDictionary<string, string>(map, StringComparer.OrdinalIgnoreCase);
+                return new Dictionary<string, string>(map, StringComparer.OrdinalIgnoreCase);
             }
         }
 

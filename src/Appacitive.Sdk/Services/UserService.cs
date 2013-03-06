@@ -15,7 +15,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
 
-            bytes = await HttpClient
+            bytes = await HttpOperation
                 .WithUrl(Urls.For.CreateUser(request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
@@ -30,7 +30,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
 
-            bytes = await HttpClient
+            bytes = await HttpOperation
                 .WithUrl(Urls.For.AuthenticateUser(request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
@@ -44,7 +44,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
 
-            bytes = await HttpClient
+            bytes = await HttpOperation
                 .WithUrl(Urls.For.GetUser(request.UserId, request.UserIdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
@@ -58,7 +58,7 @@ namespace Appacitive.Sdk.Services
         public async Task<UpdateUserResponse> UpdateUserAsync(UpdateUserRequest request)
         {
             byte[] bytes = null;
-            bytes = await HttpClient
+            bytes = await HttpOperation
                 .WithUrl(Urls.For.UpdateUser(request.UserId, request.IdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
@@ -71,7 +71,7 @@ namespace Appacitive.Sdk.Services
         public async Task<ChangePasswordResponse> ChangePasswordAsync(ChangePasswordRequest request)
         {
             byte[] bytes = null;
-            bytes = await HttpClient
+            bytes = await HttpOperation
                 .WithUrl(Urls.For.ChangePassword(request.UserId, request.IdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
@@ -85,7 +85,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
 
-            bytes = await HttpClient
+            bytes = await HttpOperation
                 .WithUrl(Urls.For.DeleteUser(request.UserId, request.UserIdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
@@ -99,7 +99,7 @@ namespace Appacitive.Sdk.Services
         public async Task<FindAllUsersResponse> FindAllAsync(FindAllUsersRequest request)
         {
             byte[] bytes = null;
-            bytes = await HttpClient
+            bytes = await HttpOperation
                         .WithUrl(Urls.For.FindAllArticles("user", request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)

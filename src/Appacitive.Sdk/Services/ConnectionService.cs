@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +14,7 @@ namespace Appacitive.Sdk.Services
         public async Task<CreateConnectionResponse> CreateConnectionAsync(CreateConnectionRequest request)
         {
             byte[] bytes = null;
-            bytes = await HttpClient
+            bytes = await HttpOperation
                         .WithUrl(Urls.For.CreateConnection(request.Connection.Type, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)
@@ -36,7 +35,7 @@ namespace Appacitive.Sdk.Services
         public async Task<GetConnectionResponse> GetConnectionAsync(GetConnectionRequest request)
         {
             byte[] bytes = null;
-            bytes = await HttpClient
+            bytes = await HttpOperation
                         .WithUrl(Urls.For.GetConnection(request.Relation, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)
@@ -49,7 +48,7 @@ namespace Appacitive.Sdk.Services
         public async Task<DeleteConnectionResponse> DeleteConnectionAsync(DeleteConnectionRequest request)
         {
             byte[] bytes = null;
-            bytes = await HttpClient
+            bytes = await HttpOperation
                         .WithUrl(Urls.For.GetConnection(request.Relation, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)
@@ -63,7 +62,7 @@ namespace Appacitive.Sdk.Services
         public async Task<FindConnectedArticlesResponse> FindConnectedArticlesAsync(FindConnectedArticlesRequest request)
         {
             byte[] bytes = null;
-            bytes = await HttpClient
+            bytes = await HttpOperation
                         .WithUrl(Urls.For.FindConnectedArticles(request.Relation, request.ArticleId, request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveSession(request.SessionToken)
                         .WithEnvironment(request.Environment)

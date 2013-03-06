@@ -172,3 +172,52 @@ var expiryInMinutes = 20 * 365 * 24 * 60;	// Public url that will be active for 
 string publicUrl = await new FileDownload(filename).GetDownloadUrlAsync(expiryInMinutes);
 
 ```
+
+
+### Pending items
+Articles and connections
+
+- [x] Get connected articles.
+- [x] Get connected articles with connections - done 
+- [ ] Get articles in between
+- [x] Multi get articles - done
+- [ ] Get connection between two articles of a specific type
+- [ ] Get connections between two articles of any type of relation.
+- [ ] Interconnect
+- [ ] Multi get connections
+- [ ] Multi delete article
+- [ ] Force delete single article.
+- [ ] Sorting support on listing calls.
+
+Users
+- [x] Authenticate with create new account - done
+- [ ] Link account
+- [ ] Create with linked account
+- [ ] Get linked account
+- [ ] Get all linked accounts
+- [ ] Add linked account
+- [ ] Update linked account
+- [ ] Remove linked account
+- [ ] Checkin
+- [ ] Multi get
+
+File
+- [x] Get upload url - done
+- [x] Upload file - done
+- [x] Download file - done
+- [x] Get download url - done
+- [x] Get public url - done
+- [ ] Update file
+- [ ] Delete file
+
+Email
+- [ ] Send raw email
+- [ ] Send templated email
+
+Push notifications
+- [ ] Send push notification 
+
+Device
+- [ ] CRUD
+- [ ] Listing
+- [ ] Find All

@@ -25,7 +25,7 @@ namespace Appacitive.Sdk.Tests
         {
             try
             {
-                var content = await HttpClient
+                var content = await HttpOperation
                     .WithUrl("http://www.google.co.in")
                     .GetAsync();
                 Console.WriteLine(Encoding.UTF8.GetString(content));

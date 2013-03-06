@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
-    public class InProcContainer : IObjectFactory
+    public class InProcContainer : IDependencyContainer
     {
         private InProcContainer()
-        {
+        {   
         }
 
         public static InProcContainer Instance = new InProcContainer();
@@ -76,6 +76,41 @@ namespace Appacitive.Sdk
         {
             _factories[new TypeKey(typeof(TInterface), name)] = factory;
             return this;
+        }
+
+        IEnumerable<T> IDependencyContainer.BuildAll<T>()
+        {
+            return this.BuildAll<T>();
+        }
+
+        T IDependencyContainer.Build<T>()
+        {
+            return this.Build<T>();
+        }
+
+        T IDependencyContainer.Build<T>(string name)
+        {
+            return this.Build<T>(name);
+        }
+
+        IDependencyContainer IDependencyContainer.Register<TInterface, TImpl>()
+        {
+            return this.Register<TInterface, TImpl>();
+        }
+
+        IDependencyContainer IDependencyContainer.Register<TInterface, TImpl>(string name)
+        {
+            return this.Register<TInterface, TImpl>(name);
+        }
+
+        IDependencyContainer IDependencyContainer.Register<TInterface, TImpl>(Func<object> factory)
+        {
+            return this.Register<TInterface, TImpl>(factory);
+        }
+
+        IDependencyContainer IDependencyContainer.Register<TInterface, TImpl>(string name, Func<object> factory)
+        {
+            return this.Register<TInterface, TImpl>(name, factory);
         }
     }
 

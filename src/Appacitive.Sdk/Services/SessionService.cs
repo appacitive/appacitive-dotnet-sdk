@@ -13,13 +13,10 @@ namespace Appacitive.Sdk.Services
 
         public async Task<CreateSessionResponse> CreateSessionAsync(CreateSessionRequest request)
         {
-            var timer = Stopwatch.StartNew();
-            var bytes = await HttpClient
+            var bytes = await HttpOperation
                 .WithUrl(Urls.For.CreateSession(request.DebugEnabled, request.Verbosity))
                 .PutAsyc(request.ToBytes());
-            timer.Stop();
             var response = CreateSessionResponse.Parse(bytes);
-            response.TimeTaken = (decimal)timer.ElapsedTicks / Stopwatch.Frequency;
             return response;
         }
     }

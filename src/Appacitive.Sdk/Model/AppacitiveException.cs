@@ -8,7 +8,6 @@ using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
-    [Serializable]
     public class AppacitiveException : Exception
     {
         public AppacitiveException()
@@ -26,10 +25,8 @@ namespace Appacitive.Sdk
         {
         }
 
-        public AppacitiveException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+        
+
 
         public string Code { get; set; }
 

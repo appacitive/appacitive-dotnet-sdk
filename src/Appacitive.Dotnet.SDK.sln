@@ -1,0 +1,83 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appacitive.Sdk.Tests", "Appacitive.Sdk.Tests\Appacitive.Sdk.Tests.csproj", "{1017D234-A3B0-4346-B4E0-B814922CAC0F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appacitive.Sdk.WinRT", "Appacitive.Sdk.WinRT\Appacitive.Sdk.WinRT.csproj", "{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appacitive.Sdk.WindowsPhone8", "Appacitive.Sdk.WindowsPhone8\Appacitive.Sdk.WindowsPhone8.csproj", "{D4540E94-B728-401E-B0F0-D486D4130B5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appacitive.Sdk", "Appacitive.Sdk\Appacitive.Sdk.csproj", "{EF1615F3-FB52-4662-91A1-70ED08203D33}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{DDA39C5C-844F-4B1D-928B-F988FA5B3FBB}"
+	ProjectSection(SolutionItems) = preProject
+		Library\Moq.dll = Library\Moq.dll
+		Library\Newtonsoft.Json.dll = Library\Newtonsoft.Json.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Portable", "Portable", "{54394001-BF23-48DA-B69A-E01AFA7C098F}"
+	ProjectSection(SolutionItems) = preProject
+		Library\Portable\Newtonsoft.Json.dll = Library\Portable\Newtonsoft.Json.dll
+		Library\Portable\Newtonsoft.Json.pdb = Library\Portable\Newtonsoft.Json.pdb
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B99B2265-49D4-4227-B72E-2E762DA292EC}"
+	ProjectSection(SolutionItems) = preProject
+		Default.testsettings = Default.testsettings
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Release|ARM.ActiveCfg = Release|Any CPU
+		{1017D234-A3B0-4346-B4E0-B814922CAC0F}.Release|x86.ActiveCfg = Release|Any CPU
+		{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}.Release|ARM.ActiveCfg = Release|Any CPU
+		{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}.Release|x86.ActiveCfg = Release|Any CPU
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Debug|ARM.ActiveCfg = Debug|ARM
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Debug|ARM.Build.0 = Debug|ARM
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Debug|x86.ActiveCfg = Debug|x86
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Debug|x86.Build.0 = Debug|x86
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Release|ARM.ActiveCfg = Release|ARM
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Release|ARM.Build.0 = Release|ARM
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Release|x86.ActiveCfg = Release|x86
+		{D4540E94-B728-401E-B0F0-D486D4130B5A}.Release|x86.Build.0 = Release|x86
+		{EF1615F3-FB52-4662-91A1-70ED08203D33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF1615F3-FB52-4662-91A1-70ED08203D33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF1615F3-FB52-4662-91A1-70ED08203D33}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{EF1615F3-FB52-4662-91A1-70ED08203D33}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EF1615F3-FB52-4662-91A1-70ED08203D33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF1615F3-FB52-4662-91A1-70ED08203D33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF1615F3-FB52-4662-91A1-70ED08203D33}.Release|ARM.ActiveCfg = Release|Any CPU
+		{EF1615F3-FB52-4662-91A1-70ED08203D33}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{54394001-BF23-48DA-B69A-E01AFA7C098F} = {DDA39C5C-844F-4B1D-928B-F988FA5B3FBB}
+	EndGlobalSection
+EndGlobal

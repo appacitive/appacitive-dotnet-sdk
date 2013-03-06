@@ -9,25 +9,26 @@ namespace Appacitive.Sdk
 {
     public struct Value
     {
-        public Value(decimal value) : this(value.ToString(), TypeCode.Decimal) { }
+        public Value(decimal value) : this(value.ToString(), ValueType.Decimal) { }
 
-        public Value(double value) : this(Convert.ToDecimal(value).ToString(), TypeCode.Decimal) { }
+        public Value(double value) : this(Convert.ToDecimal(value).ToString(), ValueType.Decimal) { }
 
-        public Value(DateTime value) : this(value.ToString("o"), TypeCode.DateTime) { }
+        public Value(DateTime value) : this(value.ToString("o"), ValueType.DateTime) { }
 
-        public Value(long value) : this(value.ToString(), TypeCode.Int64) { }
+        public Value(long value) : this(value.ToString(), ValueType.Int64) { }
 
-        public Value(bool value) : this(value.ToString(), TypeCode.Boolean) { }
+        public Value(bool value) : this(value.ToString(), ValueType.Boolean) { }
 
-        public Value(string value) : this(value, TypeCode.String) { }
+        public Value(string value) : this(value, ValueType.String) { }
 
-        private Value(string value, TypeCode typeCode) : this()
+        private Value(string value, ValueType typeCode)
+            : this()
         {
             StringValue = value;
             TypeCode = typeCode;
         }
 
-        private TypeCode TypeCode { get; set; }
+        private ValueType TypeCode { get; set; }
         public string StringValue { get; private set; }
 
         #region Implicit conversions 

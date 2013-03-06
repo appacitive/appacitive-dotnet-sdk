@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 
 namespace Appacitive.Sdk.Services
 {
-    [Serializable]
     public class FindAllArticleResponse : ApiResponse
     {
         [JsonProperty("articles")]
@@ -23,7 +22,6 @@ namespace Appacitive.Sdk.Services
         }
     }
 
-    [Serializable]
     public class PagingInfo
     {
         [JsonProperty("pagenumber")]

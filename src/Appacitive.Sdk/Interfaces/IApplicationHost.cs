@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
-    
+    public interface IApplicationHost
+    {
+        void InitializeContainer(IDependencyContainer container);
+    }
 }

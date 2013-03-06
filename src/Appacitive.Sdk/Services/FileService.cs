@@ -12,7 +12,7 @@ namespace Appacitive.Sdk.Services
 
         public async Task<GetUploadUrlResponse> GetUploadUrlAsync(GetUploadUrlRequest request)
         {
-            var bytes = await HttpClient
+            var bytes = await HttpOperation
                 .WithUrl(Urls.For.GetUploadUrl(request.MimeType, request.FileName, request.ExpiryInMinutes))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
@@ -24,7 +24,7 @@ namespace Appacitive.Sdk.Services
 
         public async Task<GetDownloadUrlResponse> GetDownloadUrlAsync(GetDownloadUrlRequest request)
         {
-            var bytes = await HttpClient
+            var bytes = await HttpOperation
                 .WithUrl(Urls.For.GetDownloadUrl(request.FileName, request.ExpiryInMinutes))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)

@@ -41,14 +41,8 @@ namespace Appacitive.Sdk
 
         public static void For<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
-            List<T> list = enumerable as List<T>;
-            if (list != null)
-                list.ForEach(action);
-            else
-            {
-                foreach (var item in enumerable)
-                    action(item);
-            }
+            foreach (var item in enumerable)
+                action(item);
         }
 
         public static AppacitiveException ToFault(this Status status)
@@ -65,17 +59,17 @@ namespace Appacitive.Sdk
         }
                 
 
-        public static HttpClient WithAppacitiveSession(this HttpClient client, string session)
+        public static HttpOperation WithAppacitiveSession(this HttpOperation client, string session)
         {       
             return client.WithHeader("Appacitive-Session", session);
         }
 
-        public static HttpClient WithEnvironment(this HttpClient client, Environment env)
+        public static HttpOperation WithEnvironment(this HttpOperation client, Environment env)
         {   
             return client.WithHeader("Appacitive-Environment", env.ToString());
         }
 
-        public static HttpClient WithUserToken(this HttpClient client, string userToken)
+        public static HttpOperation WithUserToken(this HttpOperation client, string userToken)
         {       
             if( userToken != null )
                 client.WithHeader("Appacitive-User-Auth", userToken);
