@@ -21,7 +21,11 @@ namespace Appacitive.Sdk.Services
             this.AttributeUpdates = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             this.AddedTags = new List<string>();
             this.RemovedTags = new List<string>();
+            this.Revision = 0;
         }
+
+        [JsonIgnore]
+        public int Revision { get; set; }
 
         [JsonIgnore]
         public string Id { get; set; }

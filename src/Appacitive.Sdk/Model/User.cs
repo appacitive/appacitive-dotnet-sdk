@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -236,7 +235,7 @@ namespace Appacitive.Sdk
             return response.User;
         }
 
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags)
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var userService = ObjectFactory.Build<IUserService>();
             var request = new UpdateUserRequest()
@@ -245,6 +244,7 @@ namespace Appacitive.Sdk
                 Environment = AppacitiveContext.Environment,
                 UserToken = AppacitiveContext.UserToken,
                 Verbosity = AppacitiveContext.Verbosity,
+                Revision = specificRevision,
                 UserId = this.Id
             };
 

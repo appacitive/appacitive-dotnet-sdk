@@ -71,9 +71,11 @@ namespace Appacitive.Sdk
                 return url.ToString();
             }
 
-            public static string UpdateArticle(string type, string id, Geocode geocode, bool enableDebug, Verbosity verbosity, List<string> fields)
+            public static string UpdateArticle(string type, string id, int revision, Geocode geocode, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ArticleServiceBase).Append(type).Append(id);
+                if (revision > 0)
+                    url.QueryString["revision"] = revision.ToString();
                 HandleDefaults(url, geocode, enableDebug, verbosity, fields);
                 return url.ToString();
             }
@@ -115,7 +117,7 @@ namespace Appacitive.Sdk
                 return url.ToString();
             }
 
-            public static string UpdateUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
+            public static string UpdateUser(string userId, string idType, int revision, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(UserServiceBase);
                 if (string.IsNullOrWhiteSpace(idType))
@@ -132,6 +134,9 @@ namespace Appacitive.Sdk
                     url.Append(userId);
                     url.QueryString["useridtype"] = "username";
                 }
+
+                if (revision > 0)
+                    url.QueryString["revision"] = revision.ToString();
                 HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }

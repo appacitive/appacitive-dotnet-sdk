@@ -186,8 +186,9 @@ Articles and connections
 - [ ] Interconnect
 - [ ] Multi get connections
 - [ ] Multi delete article
-- [ ] Force delete single article.
+- [x] Force delete single article.
 - [x] Sorting support on listing calls.
+- [x] Update article with revision
 
 Users
 - [x] Authenticate with create new account - done
@@ -200,6 +201,9 @@ Users
 - [ ] Remove linked account
 - [ ] Checkin
 - [ ] Multi get
+- [x] Update user with revision
+- [x] Delete user with connection
+- [x] Sorting support on listing calls.
 
 File
 - [x] Get upload url - done

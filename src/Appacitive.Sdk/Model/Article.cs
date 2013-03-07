@@ -98,7 +98,7 @@ namespace Appacitive.Sdk
                 throw status.ToFault();
         }
 
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags)
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var articleService = ObjectFactory.Build<IArticleService>();
             var request = new UpdateArticleRequest()
@@ -107,6 +107,7 @@ namespace Appacitive.Sdk
                 Environment = AppacitiveContext.Environment,
                 UserToken = AppacitiveContext.UserToken,
                 Verbosity = AppacitiveContext.Verbosity,
+                Revision = specificRevision,
                 Id = this.Id,
                 Type = this.Type
             };

@@ -59,7 +59,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = await HttpOperation
-                .WithUrl(Urls.For.UpdateUser(request.UserId, request.IdType, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
+                .WithUrl(Urls.For.UpdateUser(request.UserId, request.IdType, request.Revision, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)

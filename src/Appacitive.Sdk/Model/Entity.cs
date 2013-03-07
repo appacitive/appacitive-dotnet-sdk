@@ -128,12 +128,12 @@ namespace Appacitive.Sdk
             }
         }
 
-        public async Task SaveAsync()
+        public async Task SaveAsync(int specificRevision = 0)
         {
             if (string.IsNullOrWhiteSpace(this.Id) == true)
                 await CreateNewEntityAsync();
             else
-                await UpdateEntityAsync();
+                await UpdateEntityAsync(specificRevision);
         }
 
         private async Task CreateNewEntityAsync()
@@ -143,7 +143,7 @@ namespace Appacitive.Sdk
             UpdateLastKnown(entity);
         }
         
-        private async Task UpdateEntityAsync()
+        private async Task UpdateEntityAsync(int specificRevision)
         {
             // 1. Get property differences
             var propertyDifferences = _currentFields.GetModifications(_lastKnownFields);
@@ -156,7 +156,7 @@ namespace Appacitive.Sdk
             _lastKnownTags.GetDifferences(_currentTags, out addedTags, out removedTags);
 
             // 3. update the article
-            var updated = await UpdateAsync(propertyDifferences, attributeDifferences, addedTags, removedTags);
+            var updated = await UpdateAsync(propertyDifferences, attributeDifferences, addedTags, removedTags, specificRevision);
             if (updated != null)
             {
                 // 4. Update the last known state based on the differences
@@ -260,7 +260,7 @@ namespace Appacitive.Sdk
 
         protected abstract Task<Entity> CreateNewAsync();
 
-        protected abstract Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags);
+        protected abstract Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision);
     }
 
     internal class DictionaryDifference
