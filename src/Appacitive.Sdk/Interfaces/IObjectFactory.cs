@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk
+namespace Appacitive.Sdk.Interfaces
 {
     public interface IDependencyContainer
     {
@@ -22,26 +22,4 @@ namespace Appacitive.Sdk
 
         IDependencyContainer Register<TInterface, TImpl>(string name, Func<object> factory) where TImpl : TInterface;
     }
-
-    public static class ObjectFactory
-    {
-        public static IEnumerable<T> BuildAll<T>()
-            where T : class
-        {
-            return AppacitiveContext.ObjectFactory.BuildAll<T>();
-        }
-
-        public static T Build<T>()
-            where T : class
-        {
-            return AppacitiveContext.ObjectFactory.Build<T>();
-        }
-
-        public static T Build<T>(string name)
-            where T : class
-        {
-            return AppacitiveContext.ObjectFactory.Build<T>(name);
-        }
-    }
-
 }

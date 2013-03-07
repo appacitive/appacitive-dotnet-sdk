@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Appacitive.Sdk.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,7 +51,6 @@ namespace Appacitive.Sdk
         {
             return () => Activator.CreateInstance(type);
         }
-
 
         public InProcContainer Register<TInterface, TImpl>()
             where TImpl : TInterface

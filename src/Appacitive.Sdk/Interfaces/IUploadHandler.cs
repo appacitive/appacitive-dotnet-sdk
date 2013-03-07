@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk
+namespace Appacitive.Sdk.Interfaces
 {
     public interface IHttpFileHandler
     {

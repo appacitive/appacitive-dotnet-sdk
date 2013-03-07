@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Appacitive.Sdk.Services;
 
-namespace Appacitive.Sdk
+namespace Appacitive.Sdk.Services
 {
     public static class Urls
     {

@@ -34,18 +34,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="AppacitiveContext.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="HttpClient.cs" />
     <Compile Include="InProcContainer.cs" />
-    <Compile Include="Interfaces\IArticleDataSource.cs" />
-    <Compile Include="Interfaces\IArticles.cs" />
     <Compile Include="Interfaces\IHttpConnector.cs" />
     <Compile Include="Interfaces\IJsonSerializer.cs" />
     <Compile Include="Interfaces\IObjectFactory.cs" />
     <Compile Include="Interfaces\IApplicationHost.cs" />
     <Compile Include="Interfaces\IUploadHandler.cs" />
-    <Compile Include="Interfaces\Urls.cs" />
+    <Compile Include="Interfaces\IUserContext.cs" />
+    <Compile Include="Services\Urls.cs" />
     <Compile Include="JsonNetSerializer.cs" />
     <Compile Include="Measure.cs" />
     <Compile Include="Model\AppacitiveException.cs" />
@@ -64,7 +64,9 @@
     <Compile Include="Model\FileUrl.cs" />
     <Compile Include="Model\Geocode.cs" />
     <Compile Include="Model\Guard.cs" />
+    <Compile Include="Model\ObjectFactory.cs" />
     <Compile Include="Model\PagedList.cs" />
+    <Compile Include="Model\StaticUserContext.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\Value.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

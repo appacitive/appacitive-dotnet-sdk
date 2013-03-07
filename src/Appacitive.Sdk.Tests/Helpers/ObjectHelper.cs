@@ -36,8 +36,6 @@ namespace Appacitive.Sdk.Tests
             response = await service.CreateArticleAsync(new CreateArticleRequest()
             {
                 Article = obj,
-                SessionToken = AppacitiveContext.SessionToken,
-                UserToken = AppacitiveContext.UserToken,
                 Environment = Environment.Sandbox
             });
             ApiHelper.EnsureValidResponse(response);

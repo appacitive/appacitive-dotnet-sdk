@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Appacitive.Sdk.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -27,8 +27,6 @@ namespace Appacitive.Sdk.Tests
             response = await service.CreateArticleAsync(new CreateArticleRequest()
             {
                 Article = obj,
-                SessionToken = AppacitiveContext.SessionToken,
-                UserToken = AppacitiveContext.UserToken,
                 Environment = TestConfiguration.Environment
             });
             waitHandle.Set();
@@ -53,11 +51,9 @@ namespace Appacitive.Sdk.Tests
             GetArticleResponse getResponse = null;
             getResponse = await service.GetArticleAsync(
                 new GetArticleRequest()
-                {
-                    SessionToken = AppacitiveContext.SessionToken,
+                {   
                     Id = article.Id,
-                    Type = article.Type,
-                    Environment = AppacitiveContext.Environment
+                    Type = article.Type
                 });
             Assert.IsNotNull(getResponse);
             Assert.IsNotNull(getResponse.Status);
@@ -96,9 +92,7 @@ namespace Appacitive.Sdk.Tests
                         CreateArticleResponse response = null;
                         response = await service.CreateArticleAsync(new CreateArticleRequest()
                         {
-                            Article = obj,
-                            SessionToken = AppacitiveContext.SessionToken,
-                            UserToken = AppacitiveContext.UserToken
+                            Article = obj
                         });
                         Assert.IsNotNull(response);
                         Assert.IsNotNull(response.Status);
@@ -112,9 +106,7 @@ namespace Appacitive.Sdk.Tests
                         deleteArticleResponse = await service.DeleteArticleAsync(new DeleteArticleRequest()
                         {
                             Id = response.Article.Id,
-                            Type = response.Article.Type,
-                            Environment = AppacitiveContext.Environment,
-                            SessionToken = AppacitiveContext.SessionToken
+                            Type = response.Article.Type
                         });
                         Assert.IsNotNull(deleteArticleResponse, "Delete articler response is null.");
                         Assert.IsTrue(deleteArticleResponse.IsSuccessful == true, deleteArticleResponse.Message ?? "Delete article operation failed.");
@@ -124,9 +116,7 @@ namespace Appacitive.Sdk.Tests
                             new GetArticleRequest()
                             {
                                 Id = response.Article.Id,
-                                Type = response.Article.Type,
-                                SessionToken = AppacitiveContext.SessionToken,
-                                Environment = AppacitiveContext.Environment
+                                Type = response.Article.Type
                             });
                         Assert.IsNotNull(getArticleResponse, "Get article response is null.");
                         Assert.IsNull(getArticleResponse.Article, "Should not be able to get a deleted article.");
@@ -167,9 +157,7 @@ namespace Appacitive.Sdk.Tests
                         var service = ObjectFactory.Build<IArticleService>();
                         var createdResponse = await service.CreateArticleAsync(new CreateArticleRequest()
                         {
-                            Article = obj,
-                            Environment = AppacitiveContext.Environment,
-                            SessionToken = AppacitiveContext.SessionToken
+                            Article = obj
                         });
                         Assert.IsNotNull(createdResponse, "Article creation failed.");
                         Assert.IsNotNull(createdResponse.Status, "Status is null.");
@@ -180,9 +168,7 @@ namespace Appacitive.Sdk.Tests
                         var updateRequest = new UpdateArticleRequest()
                         {
                             Id = created.Id,
-                            Type = created.Type,
-                            SessionToken = AppacitiveContext.SessionToken,
-                            Environment = AppacitiveContext.Environment
+                            Type = created.Type
                         };
                         updateRequest.PropertyUpdates["intfield"] = "2";
                         updateRequest.PropertyUpdates["decimalfield"] = 20.0m.ToString();
@@ -233,9 +219,7 @@ namespace Appacitive.Sdk.Tests
             var service = ObjectFactory.Build<IArticleService>();
             var createdResponse = await service.CreateArticleAsync(new CreateArticleRequest()
             {
-                Article = obj,
-                Environment = AppacitiveContext.Environment,
-                SessionToken = AppacitiveContext.SessionToken
+                Article = obj
             });
             Assert.IsNotNull(createdResponse, "Article creation failed.");
             Assert.IsNotNull(createdResponse.Status, "Status is null.");
@@ -248,9 +232,7 @@ namespace Appacitive.Sdk.Tests
                 var updateRequest = new UpdateArticleRequest()
                 {
                     Id = created.Id,
-                    Type = created.Type,
-                    SessionToken = AppacitiveContext.SessionToken,
-                    Environment = AppacitiveContext.Environment
+                    Type = created.Type
                 };
                 updateRequest.PropertyUpdates["stringfield"] = null;
                 var updatedResponse = await service.UpdateArticleAsync(updateRequest);
@@ -285,9 +267,7 @@ namespace Appacitive.Sdk.Tests
             CreateArticleResponse response = null;
             response = await service.CreateArticleAsync(new CreateArticleRequest()
             {
-                Article = obj,
-                SessionToken = AppacitiveContext.SessionToken,
-                UserToken = AppacitiveContext.UserToken
+                Article = obj
             });
 
             ApiHelper.EnsureValidResponse(response);

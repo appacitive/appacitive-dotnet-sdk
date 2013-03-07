@@ -1,4 +1,5 @@
-﻿using Appacitive.Sdk.WinRT;
+﻿using Appacitive.Sdk.Interfaces;
+using Appacitive.Sdk.WinRT;
 using System;
 using System.Collections.Generic;
 using System.Linq;

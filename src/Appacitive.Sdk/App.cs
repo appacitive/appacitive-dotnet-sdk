@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
+using Appacitive.Sdk.Interfaces;
 
 namespace Appacitive.Sdk
 {
@@ -20,16 +21,41 @@ namespace Appacitive.Sdk
             AppacitiveContext.Environment = environment;
             // Set the factory
             AppacitiveContext.ObjectFactory = settings.Factory ?? AppacitiveSettings.Default.Factory;
+            // Register defaults
+            RegisterDefaults(AppacitiveContext.ObjectFactory);
             // Initialize host
             host.InitializeContainer(AppacitiveContext.ObjectFactory);
         }
 
+        public static IDependencyContainer Factory
+        {
+            get
+            {
+                return AppacitiveContext.ObjectFactory;
+            }
+        }
+
+        private static void RegisterDefaults(IDependencyContainer dependencyContainer)
+        {
+            dependencyContainer
+                            .Register<IUserContext, StaticUserContext>(() => new StaticUserContext())
+                            .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer())
+                            .Register<IFileService, FileService>(() => FileService.Instance)
+                            .Register<IConnectionService, ConnectionService>(() => ConnectionService.Instance)
+                            .Register<ISessionService, SessionService>(() => SessionService.Instance)
+                            .Register<IArticleService, ArticleService>(() => ArticleService.Instance)
+                            .Register<IUserService, UserService>(() => UserService.Instance)
+                            ;
+        }
+
         public static void SetLoggedInUser(string userToken)
         {
-            AppacitiveContext.UserToken = userToken;
+            var userContext = ObjectFactory.Build<IUserContext>();
+            userContext.SetUserToken(userToken);
         }
     }
 
+    
     public class AppacitiveSettings
     {
         internal static readonly AppacitiveSettings Default = new AppacitiveSettings
@@ -42,83 +68,10 @@ namespace Appacitive.Sdk
 
         private static IDependencyContainer GetDefaultContainer()
         {
-            InProcContainer.Instance
-                            .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer())
-                            .Register<IFileService, FileService>(() => FileService.Instance)
-                            .Register<IConnectionService, ConnectionService>(() => ConnectionService.Instance)
-                            .Register<ISessionService, SessionService>(() => SessionService.Instance)
-                            .Register<IArticleService, ArticleService>(() => ArticleService.Instance)
-                            .Register<IUserService, UserService>(() => UserService.Instance)
-                            ;
             return InProcContainer.Instance;
         }
     }
 
-    public static class AppacitiveContext
-    {
-        public static string ApiKey { get; set; }
-
-        public static Environment Environment { get; set; }
-
-        private static object _syncRoot = new object();
-        private static string _sessionToken;
-
-        public static string SessionToken
-        {
-            get
-            {
-                if (string.IsNullOrWhiteSpace(_sessionToken) == true)
-                {
-                    lock (_syncroot)
-                    {
-                        if (string.IsNullOrWhiteSpace(_sessionToken) == true)
-                        {
-                            CreateSessionAsync().Wait();
-                        }
-                    }
-                }
-                return _sessionToken;
-            }
-        }
-
-        public static string UserToken { get; internal set; }
-
-        public static Geocode UserLocation { get; internal set; }
-
-        public static IDependencyContainer ObjectFactory { get; internal set; }
-
-        internal static void MarkSessionInvalid()
-        {
-            _sessionToken = null;
-        }
-
-        private static object _syncroot = new object();
-
-        private static async Task CreateSessionAsync()
-        {
-            //TODO: Add validation and failure handling
-            var request = new CreateSessionRequest() { ApiKey = AppacitiveContext.ApiKey };
-            var service = ObjectFactory.Build<ISessionService>();
-            var response = await service.CreateSessionAsync(request);
-            _sessionToken = response.Session.SessionKey;
-        }
-
-        public static Verbosity Verbosity { get; set; }
-
-        public static bool EnableDebugging { get; set; }
-    }
-
-    public enum Environment
-    {
-        Sandbox,
-        Live
-    }
-
     
 
-    public enum Verbosity
-    {
-        Info,
-        Verbose
-    }
 }

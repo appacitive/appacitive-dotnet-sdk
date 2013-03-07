@@ -94,4 +94,16 @@ namespace Appacitive.Sdk
         //     A sealed class type representing Unicode character strings.
         String = 18,
     }
+
+    public enum Environment
+    {
+        Sandbox,
+        Live
+    }
+
+    public enum Verbosity
+    {
+        Info,
+        Verbose
+    }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Appacitive.Sdk.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -41,22 +42,22 @@ namespace Appacitive.Sdk
 
         public async Task<byte[]> GetAsync()
         {
-            return await this.Connector.Get(this.Url, this.Headers);
+            return await this.Connector.GetAsync(this.Url, this.Headers);
         }
 
         public async Task<byte[]> PostAsyc(byte[] data)
         {
-            return await this.Connector.Post(this.Url, this.Headers, data);
+            return await this.Connector.PostAsync(this.Url, this.Headers, data);
         }
 
         public async Task<byte[]> PutAsyc(byte[] data)
         {
-            return await this.Connector.Put(this.Url, this.Headers, data);
+            return await this.Connector.PutAsync(this.Url, this.Headers, data);
         }
 
         public async Task<byte[]> DeleteAsync()
         {
-            return await this.Connector.Delete(this.Url, this.Headers);
+            return await this.Connector.DeleteAsync(this.Url, this.Headers);
         }
     }
 }

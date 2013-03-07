@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk
+namespace Appacitive.Sdk.Interfaces
 {
     public interface IHttpConnector
     {
-        Task<byte[]> Get(string url, IDictionary<string, string> headers);
+        Task<byte[]> GetAsync(string url, IDictionary<string, string> headers);
 
-        Task<byte[]> Delete(string url, IDictionary<string, string> headers);
+        Task<byte[]> DeleteAsync(string url, IDictionary<string, string> headers);
 
-        Task<byte[]> Put(string url, IDictionary<string, string> headers, byte[] data);
+        Task<byte[]> PutAsync(string url, IDictionary<string, string> headers, byte[] data);
 
-        Task<byte[]> Post(string url, IDictionary<string, string> headers, byte[] data);
+        Task<byte[]> PostAsync(string url, IDictionary<string, string> headers, byte[] data);
     }
 }

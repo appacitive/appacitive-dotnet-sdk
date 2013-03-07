@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Appacitive.Sdk.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,23 +11,23 @@ namespace Appacitive.Sdk.WinRT
 {
     public class HttpConnector : IHttpConnector
     {
-        public async Task<byte[]> Get(string url, IDictionary<string, string> headers)
+        public async Task<byte[]> GetAsync(string url, IDictionary<string, string> headers)
         {
             
             return await ExecuteAsync("GET", url, headers, null);
         }
 
-        public async Task<byte[]> Delete(string url, IDictionary<string, string> headers)
+        public async Task<byte[]> DeleteAsync(string url, IDictionary<string, string> headers)
         {
             return await ExecuteAsync("DELETE", url, headers, null);
         }
 
-        public async Task<byte[]> Put(string url, IDictionary<string, string> headers, byte[] data)
+        public async Task<byte[]> PutAsync(string url, IDictionary<string, string> headers, byte[] data)
         {
             return await ExecuteAsync("PUT", url, headers, data);
         }
 
-        public async Task<byte[]> Post(string url, IDictionary<string, string> headers, byte[] data)
+        public async Task<byte[]> PostAsync(string url, IDictionary<string, string> headers, byte[] data)
         {
             return await ExecuteAsync("POST", url, headers, data);
         }

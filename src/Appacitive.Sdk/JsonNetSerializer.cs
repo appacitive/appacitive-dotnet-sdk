@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
 using Newtonsoft.Json;
+using Appacitive.Sdk.Interfaces;
 
 namespace Appacitive.Sdk
 {

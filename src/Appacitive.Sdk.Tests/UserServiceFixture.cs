@@ -65,12 +65,13 @@ namespace Appacitive.Sdk.Tests
             var created = await UserHelper.CreateNewUserAsync();
             // Setup user token
             string token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
-            App.SetLoggedInUser(token);
-
+            
             // Get the created user
+            GetUserResponse getUserResponse = null;
             IUserService userService = new UserService();
+            App.SetLoggedInUser(token);
             var getUserRequest = new GetUserRequest() { UserId = created.Id };
-            var getUserResponse = await userService.GetUserAsync(getUserRequest);
+            getUserResponse = await userService.GetUserAsync(getUserRequest);
             ApiHelper.EnsureValidResponse(getUserResponse);
             Assert.IsNotNull(getUserResponse.User);
 

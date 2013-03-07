@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
+using Appacitive.Sdk.Interfaces;
 
 
 namespace Appacitive.Sdk
