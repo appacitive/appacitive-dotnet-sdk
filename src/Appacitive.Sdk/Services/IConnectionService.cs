@@ -17,5 +17,7 @@ namespace Appacitive.Sdk.Services
         Task<DeleteConnectionResponse> DeleteConnectionAsync(DeleteConnectionRequest request);
 
         Task<FindConnectedArticlesResponse> FindConnectedArticlesAsync(FindConnectedArticlesRequest request);
+
+        Task<FindAllConectionsResponse> FindAllConnectionsAsync(FindAllConnectionsRequest request);
     }
 }

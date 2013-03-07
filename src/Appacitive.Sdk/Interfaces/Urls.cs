@@ -267,6 +267,25 @@ namespace Appacitive.Sdk
                 HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
                 return url.ToString();
             }
+
+            public static string FindAllConnectionsAsync(string type, string query, int pageNumber, int pageSize, string orderBy, SortOrder sortOrder, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
+            {
+                var url = new Url(ConnectionServiceBase).Append(type).Append("find").Append("all");
+                if (string.IsNullOrWhiteSpace(query) == false)
+                    url.QueryString["query"] = query;
+                if (pageNumber > 0)
+                    url.QueryString["pnum"] = pageNumber.ToString();
+                if (pageSize > 0)
+                    url.QueryString["psize"] = pageSize.ToString();
+                if (string.IsNullOrWhiteSpace(orderBy) == false)
+                {
+                    url.QueryString["orderby"] = orderBy;
+                    if (sortOrder == SortOrder.Ascending)
+                        url.QueryString["isAsc"] = "true";
+                }
+                HandleDefaults(url, location, enableDebug, verbosity, fields);
+                return url.ToString();
+            }
         }
     }
 

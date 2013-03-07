@@ -218,6 +218,36 @@ namespace Appacitive.Sdk
         {
             throw new NotImplementedException();
         }
+
+        public async static Task<PagedList<Connection>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        {
+            var service = ObjectFactory.Build<IConnectionService>();
+            var request = new FindAllConnectionsRequest()
+            {
+                Type = type,
+                Query = query,
+                PageNumber = page,
+                PageSize = pageSize,
+                OrderBy = orderBy,
+                SortOrder = sortOrder
+            };
+            
+            var response = await service.FindAllConnectionsAsync(request);
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            var connections = new PagedList<Connection>()
+            {
+                PageNumber = response.PagingInfo.PageNumber,
+                PageSize = response.PagingInfo.PageSize,
+                TotalRecords = response.PagingInfo.TotalRecords,
+                GetNextPage = async skip => await FindAllAsync(type, query, fields, page + skip + 1, pageSize)
+            };
+            connections.AddRange(response.Connections);
+            return connections;
+
+        }
+
+        
     }
 
     public class Endpoint

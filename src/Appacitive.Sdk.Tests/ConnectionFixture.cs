@@ -114,6 +114,18 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
+        public async Task FindAllConnectionsAsyncTest()
+        {
+            // Create a new connection
+            var conn = await ConnectionHelper.CreateNew();
+            // Find all
+            var connections = await Connection.FindAllAsync("sibling");
+            Assert.IsTrue(connections != null);
+            Assert.IsTrue(connections.Count > 0);
+            Console.WriteLine("Total connections: {0}", connections.TotalRecords);
+        }
+
+        [TestMethod]
         public async Task DeleteConnectionAsyncTest()
         {
 

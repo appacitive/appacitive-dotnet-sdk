@@ -189,6 +189,7 @@ Articles and connections
 - [x] Force delete single article.
 - [x] Sorting support on listing calls.
 - [x] Update article with revision
+- [x] Find all connections
 
 Users
 - [x] Authenticate with create new account - done

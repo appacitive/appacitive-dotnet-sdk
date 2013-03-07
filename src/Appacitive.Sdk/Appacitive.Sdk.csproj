@@ -97,6 +97,8 @@
     <Compile Include="Services\Model\AuthenticateUserResponse.cs" />
     <Compile Include="Services\Model\ChangePasswordRequest.cs" />
     <Compile Include="Services\Model\ChangePasswordResponse.cs" />
+    <Compile Include="Services\Model\FindAllConnectionRequest.cs" />
+    <Compile Include="Services\Model\FindAllConnectionResponse.cs" />
     <Compile Include="Services\Model\CreateArticleRequest.cs" />
     <Compile Include="Services\Model\CreateArticleResponse.cs" />
     <Compile Include="Services\Model\CreateConnectionRequest.cs" />
@@ -133,6 +135,7 @@
     <Compile Include="Services\Model\MultiGetArticleRequest.cs" />
     <Compile Include="Services\Model\MultiGetArticleResponse.cs" />
     <Compile Include="Services\Model\PagedConnectionList.cs" />
+    <Compile Include="Services\Model\PagingInfo.cs" />
     <Compile Include="Services\Model\Status.cs" />
     <Compile Include="Services\Model\UpdateArticleRequest.cs" />
     <Compile Include="Services\Model\UpdateArticleResponse.cs" />
