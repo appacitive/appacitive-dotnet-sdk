@@ -19,6 +19,8 @@ namespace Appacitive.Sdk.Services
             this.UserIdType = string.Empty; // Nikhil: String.empty indicates default type is id. This should probably be changed.
         }
 
+        public bool DeleteConnections { get; set; }
+
         public string UserIdType { get; set; }
 
         public string UserId { get; set; }

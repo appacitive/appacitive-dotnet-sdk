@@ -42,7 +42,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = await HttpOperation
-                .WithUrl(Urls.For.DeleteArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
+                .WithUrl(Urls.For.DeleteArticle(request.Type, request.Id, request.DeleteConnections, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                 .WithAppacitiveSession(request.SessionToken)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)

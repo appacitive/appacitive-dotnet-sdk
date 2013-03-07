@@ -62,9 +62,11 @@ namespace Appacitive.Sdk
                 return url.ToString();
             }
 
-            public static string DeleteArticle(string type, string id, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
+            public static string DeleteArticle(string type, string id, bool deleteConnections, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ArticleServiceBase).Append(type).Append(id);
+                if (deleteConnections == true)
+                    url.QueryString["deleteconnections"] = "true";
                 HandleDefaults(url, location, enableDebug, verbosity, fields);
                 return url.ToString();
             }
@@ -155,7 +157,7 @@ namespace Appacitive.Sdk
                 return url.ToString();
             }
 
-            public static string DeleteUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
+            public static string DeleteUser(string userId, string idType, bool deleteConnections, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(UserServiceBase);
                 if (string.IsNullOrWhiteSpace(idType))
@@ -172,6 +174,9 @@ namespace Appacitive.Sdk
                     url.Append(userId);
                     url.QueryString["useridtype"] = "username";
                 }
+
+                if (deleteConnections == true)
+                    url.QueryString["deleteconnections"] = "true";
                 HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }

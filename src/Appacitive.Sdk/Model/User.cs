@@ -169,12 +169,13 @@ namespace Appacitive.Sdk
         /// </summary>
         /// <param name="id">Id of the user article to delete</param>
         /// <returns>Void</returns>
-        public static async Task DeleteUserAsync(string id)
+        public static async Task DeleteUserAsync(string id, bool deleteConnections = false)
         {
             var service = ObjectFactory.Build<IUserService>();
             var response = await service.DeleteUserAsync(new DeleteUserRequest()
             {
-                UserId = id
+                UserId = id,
+                DeleteConnections = deleteConnections
             });
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();

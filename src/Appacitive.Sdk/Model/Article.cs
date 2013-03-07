@@ -85,13 +85,14 @@ namespace Appacitive.Sdk
             
         }
 
-        public async static Task DeleteAsync(string type, string id)
+        public async static Task DeleteAsync(string type, string id, bool deleteConnections = false)
         {
             var service = ObjectFactory.Build<IArticleService>();
             var status = await service.DeleteArticleAsync(new DeleteArticleRequest()
             { 
                 Id = id, 
-                Type = type 
+                Type = type,
+                DeleteConnections = deleteConnections
             });
             if (status.IsSuccessful == false)
                 throw status.ToFault();

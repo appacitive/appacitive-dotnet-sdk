@@ -22,6 +22,8 @@ namespace Appacitive.Sdk.Services
 
         public string Id { get; set; }
 
+        public bool DeleteConnections { get; set; }
+
         public override byte[] ToBytes()
         {
             return null;
