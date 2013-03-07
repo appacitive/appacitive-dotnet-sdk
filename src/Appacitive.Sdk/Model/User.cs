@@ -188,10 +188,17 @@ namespace Appacitive.Sdk
         /// <param name="page">Page number</param>
         /// <param name="pageSize">Page size</param>
         /// <returns>A paged list of users.</returns>
-        public async static Task<PagedList<User>> FindAllAsync(string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20)
+        public async static Task<PagedList<User>> FindAllAsync(string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending )
         {
             IUserService service = ObjectFactory.Build<IUserService>();
-            var request = new FindAllUsersRequest() { Query = query, PageNumber = page, PageSize = pageSize };
+            var request = new FindAllUsersRequest()
+            {
+                Query = query,
+                PageNumber = page,
+                PageSize = pageSize,
+                OrderBy = orderBy,
+                SortOrder = sortOrder
+            };
             if (fields != null)
                 request.Fields.AddRange(fields);
             var response = await service.FindAllAsync(request);

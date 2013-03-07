@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
@@ -183,7 +184,7 @@ namespace Appacitive.Sdk
                 return url.ToString();
             }
 
-            public static string FindAllArticles(string type, string query, int pageNumber, int pageSize, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
+            public static string FindAllArticles(string type, string query, int pageNumber, int pageSize, string orderBy, SortOrder sortOrder, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ArticleServiceBase).Append(type).Append("find").Append("all");
                 if (string.IsNullOrWhiteSpace(query) == false)
@@ -192,6 +193,12 @@ namespace Appacitive.Sdk
                     url.QueryString["pnum"] = pageNumber.ToString();
                 if (pageSize > 0)
                     url.QueryString["psize"] = pageSize.ToString();
+                if( string.IsNullOrWhiteSpace( orderBy ) == false )
+                {
+                    url.QueryString["orderby"] = orderBy;
+                    if( sortOrder == SortOrder.Ascending )
+                        url.QueryString["isAsc"] = "true";
+                }   
                 HandleDefaults(url, location, enableDebug, verbosity, fields);
                 return url.ToString();
             }

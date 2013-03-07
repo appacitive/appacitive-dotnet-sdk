@@ -110,6 +110,7 @@
     <Compile Include="Services\Model\DeleteConnectionResponse.cs" />
     <Compile Include="Services\Model\DeleteUserRequest.cs" />
     <Compile Include="Services\Model\DeleteUserResponse.cs" />
+    <Compile Include="Services\Model\Enums.cs" />
     <Compile Include="Services\Model\FindAllArticleRequest.cs" />
     <Compile Include="Services\Model\FindAllArticleResponse.cs" />
     <Compile Include="Services\Model\FindAllUserResponse.cs" />

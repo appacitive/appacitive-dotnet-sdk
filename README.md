@@ -187,7 +187,7 @@ Articles and connections
 - [ ] Multi get connections
 - [ ] Multi delete article
 - [ ] Force delete single article.
-- [ ] Sorting support on listing calls.
+- [x] Sorting support on listing calls.
 
 Users
 - [x] Authenticate with create new account - done

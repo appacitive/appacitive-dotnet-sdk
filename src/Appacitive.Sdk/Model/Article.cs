@@ -59,10 +59,18 @@ namespace Appacitive.Sdk
             return response.Articles;
         }
 
-        public async static Task<PagedList<Article>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20)
+        public async static Task<PagedList<Article>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending )
         {
             var service = ObjectFactory.Build<IArticleService>();
-            var request = new FindAllArticleRequest() { Type = type, Query = query, PageNumber = page, PageSize = pageSize };
+            var request = new FindAllArticleRequest()
+            {
+                Type = type,
+                Query = query,
+                PageNumber = page,
+                PageSize = pageSize,
+                OrderBy = orderBy,
+                SortOrder = sortOrder
+            };
             var response = await service.FindAllAsync(request);
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();

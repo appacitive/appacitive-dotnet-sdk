@@ -22,6 +22,10 @@ namespace Appacitive.Sdk.Services
 
         public string Query { get; set; }
 
+        public string OrderBy { get; set; }
+
+        public SortOrder SortOrder { get; set; }
+
         public int PageNumber { get; set; }
 
         public int PageSize { get; set; }
