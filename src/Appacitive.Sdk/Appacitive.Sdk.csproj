@@ -119,6 +119,8 @@
     <Compile Include="Services\Model\FindConnectedArticlesResponse.cs" />
     <Compile Include="Services\Model\GetArticleRequest.cs" />
     <Compile Include="Services\Model\GetArticleResponse.cs" />
+    <Compile Include="Services\Model\GetConnectionByEndpointRequest.cs" />
+    <Compile Include="Services\Model\GetConnectionByEndpointResponse.cs" />
     <Compile Include="Services\Model\GetConnectionRequest.cs" />
     <Compile Include="Services\Model\GetConnectionResponse.cs" />
     <Compile Include="Services\Model\GetDownloadUrlRequest.cs" />

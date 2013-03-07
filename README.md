@@ -181,7 +181,7 @@ Articles and connections
 - [x] Get connected articles with connections - done 
 - [ ] Get articles in between
 - [x] Multi get articles - done
-- [ ] Get connection between two articles of a specific type
+- [x] Get connection between two articles of a specific type
 - [ ] Get connections between two articles of any type of relation.
 - [ ] Interconnect
 - [ ] Multi get connections

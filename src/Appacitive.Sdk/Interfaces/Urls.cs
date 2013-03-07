@@ -259,6 +259,14 @@ namespace Appacitive.Sdk
                 url.QueryString["expires"] = expiry.ToString();
                 return url.ToString();
             }
+
+            public static string GetConnectionByEndpointAsync(string relation, string article1Id, string article2Id, Geocode geocode, bool enableDebugging, Verbosity verbosity, List<string> fields)
+            {
+                var url = new Url(ConnectionServiceBase);
+                url.Append("find").Append(article1Id).Append(article2Id);
+                HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
+                return url.ToString();
+            }
         }
     }
 

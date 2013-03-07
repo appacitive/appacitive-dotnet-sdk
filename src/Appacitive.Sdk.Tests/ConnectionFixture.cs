@@ -94,7 +94,19 @@ namespace Appacitive.Sdk.Tests
         {
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
-            var read = await Connection.Get(conn.Type, conn.Id);
+            var read = await Connection.GetAsync(conn.Type, conn.Id);
+            Assert.IsTrue(read != null);
+            Assert.IsTrue(read.Id == conn.Id);
+            Assert.IsTrue(read.EndpointA.ArticleId == conn.EndpointA.ArticleId || read.EndpointA.ArticleId == conn.EndpointB.ArticleId);
+            Assert.IsTrue(read.EndpointB.ArticleId == conn.EndpointA.ArticleId || read.EndpointB.ArticleId == conn.EndpointB.ArticleId);
+        }
+
+        [TestMethod]
+        public async Task GetConnectionByEndpointsAsyncTest()
+        {
+            // Create a new connection
+            var conn = await ConnectionHelper.CreateNew();
+            var read = await Connection.GetAsync(conn.Type, conn.EndpointA.ArticleId, conn.EndpointB.ArticleId);
             Assert.IsTrue(read != null);
             Assert.IsTrue(read.Id == conn.Id);
             Assert.IsTrue(read.EndpointA.ArticleId == conn.EndpointA.ArticleId || read.EndpointA.ArticleId == conn.EndpointB.ArticleId);
@@ -112,7 +124,7 @@ namespace Appacitive.Sdk.Tests
             // Try and get the connection
             try
             {
-                var read = await Connection.Get(conn.Type, conn.Id);
+                var read = await Connection.GetAsync(conn.Type, conn.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
             catch (AppacitiveException aex)

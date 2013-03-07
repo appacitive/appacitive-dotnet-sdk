@@ -71,5 +71,19 @@ namespace Appacitive.Sdk.Services
             var response = FindConnectedArticlesResponse.Parse(bytes);
             return response;
         }
+
+
+        public async Task<GetConnectionByEndpointResponse> GetConnectionByEndpointAsync(GetConnectionByEndpointRequest request)
+        {
+            byte[] bytes = null;
+            bytes = await HttpOperation
+                        .WithUrl(Urls.For.GetConnectionByEndpointAsync(request.Relation, request.ArticleId1, request.ArticleId2, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
+                        .WithAppacitiveSession(request.SessionToken)
+                        .WithEnvironment(request.Environment)
+                        .WithUserToken(request.UserToken)
+                        .GetAsync();
+            var response = GetConnectionByEndpointResponse.Parse(bytes);
+            return response;
+        }
     }
 }

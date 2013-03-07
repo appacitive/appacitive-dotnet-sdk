@@ -129,7 +129,21 @@ namespace Appacitive.Sdk
             return new Connect(relationName);
         }
 
-        public async static Task<Connection> Get(string relation, string id)
+        public async static Task<Connection> GetAsync(string relation, string endpointArticleId1, string endpointArticleId2)
+        {
+            IConnectionService connService = ObjectFactory.Build<IConnectionService>();
+            var response = await connService.GetConnectionByEndpointAsync(new GetConnectionByEndpointRequest
+            {
+                Relation = relation,
+                ArticleId1 = endpointArticleId1,
+                ArticleId2 = endpointArticleId2
+            });
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            else return response.Connections.SingleOrDefault();
+        }
+
+        public async static Task<Connection> GetAsync(string relation, string id)
         {
             IConnectionService connService = ObjectFactory.Build<IConnectionService>();
             var response = await connService.GetConnectionAsync(new GetConnectionRequest
