@@ -11,5 +11,6 @@ namespace Appacitive.Sdk
     public static class WindowsRT
     {
         public static readonly IApplicationHost Host = new WindowsHost();
+        public static readonly IApplicationHost Aspnet = new Appacitive.Sdk.Aspnet.AspnetApplicationHost();
     }
 }

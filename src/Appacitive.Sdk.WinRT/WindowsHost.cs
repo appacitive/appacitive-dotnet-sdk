@@ -12,6 +12,11 @@ namespace Appacitive.Sdk.WinRT
     {
         void IApplicationHost.InitializeContainer(IDependencyContainer container)
         {
+            this.InitializeContainer(container);
+        }
+
+        protected virtual void InitializeContainer(IDependencyContainer container)
+        {
             container
                 .Register<IHttpConnector, HttpConnector>(() => new HttpConnector())
                 .Register<IHttpFileHandler, WebClientHttpFileHandler>(() => new WebClientHttpFileHandler())
