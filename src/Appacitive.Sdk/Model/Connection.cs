@@ -85,7 +85,7 @@ namespace Appacitive.Sdk
             : base(type)
         {
             this.EndpointA = new Endpoint(labelA, articleIdA);
-            this.EndpointB = new Endpoint(labelA, ArticleIdB);
+            this.EndpointB = new Endpoint(labelB, ArticleIdB);
         }
 
         public Connection(string type, string labelA, Article articleA, string labelB, string ArticleIdB)
@@ -94,12 +94,12 @@ namespace Appacitive.Sdk
             if (articleA.IsNewInstance == false)
             {
                 this.EndpointA = new Endpoint(labelA, articleA.Id);
-                this.EndpointB = new Endpoint(labelA, ArticleIdB);
+                this.EndpointB = new Endpoint(labelB, ArticleIdB);
             }
             else
             {
                 this.EndpointA = new Endpoint(labelA, null);
-                this.EndpointB = new Endpoint(labelA, ArticleIdB);
+                this.EndpointB = new Endpoint(labelB, ArticleIdB);
                 this.EndpointA.Content = articleA;
             }
         }
@@ -117,11 +117,11 @@ namespace Appacitive.Sdk
 
             if (articleB.IsNewInstance == true)
             {
-                this.EndpointB = new Endpoint(labelA, null);
+                this.EndpointB = new Endpoint(labelB, null);
                 this.EndpointB.Content = articleB;
             }
             else
-                this.EndpointB = new Endpoint(labelA, articleB.Id);
+                this.EndpointB = new Endpoint(labelB, articleB.Id);
         }
 
         public static Connect New(string relationName)
