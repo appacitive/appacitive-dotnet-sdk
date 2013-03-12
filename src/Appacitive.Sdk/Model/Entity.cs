@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Dynamic;
+
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -12,7 +12,7 @@ using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
-    public abstract partial class Entity : DynamicObject, INotifyPropertyChanged
+    public abstract partial class Entity : INotifyPropertyChanged
     {
         public Entity(string type)
         {

@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+#if !WINDOWS_PHONE7
 using System.Dynamic;
+#endif
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
-    public partial class Entity
+    #if !WINDOWS_PHONE7
+    public partial class Entity : DynamicObject
     {
         public override bool TryGetMember(GetMemberBinder binder, out object result)
         {
@@ -42,4 +45,5 @@ namespace Appacitive.Sdk
             return true;
         }
     }
+#endif
 }

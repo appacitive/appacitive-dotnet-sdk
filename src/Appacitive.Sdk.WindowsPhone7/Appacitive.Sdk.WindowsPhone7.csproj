@@ -1,0 +1,425 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A43AF0D3-68D5-46C2-9C35-F76B37A1E294}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Appacitive.Sdk.WindowsPhone7</RootNamespace>
+    <AssemblyName>Appacitive.Sdk.WindowsPhone7</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile104</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;WINDOWS_PHONE7</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Appacitive.Sdk\App.cs">
+      <Link>App.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\AppacitiveContext.cs">
+      <Link>AppacitiveContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Entity.cs">
+      <Link>Entity.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Extensions.cs">
+      <Link>Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\HttpClient.cs">
+      <Link>HttpClient.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\InProcContainer.cs">
+      <Link>InProcContainer.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IApplicationHost.cs">
+      <Link>Interfaces\IApplicationHost.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IHttpConnector.cs">
+      <Link>Interfaces\IHttpConnector.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IJsonSerializer.cs">
+      <Link>Interfaces\IJsonSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IObjectFactory.cs">
+      <Link>Interfaces\IObjectFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IUploadHandler.cs">
+      <Link>Interfaces\IUploadHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IUserContext.cs">
+      <Link>Interfaces\IUserContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\JsonNetSerializer.cs">
+      <Link>JsonNetSerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Measure.cs">
+      <Link>Measure.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\AppacitiveException.cs">
+      <Link>Model\AppacitiveException.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Article.cs">
+      <Link>Model\Article.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\AuthenticationToken.cs">
+      <Link>Model\AuthenticationToken.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Connection.cs">
+      <Link>Model\Connection.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Constants.cs">
+      <Link>Model\Constants.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Credentials.cs">
+      <Link>Model\Credentials.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Entity.cs">
+      <Link>Model\Entity.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Entity.Dynamic.cs">
+      <Link>Model\Entity.Dynamic.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Entity.Extensions.cs">
+      <Link>Model\Entity.Extensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Enums.cs">
+      <Link>Model\Enums.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\ErrorSpace.cs">
+      <Link>Model\ErrorSpace.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\FileDownload.cs">
+      <Link>Model\FileDownload.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\FileUpload.cs">
+      <Link>Model\FileUpload.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\FileUrl.cs">
+      <Link>Model\FileUrl.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Geocode.cs">
+      <Link>Model\Geocode.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Guard.cs">
+      <Link>Model\Guard.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\ObjectFactory.cs">
+      <Link>Model\ObjectFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\PagedList.cs">
+      <Link>Model\PagedList.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\StaticUserContext.cs">
+      <Link>Model\StaticUserContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\User.cs">
+      <Link>Model\User.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Value.cs">
+      <Link>Model\Value.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\AggregateExpression.cs">
+      <Link>QueryDsl\AggregateExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\AggregateQuery.cs">
+      <Link>QueryDsl\AggregateQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\AttributeExpression.cs">
+      <Link>QueryDsl\AttributeExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\BetweenQuery.cs">
+      <Link>QueryDsl\BetweenQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\BooleanOperator.cs">
+      <Link>QueryDsl\BooleanOperator.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\DateFieldValue.cs">
+      <Link>QueryDsl\DateFieldValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\FieldQuery.cs">
+      <Link>QueryDsl\FieldQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\IFieldValue.cs">
+      <Link>QueryDsl\IFieldValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\IQuery.cs">
+      <Link>QueryDsl\IQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\PolygonSearchQuery.cs">
+      <Link>QueryDsl\PolygonSearchQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\PrimitiveFieldValue.cs">
+      <Link>QueryDsl\PrimitiveFieldValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\PropertyExpression.cs">
+      <Link>QueryDsl\PropertyExpression.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\Query.cs">
+      <Link>QueryDsl\Query.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\RadialSearchQuery.cs">
+      <Link>QueryDsl\RadialSearchQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\TimeFieldValue.cs">
+      <Link>QueryDsl\TimeFieldValue.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\ArticleService.cs">
+      <Link>Services\ArticleService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\ConnectionService.cs">
+      <Link>Services\ConnectionService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\FileService.cs">
+      <Link>Services\FileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\IArticleService.cs">
+      <Link>Services\IArticleService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\IConnectionService.cs">
+      <Link>Services\IConnectionService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\ISessionService.cs">
+      <Link>Services\ISessionService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\IUserService.cs">
+      <Link>Services\IUserService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model.cs">
+      <Link>Services\Model.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\ApiRequest.cs">
+      <Link>Services\Model\ApiRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\ApiResponse.cs">
+      <Link>Services\Model\ApiResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\AuthenticateUserRequest.cs">
+      <Link>Services\Model\AuthenticateUserRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\AuthenticateUserResponse.cs">
+      <Link>Services\Model\AuthenticateUserResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\ChangePasswordRequest.cs">
+      <Link>Services\Model\ChangePasswordRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\ChangePasswordResponse.cs">
+      <Link>Services\Model\ChangePasswordResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\CreateArticleRequest.cs">
+      <Link>Services\Model\CreateArticleRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\CreateArticleResponse.cs">
+      <Link>Services\Model\CreateArticleResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\CreateConnectionRequest.cs">
+      <Link>Services\Model\CreateConnectionRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\CreateConnectionResponse.cs">
+      <Link>Services\Model\CreateConnectionResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\CreateSessionRequest.cs">
+      <Link>Services\Model\CreateSessionRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\CreateSessionResponse.cs">
+      <Link>Services\Model\CreateSessionResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\CreateUserRequest.cs">
+      <Link>Services\Model\CreateUserRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\CreateUserResponse.cs">
+      <Link>Services\Model\CreateUserResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\DeleteArticleRequest.cs">
+      <Link>Services\Model\DeleteArticleRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\DeleteConnectionRequest.cs">
+      <Link>Services\Model\DeleteConnectionRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\DeleteConnectionResponse.cs">
+      <Link>Services\Model\DeleteConnectionResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\DeleteUserRequest.cs">
+      <Link>Services\Model\DeleteUserRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\DeleteUserResponse.cs">
+      <Link>Services\Model\DeleteUserResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\Enums.cs">
+      <Link>Services\Model\Enums.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\FindAllArticleRequest.cs">
+      <Link>Services\Model\FindAllArticleRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\FindAllArticleResponse.cs">
+      <Link>Services\Model\FindAllArticleResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\FindAllConnectionRequest.cs">
+      <Link>Services\Model\FindAllConnectionRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\FindAllConnectionResponse.cs">
+      <Link>Services\Model\FindAllConnectionResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\FindAllUserResponse.cs">
+      <Link>Services\Model\FindAllUserResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\FindAllUsersRequest.cs">
+      <Link>Services\Model\FindAllUsersRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\FindConnectedArticlesRequest.cs">
+      <Link>Services\Model\FindConnectedArticlesRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\FindConnectedArticlesResponse.cs">
+      <Link>Services\Model\FindConnectedArticlesResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetArticleRequest.cs">
+      <Link>Services\Model\GetArticleRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetArticleResponse.cs">
+      <Link>Services\Model\GetArticleResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetConnectionByEndpointRequest.cs">
+      <Link>Services\Model\GetConnectionByEndpointRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetConnectionByEndpointResponse.cs">
+      <Link>Services\Model\GetConnectionByEndpointResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetConnectionRequest.cs">
+      <Link>Services\Model\GetConnectionRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetConnectionResponse.cs">
+      <Link>Services\Model\GetConnectionResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetDownloadUrlRequest.cs">
+      <Link>Services\Model\GetDownloadUrlRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetDownloadUrlResponse.cs">
+      <Link>Services\Model\GetDownloadUrlResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetUploadUrlRequest.cs">
+      <Link>Services\Model\GetUploadUrlRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetUploadUrlResponse.cs">
+      <Link>Services\Model\GetUploadUrlResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetUserRequest.cs">
+      <Link>Services\Model\GetUserRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetUserResponse.cs">
+      <Link>Services\Model\GetUserResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\IFileService.cs">
+      <Link>Services\Model\IFileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\MultiGetArticleRequest.cs">
+      <Link>Services\Model\MultiGetArticleRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\MultiGetArticleResponse.cs">
+      <Link>Services\Model\MultiGetArticleResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\PagedConnectionList.cs">
+      <Link>Services\Model\PagedConnectionList.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\PagingInfo.cs">
+      <Link>Services\Model\PagingInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\Status.cs">
+      <Link>Services\Model\Status.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateArticleRequest.cs">
+      <Link>Services\Model\UpdateArticleRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateArticleResponse.cs">
+      <Link>Services\Model\UpdateArticleResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateUserRequest.cs">
+      <Link>Services\Model\UpdateUserRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateUserResponse.cs">
+      <Link>Services\Model\UpdateUserResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\ArticleConverter.cs">
+      <Link>Services\Serializers\ArticleConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\AuthenticateUserRequestConverter.cs">
+      <Link>Services\Serializers\AuthenticateUserRequestConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\ConnectionConverter.cs">
+      <Link>Services\Serializers\ConnectionConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\EntityConverter.cs">
+      <Link>Services\Serializers\EntityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\SerializerExtensions.cs">
+      <Link>Services\Serializers\SerializerExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\UpdateArticleRequestConverter.cs">
+      <Link>Services\Serializers\UpdateArticleRequestConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\UpdateUserRequestConverter.cs">
+      <Link>Services\Serializers\UpdateUserRequestConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\UserConverter.cs">
+      <Link>Services\Serializers\UserConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\SessionService.cs">
+      <Link>Services\SessionService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Urls.cs">
+      <Link>Services\Urls.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\UserService.cs">
+      <Link>Services\UserService.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.14-rc\lib\portable-net40+sl4+win8+wp71\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.14-rc\lib\portable-net40+sl4+win8+wp71\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Library\Portable\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime">
+      <HintPath>..\packages\Microsoft.Bcl.1.0.16-rc\lib\portable-net40+sl4+win8+wp71\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.1.0.16-rc\lib\portable-net40+sl4+win8+wp71\System.Threading.Tasks.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.0-rc\tools\Microsoft.Bcl.Build.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

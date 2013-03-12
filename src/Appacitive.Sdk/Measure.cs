@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+#if !WINDOWS_PHONE7
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -27,3 +29,4 @@ namespace Appacitive.Sdk
         }
     }
 }
+#endif

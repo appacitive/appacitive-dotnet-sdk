@@ -98,7 +98,8 @@ namespace Appacitive.Sdk
             }
             else
             {
-                this.EndpointA = new Endpoint(labelA, null);
+                string nullId = null;
+                this.EndpointA = new Endpoint(labelA, nullId);
                 this.EndpointB = new Endpoint(labelB, ArticleIdB);
                 this.EndpointA.Content = articleA;
             }
@@ -107,17 +108,18 @@ namespace Appacitive.Sdk
         public Connection(string type, string labelA, Article articleA, string labelB, Article articleB)
             : base(type)
         {
+            string nullId = null;
             if (articleA.IsNewInstance == true)
             {
-                this.EndpointA = new Endpoint(labelA, null);
+                this.EndpointA = new Endpoint(labelA, nullId);
                 this.EndpointA.Content = articleA;
             }
             else
                 this.EndpointA = new Endpoint(labelA, articleA.Id);
 
             if (articleB.IsNewInstance == true)
-            {
-                this.EndpointB = new Endpoint(labelB, null);
+            {   
+                this.EndpointB = new Endpoint(labelB, nullId);
                 this.EndpointB.Content = articleB;
             }
             else
@@ -258,7 +260,13 @@ namespace Appacitive.Sdk
             this.ArticleId = articleId;
         }
 
-        internal Article Content { get; set; }
+        public Endpoint(string label, Article content)
+        {
+            this.Label = label;
+            this.Content = content;
+        }
+
+        public Article Content { get; set; }
 
         public string ArticleId { get; set; }
 
