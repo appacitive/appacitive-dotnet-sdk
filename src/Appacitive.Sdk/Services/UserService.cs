@@ -108,5 +108,30 @@ namespace Appacitive.Sdk.Services
             var response = FindAllUsersResponse.Parse(bytes);
             return response;
         }
+
+
+        public async Task<ValidateUserSessionResponse> ValidateUserSessionAsync(ValidateUserSessionRequest request)
+        {
+            byte[] bytes = await HttpOperation
+                .WithUrl(Urls.For.ValidateUserSession(request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithAppacitiveSession(request.SessionToken)
+                .WithEnvironment(request.Environment)
+                .WithUserToken(request.UserToken)
+                .PostAsyc(request.ToBytes());
+            var response = ValidateUserSessionResponse.Parse(bytes);
+            return response;
+        }
+
+        public async Task<InvalidateUserSessionResponse> InvalidateUserSessionAsync(InvalidateUserSessionRequest request)
+        {
+            byte[] bytes = await HttpOperation
+                .WithUrl(Urls.For.InvalidateUser(request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithAppacitiveSession(request.SessionToken)
+                .WithEnvironment(request.Environment)
+                .WithUserToken(request.UserToken)
+                .PostAsyc(request.ToBytes());
+            var response = InvalidateUserSessionResponse.Parse(bytes);
+            return response;
+        }
     }
 }

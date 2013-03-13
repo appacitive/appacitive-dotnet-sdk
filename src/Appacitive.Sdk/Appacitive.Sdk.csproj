@@ -45,6 +45,11 @@
     <Compile Include="Interfaces\IApplicationHost.cs" />
     <Compile Include="Interfaces\IUploadHandler.cs" />
     <Compile Include="Interfaces\IUserContext.cs" />
+    <Compile Include="IUserFactory.cs" />
+    <Compile Include="Services\Model\InvalidateUserSessionRequest.cs" />
+    <Compile Include="Services\Model\InvalidateUserSessionResponse.cs" />
+    <Compile Include="Services\Model\ValidateUserSessionRequest.cs" />
+    <Compile Include="Services\Model\ValidateUserSessionResponse.cs" />
     <Compile Include="Services\Urls.cs" />
     <Compile Include="JsonNetSerializer.cs" />
     <Compile Include="Measure.cs" />
@@ -133,7 +138,7 @@
     <Compile Include="Services\Model\GetUploadUrlResponse.cs" />
     <Compile Include="Services\Model\GetUserRequest.cs" />
     <Compile Include="Services\Model\GetUserResponse.cs" />
-    <Compile Include="Services\Model\IFileService.cs" />
+    <Compile Include="Services\IFileService.cs" />
     <Compile Include="Services\Model\MultiGetArticleRequest.cs" />
     <Compile Include="Services\Model\MultiGetArticleResponse.cs" />
     <Compile Include="Services\Model\PagedConnectionList.cs" />
@@ -153,6 +158,7 @@
     <Compile Include="Services\Serializers\UserConverter.cs" />
     <Compile Include="Services\SessionService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="UserSession.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

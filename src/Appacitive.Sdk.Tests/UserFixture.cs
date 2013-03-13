@@ -58,5 +58,61 @@ namespace Appacitive.Sdk.Tests
                 x.Id,
                 x.Username));
         }
+
+        [TestMethod]
+        public async Task GetLoggedInUserTest()
+        {
+            // Create a new user
+            var newUser = await UserHelper.CreateNewUserAsync();
+            // Authenticate
+            var creds = new UsernamePasswordCredentials(newUser.Username, newUser.Password);
+            var userSession = await creds.AuthenticateAsync();
+            Assert.IsNotNull(userSession);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(userSession.UserToken));
+            Assert.IsNotNull(userSession.LoggedInUser);
+
+            App.SetLoggedInUser(userSession.UserToken);
+            var loggedInUser = await User.GetLoggedInUserAsync();
+            Assert.IsNotNull(loggedInUser);
+            Assert.IsTrue(loggedInUser.Id == userSession.LoggedInUser.Id);
+            
+        }
+
+        [TestMethod]
+        public async Task ValidateSessionTest()
+        {
+            // Create a new user
+            var newUser = await UserHelper.CreateNewUserAsync();
+            // Authenticate
+            var creds = new UsernamePasswordCredentials(newUser.Username, newUser.Password);
+            var userSession = await creds.AuthenticateAsync();
+            Assert.IsNotNull(userSession);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(userSession.UserToken));
+            Assert.IsNotNull(userSession.LoggedInUser);
+
+            var isValid = await UserSession.IsValidAsync(userSession.UserToken);
+            Assert.IsTrue(isValid);
+        }
+
+        [TestMethod]
+        public async Task InValidateSessionTest()
+        {
+            // Create a new user
+            var newUser = await UserHelper.CreateNewUserAsync();
+            // Authenticate
+            var creds = new UsernamePasswordCredentials(newUser.Username, newUser.Password);
+            var userSession = await creds.AuthenticateAsync();
+            Assert.IsNotNull(userSession);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(userSession.UserToken));
+            Assert.IsNotNull(userSession.LoggedInUser);
+            // Ensure that the session is valid
+            var isValid = await UserSession.IsValidAsync(userSession.UserToken);
+            Assert.IsTrue(isValid);
+            // Invalidate session
+            await UserSession.InvalidateAsync(userSession.UserToken);
+            // Check that the session is actually invalidated.
+            isValid = await UserSession.IsValidAsync(userSession.UserToken);
+            Assert.IsFalse(isValid);
+        }
     }
 }

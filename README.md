@@ -47,6 +47,14 @@ To get an existing user by it's username, call `GetUserByUsernameAsync()`.
 var user = await User.GetByUsernameAsync("john.doe");
 ```
 
+### Getting the logged in user
+To get the logged in user, call 'GetLoggedInUserAsync' on the User object as shown below.
+
+``` C#
+var loggedInUser = await User.GetLoggedInUserAsync();
+```
+
+
 ### Authenticating an existing user (with username and password)
 To authenticate an existing user with username and password, create a new instance of UsernamePasswordCrendentials
 with the appropriate values and call `AuthenticateAsync()`. On successful authentication, the method will return the 
@@ -76,6 +84,23 @@ var facebookCreds = new OAuth2Credentials(facebookAccessToken, "facebook")
 };
 var result = await facebookCreds.AuthenticateAsync();
 ```
+
+### Validating the user session
+To validate an existing user session token, call the `IsValidAsync` method on the UserSession object.
+
+``` C#
+string userToken; // Contains the user session token
+bool isValid = await UserSession.IsValidAsync(userToken);
+```
+
+### InValidating the user session
+To invalidate an existing user session token, call the `InvalidateAsync` method on the UserSession object.
+
+``` C#
+string userToken; // Contains the user session token
+await UserSession.InvalidateAsync(userToken);
+```
+
 
 ## File management
 

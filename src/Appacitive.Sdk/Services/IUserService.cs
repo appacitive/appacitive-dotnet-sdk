@@ -22,6 +22,10 @@ namespace Appacitive.Sdk.Services
         Task<DeleteUserResponse> DeleteUserAsync(DeleteUserRequest request);
 
         Task<FindAllUsersResponse> FindAllAsync(FindAllUsersRequest request);
+
+        Task<ValidateUserSessionResponse> ValidateUserSessionAsync(ValidateUserSessionRequest request);
+
+        Task<InvalidateUserSessionResponse> InvalidateUserSessionAsync(InvalidateUserSessionRequest request);
     }
 
     

@@ -198,6 +198,9 @@
     <Compile Include="..\Appacitive.Sdk\Services\IConnectionService.cs">
       <Link>Services\IConnectionService.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\IFileService.cs">
+      <Link>Services\IFileService.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\ISessionService.cs">
       <Link>Services\ISessionService.cs</Link>
     </Compile>
@@ -327,8 +330,11 @@
     <Compile Include="..\Appacitive.Sdk\Services\Model\GetUserResponse.cs">
       <Link>Services\Model\GetUserResponse.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Services\Model\IFileService.cs">
-      <Link>Services\Model\IFileService.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\InvalidateUserSessionRequest.cs">
+      <Link>Services\Model\InvalidateUserSessionRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\InvalidateUserSessionResponse.cs">
+      <Link>Services\Model\InvalidateUserSessionResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\MultiGetArticleRequest.cs">
       <Link>Services\Model\MultiGetArticleRequest.cs</Link>
@@ -356,6 +362,12 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateUserResponse.cs">
       <Link>Services\Model\UpdateUserResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\ValidateUserSessionRequest.cs">
+      <Link>Services\Model\ValidateUserSessionRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\ValidateUserSessionResponse.cs">
+      <Link>Services\Model\ValidateUserSessionResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\ArticleConverter.cs">
       <Link>Services\Serializers\ArticleConverter.cs</Link>
@@ -389,6 +401,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\UserService.cs">
       <Link>Services\UserService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\UserSession.cs">
+      <Link>UserSession.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

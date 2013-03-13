@@ -88,6 +88,22 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
+            public static string ValidateUserSession(Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            {
+                var url = new Url(UserServiceBase);
+                url.Append("validate");
+                HandleDefaults(url, geocode, debugEnabled, verbosity, null);
+                return url.ToString();
+            }
+
+            public static string InvalidateUser(Geocode geocode, bool debugEnabled, Verbosity verbosity)
+            {
+                var url = new Url(UserServiceBase);
+                url.Append("invalidate");
+                HandleDefaults(url, geocode, debugEnabled, verbosity, null);
+                return url.ToString();
+            }
+
             public static string GetUser(string userId, string idType, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(UserServiceBase);

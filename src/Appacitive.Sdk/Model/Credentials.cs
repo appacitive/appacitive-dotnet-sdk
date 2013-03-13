@@ -62,19 +62,6 @@ namespace Appacitive.Sdk
         
     }
 
-    public class UserSession
-    {
-        public UserSession(User user, string token)
-        {
-            this.UserToken = token;
-            this.LoggedInUser = user;
-        }
-
-        public User LoggedInUser {get; set;}
-
-        public string UserToken {get; set;}
-    }
-
     public class UsernamePasswordCredentials : Credentials
     {
         public UsernamePasswordCredentials(string username, string password, string type = null)
