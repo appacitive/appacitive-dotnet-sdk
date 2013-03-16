@@ -6,18 +6,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk.Aspnet
+namespace Appacitive.Sdk.Wcf
 {
-    public class AspnetApplicationHost : WindowsHost
+    public class WcfApplicationHost : WindowsHost
     {
-        public static readonly IApplicationHost Instance = new AspnetApplicationHost();
+
+        public static readonly IApplicationHost Instance = new WcfApplicationHost();
 
         protected override void InitializeContainer(IDependencyContainer container)
         {
             // Add default winrt registration
             base.InitializeContainer(container);
             // Add aspnet specific registrations
-            container.Register<IUserContext, AspnetUserContext>(() => new AspnetUserContext());
+            container.Register<IUserContext, WcfUserContext>(() => WcfUserContext.Instance);
         }
     }
 }

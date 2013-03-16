@@ -10,6 +10,8 @@ namespace Appacitive.Sdk.WinRT
 {
     public class WindowsHost : IApplicationHost
     {
+        public static readonly IApplicationHost Instance = new WindowsHost();
+
         void IApplicationHost.InitializeContainer(IDependencyContainer container)
         {
             this.InitializeContainer(container);

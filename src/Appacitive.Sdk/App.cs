@@ -48,6 +48,12 @@ namespace Appacitive.Sdk
                             ;
         }
 
+        public static string GetLoggedInUser()
+        {
+            var userContext = ObjectFactory.Build<IUserContext>();
+            return userContext.GetUserToken();
+        }
+
         public static void SetLoggedInUser(string userToken)
         {
             var userContext = ObjectFactory.Build<IUserContext>();
