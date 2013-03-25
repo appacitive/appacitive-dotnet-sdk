@@ -32,17 +32,19 @@ namespace Appacitive.Sdk.Services
 
             writer
                 .StartObject()
-                .WithWriter( w => 
-                    {
-                        if (string.IsNullOrWhiteSpace(request.Type) == false)
-                            w.WriteProperty("type", request.Type);
-                        if (request.MaxAttempts > 0)
-                            w.WriteProperty("attempts").WriteValue(request.MaxAttempts);
-                        if (request.TimeoutInSeconds > 0)
-                            w.WriteProperty("expiry").WriteValue(request.TimeoutInSeconds);
-                        foreach (var key in request.Attributes.Keys)
-                            w.WriteProperty(key, request[key]);
-                    })
+                .WithWriter(w =>
+                {
+                    if (string.IsNullOrWhiteSpace(request.Type) == false)
+                        w.WriteProperty("type", request.Type);
+                    if (request.MaxAttempts > 0)
+                        w.WriteProperty("attempts").WriteValue(request.MaxAttempts);
+                    if (request.TimeoutInSeconds > 0)
+                        w.WriteProperty("expiry").WriteValue(request.TimeoutInSeconds);
+                    if (request.CreateUserIfNotExists)
+                        w.WriteProperty("createnew").WriteValue(request.CreateUserIfNotExists);
+                    foreach (var key in request.Attributes.Keys)
+                        w.WriteProperty(key, request[key]);
+                })
                 .EndObject();
         }
     }
