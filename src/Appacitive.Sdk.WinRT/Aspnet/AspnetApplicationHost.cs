@@ -10,14 +10,14 @@ namespace Appacitive.Sdk.Aspnet
 {
     public class AspnetApplicationHost : WindowsHost
     {
-        public static readonly IApplicationHost Instance = new AspnetApplicationHost();
+        public static new readonly IApplicationHost Instance = new AspnetApplicationHost();
 
         protected override void InitializeContainer(IDependencyContainer container)
         {
             // Add default winrt registration
             base.InitializeContainer(container);
             // Add aspnet specific registrations
-            container.Register<IUserContext, AspnetUserContext>(() => new AspnetUserContext());
+            container.Register<IUserContext, AspnetUserContext>(() => UserContextViaHttpContext.Instance);
         }
     }
 }
