@@ -198,6 +198,36 @@ string publicUrl = await new FileDownload(filename).GetDownloadUrlAsync(expiryIn
 
 ```
 
+### WCF gotchas
+When using the SDK on the server side inside a web application or web service, we need to make sure that a lot 
+of the ambient user context and sdk state is available on a per request basis instead of being statically stored for
+the entire application. The SDK uses the WCF OperationContext to store and manage this information on a per request basis.
+However given the fact that the SDK methods are async, special provisions need to be made to ensure that the OperationContext
+is available across threads. To do this, service implementations using the SDK must apply the `AllowAsyncService` service
+behavior to their service implementations. This can be done in two ways.
+
+#### 1. Via attribution
+
+``` C#
+// Add the AllowAsyncService to ensure that OperationContext is propogated across async calls.
+[AllowAsyncService]
+public class MyWebService : IMyWebService
+{
+	...
+}
+```
+
+#### 2. Via web.config
+
+``` xml
+<!-- Define a behavior extension inside the wcf service model configuration -->
+<behaviorExtensions>
+    <add name="allowAsyncCalls" type="Appacitive.Sdk.Wcf.AllowAsyncServiceBehaviorExtension, Appacitive.Sdk.WinRT" />
+</behaviorExtensions>
+
+<!-- Use the extension inside your service / endpoint / operation behavior configuration. -->
+```
+
 
 ### Pending items
 Articles and connections
