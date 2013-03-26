@@ -32,12 +32,19 @@ namespace Appacitive.Sdk.Wcf
 
         public IAsyncResult InvokeBegin(object instance, object[] inputs, AsyncCallback callback, object state)
         {
-            throw new NotSupportedException("InvokeBegin is not supported.");
+            var context = OperationContext.Current.Propagate();
+            return _invoker.InvokeBegin(instance, inputs, ar =>
+                {
+                    using (context)
+                    {
+                        callback(ar);
+                    }
+                }, state);
         }
 
         public object InvokeEnd(object instance, out object[] outputs, IAsyncResult result)
         {
-            throw new NotSupportedException("InvokeEnd is not supported.");
+            return _invoker.InvokeEnd(instance, out outputs, result);
         }
 
         public bool IsSynchronous
