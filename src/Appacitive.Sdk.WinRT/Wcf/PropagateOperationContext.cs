@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Wcf
 {
-    internal static class PropagateOperationContext
+    public static class PropagateOperationContext
     {
         /// <summary>
         ///     Propagate the operation context across thread boundaries (eg. for async / await).
