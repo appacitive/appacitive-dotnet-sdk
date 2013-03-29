@@ -152,7 +152,7 @@ namespace Appacitive.Sdk.Wcf
             bool pushedNewScope = PushOperationContextScopeIfRequired();
             try
             {
-                using (OperationContext.Current.Propagate())
+                using (OperationContext.Current.UseAndPropagate())
                 {
                     chainedCallback(chainedState);
                 }

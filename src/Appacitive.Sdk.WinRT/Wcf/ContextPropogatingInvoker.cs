@@ -32,7 +32,7 @@ namespace Appacitive.Sdk.Wcf
 
         public IAsyncResult InvokeBegin(object instance, object[] inputs, AsyncCallback callback, object state)
         {
-            var context = OperationContext.Current.Propagate();
+            var context = OperationContext.Current.UseAndPropagate();
             return _invoker.InvokeBegin(instance, inputs, ar =>
                 {
                     using (context)
