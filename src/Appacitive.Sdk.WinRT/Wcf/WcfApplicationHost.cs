@@ -11,7 +11,7 @@ namespace Appacitive.Sdk.Wcf
     public class WcfApplicationHost : WindowsHost
     {
 
-        public static readonly IApplicationHost Instance = new WcfApplicationHost();
+        public static new readonly IApplicationHost Instance = new WcfApplicationHost();
 
         protected override void InitializeContainer(IDependencyContainer container)
         {
