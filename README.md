@@ -241,6 +241,7 @@ Articles and connections
 - [ ] Interconnect
 - [ ] Multi get connections
 - [ ] Multi delete article
+- [x] Multi delete connections
 - [x] Force delete single article.
 - [x] Sorting support on listing calls.
 - [x] Update article with revision

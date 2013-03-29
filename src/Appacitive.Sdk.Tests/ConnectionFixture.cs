@@ -144,5 +144,35 @@ namespace Appacitive.Sdk.Tests
                 Assert.IsTrue(aex.Code == "404");
             }
         }
+
+        [TestMethod]
+        public async Task BulkDeleteConnectionTest()
+        {
+            // Create a new connection
+            var conn1 = await ConnectionHelper.CreateNew();
+            var conn2 = await ConnectionHelper.CreateNew();
+            // Delete the connection
+            await Connection.BulkDeleteAsync(conn1.Type, new[] { conn1.Id, conn2.Id });
+            // Try and get the connection
+            try
+            {
+                var read = await Connection.GetAsync(conn1.Type, conn1.Id);
+                Assert.Fail("No exception was raised on reading deleted connection.");
+            }
+            catch (AppacitiveException aex)
+            {
+                Assert.IsTrue(aex.Code == "404");
+            }
+
+            try
+            {
+                var read = await Connection.GetAsync(conn2.Type, conn2.Id);
+                Assert.Fail("No exception was raised on reading deleted connection.");
+            }
+            catch (AppacitiveException aex)
+            {
+                Assert.IsTrue(aex.Code == "404");
+            }
+        }
     }
 }

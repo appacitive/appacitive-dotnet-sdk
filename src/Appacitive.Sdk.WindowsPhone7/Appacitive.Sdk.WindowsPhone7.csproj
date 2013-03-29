@@ -222,6 +222,12 @@
     <Compile Include="..\Appacitive.Sdk\Services\Model\AuthenticateUserResponse.cs">
       <Link>Services\Model\AuthenticateUserResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\BulkDeleteConnectionRequest.cs">
+      <Link>Services\Model\BulkDeleteConnectionRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\BulkDeleteConnectionResponse.cs">
+      <Link>Services\Model\BulkDeleteConnectionResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\ChangePasswordRequest.cs">
       <Link>Services\Model\ChangePasswordRequest.cs</Link>
     </Compile>

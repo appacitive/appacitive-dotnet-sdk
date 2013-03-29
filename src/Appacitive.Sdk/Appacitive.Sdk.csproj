@@ -46,6 +46,8 @@
     <Compile Include="Interfaces\IUploadHandler.cs" />
     <Compile Include="Interfaces\IUserContext.cs" />
     <Compile Include="IUserFactory.cs" />
+    <Compile Include="Services\Model\BulkDeleteConnectionRequest.cs" />
+    <Compile Include="Services\Model\BulkDeleteConnectionResponse.cs" />
     <Compile Include="Services\Model\InvalidateUserSessionRequest.cs" />
     <Compile Include="Services\Model\InvalidateUserSessionResponse.cs" />
     <Compile Include="Services\Model\ValidateUserSessionRequest.cs" />

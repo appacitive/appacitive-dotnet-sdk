@@ -99,5 +99,18 @@ namespace Appacitive.Sdk.Services
             var response = FindAllConectionsResponse.Parse(bytes);
             return response;
         }
+
+
+        public async Task<BulkDeleteConnectionResponse> BulkDeleteAsync(BulkDeleteConnectionRequest request)
+        {   
+            var bytes = await HttpOperation
+                        .WithUrl(Urls.For.BulkDeleteConnection(request.Type, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
+                        .WithAppacitiveSession(request.SessionToken)
+                        .WithEnvironment(request.Environment)
+                        .WithUserToken(request.UserToken)
+                        .PostAsyc(request.ToBytes());
+            var response = BulkDeleteConnectionResponse.Parse(bytes);
+            return response;
+        }
     }
 }
