@@ -44,9 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppacitiveException.cs" />
     <Compile Include="Aspnet\AspnetApplicationHost.cs" />
     <Compile Include="Aspnet\AspnetUserContext.cs" />
     <Compile Include="Aspnet\UserContextViaHttpContext.cs" />
+    <Compile Include="ExceptionFactory.cs" />
     <Compile Include="HttpConnector.cs" />
     <Compile Include="IAppacitiveUserPrincipal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

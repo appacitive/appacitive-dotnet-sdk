@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
+using Appacitive.Sdk.Interfaces;
 
 namespace Appacitive.Sdk
 {
@@ -45,17 +46,12 @@ namespace Appacitive.Sdk
                 action(item);
         }
 
-        public static AppacitiveException ToFault(this Status status)
+        public static Exception ToFault(this Status status)
         {
             if (status.IsSuccessful == true)
                 return null;
-            return new AppacitiveException(status.Message)
-            {
-                Code = status.Code,
-                ReferenceId = status.ReferenceId,
-                FaultType = status.FaultType,
-                AdditionalMessages = status.AdditionalMessages == null ? null : status.AdditionalMessages.ToArray()
-            };
+            var factory = ObjectFactory.Build<IExceptionFactory>();
+            return factory.CreateFault(status);
         }
                 
 

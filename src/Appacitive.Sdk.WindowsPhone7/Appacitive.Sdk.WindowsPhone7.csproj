@@ -54,6 +54,9 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\IApplicationHost.cs">
       <Link>Interfaces\IApplicationHost.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IExceptionFactory.cs">
+      <Link>Interfaces\IExceptionFactory.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IHttpConnector.cs">
       <Link>Interfaces\IHttpConnector.cs</Link>
     </Compile>
@@ -398,6 +401,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\UserConverter.cs">
       <Link>Services\Serializers\UserConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\ServiceExceptionFactory.cs">
+      <Link>Services\ServiceExceptionFactory.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\SessionService.cs">
       <Link>Services\SessionService.cs</Link>

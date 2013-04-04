@@ -63,6 +63,7 @@
     <Compile Include="AuthenticationFixture.cs" />
     <Compile Include="ConnectionFixture.cs" />
     <Compile Include="ConnectionServiceFixture.cs" />
+    <Compile Include="ExceptionFactoryFixture.cs" />
     <Compile Include="FileFixture.cs" />
     <Compile Include="GeocodeFixture.cs" />
     <Compile Include="Helpers\ApiHelper.cs" />

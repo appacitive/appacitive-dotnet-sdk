@@ -45,6 +45,7 @@ namespace Appacitive.Sdk
                             .Register<ISessionService, SessionService>(() => SessionService.Instance)
                             .Register<IArticleService, ArticleService>(() => ArticleService.Instance)
                             .Register<IUserService, UserService>(() => UserService.Instance)
+                            .Register<IExceptionFactory, ServiceExceptionFactory>( () => ServiceExceptionFactory.Instance )
                             ;
         }
 

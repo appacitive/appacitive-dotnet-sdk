@@ -39,6 +39,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="HttpClient.cs" />
     <Compile Include="InProcContainer.cs" />
+    <Compile Include="Interfaces\IExceptionFactory.cs" />
     <Compile Include="Interfaces\IHttpConnector.cs" />
     <Compile Include="Interfaces\IJsonSerializer.cs" />
     <Compile Include="Interfaces\IObjectFactory.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="Services\Model\InvalidateUserSessionResponse.cs" />
     <Compile Include="Services\Model\ValidateUserSessionRequest.cs" />
     <Compile Include="Services\Model\ValidateUserSessionResponse.cs" />
+    <Compile Include="Services\ServiceExceptionFactory.cs" />
     <Compile Include="Services\Urls.cs" />
     <Compile Include="JsonNetSerializer.cs" />
     <Compile Include="Measure.cs" />

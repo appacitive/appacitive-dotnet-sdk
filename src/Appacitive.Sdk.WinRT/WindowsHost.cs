@@ -22,6 +22,7 @@ namespace Appacitive.Sdk.WinRT
             container
                 .Register<IHttpConnector, HttpConnector>(() => new HttpConnector())
                 .Register<IHttpFileHandler, WebClientHttpFileHandler>(() => new WebClientHttpFileHandler())
+                .Register<IExceptionFactory, ExceptionFactory>( () => ExceptionFactory.Instance )
                 ;
         }
     }
