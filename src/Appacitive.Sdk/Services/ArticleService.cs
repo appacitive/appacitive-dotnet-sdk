@@ -16,7 +16,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
             bytes = await HttpOperation
                 .WithUrl(Urls.For.GetArticle(request.Type, request.Id, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
-                .WithAppacitiveSession(request.SessionToken)
+                .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
                 .GetAsync();
@@ -29,7 +29,7 @@ namespace Appacitive.Sdk.Services
             
             var bytes = await HttpOperation
                             .WithUrl(Urls.For.CreateArticle(request.Article.Type, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
-                            .WithAppacitiveSession(request.SessionToken)
+                            .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
                             .WithEnvironment(request.Environment)
                             .WithUserToken(request.UserToken)
                             .PutAsyc(request.ToBytes());
@@ -43,7 +43,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
             bytes = await HttpOperation
                 .WithUrl(Urls.For.DeleteArticle(request.Type, request.Id, request.DeleteConnections, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
-                .WithAppacitiveSession(request.SessionToken)
+                .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
                 .DeleteAsync();
@@ -56,7 +56,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
             bytes = await HttpOperation
                         .WithUrl(Urls.For.UpdateArticle(request.Type, request.Id, request.Revision, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
-                        .WithAppacitiveSession(request.SessionToken)
+                        .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
                         .WithEnvironment(request.Environment)
                         .WithUserToken(request.UserToken)
                         .PostAsyc(request.ToBytes());
@@ -69,7 +69,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
             bytes = await HttpOperation
                         .WithUrl(Urls.For.FindAllArticles(request.Type, request.Query, request.PageNumber, request.PageSize, request.OrderBy,request.SortOrder, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
-                        .WithAppacitiveSession(request.SessionToken)
+                        .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
                         .WithEnvironment(request.Environment)
                         .WithUserToken(request.UserToken)
                         .GetAsync();
@@ -82,7 +82,7 @@ namespace Appacitive.Sdk.Services
             byte[] bytes = null;
             bytes = await HttpOperation
                 .WithUrl(Urls.For.MultiGetArticle(request.Type, request.IdList, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
-                .WithAppacitiveSession(request.SessionToken)
+                .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
                 .GetAsync();

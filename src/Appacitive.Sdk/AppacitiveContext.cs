@@ -14,6 +14,8 @@ namespace Appacitive.Sdk
 
         public static Environment Environment { get; internal set; }
 
+        public static bool UseApiSession { get; internal set; }
+
         private static object _syncRoot = new object();
         private static string _sessionToken;
 
@@ -21,6 +23,8 @@ namespace Appacitive.Sdk
         {
             get
             {
+                if (UseApiSession == false)
+                    return null;
                 if (string.IsNullOrWhiteSpace(_sessionToken) == true)
                 {
                     lock (_syncroot)

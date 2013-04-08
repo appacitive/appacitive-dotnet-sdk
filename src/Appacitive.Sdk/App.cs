@@ -19,6 +19,8 @@ namespace Appacitive.Sdk
             AppacitiveContext.ApiKey = apiKey;
             // Set the environment
             AppacitiveContext.Environment = environment;
+            // Use api session
+            AppacitiveContext.UseApiSession = settings.UseApiSession;
             // Set the factory
             AppacitiveContext.ObjectFactory = settings.Factory ?? AppacitiveSettings.Default.Factory;
             // Register defaults
@@ -68,10 +70,13 @@ namespace Appacitive.Sdk
         internal static readonly AppacitiveSettings Default = new AppacitiveSettings
         {
             // Register defaults
-            Factory = GetDefaultContainer()
+            Factory = GetDefaultContainer(),
+            UseApiSession = false
         };
 
         public IDependencyContainer Factory { get; set; }
+
+        public bool UseApiSession { get; set; }
 
         private static IDependencyContainer GetDefaultContainer()
         {

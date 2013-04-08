@@ -139,7 +139,7 @@ namespace Appacitive.Sdk.Tests
                 var read = await Connection.GetAsync(conn.Type, conn.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (AppacitiveException aex)
+            catch (WinRT.AppacitiveException aex)
             {
                 Assert.IsTrue(aex.Code == "404");
             }
@@ -159,7 +159,7 @@ namespace Appacitive.Sdk.Tests
                 var read = await Connection.GetAsync(conn1.Type, conn1.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (AppacitiveException aex)
+            catch (WinRT.AppacitiveException aex)
             {
                 Assert.IsTrue(aex.Code == "404");
             }
@@ -169,7 +169,7 @@ namespace Appacitive.Sdk.Tests
                 var read = await Connection.GetAsync(conn2.Type, conn2.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (AppacitiveException aex)
+            catch (WinRT.AppacitiveException aex)
             {
                 Assert.IsTrue(aex.Code == "404");
             }

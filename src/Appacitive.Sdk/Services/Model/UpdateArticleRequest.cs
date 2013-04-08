@@ -10,12 +10,12 @@ namespace Appacitive.Sdk.Services
     public class UpdateArticleRequest : ApiRequest
     {
         public UpdateArticleRequest() :
-            this(AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
+            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
         {
         }
 
-        public UpdateArticleRequest(string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(sessionToken, environment, userToken, location, enableDebugging, verbosity)
+        public UpdateArticleRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
+            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
         {
             this.PropertyUpdates = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             this.AttributeUpdates = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

@@ -10,12 +10,12 @@ namespace Appacitive.Sdk.Services
     public class ChangePasswordRequest : ApiRequest
     {
         public ChangePasswordRequest() :
-            this(AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
+            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
         {
         }
 
-        public ChangePasswordRequest(string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(sessionToken, environment, userToken, location, enableDebugging, verbosity)
+        public ChangePasswordRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
+            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
         {
             this.IdType = string.Empty; // Nikhil: String.empty indicates default type is id. This should probably be changed.
         }

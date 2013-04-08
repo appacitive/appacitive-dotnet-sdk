@@ -9,12 +9,12 @@ namespace Appacitive.Sdk.Services
     public class DeleteUserRequest : ApiRequest
     {
         public DeleteUserRequest() :
-            this(AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
+            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
         {
         }
 
-        public DeleteUserRequest(string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(sessionToken, environment, userToken, location, enableDebugging, verbosity)
+        public DeleteUserRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
+            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
         {
             this.UserIdType = string.Empty; // Nikhil: String.empty indicates default type is id. This should probably be changed.
         }

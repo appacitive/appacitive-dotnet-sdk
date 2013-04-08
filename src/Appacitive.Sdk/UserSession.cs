@@ -23,7 +23,7 @@ namespace Appacitive.Sdk
         {
             var userService = ObjectFactory.Build<IUserService>();
             var response = await userService.ValidateUserSessionAsync(
-                new ValidateUserSessionRequest(AppacitiveContext.SessionToken, AppacitiveContext.Environment, authToken, 
+                new ValidateUserSessionRequest(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, authToken, 
                     AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
                 );
             return response.Result == true;
@@ -33,7 +33,7 @@ namespace Appacitive.Sdk
         {
             var userService = ObjectFactory.Build<IUserService>();
             var response = await userService.InvalidateUserSessionAsync(
-                new InvalidateUserSessionRequest(AppacitiveContext.SessionToken, AppacitiveContext.Environment, authToken,
+                new InvalidateUserSessionRequest(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, authToken,
                     AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
                 );
             if (response.Status.IsSuccessful == false)

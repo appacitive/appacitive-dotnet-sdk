@@ -55,9 +55,12 @@ namespace Appacitive.Sdk
         }
                 
 
-        public static HttpOperation WithAppacitiveSession(this HttpOperation client, string session)
+        public static HttpOperation WithAppacitiveKeyOrSession(this HttpOperation client, string apiKey, string session, bool useApiSession)
         {       
-            return client.WithHeader("Appacitive-Session", session);
+            if( useApiSession == true )
+                return client.WithHeader("Appacitive-Session", session);
+            else
+                return client.WithHeader("Appacitive-Apikey", apiKey);
         }
 
         public static HttpOperation WithEnvironment(this HttpOperation client, Environment env)

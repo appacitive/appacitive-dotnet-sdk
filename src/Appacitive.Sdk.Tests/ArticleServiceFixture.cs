@@ -65,142 +65,107 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public void DeleteArticleAsyncTest()
+        public async Task DeleteArticleAsyncTest()
         {
-            Exception fault = null;
-            var waitHandle = new ManualResetEvent(false);
-            var action = new Action(async () =>
+            // Create article
+            var now = DateTime.Now;
+            dynamic obj = new Article("object");
+            obj.intfield = 1;
+            obj.decimalfield = 10.0m;
+            obj.datefield = "2012-12-20";
+            obj.datetimefield = now.ToString("o");
+            obj.stringfield = "string value";
+            obj.textfield = "text value";
+            obj.boolfield = false;
+            obj.geofield = "11.5,12.5";
+            obj.listfield = "a";
+            obj.SetAttribute("attr1", "value1");
+            obj.SetAttribute("attr2", "value2");
+
+            var service = ObjectFactory.Build<IArticleService>();
+            CreateArticleResponse response = null;
+            response = await service.CreateArticleAsync(new CreateArticleRequest()
                 {
-                    try
-                    {
-                        // Create article
-                        var now = DateTime.Now;
-                        dynamic obj = new Article("object");
-                        obj.intfield = 1;
-                        obj.decimalfield = 10.0m;
-                        obj.datefield = "2012-12-20";
-                        obj.datetimefield = now.ToString("o");
-                        obj.stringfield = "string value";
-                        obj.textfield = "text value";
-                        obj.boolfield = false;
-                        obj.geofield = "11.5,12.5";
-                        obj.listfield = "a";
-                        obj.SetAttribute("attr1", "value1");
-                        obj.SetAttribute("attr2", "value2");
-
-                        var service = ObjectFactory.Build<IArticleService>();
-                        CreateArticleResponse response = null;
-                        response = await service.CreateArticleAsync(new CreateArticleRequest()
-                        {
-                            Article = obj
-                        });
-                        Assert.IsNotNull(response);
-                        Assert.IsNotNull(response.Status);
-                        Assert.IsTrue(response.Status.IsSuccessful);
-                        Assert.IsNotNull(response.Article);
-                        Console.WriteLine("Created article id {0}", response.Article.Id);
-                        Console.WriteLine("Time taken: {0} seconds", response.TimeTaken);
-
-                        // Delete the article
-                        Status deleteArticleResponse = null;
-                        deleteArticleResponse = await service.DeleteArticleAsync(new DeleteArticleRequest()
-                        {
-                            Id = response.Article.Id,
-                            Type = response.Article.Type
-                        });
-                        Assert.IsNotNull(deleteArticleResponse, "Delete articler response is null.");
-                        Assert.IsTrue(deleteArticleResponse.IsSuccessful == true, deleteArticleResponse.Message ?? "Delete article operation failed.");
-
-                        // Try get the deleted article
-                        var getArticleResponse = await service.GetArticleAsync(
-                            new GetArticleRequest()
-                            {
-                                Id = response.Article.Id,
-                                Type = response.Article.Type
-                            });
-                        Assert.IsNotNull(getArticleResponse, "Get article response is null.");
-                        Assert.IsNull(getArticleResponse.Article, "Should not be able to get a deleted article.");
-                        Assert.IsTrue(getArticleResponse.Status.Code == "404", "Error code expected was not 404.");
-                    }
-                    catch (Exception ex)
-                    {
-                        fault = ex;
-                    }
-                    finally
-                    {
-                        waitHandle.Set();
-                    }
+                    Article = obj
                 });
-            action();
-            waitHandle.WaitOne();
-            Assert.IsNull(fault);
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Status);
+            Assert.IsTrue(response.Status.IsSuccessful);
+            Assert.IsNotNull(response.Article);
+            Console.WriteLine("Created article id {0}", response.Article.Id);
+            Console.WriteLine("Time taken: {0} seconds", response.TimeTaken);
+
+            // Delete the article
+            Status deleteArticleResponse = null;
+            deleteArticleResponse = await service.DeleteArticleAsync(new DeleteArticleRequest()
+                {
+                    Id = response.Article.Id,
+                    Type = response.Article.Type
+                });
+            Assert.IsNotNull(deleteArticleResponse, "Delete articler response is null.");
+            Assert.IsTrue(deleteArticleResponse.IsSuccessful == true,
+                          deleteArticleResponse.Message ?? "Delete article operation failed.");
+
+            // Try get the deleted article
+            var getArticleResponse = await service.GetArticleAsync(
+                new GetArticleRequest()
+                    {
+                        Id = response.Article.Id,
+                        Type = response.Article.Type
+                    });
+            Assert.IsNotNull(getArticleResponse, "Get article response is null.");
+            Assert.IsNull(getArticleResponse.Article, "Should not be able to get a deleted article.");
+            Assert.IsTrue(getArticleResponse.Status.Code == "404", "Error code expected was not 404.");
+
         }
 
         [TestMethod]
-        public void UpdateArticleAsyncTest()
+        public async Task UpdateArticleAsyncTest()
         {
-            var waitHandle = new ManualResetEvent(false);
-            Exception fault = null;
-            Action action = async () =>
+            // Create an article
+            var now = DateTime.Now;
+            dynamic obj = new Article("object");
+            obj.intfield = 1;
+            obj.decimalfield = 10.0m;
+            obj.datefield = "2012-12-20";
+            obj.stringfield = "initial";
+            obj.Tags.Add("initial");
+
+            var service = ObjectFactory.Build<IArticleService>();
+            var createdResponse = await service.CreateArticleAsync(new CreateArticleRequest()
                 {
-                    try
-                    {
-                        // Create an article
-                        var now = DateTime.Now;
-                        dynamic obj = new Article("object");
-                        obj.intfield = 1;
-                        obj.decimalfield = 10.0m;
-                        obj.datefield = "2012-12-20";
-                        obj.stringfield = "initial";
-                        obj.Tags.Add("initial");
+                    Article = obj
+                });
+            Assert.IsNotNull(createdResponse, "Article creation failed.");
+            Assert.IsNotNull(createdResponse.Status, "Status is null.");
+            Assert.IsTrue(createdResponse.Status.IsSuccessful,
+                          createdResponse.Status.Message ?? "Create article failed.");
+            var created = createdResponse.Article;
 
-                        var service = ObjectFactory.Build<IArticleService>();
-                        var createdResponse = await service.CreateArticleAsync(new CreateArticleRequest()
-                        {
-                            Article = obj
-                        });
-                        Assert.IsNotNull(createdResponse, "Article creation failed.");
-                        Assert.IsNotNull(createdResponse.Status, "Status is null.");
-                        Assert.IsTrue(createdResponse.Status.IsSuccessful, createdResponse.Status.Message ?? "Create article failed.");
-                        var created = createdResponse.Article;
-
-                        // Update the article
-                        var updateRequest = new UpdateArticleRequest()
-                        {
-                            Id = created.Id,
-                            Type = created.Type
-                        };
-                        updateRequest.PropertyUpdates["intfield"] = "2";
-                        updateRequest.PropertyUpdates["decimalfield"] = 20.0m.ToString();
-                        updateRequest.PropertyUpdates["stringfield"] = null;
-                        updateRequest.PropertyUpdates["datefield"] = "2013-11-20";
-                        updateRequest.AddedTags.AddRange(new[] { "tag1", "tag2" });
-                        updateRequest.RemovedTags.AddRange(new[] { "initial" });
-                        var updatedResponse = await service.UpdateArticleAsync(updateRequest);
-
-                        Assert.IsNotNull(updatedResponse, "Update article response is null.");
-                        Assert.IsNotNull(updatedResponse.Status, "Update article response status is null.");
-                        Assert.IsNotNull(updatedResponse.Article, "Updated article is null.");
-                        var updated = updatedResponse.Article;
-                        Assert.IsTrue(updated["intfield"] == "2");
-                        Assert.IsTrue(updated["decimalfield"] == "20.0");
-                        Assert.IsTrue(updated["stringfield"] == null);
-                        Assert.IsTrue(updated["datefield"] == "2013-11-20");
-                        Assert.IsTrue(updated.Tags.Count() == 2);
-                        Assert.IsTrue(updated.Tags.Intersect(new[] { "tag1", "tag2" }).Count() == 2);
-                    }
-                    catch (Exception ex)
-                    {
-                        fault = ex;
-                    }
-                    finally
-                    {
-                        waitHandle.Set();
-                    }
+            // Update the article
+            var updateRequest = new UpdateArticleRequest()
+                {
+                    Id = created.Id,
+                    Type = created.Type
                 };
-            action();
-            waitHandle.WaitOne();
-            Assert.IsNull(fault);
+            updateRequest.PropertyUpdates["intfield"] = "2";
+            updateRequest.PropertyUpdates["decimalfield"] = 20.0m.ToString();
+            updateRequest.PropertyUpdates["stringfield"] = null;
+            updateRequest.PropertyUpdates["datefield"] = "2013-11-20";
+            updateRequest.AddedTags.AddRange(new[] {"tag1", "tag2"});
+            updateRequest.RemovedTags.AddRange(new[] {"initial"});
+            var updatedResponse = await service.UpdateArticleAsync(updateRequest);
+
+            Assert.IsNotNull(updatedResponse, "Update article response is null.");
+            Assert.IsNotNull(updatedResponse.Status, "Update article response status is null.");
+            Assert.IsNotNull(updatedResponse.Article, "Updated article is null.");
+            var updated = updatedResponse.Article;
+            Assert.IsTrue(updated["intfield"] == "2");
+            Assert.IsTrue(updated["decimalfield"] == "20.0");
+            Assert.IsTrue(updated["stringfield"] == null);
+            Assert.IsTrue(updated["datefield"] == "2013-11-20");
+            Assert.IsTrue(updated.Tags.Count() == 2);
+            Assert.IsTrue(updated.Tags.Intersect(new[] {"tag1", "tag2"}).Count() == 2);
 
         }
 

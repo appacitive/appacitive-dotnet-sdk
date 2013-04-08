@@ -10,8 +10,10 @@ namespace Appacitive.Sdk.Services
 {
     public abstract class ApiRequest
     {
-        protected ApiRequest(string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info)
+        protected ApiRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info)
         {
+            this.ApiKey = apiKey;
+            this.UseApiSession = string.IsNullOrWhiteSpace(sessionToken) ? false : true;
             this.SessionToken = sessionToken;
             this.CurrentLocation = location;
             this.Verbosity = verbosity;
@@ -19,6 +21,12 @@ namespace Appacitive.Sdk.Services
             this.Environment = environment;
             this.Fields = new List<string>();
         }
+
+        [JsonIgnore]
+        public string ApiKey { get; set; }
+
+        [JsonIgnore]
+        public bool UseApiSession { get; private set; }
 
         [JsonIgnore]
         public string SessionToken { get; set; }

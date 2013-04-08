@@ -11,12 +11,12 @@ namespace Appacitive.Sdk.Services
     public class AuthenticateUserRequest : ApiRequest
     {
         public AuthenticateUserRequest() :
-            this(AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
+            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
         {   
         }
 
-        public AuthenticateUserRequest(string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(sessionToken, environment, userToken, location, enableDebugging, verbosity)
+        public AuthenticateUserRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
+            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
         {
             this.Attributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }

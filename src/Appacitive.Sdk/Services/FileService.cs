@@ -14,7 +14,7 @@ namespace Appacitive.Sdk.Services
         {
             var bytes = await HttpOperation
                 .WithUrl(Urls.For.GetUploadUrl(request.MimeType, request.FileName, request.ExpiryInMinutes))
-                .WithAppacitiveSession(request.SessionToken)
+                .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
                 .GetAsync();
@@ -26,7 +26,7 @@ namespace Appacitive.Sdk.Services
         {
             var bytes = await HttpOperation
                 .WithUrl(Urls.For.GetDownloadUrl(request.FileName, request.ExpiryInMinutes))
-                .WithAppacitiveSession(request.SessionToken)
+                .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
                 .WithEnvironment(request.Environment)
                 .WithUserToken(request.UserToken)
                 .GetAsync();

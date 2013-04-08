@@ -100,17 +100,7 @@ namespace Appacitive.Sdk
         protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var articleService = ObjectFactory.Build<IArticleService>();
-            var request = new UpdateArticleRequest()
-            {
-                SessionToken = AppacitiveContext.SessionToken,
-                Environment = AppacitiveContext.Environment,
-                UserToken = AppacitiveContext.UserToken,
-                Verbosity = AppacitiveContext.Verbosity,
-                Revision = specificRevision,
-                Id = this.Id,
-                Type = this.Type
-            };
-
+            var request = new UpdateArticleRequest {Id = this.Id, Type = this.Type};
             if (propertyUpdates != null && propertyUpdates.Count > 0)
                 propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
             if (attributeUpdates != null && attributeUpdates.Count > 0)

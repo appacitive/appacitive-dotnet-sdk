@@ -10,12 +10,15 @@ namespace Appacitive.Sdk.Services
     public class CreateSessionRequest : ApiRequest
     {
         public CreateSessionRequest()
-            : base(null, Environment.Sandbox, null)
+            : base(null, null, Environment.Sandbox, null)
         {
         }
 
         [JsonProperty("apikey")]
-        public string ApiKey { get; set; }
+        public string APIKey { 
+            get { return this.ApiKey; }
+            set { this.ApiKey = value; }
+        }
 
         [JsonProperty("isnonsliding")]
         public bool IsNonSliding { get; set; }

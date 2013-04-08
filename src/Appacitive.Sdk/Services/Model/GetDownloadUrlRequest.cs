@@ -9,12 +9,12 @@ namespace Appacitive.Sdk.Services
     public class GetDownloadUrlRequest : ApiRequest
     {
         public GetDownloadUrlRequest() :
-            this(AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
+            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
         {
         }
 
-        public GetDownloadUrlRequest(string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(sessionToken, environment, userToken, location, enableDebugging, verbosity)
+        public GetDownloadUrlRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
+            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
         {
         }
 
