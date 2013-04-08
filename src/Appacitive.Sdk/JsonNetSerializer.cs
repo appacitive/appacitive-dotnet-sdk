@@ -25,6 +25,7 @@ namespace Appacitive.Sdk
             serializer.Converters.Add(new AuthenticateUserRequestConverter());
             serializer.Converters.Add(new UpdateUserRequestConverter());
             serializer.Converters.Add(new ConnectionConverter());
+            serializer.Converters.Add(new UpdateConnectionRequestConverter());
             return serializer;
         }
 

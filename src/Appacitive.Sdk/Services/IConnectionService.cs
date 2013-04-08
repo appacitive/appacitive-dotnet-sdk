@@ -12,6 +12,8 @@ namespace Appacitive.Sdk.Services
 
         Task<GetConnectionResponse> GetConnectionAsync(GetConnectionRequest request);
 
+        Task<UpdateConnectionResponse> UpdateConnectionAsync(UpdateConnectionRequest request);
+
         Task<GetConnectionByEndpointResponse> GetConnectionByEndpointAsync(GetConnectionByEndpointRequest request);
 
         Task<DeleteConnectionResponse> DeleteConnectionAsync(DeleteConnectionRequest request);

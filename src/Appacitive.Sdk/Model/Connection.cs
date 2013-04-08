@@ -216,9 +216,33 @@ namespace Appacitive.Sdk
             this.EndpointB = other.EndpointB;
         }
 
-        protected override Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
-            throw new NotImplementedException();
+            var connService = ObjectFactory.Build<IConnectionService>();
+            var request = new UpdateConnectionRequest{ Id = this.Id, Type = this.Type };
+            if (propertyUpdates != null && propertyUpdates.Count > 0)
+                propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
+            if (attributeUpdates != null && attributeUpdates.Count > 0)
+                attributeUpdates.For(x => request.AttributeUpdates[x.Key] = x.Value);
+            if (addedTags != null)
+                request.AddedTags.AddRange(addedTags);
+            if (removedTags != null)
+                request.RemovedTags.AddRange(removedTags);
+
+            // Check if an update is needed.
+            if (request.PropertyUpdates.Count == 0 &&
+                request.AttributeUpdates.Count == 0 &&
+                request.AddedTags.Count == 0 &&
+                request.RemovedTags.Count == 0)
+                return null;
+
+            var response = await connService.UpdateConnectionAsync(request);
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+
+            // 3. Update the last known state based on the differences
+            Debug.Assert(response.Connection != null, "If status is successful, then updated connection should not be null.");
+            return response.Connection;
         }
 
         public async static Task<PagedList<Connection>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)

@@ -366,6 +366,12 @@
     <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateArticleResponse.cs">
       <Link>Services\Model\UpdateArticleResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateConnectionRequest.cs">
+      <Link>Services\Model\UpdateConnectionRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateConnectionResponse.cs">
+      <Link>Services\Model\UpdateConnectionResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateUserRequest.cs">
       <Link>Services\Model\UpdateUserRequest.cs</Link>
     </Compile>
@@ -395,6 +401,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\UpdateArticleRequestConverter.cs">
       <Link>Services\Serializers\UpdateArticleRequestConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\UpdateConnectionRequestConverter.cs">
+      <Link>Services\Serializers\UpdateConnectionRequestConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\UpdateUserRequestConverter.cs">
       <Link>Services\Serializers\UpdateUserRequestConverter.cs</Link>

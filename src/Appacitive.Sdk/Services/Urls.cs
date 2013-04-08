@@ -237,6 +237,14 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
+            public static string UpdateConnection(string relationName, string connectionId, Geocode geocode, bool enableDebug, Verbosity verbosity, List<string> fields)
+            {
+                var url = new Url(ConnectionServiceBase);
+                url.Append(relationName).Append(connectionId);
+                HandleDefaults(url, geocode, enableDebug, verbosity, fields);
+                return url.ToString();
+            }
+
             public static string FindConnectedArticles(string relation, string articleId, string query, int pageNumber, int pageSize, Geocode location, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ConnectionServiceBase).Append(relation).Append(articleId).Append("find");

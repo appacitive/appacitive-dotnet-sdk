@@ -32,6 +32,31 @@ namespace Appacitive.Sdk.Tests
 
 
         [TestMethod]
+        public async Task UpdateConnectionAsyncTest()
+        {
+            dynamic conn = Connection
+                .New("sibling")
+                .FromNewArticle("object", ObjectHelper.NewInstance())
+                .ToNewArticle("object", ObjectHelper.NewInstance());
+            conn.field1 = "test";
+            conn.field2 = 15L;
+            await conn.SaveAsync();
+
+            Console.WriteLine("Created connection with id: {0}", conn.Id);
+
+            // Update the connection
+            conn.field1 = "updated";
+            conn.field2 = 11L;
+            await conn.SaveAsync();
+
+            // Get the connection
+            Connection read = await Connection.GetAsync("sibling", conn.Id);
+            // Asserts
+            Assert.IsTrue( read["field1"] == "updated");
+            Assert.IsTrue( read.AsInt("field2") == 11L);
+        }
+
+        [TestMethod]
         public async Task CreateConnectionBetweenNewAndExistingArticlesAsyncTest()
         {
             var obj1 = await ObjectHelper.CreateNewAsync();
