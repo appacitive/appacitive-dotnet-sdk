@@ -70,7 +70,7 @@ namespace Appacitive.Sdk.Tests
             var a3 = await ObjectHelper.CreateNewAsync();
             var a4 = await ObjectHelper.CreateNewAsync();
 
-            await Article.DeleteAsync(a1.Type, a1.Id, a2.Id, a3.Id, a4.Id);
+            await Article.MultiDeleteAsync(a1.Type, a1.Id, a2.Id, a3.Id, a4.Id);
             var ids = new[] { a1.Id, a2.Id, a3.Id, a4.Id };
             for (int i = 0; i < ids.Length; i++)
             {
