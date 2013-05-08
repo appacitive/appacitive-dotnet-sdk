@@ -24,10 +24,10 @@ namespace Appacitive.Sdk
             this.SchemaId = existing.SchemaId;
             
             // Copy properties
-            foreach (var property in this.Properties)
-                existing[property.Key] = property.Value;
-            foreach (var attr in this.Attributes)
-                existing.SetAttribute(attr.Key, attr.Value);
+            foreach (var property in existing.Properties)
+                this[property.Key] = property.Value;
+            foreach (var attr in existing.Attributes)
+                this.SetAttribute(attr.Key, attr.Value);
         }
 
         public Article(string type) : base(type)
