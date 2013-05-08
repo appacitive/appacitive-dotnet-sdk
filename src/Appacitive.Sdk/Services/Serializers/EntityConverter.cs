@@ -102,7 +102,7 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("__createdby", out value) == true && value.Type != JTokenType.Null)
                 entity.CreatedBy = value.ToString();
             // Create date
-            if (json.TryGetValue("__createdate", out value) == true && value.Type != JTokenType.Null)
+            if (json.TryGetValue("__utcdatecreated", out value) == true && value.Type != JTokenType.Null)
                 entity.UtcCreateDate = DateTime.ParseExact(((DateTime)value).ToString("o"), "o", null);
             // Last updated by
             if (json.TryGetValue("__lastmodifiedby", out value) == true && value.Type != JTokenType.Null)
