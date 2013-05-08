@@ -2,18 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Appacitive.Sdk.Services
-{
+{   
     public class ArticleConverter : EntityConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(Article);
+            // Type should not be a User or Device since these have their specific serializers.
+            // This serializer should be used for any other type that inherits from article.
+            if( objectType != typeof(User) )
+                #if !WINDOWS_PHONE7
+                return typeof(Article).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo());
+                #else
+                return typeof(Article).IsAssignableFrom(objectType);
+                #endif
+            return false;
         }
 
         protected override Entity CreateEntity(JObject json)

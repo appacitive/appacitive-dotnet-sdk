@@ -76,6 +76,7 @@
     <Compile Include="Helpers\ObjectHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryDslFixture.cs" />
+    <Compile Include="SerializationFixture.cs" />
     <Compile Include="SessionServiceFixture.cs" />
     <Compile Include="TestConfiguration.cs" />
     <Compile Include="UserFixture.cs" />
