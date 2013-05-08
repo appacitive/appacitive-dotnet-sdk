@@ -36,6 +36,10 @@ namespace Appacitive.Sdk.WindowsPhone7
         private async Task<byte[]> ExecuteAsync(string httpMethod, string url, IDictionary<string, string> headers, byte[] data)
         {
             var request = HttpWebRequest.Create(url) as HttpWebRequest;
+
+            //Dummy header
+            request.Headers[HttpRequestHeader.IfModifiedSince] = DateTime.Now.ToString();
+
             // Write the headers
             if (headers != null)
             {
@@ -47,7 +51,7 @@ namespace Appacitive.Sdk.WindowsPhone7
             {
                 using (var stream = await request.GetRequestStreamAsync())
                 {
-                   await stream.WriteAsync(data, 0, data.Length);
+                    await stream.WriteAsync(data, 0, data.Length);
                 }
             }
 

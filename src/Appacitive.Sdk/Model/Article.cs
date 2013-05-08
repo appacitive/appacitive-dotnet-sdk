@@ -13,6 +13,23 @@ namespace Appacitive.Sdk
 {
     public partial class Article : Entity, INotifyPropertyChanged
     {
+        
+        public Article(Article existing) : base(existing.Type, existing.Id)
+        {
+            // Copy
+            this.CreatedBy = existing.CreatedBy;
+            this.LastUpdatedBy = existing.LastUpdatedBy;
+            this.UtcCreateDate = existing.UtcCreateDate;
+            this.UtcLastUpdated = existing.UtcLastUpdated;
+            this.SchemaId = existing.SchemaId;
+            
+            // Copy properties
+            foreach (var property in this.Properties)
+                existing[property.Key] = property.Value;
+            foreach (var attr in this.Attributes)
+                existing.SetAttribute(attr.Key, attr.Value);
+        }
+
         public Article(string type) : base(type)
         {   
         }
