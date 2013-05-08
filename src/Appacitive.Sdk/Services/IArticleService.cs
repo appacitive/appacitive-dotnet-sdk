@@ -19,6 +19,10 @@ namespace Appacitive.Sdk.Services
         Task<UpdateArticleResponse> UpdateArticleAsync(UpdateArticleRequest request);
 
         Task<FindAllArticleResponse> FindAllAsync(FindAllArticleRequest request);
+
+        Task<BulkDeleteArticleResponse> BulkDeleteAsync(BulkDeleteArticleRequest request);
+ 
+        
     }
 
     

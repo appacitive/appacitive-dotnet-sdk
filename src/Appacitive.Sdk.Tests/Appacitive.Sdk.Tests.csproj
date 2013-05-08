@@ -83,7 +83,9 @@
     <Compile Include="ValueFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\logo.png" />
+    <Content Include="logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Appacitive.Sdk.WinRT\Appacitive.Sdk.WinRT.csproj">

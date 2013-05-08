@@ -319,6 +319,15 @@ namespace Appacitive.Sdk.Services
                 HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
                 return url.ToString();
             }
+
+            public static string BulkDeleteArticle(string type, Geocode geocode, bool enableDebugging, Verbosity verbosity, List<string> fields)
+            {
+                //https://apis.appacitive.com/connection/userlist/bulkdelete
+                var url = new Url(ArticleServiceBase);
+                url.Append(type).Append("bulkdelete");
+                HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
+                return url.ToString();
+            }
         }
     }
 

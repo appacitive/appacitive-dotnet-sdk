@@ -97,6 +97,19 @@ namespace Appacitive.Sdk
                 throw status.ToFault();
         }
 
+        public async static Task MultiDeleteAsync(string type, params string[] ids)
+        {
+            var service = ObjectFactory.Build<IArticleService>();
+            var response = await service.BulkDeleteAsync(
+                new BulkDeleteArticleRequest
+                {
+                    Type = type,
+                    ArticleIds = ids.ToList()
+                });
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+        }
+
         protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var articleService = ObjectFactory.Build<IArticleService>();

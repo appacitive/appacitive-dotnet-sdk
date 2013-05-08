@@ -2,7 +2,7 @@
 <TestSettings name="Default" id="2ef6129c-6a0b-4bb0-85b1-c22090a3ae37" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Description>These are default test settings for a local test run.</Description>
   <Deployment>
-    <DeploymentItem filename="Appacitive.Sdk.Tests\Data\logo.png" />
+    <DeploymentItem filename="Appacitive.Sdk.Tests\logo.png" />
   </Deployment>
   <Execution>
     <TestTypeSpecific>

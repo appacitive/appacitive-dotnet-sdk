@@ -61,6 +61,33 @@ namespace Appacitive.Sdk.Tests
 
         }
 
+
+        [TestMethod]
+        public async Task BulkDeleteArticleAsyncTest()
+        {
+            var a1 = await ObjectHelper.CreateNewAsync();
+            var a2 = await ObjectHelper.CreateNewAsync();
+            var a3 = await ObjectHelper.CreateNewAsync();
+            var a4 = await ObjectHelper.CreateNewAsync();
+
+            await Article.MultiDeleteAsync(a1.Type, a1.Id, a2.Id, a3.Id, a4.Id);
+            var ids = new[] { a1.Id, a2.Id, a3.Id, a4.Id };
+            for (int i = 0; i < ids.Length; i++)
+            {
+                try
+                {
+                    var copy = await Article.GetAsync("object", ids[i]);
+                    Assert.Fail("Operation should have faulted since the article has been deleted.");
+                }
+                catch (WinRT.AppacitiveException ex)
+                {
+                    var msg = string.Format("Cannot locate article of type 'object' and id {0}.", ids[i]);
+                    Assert.IsTrue(ex.Message == msg);
+                }    
+            }
+            
+        }
+
         [TestMethod]
         public async Task DeleteArticleAsyncTest()
         {

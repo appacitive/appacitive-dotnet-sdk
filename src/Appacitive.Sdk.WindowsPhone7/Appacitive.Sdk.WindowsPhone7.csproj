@@ -262,6 +262,12 @@
     <Compile Include="..\Appacitive.Sdk\Services\Model\AuthenticateUserResponse.cs">
       <Link>Services\Model\AuthenticateUserResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\BulkDeleteArticleRequest.cs">
+      <Link>Services\Model\BulkDeleteArticleRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\BulkDeleteArticleResponse.cs">
+      <Link>Services\Model\BulkDeleteArticleResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\BulkDeleteConnectionRequest.cs">
       <Link>Services\Model\BulkDeleteConnectionRequest.cs</Link>
     </Compile>
