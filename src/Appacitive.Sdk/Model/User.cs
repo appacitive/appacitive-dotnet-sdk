@@ -9,7 +9,7 @@ using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
-    public class User : Entity
+    public class User : Article
     {
         public User() : base("user")
         {
@@ -20,9 +20,7 @@ namespace Appacitive.Sdk
         {
         }
 
-        internal string SchemaId { get; set; }
-
-
+        
         /// <summary>
         /// Username of the user
         /// </summary>
