@@ -24,9 +24,13 @@ namespace Appacitive.Sdk.Services
 
             // Update the ids if any new articles were passed in the request.
             if (request.Connection.CreateEndpointA == true)
+            {
                 request.Connection.EndpointA.Content.Id = response.Connection.EndpointA.ArticleId;
+            }
             if (request.Connection.CreateEndpointB == true)
-                request.Connection.EndpointB.Content.Id = response.Connection.EndpointA.ArticleId;
+            {
+                request.Connection.EndpointB.Content.Id = response.Connection.EndpointB.ArticleId;
+            }
 
             return response;
         }

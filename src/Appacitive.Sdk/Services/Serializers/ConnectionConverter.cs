@@ -102,10 +102,14 @@ namespace Appacitive.Sdk.Services
             if (json == null)
                 return null;
             string label = null, articleId = null;
+            string type = null;
             JToken value;
             // Parse the label
             if (json.TryGetValue("label", out value) == true && value.Type != JTokenType.Null)
                 label = value.ToString();
+            // Parse the article type
+            if (json.TryGetValue("type", out value) == true && value.Type != JTokenType.Null)
+                type = value.ToString();
             // Parse the article id
             if (json.TryGetValue("articleid", out value) == true && value.Type != JTokenType.Null)
                 articleId = value.ToString();
@@ -123,7 +127,7 @@ namespace Appacitive.Sdk.Services
             if (string.IsNullOrWhiteSpace(articleId) == true)
                 throw new Exception("Endpoint article id is missing.");
 
-            return new Endpoint(label, articleId) { Content = article };
+            return new Endpoint(label, articleId) { Content = article, Type = type };
         }
 
         private void WriteArticle(JsonWriter writer, Article article)

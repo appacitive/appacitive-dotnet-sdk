@@ -54,23 +54,6 @@ namespace Appacitive.Sdk.Tests
             Assert.IsNotNull(response.Connection.EndpointA, "Endpoint B is null.");
         }
 
-        [TestMethod]
-        public async Task GetConnectedArticlesTest3()
-        {
-            App.Initialize(WinRT.WindowsHost.Instance, "+HfTOp2nF8TnkyZVBblkTBLm6Cz6zIfKYdXBhV6Aag4=", Environment.Live);
-            IConnectionService connService = new ConnectionService();
-            var request = new FindConnectedArticlesRequest()
-                {
-                    ArticleId = "22239781196006111",
-                    Relation = "userteam_player"
-                };
-            var response = await connService.FindConnectedArticlesAsync(request);
-            int index = 1;
-            response.Connections.ForEach(c =>
-                {
-                    Console.WriteLine("{2}) A = {0}, B = {1}, {3}", c.EndpointA.ArticleId, c.EndpointB.ArticleId, index++, c.EndpointB.Content["firstname"]);
-                });
-            
-        }
+        
     }
 }
