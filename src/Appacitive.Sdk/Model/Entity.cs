@@ -102,7 +102,7 @@ namespace Appacitive.Sdk
             _currentAttributes.Remove(name);
         }
 
-        private void FirePropertyChanged(string propertyName)
+        protected void FirePropertyChanged(string propertyName)
         {
             var privateCopy = _properyChanged;
             if (privateCopy != null)
