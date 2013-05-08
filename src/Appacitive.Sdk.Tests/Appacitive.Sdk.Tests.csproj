@@ -63,11 +63,13 @@
     <Compile Include="AuthenticationFixture.cs" />
     <Compile Include="ConnectionFixture.cs" />
     <Compile Include="ConnectionServiceFixture.cs" />
+    <Compile Include="DeviceFixture.cs" />
     <Compile Include="ExceptionFactoryFixture.cs" />
     <Compile Include="FileFixture.cs" />
     <Compile Include="GeocodeFixture.cs" />
     <Compile Include="Helpers\ApiHelper.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
+    <Compile Include="Helpers\DeviceHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Helpers\Unique.cs" />
     <Compile Include="Helpers\UserHelper.cs" />

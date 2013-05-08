@@ -14,7 +14,7 @@ namespace Appacitive.Sdk
     public partial class Article : Entity, INotifyPropertyChanged
     {
         
-        public Article(Article existing) : base(existing.Type, existing.Id)
+        protected Article(Article existing) : base(existing.Type, existing.Id)
         {
             // Copy
             this.CreatedBy = existing.CreatedBy;

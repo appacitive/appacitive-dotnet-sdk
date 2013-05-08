@@ -233,10 +233,6 @@ namespace Appacitive.Sdk
             return users;
         }
 
-        /// <summary>
-        /// Creates a new user
-        /// </summary>
-        /// <returns>The newly created user</returns>
         protected override async Task<Entity> CreateNewAsync()
         {
             // Create a new article
