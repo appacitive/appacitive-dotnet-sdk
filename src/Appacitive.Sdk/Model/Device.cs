@@ -14,7 +14,7 @@ namespace Appacitive.Sdk
     {
         public async static Task<PagedList<Device>> FindAllAsync(string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
-            var articles = await Article.FindAllAsync("device", query, fields, page, pageSize, orderBy, sortOrder);
+            var articles = await Articles.FindAllAsync("device", query, fields, page, pageSize, orderBy, sortOrder);
             var devices = articles.Select(x => new Device(x));
             var list =  new PagedList<Device>()
             {

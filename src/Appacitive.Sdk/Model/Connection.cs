@@ -329,7 +329,7 @@ namespace Appacitive.Sdk
             if (this.Content != null)
                 return this.Content;
             else 
-                return await Article.GetAsync(this.Type, this.ArticleId);
+                return await Articles.GetAsync(this.Type, this.ArticleId);
         }
     }
 }
