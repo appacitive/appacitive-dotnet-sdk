@@ -182,6 +182,24 @@ namespace Appacitive.Sdk
 
         public Endpoint EndpointB { get; set; }
 
+        public async Task<Article> GetEndpointArticleAsync(string label)
+        {
+            if (string.Compare(this.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
+                return await this.EndpointA.GetArticleAsync();
+            if (string.Compare(this.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
+                return await this.EndpointB.GetArticleAsync();
+            throw new AppacitiveException("Invalid label " + label);
+        }
+
+        public string GetEndpointId(string label)
+        {
+            if (string.Compare(this.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
+                return this.EndpointA.ArticleId;
+            if (string.Compare(this.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
+                return this.EndpointB.ArticleId;
+            throw new AppacitiveException("Invalid label " + label);
+        }
+
         public string RelationId { get; set; }
 
         internal bool CreateEndpointA
@@ -196,6 +214,7 @@ namespace Appacitive.Sdk
 
         protected async override Task<Entity> CreateNewAsync()
         {
+            
             // Create a new article
             IConnectionService service = ObjectFactory.Build<IConnectionService>();
             var response = await service.CreateConnectionAsync(new CreateConnectionRequest()
@@ -296,10 +315,21 @@ namespace Appacitive.Sdk
             this.Content = content;
         }
 
-        public Article Content { get; set; }
+
+        internal Article Content { get; set; }
 
         public string ArticleId { get; set; }
 
         public string Label { get; set; }
+
+        public string Type { get; set; }
+
+        public async Task<Article> GetArticleAsync()
+        {
+            if (this.Content != null)
+                return this.Content;
+            else 
+                return await Article.GetAsync(this.Type, this.ArticleId);
+        }
     }
 }

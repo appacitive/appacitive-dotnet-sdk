@@ -12,6 +12,28 @@ namespace Appacitive.Sdk.Tests
     public class ConnectionFixture
     {
         [TestMethod]
+        public async Task GetEndpointContentTest()
+        {
+            var existing = await ObjectHelper.CreateNewAsync();
+            var newObj = ObjectHelper.NewInstance();
+            var conn = Connection
+                .New("link")
+                .FromExistingArticle("parent", existing.Id)
+                .ToNewArticle("child", newObj);
+            await conn.SaveAsync();
+
+            Assert.IsTrue(conn.GetEndpointId("parent") == existing.Id);
+            Assert.IsTrue( string.IsNullOrWhiteSpace(conn.GetEndpointId("child")) == false );
+            
+            // Get endpoints
+            var child = await conn.GetEndpointArticleAsync("child");
+            var parent = await conn.GetEndpointArticleAsync("parent");
+            Assert.IsNotNull(child);
+            Assert.IsNotNull(parent);
+            Assert.IsTrue(parent.Id == existing.Id);
+        }
+
+        [TestMethod]
         public async Task CreateConnectionBetweenNewArticlesAsyncTest()
         {
             var obj1 = new Article("object");
