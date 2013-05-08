@@ -12,6 +12,15 @@ namespace Appacitive.Sdk.Tests
     public class ConnectionFixture
     {
         [TestMethod]
+        public void Run()
+        {
+            var x = typeof(User).IsAssignableFrom(typeof(Article));
+            var y = typeof(Article).IsAssignableFrom(typeof(User));
+
+        }
+        
+
+        [TestMethod]
         public async Task GetEndpointContentTest()
         {
             var existing = await ObjectHelper.CreateNewAsync();
