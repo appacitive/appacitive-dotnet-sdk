@@ -24,7 +24,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE7</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -51,7 +51,7 @@
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\sl4-windowsphone71\Microsoft.Threading.Tasks.Extensions.Phone.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\appacitive-sdk\appacitive-dotnet-sdk\References\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\Library\Portable\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime">
       <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\sl4-windowsphone71\System.Runtime.dll</HintPath>
@@ -463,7 +463,11 @@
     <Compile Include="..\Appacitive.Sdk\UserSession.cs">
       <Link>UserSession.cs</Link>
     </Compile>
+    <Compile Include="ExceptionFactory.cs" />
+    <Compile Include="HttpConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebClientHttpFileHandler.cs" />
+    <Compile Include="WP7ApplicationHost.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -474,7 +478,7 @@
   <ProjectExtensions />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.5\tools\Microsoft.Bcl.Build.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy $(TargetDir)$(TargetName).* $(SolutionDir)..\bin /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetDir)$(TargetName).*" "$(SolutionDir)..\bin" /Y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
