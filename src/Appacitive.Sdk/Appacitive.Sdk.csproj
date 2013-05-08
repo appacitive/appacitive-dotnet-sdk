@@ -49,6 +49,8 @@
     <Compile Include="IUserFactory.cs" />
     <Compile Include="Services\Model\BulkDeleteConnectionRequest.cs" />
     <Compile Include="Services\Model\BulkDeleteConnectionResponse.cs" />
+    <Compile Include="Services\Model\BulkDeleteArticleRequest.cs" />
+    <Compile Include="Services\Model\BulkDeleteArticleResponse.cs" />
     <Compile Include="Services\Model\UpdateConnectionRequest.cs" />
     <Compile Include="Services\Model\UpdateConnectionResponse.cs" />
     <Compile Include="Services\Model\InvalidateUserSessionRequest.cs" />

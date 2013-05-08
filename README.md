@@ -240,7 +240,7 @@ Articles and connections
 - [ ] Get connections between two articles of any type of relation.
 - [ ] Interconnect
 - [ ] Multi get connections
-- [ ] Multi delete article
+- [x] Multi delete article
 - [x] Multi delete connections
 - [x] Force delete single article.
 - [x] Sorting support on listing calls.

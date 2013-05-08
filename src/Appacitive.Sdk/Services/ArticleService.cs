@@ -89,5 +89,19 @@ namespace Appacitive.Sdk.Services
             var response = MultiGetArticleResponse.Parse(bytes);
             return response;
         }
+
+
+        public async Task<BulkDeleteArticleResponse> BulkDeleteAsync(BulkDeleteArticleRequest request)
+        {
+            byte[] bytes = null;
+            bytes = await HttpOperation
+                .WithUrl(Urls.For.BulkDeleteArticle(request.Type, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
+                .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
+                .WithEnvironment(request.Environment)
+                .WithUserToken(request.UserToken)
+                .PostAsyc( request.ToBytes() );
+            var response = BulkDeleteArticleResponse.Parse(bytes);
+            return response;
+        }
     }
 }
