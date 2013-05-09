@@ -28,7 +28,8 @@ namespace Appacitive.Sdk.WindowsPhone7
                 {
                     stream.Write(buffer, 0, buffer.Length);
                 }
-                return stream.GetBuffer();
+                await stream.FlushAsync();
+                return stream.ToArray();
             }
 
         }
@@ -60,11 +61,7 @@ namespace Appacitive.Sdk.WindowsPhone7
                 foreach (var header in headers)
                     client.Headers[header.Key] = header.Value;
             }
-            var uploadStream = await client.OpenWriteTaskAsync(url, "PUT");
-            using (var memoryStream = new MemoryStream(data))
-            {
-                await memoryStream.CopyToAsync(uploadStream);
-            }
+            await client.UploadData(url, method, data);
         }
 
         public async Task UploadAsync(string url, IDictionary<string, string> headers, string method, string file)
@@ -79,6 +76,8 @@ namespace Appacitive.Sdk.WindowsPhone7
                 using (var memStream = new MemoryStream())
                 {
                     await fileStream.CopyToAsync(memStream);
+                    await fileStream.FlushAsync();
+                    await memStream.FlushAsync();
                     data = memStream.ToArray();
                 }
             }

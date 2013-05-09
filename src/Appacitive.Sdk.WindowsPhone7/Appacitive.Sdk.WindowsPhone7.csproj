@@ -474,6 +474,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebClientHttpFileHandler.cs" />
     <Compile Include="WP7ApplicationHost.cs" />
+    <Compile Include="WP7Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
