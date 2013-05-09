@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
+
+    public enum DeviceType
+    {
+        iOS = 0,
+        Android = 1,
+        WindowsPhone7 = 2,
+        WindowsPhone7_5 = 3,
+        WindowsPhone8 = 4
+    }
+
+
+
     public enum ValueType
     {
         // Summary:

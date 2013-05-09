@@ -133,6 +133,9 @@
     <Compile Include="..\Appacitive.Sdk\Model\Credentials.cs">
       <Link>Model\Credentials.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Device.cs">
+      <Link>Model\Device.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Entity.cs">
       <Link>Model\Entity.cs</Link>
     </Compile>
@@ -171,6 +174,12 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\StaticUserContext.cs">
       <Link>Model\StaticUserContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\SupportedDevices.cs">
+      <Link>Model\SupportedDevices.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Timezone.cs">
+      <Link>Model\Timezone.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\User.cs">
       <Link>Model\User.cs</Link>
@@ -229,6 +238,9 @@
     <Compile Include="..\Appacitive.Sdk\Services\ConnectionService.cs">
       <Link>Services\ConnectionService.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\DeviceService.cs">
+      <Link>Services\DeviceService.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\FileService.cs">
       <Link>Services\FileService.cs</Link>
     </Compile>
@@ -237,6 +249,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\IConnectionService.cs">
       <Link>Services\IConnectionService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\IDeviceService.cs">
+      <Link>Services\IDeviceService.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\IFileService.cs">
       <Link>Services\IFileService.cs</Link>
@@ -313,6 +328,12 @@
     <Compile Include="..\Appacitive.Sdk\Services\Model\DeleteConnectionResponse.cs">
       <Link>Services\Model\DeleteConnectionResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\DeleteDeviceRequest.cs">
+      <Link>Services\Model\DeleteDeviceRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\DeleteDeviceResponse.cs">
+      <Link>Services\Model\DeleteDeviceResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\DeleteUserRequest.cs">
       <Link>Services\Model\DeleteUserRequest.cs</Link>
     </Compile>
@@ -364,6 +385,12 @@
     <Compile Include="..\Appacitive.Sdk\Services\Model\GetConnectionResponse.cs">
       <Link>Services\Model\GetConnectionResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetDeviceRequest.cs">
+      <Link>Services\Model\GetDeviceRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\GetDeviceResponse.cs">
+      <Link>Services\Model\GetDeviceResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\GetDownloadUrlRequest.cs">
       <Link>Services\Model\GetDownloadUrlRequest.cs</Link>
     </Compile>
@@ -400,6 +427,12 @@
     <Compile Include="..\Appacitive.Sdk\Services\Model\PagingInfo.cs">
       <Link>Services\Model\PagingInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\RegisterDeviceRequest.cs">
+      <Link>Services\Model\RegisterDeviceRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\RegisterDeviceResponse.cs">
+      <Link>Services\Model\RegisterDeviceResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\Status.cs">
       <Link>Services\Model\Status.cs</Link>
     </Compile>
@@ -414,6 +447,12 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateConnectionResponse.cs">
       <Link>Services\Model\UpdateConnectionResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateDeviceRequest.cs">
+      <Link>Services\Model\UpdateDeviceRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateDeviceResponse.cs">
+      <Link>Services\Model\UpdateDeviceResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\UpdateUserRequest.cs">
       <Link>Services\Model\UpdateUserRequest.cs</Link>
@@ -435,6 +474,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\ConnectionConverter.cs">
       <Link>Services\Serializers\ConnectionConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\DeviceConverter.cs">
+      <Link>Services\Serializers\DeviceConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\EntityConverter.cs">
       <Link>Services\Serializers\EntityConverter.cs</Link>

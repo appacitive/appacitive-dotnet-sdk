@@ -35,7 +35,7 @@ namespace Appacitive.Sdk.Tests
             var saved = await ObjectHelper.CreateNewAsync( article as Article );
 
             // Get the created article
-            dynamic copy = await Article.GetAsync("object", saved.Id);
+            dynamic copy = await Articles.GetAsync("object", saved.Id);
             Assert.IsNotNull(copy);
             int intfield = copy.intfield;
             decimal decimalField = copy.decimalfield;
@@ -52,7 +52,7 @@ namespace Appacitive.Sdk.Tests
             var obj2 = await ObjectHelper.CreateNewAsync();
 
             // Get the created article
-            var enumerable = await Article.MultiGetAsync("object", new[] { obj1.Id, obj2.Id });
+            var enumerable = await Articles.MultiGetAsync("object", new[] { obj1.Id, obj2.Id });
             
             // Asserts
             Assert.IsNotNull(enumerable);
@@ -70,13 +70,13 @@ namespace Appacitive.Sdk.Tests
             var a3 = await ObjectHelper.CreateNewAsync();
             var a4 = await ObjectHelper.CreateNewAsync();
 
-            await Article.MultiDeleteAsync(a1.Type, a1.Id, a2.Id, a3.Id, a4.Id);
+            await Articles.MultiDeleteAsync(a1.Type, a1.Id, a2.Id, a3.Id, a4.Id);
             var ids = new[] { a1.Id, a2.Id, a3.Id, a4.Id };
             for (int i = 0; i < ids.Length; i++)
             {
                 try
                 {
-                    var copy = await Article.GetAsync("object", ids[i]);
+                    var copy = await Articles.GetAsync("object", ids[i]);
                     Assert.Fail("Operation should have faulted since the article has been deleted.");
                 }
                 catch (WinRT.AppacitiveException ex)
@@ -96,12 +96,12 @@ namespace Appacitive.Sdk.Tests
             var saved = await ObjectHelper.CreateNewAsync();
 
             // Delete the article
-            await Article.DeleteAsync("object", saved.Id);
+            await Articles.DeleteAsync("object", saved.Id);
 
             // Try and get and confirm that the article is deleted.
             try
             {
-                var copy = await Article.GetAsync("object", saved.Id);
+                var copy = await Articles.GetAsync("object", saved.Id);
                 Assert.Fail("Operation should have faulted since the article has been deleted.");
             }
             catch (WinRT.AppacitiveException ex)
@@ -124,7 +124,7 @@ namespace Appacitive.Sdk.Tests
             
 
             // Get the newly created article
-            dynamic copy = await Article.GetAsync("object", saved.Id);
+            dynamic copy = await Articles.GetAsync("object", saved.Id);
             Assert.IsNotNull(copy);
             int intfield = copy.intfield;
             decimal decimalField = copy.decimalfield;
@@ -138,7 +138,7 @@ namespace Appacitive.Sdk.Tests
             await copy.SaveAsync();
 
             // Get updated copy and verify
-            dynamic updated = await Article.GetAsync("object", saved.Id);
+            dynamic updated = await Articles.GetAsync("object", saved.Id);
             Assert.IsNotNull(updated);
             intfield = updated.intfield;
             decimalField = updated.decimalfield;
@@ -158,7 +158,7 @@ namespace Appacitive.Sdk.Tests
             var saved = await ObjectHelper.CreateNewAsync();
 
             // Search
-            var articles = await Article.FindAllAsync("object");
+            var articles = await Articles.FindAllAsync("object");
             articles.ForEach(a => Console.WriteLine(a.Id));
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
 
@@ -175,7 +175,7 @@ namespace Appacitive.Sdk.Tests
 
             // Search
             string stringToSearch = obj.stringfield;
-            var articles = await Article.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch).AsString());
+            var articles = await Articles.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch).AsString());
             Assert.IsNotNull(articles);
             Assert.IsTrue(articles.Count == 1);
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
@@ -200,7 +200,7 @@ namespace Appacitive.Sdk.Tests
                             Query.Property("intfield").IsEqualTo(10)
                         });
 
-            var articles = await Article.FindAllAsync("object", query.AsString());
+            var articles = await Articles.FindAllAsync("object", query.AsString());
             Assert.IsNotNull(articles);
             Assert.IsTrue(articles.Count == 1);
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
@@ -211,7 +211,7 @@ namespace Appacitive.Sdk.Tests
         public async Task FindNonExistantPageTest()
         {
             // Search
-            var articles = await Article.FindAllAsync("object", Query.None, Article.AllFields, 10000, 500);
+            var articles = await Articles.FindAllAsync("object", Query.None, Article.AllFields, 10000, 500);
             Assert.IsNotNull(articles);
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
         }
@@ -229,7 +229,7 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Created articled with id {0}", saved.Id);
             var index = 1;
             // Search
-            var articles = await Article.FindAllAsync("object", Query.None, Article.AllFields, 1, 100);
+            var articles = await Articles.FindAllAsync("object", Query.None, Article.AllFields, 1, 100);
             do
             {
                 articles.ForEach(a => Console.WriteLine("{0}) {1}", index++, a.Id));

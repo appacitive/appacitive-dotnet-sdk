@@ -279,6 +279,6 @@ Push notifications
 - [ ] Send push notification 
 
 Device
-- [ ] CRUD
-- [ ] Listing
-- [ ] Find All
+- [x] CRUD
+- [x] Listing
+- [x] Find All
