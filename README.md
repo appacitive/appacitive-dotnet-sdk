@@ -272,8 +272,8 @@ File
 - [ ] Delete file
 
 Email
-- [ ] Send raw email
-- [ ] Send templated email
+- [x] Send raw email
+- [x] Send templated email
 
 Push notifications
 - [ ] Send push notification 
