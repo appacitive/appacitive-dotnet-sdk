@@ -136,6 +136,9 @@
     <Compile Include="..\Appacitive.Sdk\Model\Device.cs">
       <Link>Model\Device.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Email.cs">
+      <Link>Model\Email.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Entity.cs">
       <Link>Model\Entity.cs</Link>
     </Compile>
@@ -241,6 +244,9 @@
     <Compile Include="..\Appacitive.Sdk\Services\DeviceService.cs">
       <Link>Services\DeviceService.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\EmailService.cs">
+      <Link>Services\EmailService.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\FileService.cs">
       <Link>Services\FileService.cs</Link>
     </Compile>
@@ -252,6 +258,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\IDeviceService.cs">
       <Link>Services\IDeviceService.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\IEmailService.cs">
+      <Link>Services\IEmailService.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\IFileService.cs">
       <Link>Services\IFileService.cs</Link>
@@ -433,6 +442,12 @@
     <Compile Include="..\Appacitive.Sdk\Services\Model\RegisterDeviceResponse.cs">
       <Link>Services\Model\RegisterDeviceResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\SendEmailRequest.cs">
+      <Link>Services\Model\SendEmailRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\SendEmailResponse.cs">
+      <Link>Services\Model\SendEmailResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\Status.cs">
       <Link>Services\Model\Status.cs</Link>
     </Compile>
@@ -477,6 +492,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\DeviceConverter.cs">
       <Link>Services\Serializers\DeviceConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\EmailConverter.cs">
+      <Link>Services\Serializers\EmailConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\EntityConverter.cs">
       <Link>Services\Serializers\EntityConverter.cs</Link>

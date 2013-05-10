@@ -20,6 +20,8 @@ namespace Appacitive.Sdk.Services
             private static readonly string UserServiceBase = "https://apis.appacitive.com/user";
             private static readonly string SessionServiceBase = "https://apis.appacitive.com/application/session";
             private static readonly string DeviceServiceBase = "https://apis.appacitive.com/device";
+            private static readonly string EmailServiceBase = "https://apis.appacitive.com/email";
+
             public static string CreateSession(bool enableDebug, Verbosity verbosity)
             {
                 var url = new Url(SessionServiceBase);
@@ -341,6 +343,13 @@ namespace Appacitive.Sdk.Services
             public static string GetDevice(string id, Geocode geocode, bool enableDebugging, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(DeviceServiceBase).Append(id);
+                HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
+                return url.ToString();
+            }
+
+            public static string SendEmail(Geocode geocode, bool enableDebugging, Verbosity verbosity, List<string> fields)
+            {
+                var url = new Url(EmailServiceBase).Append("send");
                 HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
                 return url.ToString();
             }

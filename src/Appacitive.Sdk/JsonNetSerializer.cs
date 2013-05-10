@@ -20,6 +20,7 @@ namespace Appacitive.Sdk
             var serializer = new JsonSerializer();
             // TODO: Move this to objectfactory
             serializer.Converters.Add(new ArticleConverter());
+            serializer.Converters.Add(new EmailConverter());
             serializer.Converters.Add(new UpdateArticleRequestConverter());
             serializer.Converters.Add(new UserConverter());
             serializer.Converters.Add(new DeviceConverter());

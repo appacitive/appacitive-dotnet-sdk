@@ -48,14 +48,19 @@
     <Compile Include="Interfaces\IUserContext.cs" />
     <Compile Include="IUserFactory.cs" />
     <Compile Include="Model\Device.cs" />
+    <Compile Include="Model\Email.cs" />
     <Compile Include="Model\SupportedDevices.cs" />
     <Compile Include="Model\Timezone.cs" />
     <Compile Include="Services\DeviceService.cs" />
+    <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\IDeviceService.cs" />
+    <Compile Include="Services\IEmailService.cs" />
     <Compile Include="Services\Model\BulkDeleteConnectionRequest.cs" />
     <Compile Include="Services\Model\BulkDeleteConnectionResponse.cs" />
     <Compile Include="Services\Model\BulkDeleteArticleRequest.cs" />
     <Compile Include="Services\Model\BulkDeleteArticleResponse.cs" />
+    <Compile Include="Services\Model\SendEmailRequest.cs" />
+    <Compile Include="Services\Model\SendEmailResponse.cs" />
     <Compile Include="Services\Model\UpdateDeviceRequest.cs" />
     <Compile Include="Services\Model\UpdateDeviceResponse.cs" />
     <Compile Include="Services\Model\DeleteDeviceRequest.cs" />
@@ -71,6 +76,7 @@
     <Compile Include="Services\Model\ValidateUserSessionRequest.cs" />
     <Compile Include="Services\Model\ValidateUserSessionResponse.cs" />
     <Compile Include="Services\Serializers\DeviceConverter.cs" />
+    <Compile Include="Services\Serializers\EmailConverter.cs" />
     <Compile Include="Services\Serializers\UpdateConnectionRequestConverter.cs" />
     <Compile Include="Services\ServiceExceptionFactory.cs" />
     <Compile Include="Services\Urls.cs" />

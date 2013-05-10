@@ -32,6 +32,8 @@ namespace Appacitive.Sdk.Services
 
         public static JsonWriter WriteArray(this JsonWriter writer, string property, IEnumerable<string> values)
         {
+            if (values == null)
+                return writer;
             writer.WritePropertyName(property);
             if (values == null )
                 writer.WriteNull();
@@ -48,6 +50,13 @@ namespace Appacitive.Sdk.Services
         public static JsonWriter WriteProperty(this JsonWriter writer, string property)
         {
             writer.WritePropertyName(property);
+            return writer;
+        }
+
+        public static JsonWriter WriteProperty(this JsonWriter writer, string property, int? value)
+        {
+            writer.WritePropertyName(property);
+            writer.WriteValue(value);
             return writer;
         }
 

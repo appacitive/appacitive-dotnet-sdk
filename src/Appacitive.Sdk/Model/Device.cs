@@ -38,7 +38,6 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
         }
 
-
         public async static Task<Device> GetAsync(string id, IEnumerable<string> fields = null)
         {
             var service = ObjectFactory.Build<IDeviceService>();

@@ -101,6 +101,39 @@ string userToken; // Contains the user session token
 await UserSession.InvalidateAsync(userToken);
 ```
 
+## Email notifications
+To send emails via the SDK use the Email class. Alternatively, you can use the NewEmail fluent interface 
+for sending emails as well, as shown below.
+
+``` C#
+var to = new [] {"email1", "email2"..}
+var cc = new [] {"email1", "email2"..}
+var bcc = new [] {"email1", "email2"..}
+
+// Sending out a raw email
+await NewEmail
+    .Create("This is a raw email test from the .NET SDK.")
+    .To(to, cc, bcc)
+    .From("from@email.com", "replyto@email.com)
+    .WithBody("This is a raw body email.")
+    .SendAsync();
+
+// Sending out a templated email
+await NewEmail
+    .Create("This is a raw email test from the .NET SDK.")
+    .To(to, cc, bcc)
+    .From("from@email.com", "replyto@email.com)
+    .WithTemplateBody( "sample", 
+        new Dictionary<string, string> 
+        {
+            {"username", "john.doe"},
+            {"firstname", "John"},
+            {"lastname", "Doe"},
+        })
+    .SendAsync();
+
+```
+
 
 ## File management
 
@@ -272,8 +305,8 @@ File
 - [ ] Delete file
 
 Email
-- [ ] Send raw email
-- [ ] Send templated email
+- [x] Send raw email
+- [x] Send templated email
 
 Push notifications
 - [ ] Send push notification 
