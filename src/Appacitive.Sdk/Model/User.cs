@@ -137,6 +137,11 @@ namespace Appacitive.Sdk
         {
         }
 
+        public User(Article device)
+            : base(device)
+        {   
+        }
+
         
         /// <summary>
         /// Username of the user
