@@ -20,6 +20,7 @@ namespace Appacitive.Sdk
         {
             get
             {
+                if (this.TotalRecords == 0) return true;
                 var currentIndex = (this.PageNumber - 1) * PageSize + this.Count;
                 return currentIndex > (this.TotalRecords / this.PageSize) * this.PageSize;
             }
