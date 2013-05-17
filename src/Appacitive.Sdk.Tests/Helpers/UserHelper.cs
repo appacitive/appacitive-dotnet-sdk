@@ -49,6 +49,23 @@ namespace Appacitive.Sdk.Tests
             return getResponse.User;
         }
 
+        public static User NewUser()
+        {
+            // Create user
+            return new User()
+            {
+                Username = "john.doe_" + Unique.String,                  // ensure unique user name
+                Email = "john.doe@" + Unique.String + ".com",           // unique but useless email address
+                Password = "p@ssw0rd",
+                DateOfBirth = DateTime.Today.AddYears(-25),
+                FirstName = "John",
+                LastName = "Doe",
+                Phone = "987-654-3210",
+                Location = new Geocode(18, 19)
+            };
+            
+        }
+
         public static async Task<User> CreateNewUserAsync(User user = null)
         {
             // Create user

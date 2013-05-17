@@ -51,6 +51,7 @@
     <Compile Include="Model\Email.cs" />
     <Compile Include="Model\SupportedDevices.cs" />
     <Compile Include="Model\Timezone.cs" />
+    <Compile Include="Model\Users.cs" />
     <Compile Include="Services\DeviceService.cs" />
     <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\IDeviceService.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Services\Model\BulkDeleteConnectionResponse.cs" />
     <Compile Include="Services\Model\BulkDeleteArticleRequest.cs" />
     <Compile Include="Services\Model\BulkDeleteArticleResponse.cs" />
+    <Compile Include="Services\Model\InitiateResetPasswordRequest.cs" />
     <Compile Include="Services\Model\SendEmailRequest.cs" />
     <Compile Include="Services\Model\SendEmailResponse.cs" />
     <Compile Include="Services\Model\UpdateDeviceRequest.cs" />

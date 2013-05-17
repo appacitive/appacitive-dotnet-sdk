@@ -353,6 +353,14 @@ namespace Appacitive.Sdk.Services
                 HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
                 return url.ToString();
             }
+
+            public static string InitiateResetPassword(Geocode geocode, bool enableDebugging, Verbosity verbosity)
+            {
+                var url = new Url(UserServiceBase).Append("sendresetpasswordemail");
+                HandleDefaults(url, geocode, enableDebugging, verbosity, null);
+                return url.ToString();
+                
+            }
         }
     }
 

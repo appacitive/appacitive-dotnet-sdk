@@ -187,6 +187,9 @@
     <Compile Include="..\Appacitive.Sdk\Model\User.cs">
       <Link>Model\User.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Users.cs">
+      <Link>Model\Users.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Value.cs">
       <Link>Model\Value.cs</Link>
     </Compile>
@@ -417,6 +420,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\GetUserResponse.cs">
       <Link>Services\Model\GetUserResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\InitiateResetPasswordRequest.cs">
+      <Link>Services\Model\InitiateResetPasswordRequest.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\InvalidateUserSessionRequest.cs">
       <Link>Services\Model\InvalidateUserSessionRequest.cs</Link>

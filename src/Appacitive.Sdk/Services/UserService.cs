@@ -133,5 +133,18 @@ namespace Appacitive.Sdk.Services
             var response = InvalidateUserSessionResponse.Parse(bytes);
             return response;
         }
+
+
+        public async Task<InitiateResetPasswordResponse> InitiateResetPassword(InitiateResetPasswordRequest request)
+        {
+            byte[] bytes = await HttpOperation
+                .WithUrl(Urls.For.InitiateResetPassword(request.CurrentLocation, request.DebugEnabled, request.Verbosity))
+                .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
+                .WithEnvironment(request.Environment)
+                .WithUserToken(request.UserToken)
+                .PostAsyc(request.ToBytes());
+            var response = InitiateResetPasswordResponse.Parse(bytes);
+            return response;
+        }
     }
 }

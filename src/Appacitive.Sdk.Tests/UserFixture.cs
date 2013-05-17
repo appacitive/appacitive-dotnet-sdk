@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 
+
 namespace Appacitive.Sdk.Tests
 {
     [TestClass]
@@ -76,6 +77,16 @@ namespace Appacitive.Sdk.Tests
             Assert.IsNotNull(loggedInUser);
             Assert.IsTrue(loggedInUser.Id == userSession.LoggedInUser.Id);
             
+        }
+
+        [TestMethod]
+        public async Task InitiateResetPasswordTest()
+        {
+            var user = UserHelper.NewUser();
+            user.Email = "nikhil@appacitive.com";
+            var created = await UserHelper.CreateNewUserAsync(user);
+
+            await Users.InitiateResetPassword(user.Username);
         }
 
         [TestMethod]

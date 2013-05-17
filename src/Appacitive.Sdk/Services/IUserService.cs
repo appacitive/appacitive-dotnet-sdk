@@ -26,6 +26,8 @@ namespace Appacitive.Sdk.Services
         Task<ValidateUserSessionResponse> ValidateUserSessionAsync(ValidateUserSessionRequest request);
 
         Task<InvalidateUserSessionResponse> InvalidateUserSessionAsync(InvalidateUserSessionRequest request);
+
+        Task<InitiateResetPasswordResponse> InitiateResetPassword(InitiateResetPasswordRequest request);
     }
 
     
