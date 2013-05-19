@@ -67,10 +67,12 @@ namespace Appacitive.Sdk.Services
             return writer;
         }
 
-        public static JsonWriter WriteProperty(this JsonWriter writer, string property, string value )
+        public static JsonWriter WriteProperty(this JsonWriter writer, string property, string value, bool ignoreIfNull = false)
         {
+            if (value == null && ignoreIfNull == true)
+                return writer ;
             writer.WritePropertyName(property);
-            if (value == null)
+            if (value == null )
                 writer.WriteNull();
             else
                 writer.WriteValue(value);

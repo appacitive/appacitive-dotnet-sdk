@@ -231,6 +231,138 @@ string publicUrl = await new FileDownload(filename).GetDownloadUrlAsync(expiryIn
 
 ```
 
+## Push Notifications
+Push notifications in the SDK are sent via the PushNotification class or the PushNotifications fluent interface.
+Different platform options for android, ios and windows phone are all specified via the same.
+The sample below shows one complete example of how to send push notifications.
+
+``` C#
+
+await PushNotifications
+		// Send broadcast
+		.Broadcast("Push from .NET SDK")
+		// Increment existing badge by 1
+		.WithBadge("+1")
+		// Custom data field1 and field2
+		.WithData(new { field1 = "value1", field2 = "value2" })
+		// Expiry in seconds
+		.WithExpiry(1000)
+		// Device platform specific options
+		.WithPlatformOptions(
+			new IOsOptions
+			{
+				SoundFile = soundFile
+			})
+		.WithPlatformOptions(
+			new AndroidOptions
+			{
+				NotificationTitle = title
+			})
+		.WithPlatformOptions(
+			new WindowsPhoneOptions
+			{
+				Notification = new ToastNotification
+				{
+					Text1 = wp_text1,
+					Text2 = wp_text2,
+					Path = wp_path
+				}
+			})
+		.SendAsync();
+
+```
+
+
+### Different types of push notifications
+3 different types of push notifications are supported.
+1. Broadcast to all devices.
+2. Devices belonging to specified list of channels
+3. Devices returned from a query.
+
+The samples below show how to send the specific type of notifications.
+
+``` C#
+// Broadcast
+await PushNotifications.Broadcast("message").SendAsync();
+// For a list of channels
+await PushNotifications.ToChannels("message", channel1, channel2,.. channelN).SendAsync();
+// For a query (send to all ios devices). Query syntax is also valid here as shown in the second line
+await PushNotifications.ToQueryResult("message", "*devicetype == 'ios'").SendAsync();
+await PushNotifications.ToQueryResult("message", Query.Property("devicetype").IsEqualTo("ios").ToString()).SendAsync();
+
+```
+
+### Different options for windows phone.
+For windows phone 3 types of notifications are supported.
+1. Toast notifications.
+2. Tile notifications (flip, cyclic and iconic)
+3. Raw notifications (string based raw data)
+
+The windows phone platform options allows you to choose the specific kind of notification to be 
+send to each windows phone device type (WP7, WP75 and WP8).
+The sample below shows how this can be done.
+
+``` C#
+// Toast
+await PushNotifications
+		.Broadcast("message")
+		.WithPlatformOptions(
+			new WindowsPhoneOptions
+			{
+				Notification = new ToastNotification
+				{
+					Text1 = wp_text1,
+					Text2 = wp_text2,
+					Path = wp_path
+				}
+			})
+		.SendAsync();
+
+// Raw notification
+await PushNotifications
+		.Broadcast("message")
+		.WithPlatformOptions(
+            new WindowsPhoneOptions
+                {
+                    Notification = new RawNotification() { RawData = "string data.." }
+                })
+		.SendAsync();
+
+// Tile notification (Flip tile for all)
+await PushNotifications
+		.Broadcast("message")
+		.WithPlatformOptions(
+                    new WindowsPhoneOptions
+                    {
+                        Notification = TileNotification.CreateNewFlipTile( new FlipTile() { FrontTitle = title, .. } )
+                    })
+		.SendAsync();
+
+
+// Tile notification (cyclic tile for wp8, flip tile for others)
+await PushNotifications
+		.Broadcast("message")
+		.WithPlatformOptions(
+                    new WindowsPhoneOptions
+                    {
+                        Notification = TileNotification.CreateNewCyclicTile( new CyclicTile(), new FlipTile() )
+                    })
+		.SendAsync();
+
+// Tile notification (iconic tile for wp8, flip tile for others)
+await PushNotifications
+		.Broadcast("message")
+		.WithPlatformOptions(
+                    new WindowsPhoneOptions
+                    {
+                        Notification = TileNotification.CreateNewIconicTile( new IconicTile(), new FlipTile() )
+                    })
+		.SendAsync();
+
+```
+
+
+
 ### WCF gotchas
 When using the SDK on the server side inside a web application or web service, we need to make sure that a lot 
 of the ambient user context and sdk state is available on a per request basis instead of being statically stored for
@@ -309,7 +441,7 @@ Email
 - [x] Send templated email
 
 Push notifications
-- [ ] Send push notification 
+- [x] Send push notification 
 
 Device
 - [x] CRUD

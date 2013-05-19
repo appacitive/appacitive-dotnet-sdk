@@ -15,5 +15,7 @@ namespace Appacitive.Sdk.Services
         Task<DeleteDeviceResponse> DeleteDeviceAsync(DeleteDeviceRequest request);
 
         Task<UpdateDeviceResponse> UpdateDeviceAsync(UpdateDeviceRequest request);
+
+        Task<SendPushNotificationResponse> SendPushNotificationAsync(SendPushNotificationRequest request);
     }
 }

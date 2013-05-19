@@ -49,6 +49,7 @@
     <Compile Include="IUserFactory.cs" />
     <Compile Include="Model\Device.cs" />
     <Compile Include="Model\Email.cs" />
+    <Compile Include="Model\PushNotification.cs" />
     <Compile Include="Model\SupportedDevices.cs" />
     <Compile Include="Model\Timezone.cs" />
     <Compile Include="Model\Users.cs" />
@@ -60,6 +61,8 @@
     <Compile Include="Services\Model\BulkDeleteConnectionResponse.cs" />
     <Compile Include="Services\Model\BulkDeleteArticleRequest.cs" />
     <Compile Include="Services\Model\BulkDeleteArticleResponse.cs" />
+    <Compile Include="Services\Model\SendPushNotificationRequest.cs" />
+    <Compile Include="Services\Model\SendPushNotificationResponse.cs" />
     <Compile Include="Services\Model\InitiateResetPasswordRequest.cs" />
     <Compile Include="Services\Model\SendEmailRequest.cs" />
     <Compile Include="Services\Model\SendEmailResponse.cs" />
@@ -79,6 +82,7 @@
     <Compile Include="Services\Model\ValidateUserSessionResponse.cs" />
     <Compile Include="Services\Serializers\DeviceConverter.cs" />
     <Compile Include="Services\Serializers\EmailConverter.cs" />
+    <Compile Include="Services\Serializers\PushNotificationConverter.cs" />
     <Compile Include="Services\Serializers\UpdateConnectionRequestConverter.cs" />
     <Compile Include="Services\ServiceExceptionFactory.cs" />
     <Compile Include="Services\Urls.cs" />

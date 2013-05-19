@@ -175,6 +175,9 @@
     <Compile Include="..\Appacitive.Sdk\Model\PagedList.cs">
       <Link>Model\PagedList.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\PushNotification.cs">
+      <Link>Model\PushNotification.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\StaticUserContext.cs">
       <Link>Model\StaticUserContext.cs</Link>
     </Compile>
@@ -454,6 +457,12 @@
     <Compile Include="..\Appacitive.Sdk\Services\Model\SendEmailResponse.cs">
       <Link>Services\Model\SendEmailResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\SendPushNotificationRequest.cs">
+      <Link>Services\Model\SendPushNotificationRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Model\SendPushNotificationResponse.cs">
+      <Link>Services\Model\SendPushNotificationResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Model\Status.cs">
       <Link>Services\Model\Status.cs</Link>
     </Compile>
@@ -504,6 +513,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\EntityConverter.cs">
       <Link>Services\Serializers\EntityConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\PushNotificationConverter.cs">
+      <Link>Services\Serializers\PushNotificationConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\SerializerExtensions.cs">
       <Link>Services\Serializers\SerializerExtensions.cs</Link>

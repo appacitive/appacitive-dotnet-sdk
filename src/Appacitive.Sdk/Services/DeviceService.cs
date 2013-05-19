@@ -64,5 +64,18 @@ namespace Appacitive.Sdk.Services
             var response = UpdateDeviceResponse.Parse(bytes);
             return response;
         }
+
+        public async Task<SendPushNotificationResponse> SendPushNotificationAsync(SendPushNotificationRequest request)
+        {
+            byte[] bytes = null;
+            bytes = await HttpOperation
+                        .WithUrl(Urls.For.SendPushNotification(request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
+                        .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
+                        .WithEnvironment(request.Environment)
+                        .WithUserToken(request.UserToken)
+                        .PostAsyc(request.ToBytes());
+            var response = SendPushNotificationResponse.Parse(bytes);
+            return response;
+        }
     }
 }

@@ -23,6 +23,7 @@ namespace Appacitive.Sdk
             serializer.Converters.Add(new EmailConverter());
             serializer.Converters.Add(new UpdateArticleRequestConverter());
             serializer.Converters.Add(new UserConverter());
+            serializer.Converters.Add(new PushNotificationConverter());
             serializer.Converters.Add(new DeviceConverter());
             serializer.Converters.Add(new AuthenticateUserRequestConverter());
             serializer.Converters.Add(new UpdateUserRequestConverter());

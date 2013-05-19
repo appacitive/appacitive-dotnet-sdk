@@ -20,6 +20,7 @@ namespace Appacitive.Sdk.Services
             private static readonly string UserServiceBase = "https://apis.appacitive.com/user";
             private static readonly string SessionServiceBase = "https://apis.appacitive.com/application/session";
             private static readonly string DeviceServiceBase = "https://apis.appacitive.com/device";
+            private static readonly string PushServiceBase = "https://apis.appacitive.com/push/";
             private static readonly string EmailServiceBase = "https://apis.appacitive.com/email";
 
             public static string CreateSession(bool enableDebug, Verbosity verbosity)
@@ -360,6 +361,13 @@ namespace Appacitive.Sdk.Services
                 HandleDefaults(url, geocode, enableDebugging, verbosity, null);
                 return url.ToString();
                 
+            }
+
+            public static string SendPushNotification(Geocode geocode, bool enableDebugging, Verbosity verbosity, List<string> fields)
+            {
+                var url = new Url(PushServiceBase);
+                HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
+                return url.ToString();
             }
         }
     }
