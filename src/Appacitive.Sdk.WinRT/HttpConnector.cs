@@ -1,7 +1,6 @@
 ﻿using Appacitive.Sdk.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -36,42 +35,31 @@ namespace Appacitive.Sdk.WinRT
         private async Task<byte[]> ExecuteAsync(string httpMethod, string url, IDictionary<string, string> headers, byte[] data)
         {
             var client = new HttpClient();
-            HttpResponseMessage response = null;
-            ByteArrayContent content = null;
+            var request = new HttpRequestMessage(GetHttpMethod(httpMethod), url);
             if (data != null)
+                request.Content = new ByteArrayContent(data);
+            if (headers != null)
             {
-                content = new ByteArrayContent(data);
-                if (headers != null)
-                {
-                    foreach (var key in headers.Keys)
-                        content.Headers.Add(key, headers[key]);
-                }
+                foreach (var key in headers.Keys)
+                    request.Headers.Add(key, headers[key]);
             }
-            else
-            {
-                if (headers != null)
-                {
-                    foreach (var key in headers.Keys)
-                        client.DefaultRequestHeaders.Add(key, headers[key]);
-                }
-            }
-
-            switch (httpMethod)
-            {
-                case "GET":
-                    response = await client.GetAsync(url);
-                    break;
-                case "PUT":
-                    response = await client.PutAsync(url, content);
-                    break;
-                case "POST":
-                    response = await client.PostAsync(url, content);
-                    break;
-                case "DELETE":
-                    response = await client.DeleteAsync(url);
-                    break;
-            }
+            HttpResponseMessage response = await client.SendAsync(request);
             return await response.Content.ReadAsByteArrayAsync();
+        }
+
+        private static readonly Dictionary<string, HttpMethod> HttpMethods = new Dictionary<string, HttpMethod>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "GET", HttpMethod.Get },
+            { "POST", HttpMethod.Post },
+            { "PUT", HttpMethod.Put },
+            { "DELETE", HttpMethod.Delete },
+            { "HEAD", HttpMethod.Head },
+            { "OPTIONS", HttpMethod.Options },
+        };
+
+        private HttpMethod GetHttpMethod(string httpMethod)
+        {
+            return HttpMethods[httpMethod];
         }
     }
 }
