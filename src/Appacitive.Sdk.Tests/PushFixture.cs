@@ -13,8 +13,21 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public async Task BroadcastPushAsyncTest()
         {
-            string id = await PushNotifications
+            string id = await PushNotification
                 .Broadcast("Push from .NET SDK")
+                .WithBadge("+1")
+                .WithData(new { field1 = "value1", field2 = "value2" })
+                .SendAsync();
+            Console.WriteLine("Send push notification with id {0}.", id);
+        }
+
+
+        [Ignore]
+        [TestMethod]
+        public async Task PushToDevicesAsyncTest()
+        {
+            string id = await PushNotification
+                .ToDeviceIds("This is a device specific push.", "26430875972534723")
                 .WithBadge("+1")
                 .WithData(new { field1 = "value1", field2 = "value2" })
                 .SendAsync();

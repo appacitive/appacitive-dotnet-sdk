@@ -8,48 +8,37 @@ using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
-    public static class PushNotifications
+    public class PushNotification
     {
         public static PushNotification Broadcast(string message)
         {
-            return new PushNotification(message);
+            return new PushNotification(message, true, null, null, null);
         }
 
         public static PushNotification ToChannels(string message, params string[] channels)
         {
-            return new PushNotification(message, channels);
+            return new PushNotification(message, false, channels, null, null);
         }
 
         public static PushNotification ToQueryResult(string message, string query)
         {
-            return new PushNotification(message, query);
+            return new PushNotification(message, false, null, null, query);
         }
-    }
 
-    public class PushNotification
-    {
-        public PushNotification(string alert)
-            : this(alert, true, null, null)
+        public static PushNotification ToDeviceIds(string message, params string[] deviceIds)
         {
+            return new PushNotification(message, false, null, deviceIds, null);
         }
-
-        public PushNotification(string alert, IEnumerable<string> channels)
-            : this(alert, false, channels, null)
-        {
-        }
-
-        public PushNotification(string alert, string query)
-            : this(alert, false, null, query)
-        {
-        }
-
-        private PushNotification(string alert, bool isBroadcast, IEnumerable<string> channels, string query)
+        
+        private PushNotification(string alert, bool isBroadcast, IEnumerable<string> channels, IEnumerable<string> deviceIds, string query)
         {
             this.Alert = alert;
             this.IsBroadcast = isBroadcast;
             this.Query = query;
             if (channels != null)
                 _channels.AddRange(channels);
+            if (deviceIds != null)
+                _deviceIds.AddRange(deviceIds);
             this.ExpiryInSeconds = -1;
             this.Data = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }
@@ -63,6 +52,12 @@ namespace Appacitive.Sdk
         public string Query { get; private set; }
 
         public int ExpiryInSeconds { get; set; }
+
+        private List<string> _deviceIds = new List<string>();
+        public IEnumerable<string> DeviceIds
+        {
+            get { return _deviceIds; }
+        }
 
         private List<string> _channels = new List<string>();
         public IEnumerable<string> Channels

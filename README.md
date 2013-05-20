@@ -232,13 +232,13 @@ string publicUrl = await new FileDownload(filename).GetDownloadUrlAsync(expiryIn
 ```
 
 ## Push Notifications
-Push notifications in the SDK are sent via the PushNotification class or the PushNotifications fluent interface.
+Push notifications in the SDK are sent via the PushNotification fluent interface.
 Different platform options for android, ios and windows phone are all specified via the same.
 The sample below shows one complete example of how to send push notifications.
 
 ``` C#
 
-await PushNotifications
+await PushNotification
 		// Send broadcast
 		.Broadcast("Push from .NET SDK")
 		// Increment existing badge by 1
@@ -274,21 +274,25 @@ await PushNotifications
 
 
 ### Different types of push notifications
-3 different types of push notifications are supported.
+4 different types of push notifications are supported.
+
 1. Broadcast to all devices.
-2. Devices belonging to specified list of channels
-3. Devices returned from a query.
+2. To a list of device ids.
+3. Devices belonging to specified list of channels.
+4. Devices returned from a query.
 
 The samples below show how to send the specific type of notifications.
 
 ``` C#
 // Broadcast
-await PushNotifications.Broadcast("message").SendAsync();
+await PushNotification.Broadcast("message").SendAsync();
+// To a list of ids
+await PushNotification.ToDeviceIds("message", devId1, devId2,..devIdN).SendAsync();
 // For a list of channels
-await PushNotifications.ToChannels("message", channel1, channel2,.. channelN).SendAsync();
+await PushNotification.ToChannels("message", channel1, channel2,.. channelN).SendAsync();
 // For a query (send to all ios devices). Query syntax is also valid here as shown in the second line
-await PushNotifications.ToQueryResult("message", "*devicetype == 'ios'").SendAsync();
-await PushNotifications.ToQueryResult("message", Query.Property("devicetype").IsEqualTo("ios").ToString()).SendAsync();
+await PushNotification.ToQueryResult("message", "*devicetype == 'ios'").SendAsync();
+await PushNotification.ToQueryResult("message", Query.Property("devicetype").IsEqualTo("ios").ToString()).SendAsync();
 
 ```
 
@@ -304,7 +308,7 @@ The sample below shows how this can be done.
 
 ``` C#
 // Toast
-await PushNotifications
+await PushNotification
 		.Broadcast("message")
 		.WithPlatformOptions(
 			new WindowsPhoneOptions
@@ -319,7 +323,7 @@ await PushNotifications
 		.SendAsync();
 
 // Raw notification
-await PushNotifications
+await PushNotification
 		.Broadcast("message")
 		.WithPlatformOptions(
             new WindowsPhoneOptions
@@ -329,7 +333,7 @@ await PushNotifications
 		.SendAsync();
 
 // Tile notification (Flip tile for all)
-await PushNotifications
+await PushNotification
 		.Broadcast("message")
 		.WithPlatformOptions(
                     new WindowsPhoneOptions
@@ -340,7 +344,7 @@ await PushNotifications
 
 
 // Tile notification (cyclic tile for wp8, flip tile for others)
-await PushNotifications
+await PushNotification
 		.Broadcast("message")
 		.WithPlatformOptions(
                     new WindowsPhoneOptions
@@ -350,7 +354,7 @@ await PushNotifications
 		.SendAsync();
 
 // Tile notification (iconic tile for wp8, flip tile for others)
-await PushNotifications
+await PushNotification
 		.Broadcast("message")
 		.WithPlatformOptions(
                     new WindowsPhoneOptions

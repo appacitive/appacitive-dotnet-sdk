@@ -35,6 +35,8 @@ namespace Appacitive.Sdk.Services
                 writer.WriteProperty("query", push.Query);
             else if( push.Channels.Count() > 0 )
                 writer.WriteArray("channels", push.Channels);
+            else if( push.DeviceIds.Count() > 0 )
+                writer.WriteArray("deviceids", push.DeviceIds);
             else
                 writer.WriteProperty("broadcast", true);
             // Write data
