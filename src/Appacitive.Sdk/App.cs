@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
 using Appacitive.Sdk.Interfaces;
+using System.IO;
 
 namespace Appacitive.Sdk
 {
@@ -64,8 +65,46 @@ namespace Appacitive.Sdk
             var userContext = ObjectFactory.Build<IUserContext>();
             userContext.SetUserToken(userToken);
         }
+
+        public static class Debug
+        {
+            public static TextWriter Out { get; set; }
+        }
     }
 
+
+    public static class Debugger
+    {
+        public static async Task Log(string data)
+        {
+            try
+            {
+                var tw = App.Debug.Out;
+                if (tw != null)
+                    await tw.WriteLineAsync(data);
+                await WriteDelimiter(tw);
+            }
+            catch { }
+        }
+
+        public static async Task Log(byte[] bytes)
+        {
+            try
+            {
+                var tw = App.Debug.Out;
+                if (tw != null)
+                    await tw.WriteLineAsync(Encoding.UTF8.GetString(bytes, 0, bytes.Length));
+                await WriteDelimiter(tw);
+            }
+            catch { }
+        }
+
+        private async static Task WriteDelimiter(TextWriter writer)
+        {
+            await writer.WriteLineAsync();
+            await writer.WriteLineAsync();
+        }
+    }
     
     public class AppacitiveSettings
     {

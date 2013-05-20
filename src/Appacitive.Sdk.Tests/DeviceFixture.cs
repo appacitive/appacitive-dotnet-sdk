@@ -59,9 +59,10 @@ namespace Appacitive.Sdk.Tests
         {
             var created = await DeviceHelper.CreateNewAsync();
             created.DeviceToken = Guid.NewGuid().ToString();
-            created.Badge = created.Badge + 1;
+            created.Badge = created.Badge + 2;
             created.Location = new Geocode(20, 20);
             created.TimeZone = Timezone.Create(10, 30);
+            created.IsActive = false;
             await created.SaveAsync();
 
             var updated = await Devices.GetAsync(created.Id);
@@ -70,6 +71,7 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(updated.DeviceType == created.DeviceType);
             Assert.IsTrue(updated.DeviceToken == created.DeviceToken);
             Assert.IsTrue(updated.Badge == created.Badge);
+            Assert.IsTrue(updated.IsActive == created.IsActive);
             Assert.IsTrue(updated.TimeZone.Equals(created.TimeZone));
             Assert.IsTrue(updated.Location.Equals(created.Location));
         }

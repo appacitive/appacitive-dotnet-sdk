@@ -15,7 +15,7 @@ namespace Appacitive.Sdk.Tests
         public static void Init(TestContext context)
         {
             App.Initialize(WindowsRT.Host, TestConfiguration.ApiKey, TestConfiguration.Environment);
+            App.Debug.Out = Console.Out;
         }
     }
-
 }

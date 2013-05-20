@@ -80,6 +80,7 @@
     <Compile Include="Services\Model\InvalidateUserSessionResponse.cs" />
     <Compile Include="Services\Model\ValidateUserSessionRequest.cs" />
     <Compile Include="Services\Model\ValidateUserSessionResponse.cs" />
+    <Compile Include="Services\Serializers\UpdateDeviceRequestConverter.cs" />
     <Compile Include="Services\Serializers\DeviceConverter.cs" />
     <Compile Include="Services\Serializers\EmailConverter.cs" />
     <Compile Include="Services\Serializers\PushNotificationConverter.cs" />
