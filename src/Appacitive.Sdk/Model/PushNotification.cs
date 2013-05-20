@@ -271,7 +271,7 @@ namespace Appacitive.Sdk
 
     public class TileNotification : WPNotification 
     {
-        public TileNotification() : base(WPNotificationType.Toast)
+        public TileNotification() : base(WPNotificationType.Tile)
         {
         }
 

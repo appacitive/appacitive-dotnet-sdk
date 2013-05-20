@@ -64,14 +64,12 @@ namespace Appacitive.Sdk.Services
         private void WriteWpOptions(JsonWriter writer, WindowsPhoneOptions options)
         {
             writer.WriteProperty("wp");
-            writer.StartObject();
             if (options.Notification.WPNotificationType == WPNotificationType.Toast)
                 WriteToastOptions(writer, options.Notification as ToastNotification);
             else if (options.Notification.WPNotificationType == WPNotificationType.Tile)
                 WriteTileOptions(writer, options.Notification as TileNotification);
             if (options.Notification.WPNotificationType == WPNotificationType.Raw)
                 WriteRawOptions(writer, options.Notification as RawNotification);
-            writer.EndObject();
         }
 
         private void WriteTileOptions(JsonWriter writer, TileNotification option)
@@ -88,14 +86,13 @@ namespace Appacitive.Sdk.Services
         {
             if (tile == null) return;
             writer.WritePropertyName(device);
-            writer.StartObject();
             if (tile.WPTileType == WPTileType.Flip)
                 WriteFlipTile(writer, tile as FlipTile);
             if (tile.WPTileType == WPTileType.Cyclic)
                 WriteCyclicTile(writer, tile as CyclicTile);
             if (tile.WPTileType == WPTileType.Iconic)
                 WriteIconicTile(writer, tile as IconicTile);
-            writer.EndObject();
+            
         }
 
         private void WriteIconicTile(JsonWriter writer, IconicTile tile)

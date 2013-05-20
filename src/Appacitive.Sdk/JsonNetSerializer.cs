@@ -40,6 +40,7 @@ namespace Appacitive.Sdk
                 {
                     using (var jsonWriter = new JsonTextWriter(streamWriter))
                     {
+                        jsonWriter.Formatting = Formatting.Indented;
                         _serializer.Serialize(jsonWriter, o);
                     }
                 }
