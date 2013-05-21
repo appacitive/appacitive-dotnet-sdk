@@ -28,10 +28,10 @@ namespace Appacitive.Sdk.Tests
             ApiHelper.EnsureValidResponse(response);
             Assert.IsNotNull(response.Connection, "Connection in create connection response is null.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(response.Connection.Id), "Connection id in response.connection is invalid.");
-            Assert.IsNotNull(response.Connection.EndpointA, "Endpoint A is null.");
-            Assert.IsNotNull(response.Connection.EndpointA, "Endpoint B is null.");
-            Assert.IsTrue(response.Connection.EndpointA.ArticleId == obj1.Id, "Endpoint A article id does not match.");
-            Assert.IsTrue(response.Connection.EndpointB.ArticleId == obj2.Id, "Endpoint A article id does not match.");
+            var endpoints = response.Connection.Endpoints.ToArray();
+            Assert.IsNotNull(endpoints[0], "Endpoint A is null.");
+            Assert.IsNotNull(endpoints[1], "Endpoint B is null.");
+            Assert.IsTrue(endpoints.Select(x => x.ArticleId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
         }
 
         [TestMethod]
@@ -50,8 +50,6 @@ namespace Appacitive.Sdk.Tests
             ApiHelper.EnsureValidResponse(response);
             Assert.IsNotNull(response.Connection, "Connection in create connection response is null.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(response.Connection.Id), "Connection id in response.connection is invalid.");
-            Assert.IsNotNull(response.Connection.EndpointA, "Endpoint A is null.");
-            Assert.IsNotNull(response.Connection.EndpointA, "Endpoint B is null.");
         }
 
         

@@ -16,6 +16,7 @@ namespace Appacitive.Sdk.Tests
         {
             App.Initialize(WindowsRT.Host, TestConfiguration.ApiKey, TestConfiguration.Environment);
             App.Debug.Out = Console.Out;
+            App.Debug.IsEnabled = true;
         }
     }
 }

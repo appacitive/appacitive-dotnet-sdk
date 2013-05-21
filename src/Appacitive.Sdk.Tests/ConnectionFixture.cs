@@ -12,14 +12,36 @@ namespace Appacitive.Sdk.Tests
     public class ConnectionFixture
     {
         [TestMethod]
-        public void Run()
+        public async Task ConnectionsTest()
         {
-            var x = typeof(User).IsAssignableFrom(typeof(Article));
-            var y = typeof(Article).IsAssignableFrom(typeof(User));
+            var parent = ObjectHelper.NewInstance();
+            parent["stringfield"] = "parent";
+            var child = ObjectHelper.NewInstance();
+            child["stringfield"] = "child";
+            var conn = Connection.New("link").FromNewArticle("parent", parent).ToNewArticle("child", child);
+            await conn.SaveAsync();
 
+            var parent2 = await conn.Endpoints["parent"].GetArticleAsync();
+            var child2 = await conn.Endpoints["child"].GetArticleAsync();
+            Assert.IsTrue(parent2 != null && child2 != null);
+            Assert.IsTrue(parent2["stringfield"] == "parent");
+            Assert.IsTrue(child2["stringfield"] == "child");
+
+            // Swap and test
+            parent = ObjectHelper.NewInstance();
+            parent["stringfield"] = "parent";
+            child = ObjectHelper.NewInstance();
+            child["stringfield"] = "child";
+            conn = Connection.New("link").FromNewArticle("child", child).ToNewArticle("parent", parent);
+            await conn.SaveAsync();
+
+            parent2 = await conn.Endpoints["parent"].GetArticleAsync();
+            child2 = await conn.Endpoints["child"].GetArticleAsync();
+            Assert.IsTrue(parent2 != null && child2 != null);
+            Assert.IsTrue(parent2["stringfield"] == "parent");
+            Assert.IsTrue(child2["stringfield"] == "child");
         }
         
-
         [TestMethod]
         public async Task GetEndpointContentTest()
         {
@@ -102,8 +124,7 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(string.IsNullOrWhiteSpace(obj2.Id) == false);
             Console.WriteLine("Created new article with id: {0}", obj1.Id);
             // Ensure that the endpoint ids match
-            Assert.IsTrue(conn.EndpointA.ArticleId == obj1.Id || conn.EndpointB.ArticleId == obj1.Id);
-            Assert.IsTrue(conn.EndpointA.ArticleId == obj2.Id || conn.EndpointB.ArticleId == obj2.Id);
+            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
         }
 
 
@@ -122,8 +143,7 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(string.IsNullOrWhiteSpace(obj2.Id) == false);
             Console.WriteLine("Created new article with id: {0}", obj1.Id);
             // Ensure that the endpoint ids match
-            Assert.IsTrue(conn.EndpointA.ArticleId == obj1.Id || conn.EndpointB.ArticleId == obj1.Id);
-            Assert.IsTrue(conn.EndpointA.ArticleId == obj2.Id || conn.EndpointB.ArticleId == obj2.Id);
+            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
         }
 
         [TestMethod]
@@ -141,8 +161,7 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(string.IsNullOrWhiteSpace(obj2.Id) == false);
             Console.WriteLine("Created new article with id: {0}", obj1.Id);
             // Ensure that the endpoint ids match
-            Assert.IsTrue(conn.EndpointA.ArticleId == obj1.Id || conn.EndpointB.ArticleId == obj1.Id);
-            Assert.IsTrue(conn.EndpointA.ArticleId == obj2.Id || conn.EndpointB.ArticleId == obj2.Id);
+            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
         }
 
         [TestMethod]
@@ -153,8 +172,7 @@ namespace Appacitive.Sdk.Tests
             var read = await Connection.GetAsync(conn.Type, conn.Id);
             Assert.IsTrue(read != null);
             Assert.IsTrue(read.Id == conn.Id);
-            Assert.IsTrue(read.EndpointA.ArticleId == conn.EndpointA.ArticleId || read.EndpointA.ArticleId == conn.EndpointB.ArticleId);
-            Assert.IsTrue(read.EndpointB.ArticleId == conn.EndpointA.ArticleId || read.EndpointB.ArticleId == conn.EndpointB.ArticleId);
+            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(read.Endpoints.ToArray().Select( x => x.ArticleId)).Count() == 2);
         }
 
         [TestMethod]
@@ -162,11 +180,11 @@ namespace Appacitive.Sdk.Tests
         {
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
-            var read = await Connection.GetAsync(conn.Type, conn.EndpointA.ArticleId, conn.EndpointB.ArticleId);
+            var endpoints = conn.Endpoints.ToArray();
+            var read = await Connection.GetAsync(conn.Type, endpoints[0].ArticleId, endpoints[1].ArticleId);
             Assert.IsTrue(read != null);
             Assert.IsTrue(read.Id == conn.Id);
-            Assert.IsTrue(read.EndpointA.ArticleId == conn.EndpointA.ArticleId || read.EndpointA.ArticleId == conn.EndpointB.ArticleId);
-            Assert.IsTrue(read.EndpointB.ArticleId == conn.EndpointA.ArticleId || read.EndpointB.ArticleId == conn.EndpointB.ArticleId);
+            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(read.Endpoints.ToArray().Select(x => x.ArticleId)).Count() == 2);
         }
 
         [TestMethod]

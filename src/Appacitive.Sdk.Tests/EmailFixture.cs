@@ -16,6 +16,7 @@ namespace Appacitive.Sdk.Tests
         private string Username = "username";
         private string Password = "password";
 
+        [Ignore]
         [TestMethod]
         public async Task SendRawEmailTest()
         {
@@ -27,6 +28,7 @@ namespace Appacitive.Sdk.Tests
                 .SendAsync();
         }
 
+        [Ignore]
         [TestMethod]
         public async Task SendTemplatedEmailTest()
         {
@@ -45,6 +47,7 @@ namespace Appacitive.Sdk.Tests
                 .SendAsync();
         }
 
+        [Ignore]
         [TestMethod]
         public async Task SendEmailWithSmtpTest()
         {

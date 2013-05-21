@@ -11,8 +11,7 @@ namespace Appacitive.Sdk.WinRT
     public class HttpConnector : IHttpConnector
     {
         public async Task<byte[]> GetAsync(string url, IDictionary<string, string> headers)
-        {
-            
+        {   
             return await ExecuteAsync("GET", url, headers, null);
         }
 
@@ -34,14 +33,11 @@ namespace Appacitive.Sdk.WinRT
         private static readonly byte[] Empty = new byte[0];
         private async Task<byte[]> ExecuteAsync(string httpMethod, string url, IDictionary<string, string> headers, byte[] data)
         {
-            await Debugger.Log(string.Format("{0} {1}", httpMethod, url));
             var client = new HttpClient();
             var request = new HttpRequestMessage(GetHttpMethod(httpMethod), url);
             if (data != null)
             {
                 request.Content = new ByteArrayContent(data);
-                await Debugger.Log("Request data:");
-                await Debugger.Log(data);
             }
             if (headers != null)
             {
@@ -50,9 +46,25 @@ namespace Appacitive.Sdk.WinRT
             }
             HttpResponseMessage response = await client.SendAsync(request);
             var responseData = await response.Content.ReadAsByteArrayAsync();
-            await Debugger.Log("Response data:");
-            await Debugger.Log(responseData);
+            await LogTransaction(url, httpMethod, data, responseData, headers);
             return responseData;
+        }
+
+        private async Task LogTransaction(string url, string httpMethod, byte[] request, byte[] response, IDictionary<string, string> headers)
+        {
+            try
+            {
+                var buffer = new StringBuilder();
+                buffer
+                    .Append("Method: ").AppendLine(httpMethod)
+                    .Append("Url: ").AppendLine(url);
+                foreach (var key in headers.Keys)
+                    buffer.Append(key).AppendLine(": ").AppendLine(headers[key]);
+                buffer.Append("Request: ").AppendLine(request == null ? string.Empty : Encoding.UTF8.GetString(request));
+                buffer.Append("Response: ").AppendLine(response == null ? string.Empty : Encoding.UTF8.GetString(response));
+                await Debugger.Log(buffer.ToString());
+            }
+            catch { }
         }
 
         private static readonly Dictionary<string, HttpMethod> HttpMethods = new Dictionary<string, HttpMethod>(StringComparer.OrdinalIgnoreCase)

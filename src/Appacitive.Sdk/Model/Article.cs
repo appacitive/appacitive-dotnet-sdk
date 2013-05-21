@@ -92,7 +92,7 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
         }
 
-        public async static Task<PagedList<Article>> GetConnectedArticlesAsync(string relation, string articleId, string query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
+        public async static Task<PagedList<Article>> GetConnectedArticlesAsync(string relation, string articleId, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
             IConnectionService connService = ObjectFactory.Build<IConnectionService>();
             var request = new FindConnectedArticlesRequest
@@ -109,20 +109,25 @@ namespace Appacitive.Sdk
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 
-            var articles = response.Connections.Select(c =>
-            {
-                if (c.EndpointA.ArticleId == articleId)
-                    return c.EndpointB.Content;
-                else
-                    return c.EndpointA.Content;
-            });
+            IEnumerable<Article> articles = null;
+            // if label is specified, then get the labelled endpoint
+            if (string.IsNullOrWhiteSpace(label) == false)
+                articles = response.Connections.Select(c => c.Endpoints[label].Content);
+            else 
+                articles = response.Connections.Select(c =>
+                {
+                    if (c.Endpoints.EndpointA.ArticleId == articleId)
+                        return c.Endpoints.EndpointB.Content;
+                    else
+                        return c.Endpoints.EndpointA.Content;
+                });
 
             var list = new PagedList<Article>()
             {
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await GetConnectedArticlesAsync(relation, articleId, query, fields, pageNumber + skip + 1, pageSize)
+                GetNextPage = async skip => await GetConnectedArticlesAsync(relation, articleId, query, label, fields, pageNumber + skip + 1, pageSize)
             };
             list.AddRange(articles);
             return list;
@@ -238,9 +243,9 @@ namespace Appacitive.Sdk
             return response.Article;
         }
 
-        public async Task<PagedList<Article>> GetConnectedArticlesAsync(string relation, string query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
+        public async Task<PagedList<Article>> GetConnectedArticlesAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
-            return await Articles.GetConnectedArticlesAsync(relation, this.Id, query, fields, pageNumber, pageSize);
+            return await Articles.GetConnectedArticlesAsync(relation, this.Id, query, label, fields, pageNumber, pageSize);
         }
 
         public async Task<PagedList<Connection>> GetConnectionsAsync(string relation, string query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)

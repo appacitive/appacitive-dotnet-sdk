@@ -23,6 +23,17 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
+        public async Task QueryBasedPushAsyncTest()
+        {
+            string id = await PushNotification
+                .ToQueryResult("Push to query",Query.Property("devicetype").IsEqualTo("ios").AsString() ) 
+                .WithBadge("+1")
+                .WithData(new { field1 = "value1", field2 = "value2" })
+                .SendAsync();
+            Console.WriteLine("Send push notification with id {0}.", id);
+        }
+
+        [TestMethod]
         public void SerializerToastMessageTest()
         {
             var msg = PushNotification

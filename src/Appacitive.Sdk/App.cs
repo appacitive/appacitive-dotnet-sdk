@@ -68,6 +68,8 @@ namespace Appacitive.Sdk
 
         public static class Debug
         {
+            public static bool IsEnabled = false;
+
             public static TextWriter Out { get; set; }
         }
     }
@@ -79,10 +81,13 @@ namespace Appacitive.Sdk
         {
             try
             {
+                if (App.Debug.IsEnabled == false)
+                    return;
                 var tw = App.Debug.Out;
                 if (tw != null)
                     await tw.WriteLineAsync(data);
                 await WriteDelimiter(tw);
+                await tw.FlushAsync();
             }
             catch { }
         }
@@ -91,10 +96,13 @@ namespace Appacitive.Sdk
         {
             try
             {
+                if (App.Debug.IsEnabled == false)
+                    return;
                 var tw = App.Debug.Out;
                 if (tw != null)
                     await tw.WriteLineAsync(Encoding.UTF8.GetString(bytes, 0, bytes.Length));
                 await WriteDelimiter(tw);
+                await tw.FlushAsync();
             }
             catch { }
         }

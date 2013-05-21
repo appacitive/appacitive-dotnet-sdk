@@ -25,13 +25,13 @@ namespace Appacitive.Sdk.Services
 
             
             // Write endpoint A
-            if (conn.CreateEndpointA == false)
+            if (conn.Endpoints.EndpointA.CreateEndpoint == false)
             {
                 writer
                     .WriteProperty("__endpointa")
                     .StartObject()
-                    .WriteProperty("label", conn.EndpointA.Label)
-                    .WriteProperty("articleid", conn.EndpointA.ArticleId)
+                    .WriteProperty("label", conn.Endpoints.EndpointA.Label)
+                    .WriteProperty("articleid", conn.Endpoints.EndpointA.ArticleId)
                     .EndObject();
             }
             else
@@ -39,20 +39,20 @@ namespace Appacitive.Sdk.Services
                 writer
                     .WriteProperty("__endpointa")
                     .StartObject()
-                    .WriteProperty("label", conn.EndpointA.Label)
+                    .WriteProperty("label", conn.Endpoints.EndpointA.Label)
                     .WriteProperty("article")
-                    .WithWriter( w => WriteArticle(w, conn.EndpointA.Content) )
+                    .WithWriter( w => WriteArticle(w, conn.Endpoints.EndpointA.Content) )
                     .EndObject();
             }
 
             // Write endpoint B
-            if (conn.CreateEndpointB == false)
+            if (conn.Endpoints.EndpointB.CreateEndpoint == false)
             {
                 writer
                     .WriteProperty("__endpointb")
                     .StartObject()
-                    .WriteProperty("label", conn.EndpointB.Label)
-                    .WriteProperty("articleid", conn.EndpointB.ArticleId)
+                    .WriteProperty("label", conn.Endpoints.EndpointB.Label)
+                    .WriteProperty("articleid", conn.Endpoints.EndpointB.ArticleId)
                     .EndObject();
             }
             else
@@ -60,9 +60,9 @@ namespace Appacitive.Sdk.Services
                 writer
                     .WriteProperty("__endpointb")
                     .StartObject()
-                    .WriteProperty("label", conn.EndpointB.Label)
+                    .WriteProperty("label", conn.Endpoints.EndpointB.Label)
                     .WriteProperty("article")
-                    .WithWriter(w => WriteArticle(w, conn.EndpointB.Content))
+                    .WithWriter(w => WriteArticle(w, conn.Endpoints.EndpointB.Content))
                     .EndObject();
             }
         }
@@ -88,12 +88,14 @@ namespace Appacitive.Sdk.Services
                 conn.RelationId = value.ToString();
 
             // Parse the endpoints
+            Endpoint ep1 = null, ep2 = null;
             if (json.TryGetValue("__endpointa", out value) == true && value.Type == JTokenType.Object)
-                conn.EndpointA = ParseEndpoint(value as JObject, serializer);
+                ep1 = ParseEndpoint(value as JObject, serializer);
             else throw new Exception(string.Format("Endpoint A for connection with id {0} is invalid.", conn.Id));
             if (json.TryGetValue("__endpointb", out value) == true && value.Type == JTokenType.Object)
-                conn.EndpointB = ParseEndpoint(value as JObject, serializer);
+                ep2 = ParseEndpoint(value as JObject, serializer);
             else throw new Exception(string.Format("Endpoint B for connection with id {0} is invalid.", conn.Id));
+            conn.Endpoints = new EndpointPair(ep1, ep2);
             return conn;
         }
 

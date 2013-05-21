@@ -265,15 +265,5 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(connectedArticles.Select(x => x.Id).Intersect(new[] { obj2.Id, obj3.Id, obj4.Id, obj5.Id }).Count() == 4);
 
         }
-
-        [TestMethod]
-        public async Task GetConnectedArticlesTest2()
-        {
-            App.Initialize(WinRT.WindowsHost.Instance, "+HfTOp2nF8TnkyZVBblkTBLm6Cz6zIfKYdXBhV6Aag4=", Environment.Live);
-            var team = new Article("userteam", "22239781196006111");
-            var players = await team.GetConnectedArticlesAsync("userteam_player");
-            players.ForEach( p => Console.WriteLine(p["firstname"]));
-        }
-
     }
 }

@@ -8,9 +8,9 @@ using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
-    public class Connect
+    public class ConnectionBuilder
     {
-        internal Connect(string relation)
+        internal ConnectionBuilder(string relation)
         {
             this.RelationName = relation;
         }
@@ -24,7 +24,7 @@ namespace Appacitive.Sdk
         private Article EndpointBContent {get; set;}
 
 
-        public Connect FromNewArticle(string endpointLabel, Article article )
+        public ConnectionBuilder FromNewArticle(string endpointLabel, Article article )
         {
             this.EndpointALabel = endpointLabel;
             this.EndpointAContent = article;
@@ -32,7 +32,7 @@ namespace Appacitive.Sdk
             return this;
         }
 
-        public Connect FromExistingArticle(string endpointLabel, string articleId )
+        public ConnectionBuilder FromExistingArticle(string endpointLabel, string articleId )
         {
             this.EndpointALabel = endpointLabel;
             this.EndpointAContent = null;
@@ -84,51 +84,57 @@ namespace Appacitive.Sdk
         public Connection(string type, string labelA, string articleIdA, string labelB, string ArticleIdB) 
             : base(type)
         {
-            this.EndpointA = new Endpoint(labelA, articleIdA);
-            this.EndpointB = new Endpoint(labelB, ArticleIdB);
+            var ep1 = new Endpoint(labelA, articleIdA);
+            var ep2 = new Endpoint(labelB, ArticleIdB);
+            this.Endpoints = new EndpointPair(ep1, ep2);
         }
 
         public Connection(string type, string labelA, Article articleA, string labelB, string ArticleIdB)
             : base(type)
         {
+            Endpoint ep1, ep2;
             if (articleA.IsNewInstance == false)
             {
-                this.EndpointA = new Endpoint(labelA, articleA.Id);
-                this.EndpointB = new Endpoint(labelB, ArticleIdB);
+                ep1 = new Endpoint(labelA, articleA.Id);
+                ep2 = new Endpoint(labelB, ArticleIdB);
             }
             else
             {
                 string nullId = null;
-                this.EndpointA = new Endpoint(labelA, nullId);
-                this.EndpointB = new Endpoint(labelB, ArticleIdB);
-                this.EndpointA.Content = articleA;
+                ep1 = new Endpoint(labelA, nullId);
+                ep2 = new Endpoint(labelB, ArticleIdB);
+                ep1.Content = articleA;
             }
+            this.Endpoints = new EndpointPair(ep1, ep2);
         }
 
         public Connection(string type, string labelA, Article articleA, string labelB, Article articleB)
             : base(type)
         {
+            Endpoint ep1, ep2;
             string nullId = null;
             if (articleA.IsNewInstance == true)
             {
-                this.EndpointA = new Endpoint(labelA, nullId);
-                this.EndpointA.Content = articleA;
+                ep1 = new Endpoint(labelA, nullId);
+                ep1.Content = articleA;
             }
             else
-                this.EndpointA = new Endpoint(labelA, articleA.Id);
+                ep1 = new Endpoint(labelA, articleA.Id);
 
             if (articleB.IsNewInstance == true)
             {   
-                this.EndpointB = new Endpoint(labelB, nullId);
-                this.EndpointB.Content = articleB;
+                ep2 = new Endpoint(labelB, nullId);
+                ep2.Content = articleB;
             }
             else
-                this.EndpointB = new Endpoint(labelB, articleB.Id);
+                ep2 = new Endpoint(labelB, articleB.Id);
+
+            this.Endpoints = new EndpointPair(ep1, ep2);
         }
 
-        public static Connect New(string relationName)
+        public static ConnectionBuilder New(string relationName)
         {
-            return new Connect(relationName);
+            return new ConnectionBuilder(relationName);
         }
 
         public async static Task<Connection> GetAsync(string relation, string endpointArticleId1, string endpointArticleId2)
@@ -178,39 +184,27 @@ namespace Appacitive.Sdk
             }
         }
 
-        public Endpoint EndpointA { get; set; }
-
-        public Endpoint EndpointB { get; set; }
+        public EndpointPair Endpoints { get; set; }
 
         public async Task<Article> GetEndpointArticleAsync(string label)
         {
-            if (string.Compare(this.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
-                return await this.EndpointA.GetArticleAsync();
-            if (string.Compare(this.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
-                return await this.EndpointB.GetArticleAsync();
+            if (string.Compare(this.Endpoints.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
+                return await this.Endpoints.EndpointA.GetArticleAsync();
+            if (string.Compare(this.Endpoints.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
+                return await this.Endpoints.EndpointB.GetArticleAsync();
             throw new AppacitiveException("Invalid label " + label);
         }
 
         public string GetEndpointId(string label)
         {
-            if (string.Compare(this.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
-                return this.EndpointA.ArticleId;
-            if (string.Compare(this.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
-                return this.EndpointB.ArticleId;
+            if (string.Compare(this.Endpoints.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
+                return this.Endpoints.EndpointA.ArticleId;
+            if (string.Compare(this.Endpoints.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
+                return this.Endpoints.EndpointB.ArticleId;
             throw new AppacitiveException("Invalid label " + label);
         }
 
         public string RelationId { get; set; }
-
-        internal bool CreateEndpointA
-        {
-            get { return string.IsNullOrWhiteSpace(this.EndpointA.ArticleId); }
-        }
-
-        internal bool CreateEndpointB
-        {
-            get { return string.IsNullOrWhiteSpace(this.EndpointB.ArticleId); }
-        }
 
         protected async override Task<Entity> CreateNewAsync()
         {
@@ -231,8 +225,8 @@ namespace Appacitive.Sdk
         {
             var other = entity as Connection;
             if (other == null) return;
-            this.EndpointA = other.EndpointA;
-            this.EndpointB = other.EndpointB;
+            this.Endpoints.EndpointA = other.Endpoints.EndpointA;
+            this.Endpoints.EndpointB = other.Endpoints.EndpointB;
         }
 
         protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
@@ -315,6 +309,10 @@ namespace Appacitive.Sdk
             this.Content = content;
         }
 
+        internal bool CreateEndpoint
+        {
+            get { return string.IsNullOrWhiteSpace(this.ArticleId); }
+        }
 
         internal Article Content { get; set; }
 
@@ -331,5 +329,37 @@ namespace Appacitive.Sdk
             else 
                 return await Articles.GetAsync(this.Type, this.ArticleId);
         }
+    }
+
+    public class EndpointPair
+    {
+        public EndpointPair(Endpoint ep1, Endpoint ep2)
+        {
+            this.EndpointA = ep1;
+            this.EndpointB = ep2;
+        }
+
+        public Endpoint[] ToArray()
+        {
+            return new Endpoint[] { this.EndpointA, this.EndpointB };
+        }
+
+        public Endpoint this[string name]
+        {
+            get
+            {
+                if( string.Compare( this.EndpointA.Label, this.EndpointB.Label, StringComparison.OrdinalIgnoreCase) == 0 )
+                    throw new Exception("Cannot resolve endpoint as both endpoint labels are the same.");
+                if( string.Compare( this.EndpointA.Label, name, StringComparison.OrdinalIgnoreCase) == 0 )
+                    return this.EndpointA;
+                if( string.Compare( this.EndpointB.Label, name, StringComparison.OrdinalIgnoreCase) == 0 )
+                    return this.EndpointB;
+                return null;
+            }
+        }
+
+        internal Endpoint EndpointA { get; set; }
+
+        internal Endpoint EndpointB { get; set; }
     }
 }
