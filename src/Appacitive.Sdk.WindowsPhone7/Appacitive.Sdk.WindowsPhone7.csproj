@@ -526,6 +526,9 @@
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\UpdateConnectionRequestConverter.cs">
       <Link>Services\Serializers\UpdateConnectionRequestConverter.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Services\Serializers\UpdateDeviceRequestConverter.cs">
+      <Link>Services\Serializers\UpdateDeviceRequestConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Services\Serializers\UpdateUserRequestConverter.cs">
       <Link>Services\Serializers\UpdateUserRequestConverter.cs</Link>
     </Compile>
