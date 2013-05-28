@@ -72,7 +72,7 @@ namespace Appacitive.Sdk.Tests
             Assert.IsFalse(string.IsNullOrWhiteSpace(userSession.UserToken));
             Assert.IsNotNull(userSession.LoggedInUser);
 
-            App.SetLoggedInUser(userSession.UserToken);
+            App.Login(userSession.UserToken);
             var loggedInUser = await Users.GetLoggedInUserAsync();
             Assert.IsNotNull(loggedInUser);
             Assert.IsTrue(loggedInUser.Id == userSession.LoggedInUser.Id);

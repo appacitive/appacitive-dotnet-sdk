@@ -6,7 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
 using Newtonsoft.Json;
-using Appacitive.Sdk.Interfaces;
+using Appacitive.Sdk.Realtime;
+using Appacitive.Sdk.Internal;
 
 namespace Appacitive.Sdk
 {
@@ -20,6 +21,7 @@ namespace Appacitive.Sdk
             var serializer = new JsonSerializer();
             // TODO: Move this to objectfactory
             serializer.Converters.Add(new ArticleConverter());
+            serializer.Converters.Add(new RealTimeMessageConverter());
             serializer.Converters.Add(new EmailConverter());
             serializer.Converters.Add(new UpdateArticleRequestConverter());
             serializer.Converters.Add(new UserConverter());

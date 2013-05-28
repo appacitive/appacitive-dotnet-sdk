@@ -49,7 +49,7 @@ namespace Appacitive.Sdk.Tests
                 var shouldNotExist = await Devices.GetAsync(created.Id);
                 Assert.Fail("Able to retrieve deleted article.");
             }
-            catch (Appacitive.Sdk.WinRT.AppacitiveException)
+            catch (Appacitive.Sdk.Net45.AppacitiveException)
             {   
             }
         }

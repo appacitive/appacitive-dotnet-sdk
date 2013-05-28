@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Appacitive.Sdk.Interfaces;
+using Appacitive.Sdk.Realtime;
 
 namespace Appacitive.Sdk.WindowsPhone7
 {
@@ -17,7 +17,9 @@ namespace Appacitive.Sdk.WindowsPhone7
         
         public void InitializeContainer(IDependencyContainer container)
         {
+            
             container
+                .Register <IRealTimeTransport, SignalRTransport>( () => new SignalRTransport() )
                 .Register<IHttpConnector, HttpConnector>(() => new HttpConnector())
                 .Register<IHttpFileHandler, WebClientHttpFileHandler>(() => new WebClientHttpFileHandler())
                 .Register<IExceptionFactory, ExceptionFactory>(() => new ExceptionFactory());

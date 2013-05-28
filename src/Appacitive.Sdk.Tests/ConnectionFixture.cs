@@ -103,7 +103,7 @@ namespace Appacitive.Sdk.Tests
             await conn.SaveAsync();
 
             // Get the connection
-            Connection read = await Connection.GetAsync("sibling", conn.Id);
+            Connection read = await Connections.GetAsync("sibling", conn.Id);
             // Asserts
             Assert.IsTrue( read["field1"] == "updated");
             Assert.IsTrue( read.AsInt("field2") == 11L);
@@ -169,7 +169,7 @@ namespace Appacitive.Sdk.Tests
         {
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
-            var read = await Connection.GetAsync(conn.Type, conn.Id);
+            var read = await Connections.GetAsync(conn.Type, conn.Id);
             Assert.IsTrue(read != null);
             Assert.IsTrue(read.Id == conn.Id);
             Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(read.Endpoints.ToArray().Select( x => x.ArticleId)).Count() == 2);
@@ -181,7 +181,7 @@ namespace Appacitive.Sdk.Tests
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
             var endpoints = conn.Endpoints.ToArray();
-            var read = await Connection.GetAsync(conn.Type, endpoints[0].ArticleId, endpoints[1].ArticleId);
+            var read = await Connections.GetAsync(conn.Type, endpoints[0].ArticleId, endpoints[1].ArticleId);
             Assert.IsTrue(read != null);
             Assert.IsTrue(read.Id == conn.Id);
             Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(read.Endpoints.ToArray().Select(x => x.ArticleId)).Count() == 2);
@@ -193,7 +193,7 @@ namespace Appacitive.Sdk.Tests
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
             // Find all
-            var connections = await Connection.FindAllAsync("sibling");
+            var connections = await Connections.FindAllAsync("sibling");
             Assert.IsTrue(connections != null);
             Assert.IsTrue(connections.Count > 0);
             Console.WriteLine("Total connections: {0}", connections.TotalRecords);
@@ -206,14 +206,14 @@ namespace Appacitive.Sdk.Tests
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
             // Delete the connection
-            await Connection.DeleteAsync(conn.Type, conn.Id);
+            await Connections.DeleteAsync(conn.Type, conn.Id);
             // Try and get the connection
             try
             {
-                var read = await Connection.GetAsync(conn.Type, conn.Id);
+                var read = await Connections.GetAsync(conn.Type, conn.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (WinRT.AppacitiveException aex)
+            catch (Net45.AppacitiveException aex)
             {
                 Assert.IsTrue(aex.Code == "404");
             }
@@ -226,24 +226,24 @@ namespace Appacitive.Sdk.Tests
             var conn1 = await ConnectionHelper.CreateNew();
             var conn2 = await ConnectionHelper.CreateNew();
             // Delete the connection
-            await Connection.BulkDeleteAsync(conn1.Type, new[] { conn1.Id, conn2.Id });
+            await Connections.BulkDeleteAsync(conn1.Type, new[] { conn1.Id, conn2.Id });
             // Try and get the connection
             try
             {
-                var read = await Connection.GetAsync(conn1.Type, conn1.Id);
+                var read = await Connections.GetAsync(conn1.Type, conn1.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (WinRT.AppacitiveException aex)
+            catch (Net45.AppacitiveException aex)
             {
                 Assert.IsTrue(aex.Code == "404");
             }
 
             try
             {
-                var read = await Connection.GetAsync(conn2.Type, conn2.Id);
+                var read = await Connections.GetAsync(conn2.Type, conn2.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (WinRT.AppacitiveException aex)
+            catch (Net45.AppacitiveException aex)
             {
                 Assert.IsTrue(aex.Code == "404");
             }

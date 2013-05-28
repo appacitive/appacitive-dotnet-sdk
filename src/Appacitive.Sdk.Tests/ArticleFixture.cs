@@ -79,7 +79,7 @@ namespace Appacitive.Sdk.Tests
                     var copy = await Articles.GetAsync("object", ids[i]);
                     Assert.Fail("Operation should have faulted since the article has been deleted.");
                 }
-                catch (WinRT.AppacitiveException ex)
+                catch (Net45.AppacitiveException ex)
                 {
                     var msg = string.Format("Cannot locate article of type 'object' and id {0}.", ids[i]);
                     Assert.IsTrue(ex.Message == msg);
@@ -104,7 +104,7 @@ namespace Appacitive.Sdk.Tests
                 var copy = await Articles.GetAsync("object", saved.Id);
                 Assert.Fail("Operation should have faulted since the article has been deleted.");
             }
-            catch (WinRT.AppacitiveException ex)
+            catch (Net45.AppacitiveException ex)
             {
                 var msg = string.Format("Cannot locate article of type 'object' and id {0}.", saved.Id);
                 Assert.IsTrue(ex.Message == msg);

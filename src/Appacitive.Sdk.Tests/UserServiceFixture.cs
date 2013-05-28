@@ -69,7 +69,7 @@ namespace Appacitive.Sdk.Tests
             // Get the created user
             GetUserResponse getUserResponse = null;
             IUserService userService = new UserService();
-            App.SetLoggedInUser(token);
+            App.Login(token);
             var getUserRequest = new GetUserRequest() { UserId = created.Id };
             getUserResponse = await userService.GetUserAsync(getUserRequest);
             ApiHelper.EnsureValidResponse(getUserResponse);
@@ -99,7 +99,7 @@ namespace Appacitive.Sdk.Tests
 
             // Setup user token
             string token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
-            App.SetLoggedInUser(token);
+            App.Login(token);
 
             // Get the created user
             IUserService userService = new UserService();
@@ -132,7 +132,7 @@ namespace Appacitive.Sdk.Tests
 
             // Setup user token
             var token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
-            App.SetLoggedInUser(token);
+            App.Login(token);
 
             // Get the created user
             IUserService userService = new UserService();
@@ -165,7 +165,7 @@ namespace Appacitive.Sdk.Tests
 
             // Get auth token
             var token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
-            App.SetLoggedInUser(token);
+            App.Login(token);
 
             // Update user
             created.Username = "john.doe_" + Unique.String;
@@ -209,7 +209,7 @@ namespace Appacitive.Sdk.Tests
 
             // Authenticate with existing password
             var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
-            App.SetLoggedInUser(token);
+            App.Login(token);
 
             // Change password
             var newPassword = "p@ssw0rd2";
@@ -231,7 +231,7 @@ namespace Appacitive.Sdk.Tests
 
             // Authenticate with existing password
             var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
-            App.SetLoggedInUser(token);
+            App.Login(token);
 
             // Change password
             var newPassword = "p@ssw0rd2";
@@ -253,7 +253,7 @@ namespace Appacitive.Sdk.Tests
 
             // Authenticate with existing password
             var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
-            App.SetLoggedInUser(token);
+            App.Login(token);
 
             // Change password
             var newPassword = "p@ssw0rd2";
@@ -275,7 +275,7 @@ namespace Appacitive.Sdk.Tests
 
             // Authenticate the user
             var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
-            App.SetLoggedInUser(token);
+            App.Login(token);
 
             // Delete the user
             var request = new DeleteUserRequest() { UserId = newUser.Id };

@@ -80,6 +80,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PushFixture.cs" />
     <Compile Include="QueryDslFixture.cs" />
+    <Compile Include="RealTimeFixture.cs" />
     <Compile Include="SerializationFixture.cs" />
     <Compile Include="SessionServiceFixture.cs" />
     <Compile Include="TestConfiguration.cs" />
@@ -93,9 +94,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Appacitive.Sdk.WinRT\Appacitive.Sdk.WinRT.csproj">
+    <ProjectReference Include="..\Appacitive.Sdk.Net45\Appacitive.Sdk.Net45.csproj">
       <Project>{df28e8e5-2601-4ee5-b02a-1a59e12fbfec}</Project>
-      <Name>Appacitive.Sdk.WinRT</Name>
+      <Name>Appacitive.Sdk.Net45</Name>
     </ProjectReference>
     <ProjectReference Include="..\Appacitive.Sdk\Appacitive.Sdk.csproj">
       <Project>{ef1615f3-fb52-4662-91a1-70ed08203d33}</Project>

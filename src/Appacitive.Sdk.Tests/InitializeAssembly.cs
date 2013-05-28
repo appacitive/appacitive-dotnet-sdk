@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Appacitive.Sdk.WinRT;
+using Appacitive.Sdk.Net45;
+using Appacitive.Net45;
 
 namespace Appacitive.Sdk.Tests
 {
@@ -14,9 +15,19 @@ namespace Appacitive.Sdk.Tests
         [AssemblyInitialize]
         public static void Init(TestContext context)
         {
-            App.Initialize(WindowsRT.Host, TestConfiguration.ApiKey, TestConfiguration.Environment);
+            App.Initialize(WindowsRT.Host, TestConfiguration.ApiKey, TestConfiguration.Environment,
+                new AppacitiveSettings
+                {
+                    EnableRealTimeSupport = false
+                });
             App.Debug.Out = Console.Out;
             App.Debug.IsEnabled = true;
+        }
+
+        [AssemblyCleanup]
+        public static void Cleanup()
+        {
+            App.Shutdown();
         }
     }
 }

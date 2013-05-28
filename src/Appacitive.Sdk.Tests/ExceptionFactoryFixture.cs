@@ -1,4 +1,5 @@
-﻿using Appacitive.Sdk.Interfaces;
+﻿using Appacitive.Net45;
+using Appacitive.Sdk.Realtime;
 using Appacitive.Sdk.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -26,7 +27,7 @@ namespace Appacitive.Sdk.Tests
             var exceptionFactory = App.Factory.Build<IExceptionFactory>();
             var fault = exceptionFactory.CreateFault(status);
             Assert.IsNotNull(fault);
-            Assert.IsInstanceOfType(fault, typeof(Appacitive.Sdk.WinRT.AppacitiveException));
+            Assert.IsInstanceOfType(fault, typeof(Appacitive.Sdk.Net45.AppacitiveException));
         }
     }
 }
