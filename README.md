@@ -365,6 +365,123 @@ await PushNotification
 
 ```
 
+## Real time messaging
+
+Real time functionality inside the SDK, leverages real time technology like web sockets, long polling and server sent events
+via SignalR. This infrastructure can be used to incorporate real time duplex communication between users and the app backend.
+
+NOTE: This feature is still in early stage beta. Use at your own risk.
+
+There are 2 key terms that are used inside Appacitive for real time functionality.
+
+
+1. Subscriptions
+2. Messaging
+
+### Enabling real time functionality
+
+``` C#
+
+// Enabling real time
+App.Initialize(host, apiKey, Environment.Live, new AppacitiveSettings { EnableRealTimeSupport = true }); 
+
+```
+
+### Subscriptions 
+
+Subscriptions allow the client app to subscribe to real time notifications on data changes on the server.
+The client can subscribe to all changes (create, update & delete) for a specific type of schema or relation 
+as well they can subscribe to all changes for a specific instance of an article or connection.
+The sample below shows how this can be done.
+
+``` C#
+
+		// Modification to articles of a specific schema (create,update, delete)
+        Subscriptions.ForSchema("post").Created += m =>
+        {
+            var msg = m as ObjectUpdatedMessage;
+            Console.WriteLine("Created new post with id {0}.", msg.ObjectId);
+        };
+
+        // Modification to a specific article instance (update, delete)
+        Subscriptions.ForArticle("post", "100").Updated += m =>
+        {
+            var msg = m as ObjectUpdatedMessage;
+            Console.WriteLine("Post with id 100 was just updated.");
+        };
+
+        // Modification to connections of a specific relation (create, update, delete)
+        Subscriptions.ForRelation("friend").Deleted += m =>
+        {
+            var msg = m as ObjectUpdatedMessage;
+            Console.WriteLine("Friend connection with id {0} deleted.", msg.ObjectId);
+        };
+
+        // Modification to a specific connection instance (update, delete)
+        Subscriptions.ForConnection("friend", "100").Updated += m =>
+        {
+            var msg = m as ObjectUpdatedMessage;
+            Console.WriteLine("Friend connection with id 100 was just updated.");
+        };
+
+```
+
+
+### Messaging
+
+Messaging allows the client app to send real time messages to a given set of users.
+The message must be an object that can be serialized properly. If the given set of users
+are online, then they would get the appropriate messages.
+
+The code sample below shows how this functionality can be implemented.
+
+``` C#
+
+		// Sending a message to user id 100 and 110
+        var msg = new { text = "Come to my party", venue="19.123123,30.123123123" };
+        await Messaging.SendMessageAsync(msg, 100, 110);
+
+        // Recieve messages
+        Messaging.Inbox.NewMessage += m =>
+            {
+                var msg = m as NewNotificationMessage;
+                Console.WriteLine("Recieved message {0} from user id {1}.", msg.Payload.AsString(), msg.Sender);
+            };
+
+```
+
+### Group messaging
+Group messaging in Appacitive is implemented via the concept of Hubs.
+A hub is a group of connections with a unique name in the scope of your App deployment.
+All messages sent to a hub are sent to all connections that are part of the hub.
+A hub can be used as a logical abstraction for most multi user scenarios like chatroom, multi player session etc.
+The sample below shows how hubs can be used using the SDK.
+``` C#
+
+		var hubName = "my_chat_room";
+        // Create or join hub
+        await Messaging.JoinHubAsync(hubName);
+
+        // Send message to hub
+        var msg = new { text = "Come to my party", venue="19.123123,30.123123123" };
+        await Messaging.SendMessageAsync(msg, hub);
+
+        // Join notifications
+        Messaging.Hubs.Joined += m =>
+            {
+                var msg = m as JoinedHubMessage;
+                Console.WriteLine("User {0} joined hub {1}.", msg.User, msg.Hub);
+            };
+
+        // Leave hub notifications
+        Messaging.Hubs.Left += m =>
+        {
+            var msg = m as LeftHubMessage;
+            Console.WriteLine("User {0} left hub {1}.", msg.User, msg.Hub);
+        };
+
+```
+
 
 
 ### WCF gotchas
