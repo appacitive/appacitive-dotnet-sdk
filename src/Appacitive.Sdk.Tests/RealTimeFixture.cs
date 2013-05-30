@@ -11,22 +11,6 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class RealTimeFixture
     {
-        [TestMethod]
-        public async Task Run()
-        {
-            try
-            {
-                Console.WriteLine("test");
-                await Messaging.JoinHubAsync("test");
-                Console.WriteLine("Joined group");
-                Console.WriteLine("Press any key to send message");
-                await Messaging.SendMessageAsync(new { a = "test", b = "value" }, "test");
-                Console.WriteLine("done");
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        
     }
 }

@@ -67,7 +67,7 @@ namespace Appacitive.Sdk.Internal
 
     public class JoinedHubTopic : ITopic
     {
-        public static readonly ITopic Instance = new NewMessageTopic();
+        public static readonly ITopic Instance = new JoinedHubTopic();
 
         public string Key
         {
@@ -77,7 +77,7 @@ namespace Appacitive.Sdk.Internal
 
     public class LeftHubTopic : ITopic
     {
-        public static readonly ITopic Instance = new NewMessageTopic();
+        public static readonly ITopic Instance = new LeftHubTopic();
 
         public string Key
         {

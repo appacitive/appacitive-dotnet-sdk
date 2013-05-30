@@ -133,6 +133,9 @@
     <Compile Include="..\Appacitive.Sdk\Internal\IDownstreamMessage.cs">
       <Link>Internal\IDownstreamMessage.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\IUpstreamMessage.cs">
+      <Link>Internal\IUpstreamMessage.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\JsonObject.cs">
       <Link>Internal\JsonObject.cs</Link>
     </Compile>

@@ -54,6 +54,10 @@ namespace Appacitive.Sdk.Realtime
                     return typeof(ObjectUpdatedMessage);
                 case "9":
                     return typeof(NewNotificationMessage);
+                case "10":
+                    return typeof(JoinedHubMessage);
+                case "11":
+                    return typeof(LeftHubMessage);
                 default:
                     return null;
 

@@ -53,6 +53,7 @@
     <Compile Include="Interfaces\IUserContext.cs" />
     <Compile Include="Internal\HubSubscriber.cs" />
     <Compile Include="Internal\IDownstreamMessage.cs" />
+    <Compile Include="Internal\IUpstreamMessage.cs" />
     <Compile Include="Internal\JsonObject.cs" />
     <Compile Include="Internal\Messages.cs" />
     <Compile Include="Internal\MessageSubscriber.cs" />

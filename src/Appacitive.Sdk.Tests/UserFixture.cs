@@ -67,12 +67,12 @@ namespace Appacitive.Sdk.Tests
             var newUser = await UserHelper.CreateNewUserAsync();
             // Authenticate
             var creds = new UsernamePasswordCredentials(newUser.Username, newUser.Password);
-            var userSession = await creds.AuthenticateAsync();
+            var userSession = await App.LoginAsync(creds);
             Assert.IsNotNull(userSession);
             Assert.IsFalse(string.IsNullOrWhiteSpace(userSession.UserToken));
             Assert.IsNotNull(userSession.LoggedInUser);
 
-            App.Login(userSession.UserToken);
+            
             var loggedInUser = await Users.GetLoggedInUserAsync();
             Assert.IsNotNull(loggedInUser);
             Assert.IsTrue(loggedInUser.Id == userSession.LoggedInUser.Id);

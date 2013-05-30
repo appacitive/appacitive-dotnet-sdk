@@ -92,8 +92,8 @@ namespace Appacitive.Sdk.Net45
             if (_conn != null)
                 return;
             _conn = new Connection2(Urls.RealTimeMessaging);
-            _conn.Headers["ut"] = App.UserToken;
             _conn.Headers["ak"] = App.Apikey;
+            _conn.Headers["e"] = App.Environment.ToString();
             _conn.Received += OnReceived;
             _conn.Closed += OnClosed;
             _conn.ConnectionSlow += OnConnectionSlow;

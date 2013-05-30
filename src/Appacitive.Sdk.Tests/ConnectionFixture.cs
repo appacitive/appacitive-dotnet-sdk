@@ -129,6 +129,28 @@ namespace Appacitive.Sdk.Tests
 
 
         [TestMethod]
+        public async Task UpdatePartialConnectionAsyncTest()
+        {
+            // Create new connection
+            var obj1 = await ObjectHelper.CreateNewAsync();
+            var obj2 = new Article("object");
+            var conn = Connection
+                            .New("sibling")
+                            .FromExistingArticle("object", obj1.Id)
+                            .ToNewArticle("object", obj2);
+            await conn.SaveAsync();
+
+            // Update
+            var conn2 = new Connection("sibling", conn.Id);
+            var value = Guid.NewGuid().ToString();
+            conn["field1"] = value;
+            await conn.SaveAsync();
+
+            var updated = await Connections.GetAsync("sibling", conn.Id);
+            Assert.IsTrue(updated["field1"] == value);
+        }
+
+        [TestMethod]
         public async Task CreateConnection2BetweenNewAndExistingArticlesAsyncTest()
         {
             var obj1 = await ObjectHelper.CreateNewAsync();

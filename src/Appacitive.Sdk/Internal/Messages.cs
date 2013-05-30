@@ -122,12 +122,23 @@ namespace Appacitive.Sdk.Realtime
         }
     }
 
+    public abstract class UpstreamMessage : RealTimeMessage, IUpstreamMessage
+    {
+        protected UpstreamMessage(string code) : base(code)
+        {
+            this.UserToken = App.UserToken;
+        }
+
+        [JsonProperty("ut")]
+        public string UserToken { get; set; }   
+    }
+
     // Upstream messages
-    public class UnsubscribeFromObjectChangesMessage : RealTimeMessage
+    public class UnsubscribeFromObjectChangesMessage : UpstreamMessage
     {
         public UnsubscribeFromObjectChangesMessage()
             : base("6")
-        {
+        {   
         }
 
         [JsonProperty("et")]
@@ -140,7 +151,7 @@ namespace Appacitive.Sdk.Realtime
         public string Id { get; set; }
     }
 
-    public class SubscribeToObjectChangesMessage : RealTimeMessage
+    public class SubscribeToObjectChangesMessage : UpstreamMessage
     {
         public SubscribeToObjectChangesMessage()
             : base("5")
@@ -157,7 +168,7 @@ namespace Appacitive.Sdk.Realtime
         public string Id { get; set; }
     }
 
-    public class SubscribeToHubMessage : RealTimeMessage
+    public class SubscribeToHubMessage : UpstreamMessage
     {
         public SubscribeToHubMessage()
             : base("3")
@@ -166,9 +177,10 @@ namespace Appacitive.Sdk.Realtime
 
         [JsonProperty("h")]
         public string Hub { get; set; }
+
     }
 
-    public class UnsubscribeFromHubMessage : RealTimeMessage
+    public class UnsubscribeFromHubMessage : UpstreamMessage
     {
         public UnsubscribeFromHubMessage()
             : base("4")
@@ -177,9 +189,11 @@ namespace Appacitive.Sdk.Realtime
 
         [JsonProperty("h")]
         public string Hub { get; set; }
+
+
     }
 
-    public class SendToHub : RealTimeMessage
+    public class SendToHub : UpstreamMessage
     {
         public SendToHub()
             : base("2")
@@ -192,9 +206,10 @@ namespace Appacitive.Sdk.Realtime
         [JsonProperty("p")]
         public JObject Payload { get; set; }
 
+
     }
 
-    public class SendToUsers : RealTimeMessage
+    public class SendToUsers : UpstreamMessage
     {
         public SendToUsers()
             : base("1")

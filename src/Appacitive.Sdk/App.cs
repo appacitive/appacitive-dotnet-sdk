@@ -112,10 +112,11 @@ namespace Appacitive.Sdk
                     ;
         }
 
-        public static async Task LoginAsync(Credentials credentials)
+        public static async Task<UserSession> LoginAsync(Credentials credentials)
         {
             var session = await credentials.AuthenticateAsync();
-            Login(session.UserToken);
+            App.UserToken = session.UserToken;
+            return session;
         }
 
         public static async Task Logout()
@@ -132,11 +133,6 @@ namespace Appacitive.Sdk
             {
                 return string.IsNullOrWhiteSpace(App.UserToken) == false;
             }
-        }
-
-        public static void Login(string token)
-        {
-            App.UserToken = token;
         }
 
         internal static async Task SendMessageAsync(RealTimeMessage msg)
