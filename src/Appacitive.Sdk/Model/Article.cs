@@ -97,9 +97,9 @@ namespace Appacitive.Sdk
             return await Articles.GetConnectedArticlesAsync(relation, this.Id, query, label, fields, pageNumber, pageSize);
         }
 
-        public async Task<PagedList<Connection>> GetConnectionsAsync(string relation, string query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
+        public async Task<PagedList<Connection>> GetConnectionsAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
-            return await Articles.GetConnectionsAsync(relation, this.Id, query, null, fields, pageNumber, pageSize);
+            return await Articles.GetConnectionsAsync(relation, this.Id, query, label, fields, pageNumber, pageSize);
         }
     }
 }
