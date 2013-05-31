@@ -46,7 +46,13 @@ namespace Appacitive.Sdk.Services
                 if (json.TryGetValue("__schemaid", out value) == true && value.Type != JTokenType.Null)
                     article.SchemaId = value.ToString();
             }
-            return article;
+
+            // Check for inheritance.
+            if (article.Type.Equals("user", StringComparison.OrdinalIgnoreCase) == true)
+                return new User(article);
+            else if (article.Type.Equals("device", StringComparison.OrdinalIgnoreCase) == true)
+                return new Device(article);
+            else return article;
         }
 
         protected override void WriteJson(Entity entity, JsonWriter writer, JsonSerializer serializer)

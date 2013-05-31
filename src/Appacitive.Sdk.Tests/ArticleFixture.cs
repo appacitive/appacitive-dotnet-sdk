@@ -24,6 +24,23 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Created article with id {0}.", saved.Id);
         }
 
+
+        [TestMethod]
+        public async Task GetDevicesShouldReturnDeviceObjectsTest()
+        {
+            var created = await DeviceHelper.CreateNewAsync();
+            var devices = await Articles.FindAllAsync("device");
+            Assert.IsFalse(devices.Exists(d => d is Device == false ));
+        }
+
+        [TestMethod]
+        public async Task GetUsersShouldReturnUserObjectsTest()
+        {
+            var created = await UserHelper.CreateNewUserAsync();
+            var users = await Articles.FindAllAsync("user");
+            Assert.IsFalse(users.Exists(d => d is User == false));
+        }
+
         [TestMethod]
         public async Task GetArticleAsyncTest()
         {
