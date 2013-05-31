@@ -25,5 +25,16 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Created new device with id {0}.", device.Id);
             return device;
         }
+
+        public static Device NewDevice()
+        {
+            return new Device(DeviceType.iOS)
+                {
+                    DeviceToken = Guid.NewGuid().ToString(),
+                    Badge = 1,
+                    Location = new Geocode(10, 10),
+                    TimeZone = Timezone.Create(5, 30)
+                };
+        }
     }
 }

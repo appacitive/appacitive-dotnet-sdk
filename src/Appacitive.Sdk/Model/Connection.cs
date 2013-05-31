@@ -170,7 +170,22 @@ namespace Appacitive.Sdk
 
         protected async override Task<Entity> CreateNewAsync()
         {
-            
+            // Handling for special case when endpoint contains a new article or device.
+            // Since these cannot be created on the fly when creating a new connection.
+            var endpoints = this.Endpoints.ToArray();
+            for (int i = 0; i < endpoints.Length; i++)
+            {
+                if (endpoints[i].CreateEndpoint == false) continue;
+                if (endpoints[i].Content.Type.Equals("user", StringComparison.OrdinalIgnoreCase) == true ||
+                    endpoints[i].Content.Type.Equals("device", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    // Create the article
+                    await endpoints[i].Content.SaveAsync();
+                    // Update endpoint articleid
+                    endpoints[i].ArticleId = endpoints[i].Content.Id;
+                }
+            }
+
             // Create a new article
             IConnectionService service = ObjectFactory.Build<IConnectionService>();
             var response = await service.CreateConnectionAsync(new CreateConnectionRequest()

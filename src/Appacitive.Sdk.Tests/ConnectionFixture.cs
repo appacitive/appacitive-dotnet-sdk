@@ -65,6 +65,20 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
+        public async Task CreateConnectionWithNewUserAndNewDevice()
+        {
+            var device = DeviceHelper.NewDevice();
+            var user = UserHelper.NewUser();
+            var conn = Connection.New("my_device")
+                .FromNewArticle("device", device)
+                .ToNewArticle("user", user);
+            await conn.SaveAsync();
+
+            Assert.IsTrue(string.IsNullOrWhiteSpace(conn.Id) == false);
+            Console.WriteLine("Created connection with id: {0}", conn.Id);
+        }
+
+        [TestMethod]
         public async Task CreateConnectionBetweenNewArticlesAsyncTest()
         {
             var obj1 = new Article("object");
