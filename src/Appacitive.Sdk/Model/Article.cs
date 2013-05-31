@@ -99,7 +99,7 @@ namespace Appacitive.Sdk
 
         public async Task<PagedList<Connection>> GetConnectionsAsync(string relation, string query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
-            return await Articles.GetConnectionsAsync(relation, this.Id, query, fields, pageNumber, pageSize);
+            return await Articles.GetConnectionsAsync(relation, this.Id, query, null, fields, pageNumber, pageSize);
         }
     }
 }

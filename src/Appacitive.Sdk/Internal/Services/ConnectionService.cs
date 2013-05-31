@@ -68,7 +68,7 @@ namespace Appacitive.Sdk.Services
         {
             byte[] bytes = null;
             bytes = await HttpOperation
-                        .WithUrl(Urls.For.FindConnectedArticles(request.Relation, request.ArticleId, request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
+                        .WithUrl(Urls.For.FindConnectedArticles(request.Relation, request.ArticleId, request.Label, request.Query, request.PageNumber, request.PageSize, request.CurrentLocation, request.DebugEnabled, request.Verbosity, request.Fields))
                         .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
                         .WithEnvironment(request.Environment)
                         .WithUserToken(request.UserToken)

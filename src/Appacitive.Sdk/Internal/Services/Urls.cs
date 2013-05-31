@@ -248,9 +248,11 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string FindConnectedArticles(string relation, string articleId, string query, int pageNumber, int pageSize, Geocode location, bool debugEnabled, Verbosity verbosity, List<string> fields)
+            public static string FindConnectedArticles(string relation, string articleId, string label, string query, int pageNumber, int pageSize, Geocode location, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ConnectionServiceBase).Append(relation).Append(articleId).Append("find");
+                if (string.IsNullOrWhiteSpace(label) == false)
+                    url.QueryString["label"] = label;
                 if (string.IsNullOrWhiteSpace(query) == false)
                     url.QueryString["query"] = query;
                 if (pageNumber > 0)

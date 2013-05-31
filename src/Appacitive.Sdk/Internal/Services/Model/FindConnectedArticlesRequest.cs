@@ -22,6 +22,8 @@ namespace Appacitive.Sdk.Services
 
         public string ArticleId { get; set; }
 
+        public string Label { get; set; }
+
         public string Query { get; set; }
 
         public int PageNumber { get; set; }

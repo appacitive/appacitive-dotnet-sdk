@@ -79,6 +79,58 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
+        public async Task GetConnectedArticlesOnConnectionWithSameTypeAndDifferentLabels()
+        {
+            var parent = await ObjectHelper.CreateNewAsync();
+            var child1 = await ObjectHelper.CreateNewAsync();
+            var child2 = await ObjectHelper.CreateNewAsync();
+            // Create connections
+            await Connection.New("link")
+                .FromExistingArticle("parent", parent.Id)
+                .ToExistingArticle("child", child1.Id)
+                .SaveAsync();
+
+            await Connection.New("link")
+                .FromExistingArticle("parent", parent.Id)
+                .ToExistingArticle("child", child2.Id)
+                .SaveAsync();
+
+            // Get connected articles
+            var articles = await parent.GetConnectedArticlesAsync("link", label: "child");
+            Assert.IsTrue(articles.Count == 2);
+            Assert.IsTrue(articles.Select(a => a.Id).Intersect(new[] { child1.Id, child2.Id }).Count() == 2);
+        }
+
+        [TestMethod]
+        public async Task GetConnectedArticlesForSameTypeAndDifferentLabelsWithoutLabelTest()
+        {
+            var parent = await ObjectHelper.CreateNewAsync();
+            var child1 = await ObjectHelper.CreateNewAsync();
+            var child2 = await ObjectHelper.CreateNewAsync();
+            // Create connections
+            await Connection.New("link")
+                .FromExistingArticle("parent", parent.Id)
+                .ToExistingArticle("child", child1.Id)
+                .SaveAsync();
+
+            await Connection.New("link")
+                .FromExistingArticle("parent", parent.Id)
+                .ToExistingArticle("child", child2.Id)
+                .SaveAsync();
+
+            // Get connected articles
+            try
+            {
+                var articles = await parent.GetConnectedArticlesAsync("link");
+                Assert.Fail("This call should have failed since we did not specify the label to retreive.");
+            }
+            catch (Exception ex)
+            {
+                Assert.IsTrue(ex.Message == "Label is required for edge 'link'.");
+            }
+        }
+
+        [TestMethod]
         public async Task CreateConnectionBetweenNewArticlesAsyncTest()
         {
             var obj1 = new Article("object");

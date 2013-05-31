@@ -96,6 +96,7 @@ namespace Appacitive.Sdk
             {
                 Relation = relation,
                 ArticleId = articleId,
+                Label = label,
                 Query = query,
                 PageNumber = pageNumber,
                 PageSize = pageSize
@@ -130,7 +131,7 @@ namespace Appacitive.Sdk
             return list;
         }
 
-        public async static Task<PagedList<Connection>> GetConnectionsAsync(string relation, string articleId, string query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
+        public async static Task<PagedList<Connection>> GetConnectionsAsync(string relation, string articleId, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
             IConnectionService connService = ObjectFactory.Build<IConnectionService>();
             var request = new FindConnectedArticlesRequest
@@ -138,6 +139,7 @@ namespace Appacitive.Sdk
                 Relation = relation,
                 ArticleId = articleId,
                 Query = query,
+                Label = label,
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };
@@ -152,7 +154,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await GetConnectionsAsync(relation, articleId, query, fields, pageNumber + skip + 1, pageSize)
+                GetNextPage = async skip => await GetConnectionsAsync(relation, articleId, query, null, fields, pageNumber + skip + 1, pageSize)
             };
             list.AddRange(response.Connections);
             return list;
