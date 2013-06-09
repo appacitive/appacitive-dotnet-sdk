@@ -50,9 +50,11 @@ namespace Appacitive.Sdk
         public IEnumerable<T> GetList<T>(string name)
         {
             var value = ReadField(name);
+            if (value == null)
+                return MultiValue.Empty.GetValues<T>();
             if( value is IEnumerable == false )
                 throw new Exception("Value of property '" + name + "' is not multivalued.");
-            var list = new MultiValue(ReadField(name) as IEnumerable);
+            var list = new MultiValue(value as IEnumerable);
             return list.GetValues<T>();
         }
     }

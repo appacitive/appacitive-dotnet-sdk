@@ -50,6 +50,7 @@
     <Compile Include="Interfaces\ISubscriptionManager.cs" />
     <Compile Include="Interfaces\IUploadHandler.cs" />
     <Compile Include="Interfaces\IUserContext.cs" />
+    <Compile Include="Interfaces\IValueCollection.cs" />
     <Compile Include="Internal\MapDiff.cs" />
     <Compile Include="Internal\HubSubscriber.cs" />
     <Compile Include="Internal\IDownstreamMessage.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Internal\Messages.cs" />
     <Compile Include="Internal\MessageSubscriber.cs" />
     <Compile Include="Internal\EventProxy.cs" />
+    <Compile Include="Model\MultiValueCollection.cs" />
     <Compile Include="Internal\NamingConvention.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -80,7 +82,6 @@
     <Compile Include="Model\Connections.cs" />
     <Compile Include="Model\Device.cs" />
     <Compile Include="Model\Email.cs" />
-    <Compile Include="Model\IValueCollection.cs" />
     <Compile Include="Model\PushNotification.cs" />
     <Compile Include="Model\SupportedDevices.cs" />
     <Compile Include="Model\Timezone.cs" />

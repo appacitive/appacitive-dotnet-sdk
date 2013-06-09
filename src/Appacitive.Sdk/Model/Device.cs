@@ -1,4 +1,6 @@
-﻿using Appacitive.Sdk.Services;
+﻿using Appacitive.Sdk.Interfaces;
+using Appacitive.Sdk.Internal;
+using Appacitive.Sdk.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -59,17 +61,22 @@ namespace Appacitive.Sdk
         public Device(DeviceType type) : base("device")
         {
             this.DeviceType = type;
+            this.Channels = new MultiValueCollection<string>(this, "channels");
         }
 
         public Device(string id)
             : base("device", id)
         {
+            this.Channels = new MultiValueCollection<string>(this, "channels");
         }
 
         public Device(Article device)
             : base(device)
-        {   
+        {
+            this.Channels = new MultiValueCollection<string>(this, "channels");
         }
+
+        public IValueCollection<string> Channels { get; private set; }
         
         public DeviceType DeviceType
         {

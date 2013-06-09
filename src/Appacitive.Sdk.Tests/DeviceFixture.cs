@@ -18,8 +18,10 @@ namespace Appacitive.Sdk.Tests
                 DeviceToken = Guid.NewGuid().ToString(),
                 Badge = 1,
                 Location = new Geocode(10,10),
-                TimeZone  = Timezone.Create(5,30)
+                TimeZone  = Timezone.Create(5,30),
             };
+            device.Channels.Add("a");
+            device.Channels.Add("b");
             await device.SaveAsync();
             Console.WriteLine("Created new device with id {0}.", device.Id);
         }
@@ -29,7 +31,11 @@ namespace Appacitive.Sdk.Tests
         {
             // Create a new device
             var created = await DeviceHelper.CreateNewAsync();
+            created.Channels.AddRange(new[] { "x", "y", "z" });
+            var count = created.Channels.Count;
+            await created.SaveAsync();
             var device = await Devices.GetAsync(created.Id);
+            Assert.IsTrue(device.Channels.Count == count);
             Assert.IsNotNull(device);
             Assert.IsTrue(device.Id == created.Id);
             Assert.IsTrue(device.DeviceToken == created.DeviceToken);

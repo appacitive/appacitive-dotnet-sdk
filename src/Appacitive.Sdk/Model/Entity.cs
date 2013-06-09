@@ -410,5 +410,19 @@ namespace Appacitive.Sdk
         protected abstract Task<Entity> CreateNewAsync();
 
         protected abstract Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision);
+
+        public void ClearList(string property)
+        {
+            lock (_syncRoot)
+            {
+                object value = null;
+                if (_currentFields.TryGetValue(property, out value) == true)
+                {
+                    if (value != null && value.IsMultiValued() == false)
+                        throw new ArgumentException("Existing value for property " + property + " is not multi valued.");
+                }
+                _currentFields[property] = new List<string>();
+            }
+        }
     }
 }

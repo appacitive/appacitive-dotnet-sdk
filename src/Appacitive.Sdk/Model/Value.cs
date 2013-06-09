@@ -252,12 +252,20 @@ namespace Appacitive.Sdk
 
     public class MultiValue : Value
     {
+        public static readonly MultiValue Empty = new MultiValue(new string[] { });
+
         public MultiValue(IEnumerable enumerable) 
         {
-            this.Values = enumerable;
+            this.Values = enumerable.Cast<object>().ToArray();
         }
 
-        public IEnumerable Values { get; private set; }
+        public object[] Values { get; private set; }
+
+
+        public int Count
+        {
+            get { return this.Values.Length; }
+        }
 
         public override ValueType Type
         {

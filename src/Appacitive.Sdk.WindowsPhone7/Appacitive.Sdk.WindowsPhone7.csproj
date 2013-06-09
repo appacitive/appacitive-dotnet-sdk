@@ -121,6 +121,9 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\IUserContext.cs">
       <Link>Interfaces\IUserContext.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IValueCollection.cs">
+      <Link>Internal\IValueCollection.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\EventProxy.cs">
       <Link>Internal\EventProxy.cs</Link>
     </Compile>
@@ -564,6 +567,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Guard.cs">
       <Link>Model\Guard.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\MultiValueCollection.cs">
+      <Link>Model\MultiValueCollection.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\ObjectFactory.cs">
       <Link>Model\ObjectFactory.cs</Link>
