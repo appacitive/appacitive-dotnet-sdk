@@ -12,6 +12,81 @@ Except as otherwise noted, the .NET SDK for Appacitive is licensed under the Apa
 
 # Documentation 
 
+## Data storage and retrieval
+
+### Managing articles
+Articles in the SDK are managed via the Article object and the Articles static helper class.
+The snippets below show how common actions are performed on articles.
+
+#### Creating a new article.
+To create a new article, simply instantiate a new article object with the specific schema type.
+Initialize its properties and invoke SaveAsync().
+
+``` C#
+// Creating a new article
+var myScore = new Article("score");
+myScore.Set<int>("points", 100);
+myScore.Set<bool>("level_completed", true);
+await myScore.SaveAsync();
+
+// Creating a new article using dynamic (.NET 4.5)
+dynamic myScore = new Article("score");
+myScore.Points = 100; // Points is case insensitive.
+myScore.Level_Completed = true;
+await myScore.SaveAsync();
+
+```
+
+#### Get an existing article
+
+``` C#
+// Get score with id 87321
+var score = await Articles.GetAsync("score", "87321");
+
+// Get score with id 87321 with points field only
+var score = await Articles.GetAsync("score", "1234233434", new [] { "points" });
+int points = score.Get<int>("points");
+
+// To multi get a list of articles using a list of ids
+var ids = new[] { "4543212", "79782374", "8734734" };
+IEnumerable<Article> articles = await Articles.MultiGetAsync("account", ids);
+
+```
+
+#### Updating an existing article.
+The SaveAsync() method will update all changes made to an article. Incase you know the article id but do not have
+the article instance, simply create a new article object with the id, update the required fields and invoke SaveAsync().
+The article object supports partial updates and will only update the fields that have changed explicitly.
+
+``` C#
+
+// Update an existing article
+// Incase the article object is not available, simply 
+// create a new instance with the id of the article to be updated.
+var account = new Article("account", "43234455");	
+account.Set<bool>("email_verified", true);			// Set the field value to be updated.
+await account.SaveAsync();							// Save async
+
+```
+
+
+#### Deleting an article.
+To delete an article, use the DeleteAsync() method on the Articles helper class as shown in the snippet below.
+
+``` C#
+// To delete article of type account with id 53323454
+await Articles.DeleteAsync("account", "53323454");
+
+// To delete article of type account with id 32423453 along with all connections
+bool deleteConnections = true;
+Articles.DeleteAsync("account", "32423453", deleteConnections);
+
+// To delete multiple articles of type account.
+var ids = new [] { "234234", "71231230", "97637282" };
+await Articles.MultiDeleteAsync("account", ids);
+```
+
+
 ## User management
 
 ### Adding or updating a new user
