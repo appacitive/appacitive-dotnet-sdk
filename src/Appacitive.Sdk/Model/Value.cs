@@ -2,338 +2,296 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Collections;
+using Appacitive.Sdk.Internal;
 
 namespace Appacitive.Sdk
 {
-    public struct Value
+    public abstract class Value
     {
-        public Value(decimal value) : this(value.ToString(), ValueType.Decimal) { }
-
-        public Value(double value) : this(Convert.ToDecimal(value).ToString(), ValueType.Decimal) { }
-
-        public Value(DateTime value) : this(value.ToString("o"), ValueType.DateTime) { }
-
-        public Value(long value) : this(value.ToString(), ValueType.Int64) { }
-
-        public Value(bool value) : this(value.ToString(), ValueType.Boolean) { }
-
-        public Value(string value) : this(value, ValueType.String) { }
-
-        private Value(string value, ValueType typeCode)
-            : this()
+        public static Value FromObject(object obj)
         {
-            StringValue = value;
-            TypeCode = typeCode;
+            if (obj == null)
+                return NullValue.Instance;
+            if (obj.IsMultiValued() == true)
+                return new MultiValue(obj as IEnumerable);
+            if (obj.GetType().IsPrimitiveType() || obj is string || obj is DateTime )
+                return new SingleValue(obj);
+            throw new Exception(obj.GetType().Name + " cannot be converted to a Value object.");
         }
 
-        private ValueType TypeCode { get; set; }
-        public string StringValue { get; private set; }
+        public abstract ValueType Type { get; }
 
-        #region Implicit conversions 
+        public abstract T GetValue<T>();
 
-        // decimal representation
-        public static implicit operator decimal(Value value)
+        public abstract IEnumerable<T> GetValues<T>();
+
+        public static implicit operator Value(bool value)
         {
-            return decimal.Parse(value.StringValue);
-        }
-
-        public static implicit operator Value(decimal d)
-        {
-            return new Value(d);
-        }
-
-        // int rep
-        public static implicit operator int(Value value)
-        {
-            return int.Parse(value.StringValue);
-        }
-
-        public static implicit operator Value(int value)
-        {
-            return new Value(value);
-        }
-
-        // long rep
-        public static implicit operator long(Value value)
-        {
-            return long.Parse(value.StringValue);
-        }
-
-        public static implicit operator Value(long d)
-        {
-            return new Value(d);
-        }
-
-        // float rep
-        public static implicit operator float(Value value)
-        {
-            return float.Parse(value.StringValue);
-        }
-
-        public static implicit operator Value(float d)
-        {
-            return new Value(d);
-        }
-
-        // string rep
-        public static implicit operator string(Value value)
-        {
-            return value.StringValue;
-        }
-
-        public static implicit operator Value(string s)
-        {
-            return new Value(s);
-        }
-
-        // double rep
-        public static implicit operator double(Value value)
-        {
-            return double.Parse(value.StringValue);
-        }
-
-        public static implicit operator Value(double d)
-        {
-            return new Value(d);
-        }
-
-        // bool rep
-        private static bool IsTrue(string value)
-        {
-            if ("|Y|Yes|1|true|on|".IndexOf(value, StringComparison.OrdinalIgnoreCase) > -1)
-                return true;
-            else if ("|N|No|0|false|off|".IndexOf(value, StringComparison.OrdinalIgnoreCase) > -1)
-                return false;
-            else throw new Exception(string.Format("Cannot convert {0} to boolean.", value));
+            return new SingleValue(value.ToString());
         }
 
         public static implicit operator bool(Value value)
         {
-            return IsTrue(value.StringValue);
+            return value.GetValue<bool>();
         }
 
-        public static implicit operator Value(bool d)
+        public static implicit operator Value(string value)
         {
-            return new Value(d);
+            return new SingleValue(value);
         }
 
-        // date time
+        public static implicit operator string(Value value)
+        {
+            return value.GetValue<string>();
+        }
+
+
+        public static implicit operator Value(int value)
+        {
+            return new SingleValue(value.ToString());
+        }
+
+        public static implicit operator int(Value value)
+        {
+            return value.GetValue<int>();
+        }
+
+        public static implicit operator Value(long value)
+        {
+            return new SingleValue(value.ToString());
+        }
+
+        public static implicit operator long(Value value)
+        {
+            return value.GetValue<long>();
+        }
+
+        public static implicit operator Value(uint value)
+        {
+            return new SingleValue(value.ToString());
+        }
+
+        public static implicit operator uint(Value value)
+        {
+            return value.GetValue<uint>();
+        }
+
+        public static implicit operator Value(ulong value)
+        {
+            return new SingleValue(value.ToString());
+        }
+
+        public static implicit operator ulong(Value value)
+        {
+            return value.GetValue<ulong>();
+        }
+
+        public static implicit operator Value(DateTime value)
+        {
+            return new SingleValue(value);
+        }
+
         public static implicit operator DateTime(Value value)
         {
-            return DateTime.ParseExact(value.StringValue, new [] { "o",Formats.BirthDate,Formats.Time }, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            return value.GetValue<DateTime>();
         }
 
-        public static implicit operator Value(DateTime d)
+        public static implicit operator Value(float value)
         {
-            return new Value(d);
+            return new SingleValue(value.ToString());
         }
 
-        #endregion
-
-        #region Equality operator
-
-        // decimal equality
-        public static bool operator ==(Value v1, decimal num)
+        public static implicit operator float(Value value)
         {
-            return decimal.Parse(v1.StringValue) == num;
+            return value.GetValue<float>();
         }
 
-        public static bool operator ==(decimal num, Value v)
+        public static implicit operator Value(double value)
         {
-            return decimal.Parse(v.StringValue) == num;
+            return new SingleValue(value.ToString());
         }
 
-        public static bool operator !=(Value v1, decimal num)
+        public static implicit operator double(Value value)
         {
-            return decimal.Parse(v1.StringValue) != num;
+            return value.GetValue<double>();
         }
 
-        public static bool operator !=(decimal num, Value v)
+        public static implicit operator Value(decimal value)
         {
-            return decimal.Parse(v.StringValue) != num;
+            return new SingleValue(value.ToString());
         }
 
-        // float equality
-        public static bool operator ==(Value value, float num)
+        public static implicit operator decimal(Value value)
         {
-            return decimal.Parse(value.StringValue) == Convert.ToDecimal(num);
+            return value.GetValue<decimal>();
         }
 
-        public static bool operator ==(float num, Value value)
+        public static implicit operator Value(Int16 value)
         {
-            return decimal.Parse(value.StringValue) == Convert.ToDecimal(num);
+            return new SingleValue(value.ToString());
         }
 
-        public static bool operator !=(Value value, float num)
+        public static implicit operator Int16(Value value)
         {
-            return decimal.Parse(value.StringValue) != Convert.ToDecimal(num);
+            return value.GetValue<Int16>();
         }
 
-        public static bool operator !=(float num, Value value)
+        public static implicit operator Value(UInt16  value)
         {
-            return decimal.Parse(value.StringValue) != Convert.ToDecimal(num);
+            return new SingleValue(value.ToString());
         }
 
-        // double equality
-        public static bool operator ==(Value value, double num)
+        public static implicit operator UInt16(Value value)
         {
-            return decimal.Parse(value.StringValue) == Convert.ToDecimal(num);
+            return value.GetValue<UInt16>();
         }
 
-        public static bool operator ==(double num, Value value)
+        public static implicit operator Value(char value)
         {
-            return decimal.Parse(value.StringValue) == Convert.ToDecimal(num);
+            return new SingleValue(value.ToString());
         }
 
-        public static bool operator !=(Value value, double num)
+        public static implicit operator char(Value value)
         {
-            return decimal.Parse(value.StringValue) != Convert.ToDecimal(num);
+            return value.GetValue<char>();
         }
+    }
 
-        public static bool operator !=(double num, Value value)
+    public enum ValueType
+    {
+        Null,
+        SingleValue,
+        MultiValue
+    }
+
+    public class NullValue : Value
+    {
+        private NullValue()
         {
-            return decimal.Parse(value.StringValue) != Convert.ToDecimal(num);
         }
 
-        // long equality
-        public static bool operator ==(Value value, long num)
+        public static Value Instance = new NullValue();
+
+        public override ValueType Type
         {
-            return long.Parse(value.StringValue) == num;
+            get { return ValueType.Null; }
         }
 
-        public static bool operator ==(long num, Value value)
+        public override T GetValue<T>()
         {
-            return long.Parse(value.StringValue) == num;
+            if (default(T) == null)
+                return default(T);
+            else throw new Exception(typeof(T).Name + " is not nullable.");
         }
 
-        public static bool operator !=(Value value, long num)
+        public override IEnumerable<T> GetValues<T>()
         {
-            return long.Parse(value.StringValue) != num;
+            throw new NotImplementedException();
         }
-
-        public static bool operator !=(long num, Value value)
-        {
-            return long.Parse(value.StringValue) != num;
-        }
-
-        // int equality
-        public static bool operator ==(Value value, int num)
-        {
-            return long.Parse(value.StringValue) == num;
-        }
-
-        public static bool operator ==(int num, Value value)
-        {
-            return long.Parse(value.StringValue) == num;
-        }
-
-        public static bool operator !=(Value value, int num)
-        {
-            return long.Parse(value.StringValue) != num;
-        }
-
-        public static bool operator !=(int num, Value value)
-        {
-            return long.Parse(value.StringValue) != num;
-        }
-
-        // Date time equality
-        public static bool operator ==(Value value, DateTime datetime)
-        {
-            DateTime date = value;
-            return date == datetime;
-        }
-
-        public static bool operator ==(DateTime datetime, Value value)
-        {
-            DateTime date = value;
-            return date == datetime;
-        }
-
-        public static bool operator !=(Value value, DateTime datetime)
-        {
-            DateTime date = value;
-            return date != datetime;
-        }
-
-        public static bool operator !=(DateTime datetime, Value value)
-        {
-            DateTime date = value;
-            return date != datetime;
-        }
-
-        // Boolean equality
-        public static bool operator ==(Value value, bool boolean)
-        {
-            bool bool1 = value;
-            return bool1 == boolean;
-        }
-
-        public static bool operator ==(bool boolean, Value value)
-        {
-            bool bool1 = value;
-            return bool1 == boolean;
-        }
-
-        public static bool operator !=(Value value, bool boolean)
-        {
-            bool bool1 = value;
-            return bool1 != boolean;
-        }
-
-        public static bool operator !=(bool boolean, Value value)
-        {
-            bool bool1 = value;
-            return bool1 != boolean;
-        }
-
-        // String equality
-        public static bool operator ==(Value value, string str)
-        {
-            return value.StringValue == str;
-        }
-
-        public static bool operator ==(string str, Value value)
-        {
-            return value.StringValue == str;
-        }
-
-        public static bool operator !=(Value value, string str)
-        {
-            return value.StringValue != str;
-        }
-
-        public static bool operator !=(string str, Value value)
-        {
-            return value.StringValue != str;
-        }
-
-        public static bool operator ==(Value v1, Value v2)
-        {
-            return v1.Equals(v2);
-        }
-
-        public static bool operator !=(Value v1, Value v2)
-        {
-            return v1.Equals(v2) == false;
-        }
-
-        #endregion
 
         public override bool Equals(object obj)
         {
-            if (obj == null || obj is Value == false || this.StringValue == null)
-                return false;
-            var other = (Value)obj;
-            if (this.StringValue == null || other.StringValue == null)
-                return false;
-            return this.StringValue.Equals(other.StringValue);
+            return this == obj;
         }
 
         public override int GetHashCode()
         {
-            return this.StringValue.GetHashCode();
+            // Dont need to override since there will always be only once instance of this class
+            // since it is a singleton.
+            return base.GetHashCode();   
         }
     }
+
+    public class SingleValue : Value
+    {
+        public SingleValue(object value)
+        {
+            if( value.GetType().IsPrimitiveType() == false )
+                throw new ArgumentException("value must by a string, datetime or primitive type.");
+            if( value is DateTime )
+                this.Value = ((DateTime)value).ToString("o");
+            else
+                this.Value = value.ToString();
+        }
+
+        public string Value { get; private set; }
+
+        public override IEnumerable<T> GetValues<T>()
+        {
+            throw new Exception("StringValue does not support Values<T>().");
+        }
+
+        public override T GetValue<T>()
+        {
+            if (default(T) != null && this.Value == null)
+                throw new Exception("Value is null.");
+            return Internal.ValueConverter.Convert<T>(this.Value);
+        }
+
+        public override ValueType Type
+        {
+            get { return ValueType.SingleValue; }
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as SingleValue;
+            if (other == null)
+                return false;
+            return this.Value.Equals(other.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Value.GetHashCode();
+        }
+    }
+
+    public class MultiValue : Value
+    {
+        public MultiValue(IEnumerable enumerable) 
+        {
+            this.Values = enumerable;
+        }
+
+        public IEnumerable Values { get; private set; }
+
+        public override ValueType Type
+        {
+            get { return ValueType.MultiValue; }
+        }
+
+        public override T GetValue<T>()
+        {
+            throw new Exception("GetValue<T> not supported for array values.");
+        }
+
+        public override IEnumerable<T> GetValues<T>()
+        {
+            return ValueConverter.ConvertAll<T>(this.Values);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as MultiValue;
+            if (other == null)
+                return false;
+            var otherArray = other.GetValues<string>().ToArray();
+            var myArray = this.GetValues<string>().ToArray();
+            return otherArray.Intersect(myArray).Count() == myArray.Length;
+
+        }
+
+        public override int GetHashCode()
+        {
+            // Get sorted concatenated key
+            var array = this.GetValues<string>().ToArray();
+            Array.Sort(array);
+            return array.AsString().GetHashCode();
+        }
+    }
+
 }

@@ -18,30 +18,18 @@ namespace Appacitive.Sdk
                 return true;
             else
             {
-                result = null;
-                string outResult;
-                var exists = _currentFields.TryGetValue(binder.Name, out outResult);
-                if (exists == true)
-                {
-                    result = new Value(outResult);
-                    return true;
-                }
-                else
-                {
-                    result = null;
-                    return false;
-                }
+                result = this[binder.Name];
+                return true;
             }
         }
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            if (value != null)
-                Guard.ValidateAllowedTypes(value.GetType());
-            if (value is Value)
-                _currentFields[binder.Name] = ((Value)value).StringValue;
-            else
-                _currentFields[binder.Name] = value == null ? null : value.ToString();
+            if (value.IsMultiValued() == true)
+                throw new Exception("Dynamic properties cannot be used for multi-valued values.");
+            if (value != null) 
+                Guard.ValidateAllowedPrimitiveTypes(value.GetType());
+            this[binder.Name] = Value.FromObject(value);
             return true;
         }
     }

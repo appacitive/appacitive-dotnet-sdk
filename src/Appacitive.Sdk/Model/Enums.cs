@@ -18,7 +18,7 @@ namespace Appacitive.Sdk
 
 
 
-    public enum ValueType
+    public enum DynamicValueType
     {
         // Summary:
         //     A null reference.

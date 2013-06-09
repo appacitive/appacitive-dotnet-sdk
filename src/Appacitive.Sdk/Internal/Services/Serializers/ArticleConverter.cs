@@ -16,13 +16,10 @@ namespace Appacitive.Sdk.Services
         {
             // Type should not be a User or Device since these have their specific serializers.
             // This serializer should be used for any other type that inherits from article.
-            if( objectType != typeof(User) && objectType != typeof(Device) )
-                #if !WINDOWS_PHONE7
-                return typeof(Article).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo());
-                #else
-                return typeof(Article).IsAssignableFrom(objectType);
-                #endif
-            return false;
+            if (objectType != typeof(User) && objectType != typeof(Device))
+                return objectType.Is<Article>();
+            else 
+                return false;
         }
 
         protected override Entity CreateEntity(JObject json)

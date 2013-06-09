@@ -76,9 +76,6 @@
     <Compile Include="..\Appacitive.Sdk\AppacitiveContext.cs">
       <Link>AppacitiveContext.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Entity.cs">
-      <Link>Entity.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Extensions.cs">
       <Link>Extensions.cs</Link>
     </Compile>
@@ -138,6 +135,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\JsonObject.cs">
       <Link>Internal\JsonObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\MapDiff.cs">
+      <Link>Internal\MapDiff.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Messages.cs">
       <Link>Internal\Messages.cs</Link>
@@ -489,6 +489,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\TypeSubscriber.cs">
       <Link>Internal\TypeSubscriber.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\ValueConverter.cs">
+      <Link>Internal\ValueConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\IUserFactory.cs">
       <Link>IUserFactory.cs</Link>

@@ -75,7 +75,7 @@ namespace Appacitive.Sdk
         {
             get
             {
-                var type = this["devicetype"];
+                var type = this.Get<string>("devicetype");
                 if (string.IsNullOrWhiteSpace(type) == true)
                     throw new Exception("Devicetype cannot be null or empty.");
                 return SupportedDevices.ResolveDeviceType(type);
@@ -89,15 +89,16 @@ namespace Appacitive.Sdk
 
         public string DeviceToken
         {
-            get { return this["devicetoken"]; }
+            get { return this.Get<string>("devicetoken"); }
             set { this["devicetoken"] = value; }
         }
 
+        
         public int Badge
         {
             get 
             {
-                var badge = this["badge"];
+                var badge = this.Get<string>("badge");
                 if (string.IsNullOrWhiteSpace(badge) == true)
                     return 0;
                 else return int.Parse(badge);
@@ -114,7 +115,7 @@ namespace Appacitive.Sdk
         {
             get 
             {
-                var location = this["location"];
+                var location = this.Get<string>("location");
                 if (string.IsNullOrWhiteSpace(location) == true)
                     return null;
                 Geocode geo;
@@ -132,7 +133,7 @@ namespace Appacitive.Sdk
         {
             get
             {
-                var isActive = this["isactive"];
+                var isActive = this.Get<string>("isactive");
                 if (string.IsNullOrWhiteSpace(isActive) == true)
                     return true;
                 else return bool.Parse(isActive);
@@ -147,7 +148,7 @@ namespace Appacitive.Sdk
         {
             get
             {
-                var zone = this["timezone"];
+                var zone = this.Get<string>("timezone");
                 if (string.IsNullOrWhiteSpace(zone) == true)
                     return null;
                 return Timezone.Parse(zone);
@@ -174,7 +175,7 @@ namespace Appacitive.Sdk
             return response.Device;
         }
 
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var deviceSerivce = ObjectFactory.Build<IDeviceService>();
             var request = new UpdateDeviceRequest()

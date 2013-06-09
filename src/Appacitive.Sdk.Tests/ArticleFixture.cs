@@ -61,6 +61,21 @@ namespace Appacitive.Sdk.Tests
 
         }
 
+
+        [TestMethod]
+        public async Task MultiValueArticleTest()
+        {
+            var obj = new Article("object");
+            obj.SetList<string>("multifield", new[] { "1", "2", "3", "4" });
+            await obj.SaveAsync();
+
+            var read = await Articles.GetAsync("object", obj.Id);
+            var value = read.GetList<string>("multifield");
+            var strList = read.GetList<string>("multifield");
+            var intList = read.GetList<int>("multifield");
+        }
+
+
         [TestMethod]
         public async Task MultiGetArticleAsyncTest()
         {
@@ -280,7 +295,6 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(connectedArticles != null);
             Assert.IsTrue(connectedArticles.TotalRecords == 4);
             Assert.IsTrue(connectedArticles.Select(x => x.Id).Intersect(new[] { obj2.Id, obj3.Id, obj4.Id, obj5.Id }).Count() == 4);
-
         }
     }
 }

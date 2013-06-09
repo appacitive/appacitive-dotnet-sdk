@@ -17,7 +17,7 @@ namespace Appacitive.Sdk.Services
         public UpdateArticleRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
             base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
         {
-            this.PropertyUpdates = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            this.PropertyUpdates = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             this.AttributeUpdates = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             this.AddedTags = new List<string>();
             this.RemovedTags = new List<string>();
@@ -34,7 +34,7 @@ namespace Appacitive.Sdk.Services
         public string Type { get; set; }
 
         [JsonIgnore]
-        public IDictionary<string, string> PropertyUpdates { get; private set; }
+        public IDictionary<string, object> PropertyUpdates { get; private set; }
 
         [JsonIgnore]
         public IDictionary<string, string> AttributeUpdates { get; private set; }

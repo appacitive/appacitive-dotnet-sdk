@@ -35,7 +35,6 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="AppacitiveContext.cs" />
-    <Compile Include="Entity.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="HttpClient.cs" />
     <Compile Include="InProcContainer.cs" />
@@ -51,6 +50,7 @@
     <Compile Include="Interfaces\ISubscriptionManager.cs" />
     <Compile Include="Interfaces\IUploadHandler.cs" />
     <Compile Include="Interfaces\IUserContext.cs" />
+    <Compile Include="Internal\MapDiff.cs" />
     <Compile Include="Internal\HubSubscriber.cs" />
     <Compile Include="Internal\IDownstreamMessage.cs" />
     <Compile Include="Internal\IUpstreamMessage.cs" />
@@ -73,12 +73,14 @@
     <Compile Include="Internal\ObjectSubscriber.cs" />
     <Compile Include="Internal\Topics.cs" />
     <Compile Include="Internal\TypeSubscriber.cs" />
+    <Compile Include="Internal\ValueConverter.cs" />
     <Compile Include="IUserFactory.cs" />
     <Compile Include="Messaging.cs" />
     <Compile Include="Model\Articles.cs" />
     <Compile Include="Model\Connections.cs" />
     <Compile Include="Model\Device.cs" />
     <Compile Include="Model\Email.cs" />
+    <Compile Include="Model\IValueCollection.cs" />
     <Compile Include="Model\PushNotification.cs" />
     <Compile Include="Model\SupportedDevices.cs" />
     <Compile Include="Model\Timezone.cs" />
@@ -139,7 +141,7 @@
     <Compile Include="Model\PagedList.cs" />
     <Compile Include="Model\StaticUserContext.cs" />
     <Compile Include="Model\User.cs" />
-    <Compile Include="Model\Value.cs" />
+    <Compile Include="Model\DynamicValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryDsl\AggregateExpression.cs" />
     <Compile Include="QueryDsl\AggregateQuery.cs" />
@@ -227,6 +229,7 @@
     <Compile Include="Subscriptions.cs" />
     <Compile Include="Urls.cs" />
     <Compile Include="UserSession.cs" />
+    <Compile Include="Model\Value.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

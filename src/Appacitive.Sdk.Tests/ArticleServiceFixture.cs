@@ -160,10 +160,10 @@ namespace Appacitive.Sdk.Tests
             Assert.IsNotNull(updatedResponse.Status, "Update article response status is null.");
             Assert.IsNotNull(updatedResponse.Article, "Updated article is null.");
             var updated = updatedResponse.Article;
-            Assert.IsTrue(updated["intfield"] == "2");
-            Assert.IsTrue(updated["decimalfield"] == "20.0");
-            Assert.IsTrue(updated["stringfield"] == null);
-            Assert.IsTrue(updated["datefield"] == "2013-11-20");
+            Assert.IsTrue(updated.Get<string>("intfield") == "2");
+            Assert.IsTrue(updated.Get<string>("decimalfield") == "20.0");
+            Assert.IsTrue(updated.Get<string>("stringfield") == null);
+            Assert.IsTrue(updated.Get<string>("datefield") == "2013-11-20");
             Assert.IsTrue(updated.Tags.Count() == 2);
             Assert.IsTrue(updated.Tags.Intersect(new[] {"tag1", "tag2"}).Count() == 2);
 
@@ -207,7 +207,7 @@ namespace Appacitive.Sdk.Tests
                 Assert.IsTrue(updatedResponse.Status.IsSuccessful, updatedResponse.Status.Message ?? "NULL");
                 Assert.IsNotNull(updatedResponse.Article, "Updated article is null.");
                 var updated = updatedResponse.Article;
-                Assert.IsTrue(updated["stringfield"] == null);   
+                Assert.IsTrue(updated["stringfield"] is NullValue);   
             }
         }
 

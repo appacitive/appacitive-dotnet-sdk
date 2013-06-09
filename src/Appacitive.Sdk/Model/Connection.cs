@@ -76,10 +76,14 @@ namespace Appacitive.Sdk
     public class Connection : Entity
     {
         public Connection(string type) : base(type) 
-        {   
+        {
+            this.Endpoints = new EndpointPair(null, null);
         }
 
-        public Connection(string type, string id) : base(type, id) { }
+        public Connection(string type, string id) : base(type, id) 
+        {
+            this.Endpoints = new EndpointPair(null, null);
+        }
 
         public Connection(string type, string labelA, string articleIdA, string labelB, string ArticleIdB) 
             : base(type)
@@ -206,7 +210,7 @@ namespace Appacitive.Sdk
             this.Endpoints.EndpointB = other.Endpoints.EndpointB;
         }
 
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var connService = ObjectFactory.Build<IConnectionService>();
             var request = new UpdateConnectionRequest{ Id = this.Id, Type = this.Type };

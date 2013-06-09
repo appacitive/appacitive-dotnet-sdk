@@ -15,7 +15,9 @@ namespace Appacitive.Sdk.Tests
         public void SimpleQueryTest()
         {
             var query = Query.Property("name").IsEqualTo("nikhil");
+            var query2 = Query.Property("__id").IsEqualTo("12345");
             Console.WriteLine(query.ToString());
+            Console.WriteLine(query2.ToString());
         }
 
         [TestMethod]

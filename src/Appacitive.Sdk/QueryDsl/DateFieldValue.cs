@@ -11,7 +11,7 @@ namespace Appacitive.Sdk
         public DateFieldValue(object o)
             : this()
         {
-            this.Value = "date('" + ((DateTime)o).ToString(Formats.BirthDate) + "')";
+            this.Value = "date('" + ((DateTime)o).ToString(Formats.Date) + "')";
         }
 
         public string Value { get; private set; }

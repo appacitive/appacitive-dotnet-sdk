@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
+using System.Collections;
+using Appacitive.Sdk.Internal;
 
 namespace Appacitive.Sdk
 {
@@ -24,17 +26,17 @@ namespace Appacitive.Sdk
         {
             this.Id = id;
         }
-
         
         // Represents the saved state of the article
-        private IDictionary<string, string> _currentFields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        private IDictionary<string, string> _lastKnownFields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        private IDictionary<string, object> _currentFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        private IDictionary<string, object> _lastKnownFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private IDictionary<string, string> _currentAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private IDictionary<string, string> _lastKnownAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private List<string> _currentTags = new List<string>();
         private List<string> _lastKnownTags = new List<string>();
         private readonly object _syncRoot = new object();
         private readonly object _eventSyncRoot = new object();
+        
         PropertyChangedEventHandler _properyChanged;
         public event PropertyChangedEventHandler PropertyChanged
         {
@@ -68,11 +70,16 @@ namespace Appacitive.Sdk
 
         public DateTime UtcLastUpdated { get; internal set; }
 
-        public IEnumerable<KeyValuePair<string, string>> Properties
+        public IEnumerable<KeyValuePair<string, Value>> Properties
         {
             get
             {
-                return this.Clone(_currentFields);
+                IDictionary<string, object> clone = null;
+                lock (_syncRoot)
+                {
+                    clone = new Dictionary<string, object>(_currentFields, StringComparer.OrdinalIgnoreCase);
+                }
+                return clone.Select(x => new KeyValuePair<string, Value>(x.Key, Value.FromObject(x.Value)));
             }
         }
 
@@ -80,26 +87,114 @@ namespace Appacitive.Sdk
         {
             get
             {
-                return this.Clone(_currentAttributes);
+                lock (_syncRoot)
+                {
+                    return new Dictionary<string, string>(_currentAttributes, StringComparer.OrdinalIgnoreCase);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Allows for atomically adding items without duplication to a multi valued property.
+        /// </summary>
+        /// <typeparam name="T">Type of the value</typeparam>
+        /// <param name="property">The multi valued property</param>
+        /// <param name="values">Item values</param>
+        public void AddItems<T>(string property, params T[] values)
+        {
+            AddItems<T>(property, false, values);
+        }
+
+        /// <summary>
+        /// Allows for atomically adding an item to a multi valued property.
+        /// </summary>
+        /// <typeparam name="T">Type of the value</typeparam>
+        /// <param name="property">The multi valued property</param>
+        /// <param name="values">Item values</param>
+        /// <param name="allowDuplicates">Allow duplicate entries to be added.</param>
+        public void AddItems<T>(string property, bool allowDuplicates, params T[] values)
+        {
+            // Validate type
+            if (values == null)
+                throw new ArgumentException("Cannot add null item to multi valued property.");
+            Guard.ValidateAllowedPrimitiveTypes(typeof(T));
+            List<string> items = null;
+            lock (_syncRoot)
+            {
+                object value = null;
+                // Set atomically if null.
+                if (_currentFields.TryGetValue(property, out value) == true)
+                {
+                    if (value != null && value.IsMultiValued() == false)
+                        throw new ArgumentException("Existing value of property " + property + " is not multi valued.");
+                    items = value as List<string>;
+                }
+                if (items == null)
+                {
+                    items = new List<string>();
+                    _currentFields[property] = items;
+                }
+                for (int i = 0; i < values.Length; i++)
+                {
+                    var content = values[i].AsString();
+                    if (allowDuplicates == true)
+                        items.Add(content);
+                    else if (items.Contains(content) == false)
+                        items.Add(content);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Allows for removing a value from a multi valued property.
+        /// </summary>
+        /// <typeparam name="T">Type of the value to remove.</typeparam>
+        /// <param name="property">Name of the property.</param>
+        /// <param name="item">The item value to remove.</param>
+        /// <returns>Returns true of the item exists in the collection.</returns>
+        public bool RemoveItems<T>(string property, T item, bool removeFirstOccurenceOnly = false)
+        {
+            // Validate type
+            if (item == null)
+                throw new ArgumentException("Cannot remove null item to multi valued property.");
+            Guard.ValidateAllowedPrimitiveTypes(typeof(T));
+            var strContent = item.AsString();
+            List<string> items = null;
+            lock (_syncRoot)
+            {
+                object value = null;
+                if (_currentFields.TryGetValue(property, out value) == true)
+                {
+                    if (value != null && value.IsMultiValued() == false)
+                        throw new ArgumentException("Existing value of property " + property + " is not multi valued.");
+                    items = value as List<string>;
+                }
+                if (items == null)
+                    return false;
+                else if (removeFirstOccurenceOnly == true)
+                    return items.Remove(strContent);
+                else
+                    return items.RemoveAllOccurences(strContent);
             }
         }
 
         public string GetAttribute(string name)
         {
-            string value;
-            if (_currentAttributes.TryGetValue(name, out value) == true)
-                return value;
-            else return null;
+            return ReadAttribute(name);
         }
 
         public void SetAttribute(string name, string value)
         {
-            _currentAttributes[name] = value;
+            WriteAttribute(name, value);
         }
 
         public void RemoveAttribute(string name)
         {
-            _currentAttributes.Remove(name);
+            lock (_syncRoot)
+            {
+                _currentAttributes.Remove(name);
+            }
         }
 
         protected void FirePropertyChanged(string propertyName)
@@ -109,21 +204,31 @@ namespace Appacitive.Sdk
                 privateCopy(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public string this[string name]
+        public Value this[string name]
         {
             get
             {
-                string value;
-                if (_currentFields.TryGetValue(name, out value) == true)
-                    return value;
-                else return null;
+                // Read value
+                var value = ReadField(name);
+                if (value == null)
+                    return NullValue.Instance;
+                else if (value.IsMultiValued() == true)
+                    return new MultiValue(value as IEnumerable);
+                else return new SingleValue(value);
             }
             set
             {
                 var oldValue = this[name];
-                _currentFields[name] = value;
+                // Value is null
+                if (value == null || value is NullValue)
+                    WriteField(name, null);
+                else if (value is SingleValue)
+                    WriteField(name, ((SingleValue)value).Value);
+                else if(value is MultiValue )
+                    WriteField(name, ((MultiValue)value).GetValues<string>().ToList());
+
                 // Raise property changed event
-                if (oldValue != value)
+                if( oldValue.Equals(value) == false )
                     FirePropertyChanged(name);
             }
         }
@@ -146,10 +251,15 @@ namespace Appacitive.Sdk
         private async Task UpdateEntityAsync(int specificRevision)
         {
             // 1. Get property differences
-            var propertyDifferences = _currentFields.GetModifications(_lastKnownFields);
+            var propertyDifferences = _currentFields.GetModifications(_lastKnownFields, (x, y) =>
+                {
+                    var strX = x.AsString();
+                    var strY = y.AsString();
+                    return strX == strY;
+                });
 
             // 2. Get attribute differences
-            var attributeDifferences = _currentAttributes.GetModifications(_lastKnownAttributes);
+            var attributeDifferences = _currentAttributes.GetModifications(_lastKnownAttributes, (x,y) => x == y );
 
             // 2. Get tags changes
             IEnumerable<string> addedTags, removedTags;
@@ -164,14 +274,24 @@ namespace Appacitive.Sdk
             }
         }
 
+        private object ExtractValue(Value value)
+        {
+            if (value is NullValue)
+                return null;
+            if (value is SingleValue)
+                return value.GetValue<string>();
+            if (value is MultiValue)
+                return value.GetValues<string>().ToList();
+            else throw new ArgumentException(value.GetType().Name + " is not a supported value type.");
+        }
+
         private void UpdateLastKnown(Entity entity)
         {   
-            var newLastKnownFields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            var newCurrentFields = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var newLastKnownFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            var newCurrentFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             entity.Properties.For(x => 
                 {
-                    newLastKnownFields[x.Key] = x.Value;
-                    newCurrentFields[x.Key] = x.Value;
+                    newLastKnownFields[x.Key] = newCurrentFields[x.Key] = ExtractValue(x.Value);
                 });
             var newLastKnownAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             var newCurrentAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -203,11 +323,41 @@ namespace Appacitive.Sdk
         {
         }
 
-        private IDictionary<string, string> Clone(IDictionary<string, string> map)
+        private void WriteField(string name, object value)
         {
             lock (_syncRoot)
             {
-                return new Dictionary<string, string>(map, StringComparer.OrdinalIgnoreCase);
+                _currentFields[name] = value;
+            }
+        }
+
+        private object ReadField(string name)
+        {
+            object result = null;
+            lock (_syncRoot)
+            {
+                if (_currentFields.TryGetValue(name, out result) == true)
+                    return result;
+                else return null;
+            }
+        }
+
+        private string ReadAttribute(string name)
+        {
+            string result = null;
+            lock (_syncRoot)
+            {
+                if (_currentAttributes.TryGetValue(name, out result) == true)
+                    return result;
+                else return null;
+            }
+        }
+
+        private void WriteAttribute(string name, string value)
+        {
+            lock (_syncRoot)
+            {
+                _currentAttributes[name] = value;
             }
         }
 
@@ -257,37 +407,8 @@ namespace Appacitive.Sdk
             }
         }
 
-
         protected abstract Task<Entity> CreateNewAsync();
 
-        protected abstract Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision);
-    }
-
-    internal class DictionaryDifference
-    {
-        public IDictionary<string, string> GetDifferences(IDictionary<string, string> current, IDictionary<string, string> old)
-        {
-            var allKeys = current.Keys.Union(old.Keys).ToArray();
-            var differences = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-            // Get updates
-            for (int i = 0; i < allKeys.Length; i++)
-            {
-                string oldValue, newValue;
-                bool hasLastKnownValue = old.TryGetValue(allKeys[i], out oldValue);
-                bool hasCurrentValue = current.TryGetValue(allKeys[i], out newValue);
-
-                // If value has changed
-                if (hasLastKnownValue == true && hasCurrentValue == true && oldValue != newValue)
-                    differences[allKeys[i]] = newValue;
-                // If value has been added
-                else if (hasLastKnownValue == false && hasCurrentValue == true)
-                    differences[allKeys[i]] = newValue;
-                // If value has been removed.. Should never happen
-                if (hasLastKnownValue == true && hasCurrentValue == false)
-                    differences[allKeys[i]] = null;
-            }
-            return differences;
-        }
+        protected abstract Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision);
     }
 }

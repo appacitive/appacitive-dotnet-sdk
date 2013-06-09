@@ -24,8 +24,8 @@ namespace Appacitive.Sdk.Tests
             var parent2 = await conn.Endpoints["parent"].GetArticleAsync();
             var child2 = await conn.Endpoints["child"].GetArticleAsync();
             Assert.IsTrue(parent2 != null && child2 != null);
-            Assert.IsTrue(parent2["stringfield"] == "parent");
-            Assert.IsTrue(child2["stringfield"] == "child");
+            Assert.IsTrue(parent2.Get<string>("stringfield") == "parent");
+            Assert.IsTrue(child2.Get<string>("stringfield") == "child");
 
             // Swap and test
             parent = ObjectHelper.NewInstance();
@@ -38,8 +38,8 @@ namespace Appacitive.Sdk.Tests
             parent2 = await conn.Endpoints["parent"].GetArticleAsync();
             child2 = await conn.Endpoints["child"].GetArticleAsync();
             Assert.IsTrue(parent2 != null && child2 != null);
-            Assert.IsTrue(parent2["stringfield"] == "parent");
-            Assert.IsTrue(child2["stringfield"] == "child");
+            Assert.IsTrue(parent2.Get<string>("stringfield") == "parent");
+            Assert.IsTrue(child2.Get<string>("stringfield") == "child");
         }
         
         [TestMethod]
@@ -171,8 +171,8 @@ namespace Appacitive.Sdk.Tests
             // Get the connection
             Connection read = await Connections.GetAsync("sibling", conn.Id);
             // Asserts
-            Assert.IsTrue( read["field1"] == "updated");
-            Assert.IsTrue( read.AsInt("field2") == 11L);
+            Assert.IsTrue( read.Get<string>("field1") == "updated");
+            Assert.IsTrue( read.Get<int>("field2") == 11L);
         }
 
         [TestMethod]
@@ -213,7 +213,7 @@ namespace Appacitive.Sdk.Tests
             await conn.SaveAsync();
 
             var updated = await Connections.GetAsync("sibling", conn.Id);
-            Assert.IsTrue(updated["field1"] == value);
+            Assert.IsTrue(updated.Get<string>("field1") == value);
         }
 
         [TestMethod]

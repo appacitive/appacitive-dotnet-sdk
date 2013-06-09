@@ -47,7 +47,7 @@ namespace Appacitive.Sdk
 
         public static readonly IEnumerable<string> AllFields = new string[0];
 
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var articleService = ObjectFactory.Build<IArticleService>();
             var request = new UpdateArticleRequest {Id = this.Id, Type = this.Type};

@@ -2,37 +2,58 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
+using Appacitive.Sdk.Internal;
+using System.Threading;
+using System.Collections;
 
 namespace Appacitive.Sdk
 {
     public partial class Entity
     {
-        public long AsInt(string property)
+        public T Get<T>(string name)
         {
-            return int.Parse(this[property]);
+            if( typeof(T).IsPrimitiveType() == false && typeof(T).Is<IEnumerable>() == true )
+                throw new ArgumentException("Cannot get multi valued properties via Get<T>().");
+            return this[name].GetValue<T>();
         }
 
-        public decimal AsDecimal(string property)
+        public T Get<T>(string name, T defaultValue)
         {
-            return decimal.Parse(this[property]);
+            if (typeof(T).IsPrimitiveType() == false && typeof(T).Is<IEnumerable>() == true)
+                throw new ArgumentException("Cannot get multi valued properties via Get<T>().");
+            var value = this[name];
+            if (value is NullValue)
+                return defaultValue;
+            else return value.GetValue<T>();
+            
         }
 
-        public bool AsBool(string property)
+
+        public void Set<T>(string name, T value)
         {
-            return bool.Parse(this[property]);
+            if (value.IsMultiValued() == true)
+                throw new ArgumentException("Cannot set multi valued properties via Set<T>().");
+            var propertyValue = Value.FromObject(value);
+            this[name] = propertyValue;   
+        }
+        
+        public void SetList<T>(string name, IEnumerable<T> enumerable)
+        {
+            if (enumerable == null)
+                throw new Exception("Enumerable value cannot be null.");
+            this[name] = new MultiValue(enumerable);
         }
 
-        public DateTime AsDateTime(string property)
-        {
-            return DateTime.ParseExact(this[property], Formats.DateTime, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
-        }
 
-        public DateTime AsDate(string property)
+        public IEnumerable<T> GetList<T>(string name)
         {
-            //TODO: Confirm date format string
-            var value = this[property];
-            return DateTime.ParseExact(value, new [] {Formats.DateTime, Formats.BirthDate }, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            var value = ReadField(name);
+            if( value is IEnumerable == false )
+                throw new Exception("Value of property '" + name + "' is not multivalued.");
+            var list = new MultiValue(ReadField(name) as IEnumerable);
+            return list.GetValues<T>();
         }
     }
 }

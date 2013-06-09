@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections;
 
 namespace Appacitive.Sdk.Services
 {
@@ -21,6 +22,27 @@ namespace Appacitive.Sdk.Services
             throw new NotImplementedException();
         }
 
+        private void WriteProperty(JsonWriter writer, string key, object property)
+        {
+            writer.WritePropertyName(key);
+            if (property != null && property is string == false && property is IEnumerable)
+            {
+                var enumerable = property as IEnumerable;
+                writer.WriteStartArray();
+                foreach (var item in enumerable)
+                    writer.WriteValue(item.ToString());
+                writer.WriteEndArray();
+            }
+            else
+            {
+                if (property == null)
+                    writer.WriteNull();
+                else
+                    writer.WriteValue(property.ToString());
+            }
+
+        }
+
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var request = value as UpdateDeviceRequest;
@@ -33,7 +55,7 @@ namespace Appacitive.Sdk.Services
             writer
                 .StartObject()
                 // Write properties
-                .WithWriter(w => request.PropertyUpdates.For(p => w.WriteProperty(p.Key, p.Value)))
+                .WithWriter(w => request.PropertyUpdates.For(p => WriteProperty(w, p.Key, p.Value)))
                 // Write atttributes
                 .WithWriter(w =>
                 {

@@ -31,7 +31,7 @@ namespace Appacitive.Sdk
         /// </summary>
         public string Username 
         {
-            get { return base["username"]; }
+            get { return this.Get<string>("username"); }
             set { base["username"] = value; }
         }
 
@@ -40,7 +40,7 @@ namespace Appacitive.Sdk
         /// </summary>
         public string Password
         {
-            get { return base["password"]; }
+            get { return this.Get<string>("password"); }
             set { base["password"] = value; }
         }
 
@@ -52,8 +52,8 @@ namespace Appacitive.Sdk
             get 
             {
                 DateTime date;
-                var dob = base["birthdate"];
-                if (DateTime.TryParseExact(dob, Formats.BirthDate, null, DateTimeStyles.None, out date) == true)
+                var dob = this.Get<string>("birthdate");
+                if (DateTime.TryParseExact(dob, Formats.Date, null, DateTimeStyles.None, out date) == true)
                     return date;
                 else return null;
                 
@@ -61,7 +61,7 @@ namespace Appacitive.Sdk
             set 
             { 
                 if( value != null || value.HasValue == true )
-                    base["birthdate"] = value.Value.ToString(Formats.BirthDate); 
+                    base["birthdate"] = value.Value.ToString(Formats.Date); 
             }
         }
 
@@ -70,7 +70,7 @@ namespace Appacitive.Sdk
         /// </summary>
         public string Email
         {
-            get { return base["email"]; }
+            get { return this.Get<string>("email"); }
             set { base["email"] = value; }
         }
 
@@ -79,7 +79,7 @@ namespace Appacitive.Sdk
         /// </summary>
         public string FirstName
         {
-            get { return base["firstname"]; }
+            get { return this.Get<string>("firstname"); }
             set { base["firstname"] = value; }
         }
 
@@ -88,7 +88,7 @@ namespace Appacitive.Sdk
         /// </summary>
         public string LastName
         {
-            get { return base["lastname"]; }
+            get { return this.Get<string>("lastname"); }
             set { base["lastname"] = value; }
         }
 
@@ -98,7 +98,7 @@ namespace Appacitive.Sdk
         /// </summary>
         public string Phone
         {
-            get { return base["phone"]; }
+            get { return this.Get<string>("phone"); }
             set { base["phone"] = value; }
         }
 
@@ -110,7 +110,7 @@ namespace Appacitive.Sdk
             get
             {
                 Geocode geo;
-                var geocode = base["location"];
+                var geocode = this.Get<string>("location");
                 if (string.IsNullOrWhiteSpace(geocode) == true)
                     return null;
                 if (Geocode.TryParse(geocode, out geo) == true)
@@ -140,7 +140,7 @@ namespace Appacitive.Sdk
             return response.User;
         }
 
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, string> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var userService = ObjectFactory.Build<IUserService>();
             var request = new UpdateUserRequest()

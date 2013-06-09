@@ -36,6 +36,7 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(device.DeviceType == created.DeviceType);
             Assert.IsTrue(device.Location.ToString() == created.Location.ToString());
             Assert.IsTrue(device.TimeZone.Equals(created.TimeZone));
+            
         }
 
         [TestMethod]

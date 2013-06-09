@@ -183,7 +183,7 @@ namespace Appacitive.Sdk.Tests
             updateRequest.PropertyUpdates["lastname"] = created.LastName;
             updateRequest.PropertyUpdates["phone"] = created.Phone;
             updateRequest.PropertyUpdates["location"] = created.Location.ToString();
-            updateRequest.PropertyUpdates["birthdate"] = created.DateOfBirth.Value.ToString(Formats.BirthDate);
+            updateRequest.PropertyUpdates["birthdate"] = created.DateOfBirth.Value.ToString(Formats.Date);
             IUserService userService = new UserService();
             var response = await userService.UpdateUserAsync(updateRequest);
 

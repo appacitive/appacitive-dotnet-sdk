@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections;
+using Appacitive.Sdk.Internal;
 
 namespace Appacitive.Sdk.Services
 {
@@ -55,9 +57,26 @@ namespace Appacitive.Sdk.Services
                 // Write properties
                 .WithWriter(w =>
                 {
-                    
+
                     foreach (var property in entity.Properties)
-                        w.WriteProperty(property.Key, property.Value);
+                    {
+                        if (property.Value is NullValue)
+                        {
+                            w.WritePropertyName(property.Key);
+                            w.WriteNull();
+                        }
+                        else if (property.Value is MultiValue )
+                        {
+                            var collection = property.Value.GetValues<string>();
+                            w.WritePropertyName(property.Key);
+                            w.WriteStartArray();
+                            foreach (var item in collection)
+                                w.WriteValue(item);
+                            w.WriteEndArray();
+                        }
+                        else
+                            w.WriteProperty(property.Key, property.Value.GetValue<string>());
+                    }
                 })
                 .WithWriter( w => WriteJson(entity, w, serializer) )
                 .WithWriter(w =>
@@ -120,11 +139,16 @@ namespace Appacitive.Sdk.Services
                 // Ignore system properties
                 if (IsSytemProperty(property.Name) == true) continue;
                 // Ignore objects
-                if (property.Value.Type == JTokenType.Object) continue;
+                else if (property.Value.Type == JTokenType.Object) continue;
+                // Check for arrays
+                else if (property.Value.Type == JTokenType.Array)
+                {
+                    entity.SetList<string>(property.Name, property.Value.Values<string>());
+                }
                 // Set value of the property
-                if (property.Value.Type == JTokenType.Date)
+                else if (property.Value.Type == JTokenType.Date)
                     entity[property.Name] = ((DateTime)property.Value).ToString("o");
-                else
+                else 
                     entity[property.Name] = property.Value.Type == JTokenType.Null ? null : property.Value.ToString();
             }
 

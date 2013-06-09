@@ -19,6 +19,9 @@ namespace Appacitive.Sdk
 
         public IQuery IsEqualTo(string value)
         {
+            // Hack!!! __id mapping to be fixed inside API.
+            if( this.Field.Equals("__id", StringComparison.OrdinalIgnoreCase) == true )
+                return FieldQuery.IsEqualTo(FieldType.Property, this.Field, long.Parse(value));
             return FieldQuery.IsEqualTo(FieldType.Property, this.Field, value);
         }
 
