@@ -314,7 +314,7 @@ namespace Appacitive.Sdk.Tests
             var conn1 = await ConnectionHelper.CreateNew();
             var conn2 = await ConnectionHelper.CreateNew();
             // Delete the connection
-            await Connections.BulkDeleteAsync(conn1.Type, new[] { conn1.Id, conn2.Id });
+            await Connections.MultiDeleteAsync(conn1.Type, new[] { conn1.Id, conn2.Id });
             // Try and get the connection
             try
             {

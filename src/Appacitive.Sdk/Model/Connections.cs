@@ -77,7 +77,7 @@ namespace Appacitive.Sdk
 
         }
 
-        public async static Task BulkDeleteAsync(string connectionType, IEnumerable<string> connectionIds)
+        public async static Task MultiDeleteAsync(string connectionType, params string[] connectionIds)
         {
             IConnectionService connService = ObjectFactory.Build<IConnectionService>();
             var response = await connService.BulkDeleteAsync(new BulkDeleteConnectionRequest { Type = connectionType, ConnectionIds = new List<string>(connectionIds) } );
