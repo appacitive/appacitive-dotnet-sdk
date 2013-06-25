@@ -65,7 +65,7 @@ namespace Appacitive.Sdk.Services
                             w.WritePropertyName(property.Key);
                             w.WriteNull();
                         }
-                        else if (property.Value is MultiValue )
+                        else if (property.Value is MultiValue)
                         {
                             var collection = property.Value.GetValues<string>();
                             w.WritePropertyName(property.Key);
@@ -78,7 +78,7 @@ namespace Appacitive.Sdk.Services
                             w.WriteProperty(property.Key, property.Value.GetValue<string>());
                     }
                 })
-                .WithWriter( w => WriteJson(entity, w, serializer) )
+                .WithWriter(w => WriteJson(entity, w, serializer))
                 .WithWriter(w =>
                 {
                     var attr = entity.Attributes.ToArray();
@@ -102,7 +102,7 @@ namespace Appacitive.Sdk.Services
         }
 
         protected abstract Entity CreateEntity(JObject json);
-        
+
         protected virtual Entity ReadJson(Entity entity, Type objectType, JObject json, JsonSerializer serializer)
         {
 
@@ -131,7 +131,7 @@ namespace Appacitive.Sdk.Services
                 entity.UtcLastUpdated = (DateTime)value;
             // tags
             if (json.TryGetValue("__tags", out value) == true && value.Type != JTokenType.Null)
-                entity.AddTags(value.Values<string>());
+                entity.AddTags(value.Values<string>(), true);
 
             // properties
             foreach (var property in json.Properties())
@@ -143,13 +143,13 @@ namespace Appacitive.Sdk.Services
                 // Check for arrays
                 else if (property.Value.Type == JTokenType.Array)
                 {
-                    entity.SetList<string>(property.Name, property.Value.Values<string>());
+                    entity.SetList<string>(property.Name, property.Value.Values<string>(), true);
                 }
                 // Set value of the property
                 else if (property.Value.Type == JTokenType.Date)
-                    entity[property.Name] = ((DateTime)property.Value).ToString("o");
-                else 
-                    entity[property.Name] = property.Value.Type == JTokenType.Null ? null : property.Value.ToString();
+                    entity.SetField(property.Name, ((DateTime)property.Value).ToString("o"), true);
+                else
+                    entity.SetField(property.Name, property.Value.Type == JTokenType.Null ? null : property.Value.ToString(), true);
             }
 
             // attributes
@@ -167,9 +167,9 @@ namespace Appacitive.Sdk.Services
                         if (property.Value.Type == JTokenType.Object) continue;
                         // Set value of the property
                         if (property.Value.Type == JTokenType.Date)
-                            entity.SetAttribute(property.Name,((DateTime)property.Value).ToString("o"));
+                            entity.SetAttribute(property.Name, ((DateTime)property.Value).ToString("o"), true);
                         else
-                            entity.SetAttribute(property.Name, property.Value.Type == JTokenType.Null ? null : property.Value.ToString());
+                            entity.SetAttribute(property.Name, property.Value.Type == JTokenType.Null ? null : property.Value.ToString(), true);
                     }
                 }
             }

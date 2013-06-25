@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Appacitive.Sdk.Tests
 {
@@ -24,13 +25,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Created article with id {0}.", saved.Id);
         }
 
-
         [TestMethod]
         public async Task GetDevicesShouldReturnDeviceObjectsTest()
         {
             var created = await DeviceHelper.CreateNewAsync();
             var devices = await Articles.FindAllAsync("device");
-            Assert.IsFalse(devices.Exists(d => d is Device == false ));
+            Assert.IsFalse(devices.Exists(d => d is Device == false));
         }
 
         [TestMethod]
@@ -46,10 +46,10 @@ namespace Appacitive.Sdk.Tests
         {
             // Create new article
             dynamic article = new Article("object");
-            decimal pi = 22.0m/7.0m;
+            decimal pi = 22.0m / 7.0m;
             article.intfield = 1;
             article.decimalfield = pi;
-            var saved = await ObjectHelper.CreateNewAsync( article as Article );
+            var saved = await ObjectHelper.CreateNewAsync(article as Article);
 
             // Get the created article
             dynamic copy = await Articles.GetAsync("object", saved.Id);
@@ -60,7 +60,6 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(decimalField == pi);
 
         }
-
 
         [TestMethod]
         public async Task MultiValueArticleTest()
@@ -75,7 +74,6 @@ namespace Appacitive.Sdk.Tests
             var intList = read.GetList<int>("multifield");
         }
 
-
         [TestMethod]
         public async Task MultiGetArticleAsyncTest()
         {
@@ -85,14 +83,13 @@ namespace Appacitive.Sdk.Tests
 
             // Get the created article
             var enumerable = await Articles.MultiGetAsync("object", new[] { obj1.Id, obj2.Id });
-            
+
             // Asserts
             Assert.IsNotNull(enumerable);
             var list = enumerable.Select(x => x.Id);
             Assert.IsTrue(list.Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
 
         }
-
 
         [TestMethod]
         public async Task BulkDeleteArticleAsyncTest()
@@ -115,9 +112,9 @@ namespace Appacitive.Sdk.Tests
                 {
                     var msg = string.Format("Cannot locate article of type 'object' and id {0}.", ids[i]);
                     Assert.IsTrue(ex.Message == msg);
-                }    
+                }
             }
-            
+
         }
 
         [TestMethod]
@@ -145,7 +142,35 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public async Task UpdateArticleAsyncTest()
+        public async Task UpdateArticleWithNoUpdateAsyncTest()
+        {
+            var stopWatch = new System.Diagnostics.Stopwatch();
+
+            // Create the article
+            dynamic article = new Article("object");
+            decimal pi = 22.0m / 7.0m;
+            article.intfield = 1;
+            article.decimalfield = pi;
+
+            var saved = await ObjectHelper.CreateNewAsync(article as Article);
+            var firstUpdateTime = saved.UtcLastUpdated;
+
+            stopWatch.Start();
+
+            //Dummy update, shouldn't make any api call, assuming api call takes atleast 50 ms
+            await saved.SaveAsync();
+
+            stopWatch.Stop();
+
+            Assert.IsTrue(stopWatch.ElapsedMilliseconds < 50);
+            Console.WriteLine(stopWatch.ElapsedMilliseconds);
+
+            //Cleanup
+            await Articles.DeleteAsync(saved.Type, saved.Id);
+        }
+
+        [TestMethod]
+        public async Task UpdateArticlePropertyAsyncTest()
         {
             // Create the article
             dynamic article = new Article("object");
@@ -153,7 +178,7 @@ namespace Appacitive.Sdk.Tests
             article.intfield = 1;
             article.decimalfield = pi;
             var saved = await ObjectHelper.CreateNewAsync(article as Article);
-            
+
 
             // Get the newly created article
             dynamic copy = await Articles.GetAsync("object", saved.Id);
@@ -182,6 +207,87 @@ namespace Appacitive.Sdk.Tests
 
         }
 
+        [TestMethod]
+        public async Task UpdateArticleTagAsyncTest()
+        {
+            string tagToRemove = "one";
+            string tagPersist = "two";
+            string tagToAdd = "three";
+
+            // Create the article
+            dynamic article = new Article("object");
+            decimal pi = 22.0m / 7.0m;
+            article.intfield = 1;
+            article.decimalfield = pi;
+
+            //Add tag
+            article.AddTag(tagToRemove);
+            article.AddTag(tagPersist);
+
+            var saved = await ObjectHelper.CreateNewAsync(article as Article);
+
+            // Get the newly created article
+            var afterFirstUpdate = await Articles.GetAsync("object", saved.Id);
+            Assert.IsNotNull(afterFirstUpdate);
+            Assert.IsTrue(afterFirstUpdate.Tags.Count(tag => string.Equals(tag, tagPersist, StringComparison.OrdinalIgnoreCase)) == 1);
+            Assert.IsTrue(afterFirstUpdate.Tags.Count(tag => string.Equals(tag, tagToRemove, StringComparison.OrdinalIgnoreCase)) == 1);
+            Assert.IsTrue(afterFirstUpdate.Tags.Count() == 2);
+
+            //Add/Remove tag
+            afterFirstUpdate.RemoveTag(tagToRemove);
+            afterFirstUpdate.AddTag(tagToAdd);
+            await afterFirstUpdate.SaveAsync();
+
+            var afterSecondUpdate = await Articles.GetAsync("object", saved.Id);
+
+            Assert.IsTrue(afterSecondUpdate.Tags.Count(tag => string.Equals(tag, tagToRemove, StringComparison.OrdinalIgnoreCase)) == 0);
+            Assert.IsTrue(afterSecondUpdate.Tags.Count(tag => string.Equals(tag, tagToAdd, StringComparison.OrdinalIgnoreCase)) == 1);
+            Assert.IsTrue(afterSecondUpdate.Tags.Count() == 2);
+
+            //Cleanup
+            await Articles.DeleteAsync(afterSecondUpdate.Type, afterSecondUpdate.Id);
+        }
+
+        [TestMethod]
+        public async Task UpdateArticleAttributeAsyncTest()
+        {
+            string attrToRemove = "one";
+            string attrPersist = "two";
+            string attrToAdd = "three";
+
+            // Create the article
+            dynamic article = new Article("object");
+            decimal pi = 22.0m / 7.0m;
+            article.intfield = 1;
+            article.decimalfield = pi;
+
+            //Add Attributes
+            article.SetAttribute(attrToRemove, attrToRemove);
+            article.SetAttribute(attrPersist, attrPersist);
+
+            var saved = await ObjectHelper.CreateNewAsync(article as Article);
+
+            // Get the newly created article
+            var afterFirstUpdate = await Articles.GetAsync("object", saved.Id);
+            Assert.IsNotNull(afterFirstUpdate);
+            Assert.IsTrue(afterFirstUpdate.Attributes.Count(tag => string.Equals(tag.Key, attrPersist, StringComparison.OrdinalIgnoreCase)) == 1);
+            Assert.IsTrue(afterFirstUpdate.Attributes.Count(tag => string.Equals(tag.Key, attrToRemove, StringComparison.OrdinalIgnoreCase)) == 1);
+            Assert.IsTrue(afterFirstUpdate.Attributes.Count() == 2);
+
+            //Add/Remove Attribute
+            afterFirstUpdate.RemoveAttribute(attrToRemove);
+            afterFirstUpdate.SetAttribute(attrToAdd, attrToAdd);
+            await afterFirstUpdate.SaveAsync();
+
+            var afterSecondUpdate = await Articles.GetAsync("object", saved.Id);
+
+            Assert.IsTrue(afterSecondUpdate.Attributes.Count(tag => string.Equals(tag.Key, attrPersist, StringComparison.OrdinalIgnoreCase)) == 1);
+            Assert.IsTrue(afterSecondUpdate.Attributes.Count(tag => string.Equals(tag.Key, attrToAdd, StringComparison.OrdinalIgnoreCase)) == 1);
+            Assert.IsTrue(afterSecondUpdate.Attributes.Count() == 2);
+
+            //Cleanup
+            await Articles.DeleteAsync(afterSecondUpdate.Type, afterSecondUpdate.Id);
+        }
 
         [TestMethod]
         public async Task FindAllArticlesAsyncTest()
@@ -195,7 +301,6 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
 
         }
-
 
         [TestMethod]
         public async Task FindAllArticlesAsyncWithQueryTest()
@@ -252,7 +357,7 @@ namespace Appacitive.Sdk.Tests
         public async Task FindAndDisplayAllArticlesTest()
         {
             var waitHandle = new ManualResetEvent(false);
-            
+
             // Create the article
             dynamic obj = new Article("object");
             obj.stringfield = Unique.String;
@@ -273,7 +378,6 @@ namespace Appacitive.Sdk.Tests
             } while (true);
             Console.WriteLine("Finished.");
         }
-
 
         [TestMethod]
         public async Task GetConnectedArticlesAsyncTest()
