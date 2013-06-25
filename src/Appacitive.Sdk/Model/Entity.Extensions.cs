@@ -14,7 +14,7 @@ namespace Appacitive.Sdk
     {
         public T Get<T>(string name)
         {
-            if( typeof(T).IsPrimitiveType() == false && typeof(T).Is<IEnumerable>() == true )
+            if (typeof(T).IsPrimitiveType() == false && typeof(T).Is<IEnumerable>() == true)
                 throw new ArgumentException("Cannot get multi valued properties via Get<T>().");
             return this[name].GetValue<T>();
         }
@@ -27,23 +27,32 @@ namespace Appacitive.Sdk
             if (value is NullValue)
                 return defaultValue;
             else return value.GetValue<T>();
-            
+
         }
 
-
-        public void Set<T>(string name, T value)
+        internal void Set<T>(string name, T value, bool updateLastKnown)
         {
             if (value.IsMultiValued() == true)
                 throw new ArgumentException("Cannot set multi valued properties via Set<T>().");
             var propertyValue = Value.FromObject(value);
-            this[name] = propertyValue;   
+            this.SetField(name, propertyValue, updateLastKnown);
         }
-        
-        public void SetList<T>(string name, IEnumerable<T> enumerable)
+
+        public void Set<T>(string name, T value)
+        {
+            Set(name, value, false);
+        }
+
+        internal void SetList<T>(string name, IEnumerable<T> enumerable, bool updateLastKnown)
         {
             if (enumerable == null)
                 throw new Exception("Enumerable value cannot be null.");
-            this[name] = new MultiValue(enumerable);
+            this.SetField(name, new MultiValue(enumerable), updateLastKnown);
+        }
+
+        public void SetList<T>(string name, IEnumerable<T> enumerable)
+        {
+            SetList(name, enumerable, false);
         }
 
 
@@ -52,7 +61,7 @@ namespace Appacitive.Sdk
             var value = ReadField(name);
             if (value == null)
                 return MultiValue.Empty.GetValues<T>();
-            if( value is IEnumerable == false )
+            if (value is IEnumerable == false)
                 throw new Exception("Value of property '" + name + "' is not multivalued.");
             var list = new MultiValue(value as IEnumerable);
             return list.GetValues<T>();
