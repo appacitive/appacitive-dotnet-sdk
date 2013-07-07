@@ -16,6 +16,33 @@ namespace Appacitive.Sdk
 {
     public abstract partial class Entity : INotifyPropertyChanged
     {
+        public Entity(Entity existing)
+            : this(existing.Type, existing.Id)
+        {
+            // Copy
+            this.CreatedBy = existing.CreatedBy;
+            this.LastUpdatedBy = existing.LastUpdatedBy;
+            this.UtcCreateDate = existing.UtcCreateDate;
+            this.UtcLastUpdated = existing.UtcLastUpdated;
+
+            // Copy properties
+            lock (_syncRoot)
+            {
+                foreach (var property in existing.Properties)
+                    this[property.Key] = property.Value;
+                foreach (var attr in existing.Attributes)
+                {
+                    this._currentAttributes[attr.Key] = attr.Value;
+                    this._lastKnownAttributes[attr.Key] = attr.Value;
+                }
+                foreach (var tag in existing.Tags)
+                {
+                    this._currentTags.Add(tag);
+                    this._lastKnownTags.Add(tag);
+                }
+            }
+        }
+
         public Entity(string type)
         {
             this.Type = type;
@@ -26,7 +53,7 @@ namespace Appacitive.Sdk
         {
             this.Id = id;
         }
-        
+
         // Represents the saved state of the article
         private IDictionary<string, object> _currentFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private IDictionary<string, object> _lastKnownFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -36,7 +63,7 @@ namespace Appacitive.Sdk
         private List<string> _lastKnownTags = new List<string>();
         private readonly object _syncRoot = new object();
         private readonly object _eventSyncRoot = new object();
-        
+
         PropertyChangedEventHandler _properyChanged;
         public event PropertyChangedEventHandler PropertyChanged
         {
@@ -69,6 +96,7 @@ namespace Appacitive.Sdk
         public DateTime UtcCreateDate { get; internal set; }
 
         public DateTime UtcLastUpdated { get; internal set; }
+
 
         public IEnumerable<KeyValuePair<string, Value>> Properties
         {
@@ -184,9 +212,18 @@ namespace Appacitive.Sdk
             return ReadAttribute(name);
         }
 
+        internal void SetAttribute(string name, string value, bool updateLastKnown)
+        {
+            lock (_syncRoot)
+            {
+                if (updateLastKnown) _lastKnownAttributes[name] = value;
+                _currentAttributes[name] = value;
+            }
+        }
+
         public void SetAttribute(string name, string value)
         {
-            WriteAttribute(name, value);
+            SetAttribute(name, value, false);
         }
 
         public void RemoveAttribute(string name)
@@ -204,6 +241,23 @@ namespace Appacitive.Sdk
                 privateCopy(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        internal void SetField(string name, Value value, bool updateLastKnown)
+        {
+            var oldValue = this[name];
+
+            // Value is null
+            if (value == null || value is NullValue)
+                WriteField(name, null, updateLastKnown);
+            else if (value is SingleValue)
+                WriteField(name, ((SingleValue)value).Value, updateLastKnown);
+            else if (value is MultiValue)
+                WriteField(name, ((MultiValue)value).GetValues<string>().ToList(), updateLastKnown);
+
+            // Raise property changed event
+            if (oldValue.Equals(value) == false)
+                FirePropertyChanged(name);
+        }
+
         public Value this[string name]
         {
             get
@@ -218,18 +272,7 @@ namespace Appacitive.Sdk
             }
             set
             {
-                var oldValue = this[name];
-                // Value is null
-                if (value == null || value is NullValue)
-                    WriteField(name, null);
-                else if (value is SingleValue)
-                    WriteField(name, ((SingleValue)value).Value);
-                else if(value is MultiValue )
-                    WriteField(name, ((MultiValue)value).GetValues<string>().ToList());
-
-                // Raise property changed event
-                if( oldValue.Equals(value) == false )
-                    FirePropertyChanged(name);
+                SetField(name, value, false);
             }
         }
 
@@ -247,7 +290,7 @@ namespace Appacitive.Sdk
             var entity = await CreateNewAsync();
             UpdateLastKnown(entity);
         }
-        
+
         private async Task UpdateEntityAsync(int specificRevision)
         {
             // 1. Get property differences
@@ -259,7 +302,7 @@ namespace Appacitive.Sdk
                 });
 
             // 2. Get attribute differences
-            var attributeDifferences = _currentAttributes.GetModifications(_lastKnownAttributes, (x,y) => x == y );
+            var attributeDifferences = _currentAttributes.GetModifications(_lastKnownAttributes, (x, y) => x == y);
 
             // 2. Get tags changes
             IEnumerable<string> addedTags, removedTags;
@@ -286,10 +329,10 @@ namespace Appacitive.Sdk
         }
 
         private void UpdateLastKnown(Entity entity)
-        {   
+        {
             var newLastKnownFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             var newCurrentFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-            entity.Properties.For(x => 
+            entity.Properties.For(x =>
                 {
                     newLastKnownFields[x.Key] = newCurrentFields[x.Key] = ExtractValue(x.Value);
                 });
@@ -300,8 +343,8 @@ namespace Appacitive.Sdk
                     newLastKnownAttributes[x.Key] = x.Value;
                     newCurrentAttributes[x.Key] = x.Value;
                 });
-            
-            
+
+
 
             lock (_syncRoot)
             {
@@ -323,10 +366,11 @@ namespace Appacitive.Sdk
         {
         }
 
-        private void WriteField(string name, object value)
+        private void WriteField(string name, object value, bool updateLastKnown)
         {
             lock (_syncRoot)
             {
+                if (updateLastKnown) _lastKnownFields[name] = value;
                 _currentFields[name] = value;
             }
         }
@@ -353,15 +397,7 @@ namespace Appacitive.Sdk
             }
         }
 
-        private void WriteAttribute(string name, string value)
-        {
-            lock (_syncRoot)
-            {
-                _currentAttributes[name] = value;
-            }
-        }
-
-        public IEnumerable<string> Tags 
+        public IEnumerable<string> Tags
         {
             get { return _currentTags; }
         }
@@ -385,26 +421,31 @@ namespace Appacitive.Sdk
             }
         }
 
-        public void AddTags(IEnumerable<string> tags)
+        internal void AddTags(IEnumerable<string> tags, bool updateLastKnown)
         {
-            lock( _syncRoot )
+            lock (_syncRoot)
             {
-                tags.For( x => 
-                 {
-                     if( _currentTags.Contains(x) == false )
-                         _currentTags.Add(x);
-                 });
+                tags.For(x => AddTag(x, updateLastKnown));
             }
-            
         }
 
-        public void AddTag( string tag )
+        public void AddTags(IEnumerable<string> tags)
         {
-            lock( _syncRoot )
+            AddTags(tags, false);
+        }
+
+        internal void AddTag(string tag, bool updateLastKnown)
+        {
+            lock (_syncRoot)
             {
-                if( _currentTags.Contains(tag) == false )
-                    _currentTags.Add(tag);
+                if (updateLastKnown && _lastKnownTags.Contains(tag) == false) _lastKnownTags.Add(tag);
+                if (_currentTags.Contains(tag) == false) _currentTags.Add(tag);
             }
+        }
+
+        public void AddTag(string tag)
+        {
+            AddTag(tag, false);
         }
 
         protected abstract Task<Entity> CreateNewAsync();
