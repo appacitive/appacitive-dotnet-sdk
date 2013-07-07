@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class BulkDeleteConnectionRequest : ApiRequest
+    public class BulkDeleteConnectionRequest : PostOperation<BulkDeleteConnectionResponse>
     {
         public BulkDeleteConnectionRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -25,6 +25,11 @@ namespace Appacitive.Sdk.Services
         [JsonProperty("idlist")]
         public List<string> ConnectionIds { get; set; }
 
-        
+
+
+        protected override string GetUrl()
+        {
+            return Urls.For.BulkDeleteConnection(this.Type, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+        }
     }
 }

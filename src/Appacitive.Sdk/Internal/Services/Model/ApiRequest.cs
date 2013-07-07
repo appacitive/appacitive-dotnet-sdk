@@ -10,6 +10,10 @@ namespace Appacitive.Sdk.Services
 {
     public abstract class ApiRequest
     {
+        protected ApiRequest()
+        {
+        }
+
         protected ApiRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info)
         {
             this.ApiKey = apiKey;

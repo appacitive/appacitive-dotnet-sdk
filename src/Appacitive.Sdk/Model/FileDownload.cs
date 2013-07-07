@@ -30,8 +30,7 @@ namespace Appacitive.Sdk
                 FileName = this.FileName,
                 ExpiryInMinutes = expiryTimeInMinutes
             };
-            IFileService fileService = ObjectFactory.Build<IFileService>();
-            var response = await fileService.GetDownloadUrlAsync(request);
+            var response = await request.ExecuteAsync();
             return response.Url;
         }
 

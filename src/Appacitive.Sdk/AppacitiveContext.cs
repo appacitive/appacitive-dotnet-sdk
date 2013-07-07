@@ -65,8 +65,7 @@ namespace Appacitive.Sdk
         {
             //TODO: Add validation and failure handling
             var request = new CreateSessionRequest() { ApiKey = AppacitiveContext.ApiKey };
-            var service = ObjectFactory.Build<ISessionService>();
-            var response = await service.CreateSessionAsync(request);
+            var response = await request.ExecuteAsync();
             _sessionToken = response.Session.SessionKey;
         }
 

@@ -12,13 +12,12 @@ namespace Appacitive.Sdk
     {   
         public async static Task<Connection> GetAsync(string relation, string endpointArticleId1, string endpointArticleId2)
         {
-            IConnectionService connService = ObjectFactory.Build<IConnectionService>();
-            var response = await connService.GetConnectionByEndpointAsync(new GetConnectionByEndpointRequest
+            var response = await (new GetConnectionByEndpointRequest
             {
                 Relation = relation,
                 ArticleId1 = endpointArticleId1,
                 ArticleId2 = endpointArticleId2
-            });
+            }).ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             else return response.Connections.SingleOrDefault();
@@ -26,12 +25,11 @@ namespace Appacitive.Sdk
 
         public async static Task<Connection> GetAsync(string relation, string id)
         {
-            IConnectionService connService = ObjectFactory.Build<IConnectionService>();
-            var response = await connService.GetConnectionAsync(new GetConnectionRequest
+            var response = await (new GetConnectionRequest
                                                         {
                                                             Relation = relation,
                                                             Id = id
-                                                        });
+                                                        }).ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             else return response.Connection;
@@ -39,19 +37,17 @@ namespace Appacitive.Sdk
 
         public async static Task DeleteAsync(string relation, string id)
         {
-            IConnectionService connService = ObjectFactory.Build<IConnectionService>();
-            var response = await connService.DeleteConnectionAsync (new DeleteConnectionRequest
+            var response = await (new DeleteConnectionRequest
             {
                 Relation = relation,
                 Id = id
-            });
+            }).ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
         }
 
         public async static Task<PagedList<Connection>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
-            var service = ObjectFactory.Build<IConnectionService>();
             var request = new FindAllConnectionsRequest()
             {
                 Type = type,
@@ -61,8 +57,8 @@ namespace Appacitive.Sdk
                 OrderBy = orderBy,
                 SortOrder = sortOrder
             };
-            
-            var response = await service.FindAllConnectionsAsync(request);
+
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             var connections = new PagedList<Connection>()
@@ -79,8 +75,7 @@ namespace Appacitive.Sdk
 
         public async static Task MultiDeleteAsync(string connectionType, params string[] connectionIds)
         {
-            IConnectionService connService = ObjectFactory.Build<IConnectionService>();
-            var response = await connService.BulkDeleteAsync(new BulkDeleteConnectionRequest { Type = connectionType, ConnectionIds = new List<string>(connectionIds) } );
+            var response = await (new BulkDeleteConnectionRequest { Type = connectionType, ConnectionIds = new List<string>(connectionIds) }).ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
         }

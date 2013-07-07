@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class InvalidateUserSessionRequest : ApiRequest
+    public class InvalidateUserSessionRequest : PostOperation<InvalidateUserSessionResponse>
     {
         public InvalidateUserSessionRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -21,6 +21,11 @@ namespace Appacitive.Sdk.Services
         public override byte[] ToBytes()
         {
             return null;
+        }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.InvalidateUser(this.CurrentLocation, this.DebugEnabled, this.Verbosity);
         }
     }
 }

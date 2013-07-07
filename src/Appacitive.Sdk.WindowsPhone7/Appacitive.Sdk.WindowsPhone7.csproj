@@ -166,42 +166,6 @@
     <Compile Include="..\Appacitive.Sdk\Internal\RealTimeMessage.cs">
       <Link>Internal\RealTimeMessage.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\ArticleService.cs">
-      <Link>Internal\Services\ArticleService.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\ConnectionService.cs">
-      <Link>Internal\Services\ConnectionService.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\DeviceService.cs">
-      <Link>Internal\Services\DeviceService.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\EmailService.cs">
-      <Link>Internal\Services\EmailService.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\FileService.cs">
-      <Link>Internal\Services\FileService.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\IArticleService.cs">
-      <Link>Internal\Services\IArticleService.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\IConnectionService.cs">
-      <Link>Internal\Services\IConnectionService.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\IDeviceService.cs">
-      <Link>Internal\Services\IDeviceService.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\IEmailService.cs">
-      <Link>Internal\Services\IEmailService.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\IFileService.cs">
-      <Link>Internal\Services\IFileService.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\ISessionService.cs">
-      <Link>Internal\Services\ISessionService.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\IUserService.cs">
-      <Link>Internal\Services\IUserService.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model.cs">
       <Link>Internal\Services\Model.cs</Link>
     </Compile>
@@ -349,6 +313,9 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetUserResponse.cs">
       <Link>Internal\Services\Model\GetUserResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\HttpRequests.cs">
+      <Link>Internal\Services\Model\HttpRequests.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\InitiateResetPasswordRequest.cs">
       <Link>Internal\Services\Model\InitiateResetPasswordRequest.cs</Link>
     </Compile>
@@ -454,6 +421,9 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\SerializerExtensions.cs">
       <Link>Internal\Services\Serializers\SerializerExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\StatusResponseConverter.cs">
+      <Link>Internal\Services\Serializers\StatusResponseConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateArticleRequestConverter.cs">
       <Link>Internal\Services\Serializers\UpdateArticleRequestConverter.cs</Link>
     </Compile>
@@ -472,14 +442,8 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\ServiceExceptionFactory.cs">
       <Link>Internal\Services\ServiceExceptionFactory.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\SessionService.cs">
-      <Link>Internal\Services\SessionService.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Urls.cs">
       <Link>Internal\Services\Urls.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\UserService.cs">
-      <Link>Internal\Services\UserService.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Subscription.cs">
       <Link>Internal\Subscription.cs</Link>

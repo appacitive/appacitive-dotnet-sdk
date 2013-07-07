@@ -16,10 +16,5 @@ namespace Appacitive.Sdk.Services
         [JsonProperty("id")]
         public string Filename { get; set; }
 
-        public static GetUploadUrlResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<GetUploadUrlResponse>(bytes);
-        }
     }
 }

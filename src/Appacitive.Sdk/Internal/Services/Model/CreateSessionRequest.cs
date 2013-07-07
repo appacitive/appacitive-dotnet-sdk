@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Appacitive.Sdk.Services
 {
-    public class CreateSessionRequest : ApiRequest
+    public class CreateSessionRequest : PutOperation<CreateSessionResponse>
     {
         public CreateSessionRequest()
             : base(null, null, Environment.Sandbox, null)
@@ -28,5 +28,10 @@ namespace Appacitive.Sdk.Services
 
         [JsonProperty("usagecount")]
         public int UsageCount { get; set; }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.CreateSession(this.DebugEnabled, this.Verbosity);
+        }
     }
 }

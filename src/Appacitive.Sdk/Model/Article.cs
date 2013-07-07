@@ -39,7 +39,6 @@ namespace Appacitive.Sdk
 
         protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
-            var articleService = ObjectFactory.Build<IArticleService>();
             var request = new UpdateArticleRequest {Id = this.Id, Type = this.Type};
             if (propertyUpdates != null && propertyUpdates.Count > 0)
                 propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
@@ -57,7 +56,7 @@ namespace Appacitive.Sdk
                 request.RemovedTags.Count == 0)
                 return null;
 
-            var response = await articleService.UpdateArticleAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 
@@ -69,11 +68,10 @@ namespace Appacitive.Sdk
         protected override async Task<Entity> CreateNewAsync()
         {
             // Create a new article
-            var service = ObjectFactory.Build<IArticleService>();
-            var response = await service.CreateArticleAsync(new CreateArticleRequest() 
+            var response = await new CreateArticleRequest()
             {
                 Article = this
-            });
+            }.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 

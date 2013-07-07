@@ -127,11 +127,10 @@ namespace Appacitive.Sdk
         protected override async Task<Entity> CreateNewAsync()
         {
             // Create a new article
-            var service = ObjectFactory.Build<IUserService>();
-            var response = await service.CreateUserAsync(new CreateUserRequest()
+            var response = await new CreateUserRequest()
             {
                 User = this
-            });
+            }.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 
@@ -142,7 +141,6 @@ namespace Appacitive.Sdk
 
         protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
-            var userService = ObjectFactory.Build<IUserService>();
             var request = new UpdateUserRequest()
             {
                 SessionToken = AppacitiveContext.SessionToken,
@@ -170,7 +168,7 @@ namespace Appacitive.Sdk
                 request.RemovedTags.Count == 0)
                 return null;
 
-            var response = await userService.UpdateUserAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 
@@ -178,8 +176,5 @@ namespace Appacitive.Sdk
             Debug.Assert(response.User != null, "If status is successful, then updated user should not be null.");
             return response.User;
         }
-
-        
-
     }
 }

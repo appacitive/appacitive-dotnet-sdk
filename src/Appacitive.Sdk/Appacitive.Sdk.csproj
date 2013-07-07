@@ -59,6 +59,9 @@
     <Compile Include="Internal\Messages.cs" />
     <Compile Include="Internal\MessageSubscriber.cs" />
     <Compile Include="Internal\EventProxy.cs" />
+    <Compile Include="Internal\Services\Model\FindAllConnectionsResponse.cs" />
+    <Compile Include="Internal\Services\Model\HttpRequests.cs" />
+    <Compile Include="Internal\Services\Serializers\StatusResponseConverter.cs" />
     <Compile Include="Model\MultiValueCollection.cs" />
     <Compile Include="Internal\NamingConvention.cs">
       <SubType>Code</SubType>
@@ -86,10 +89,6 @@
     <Compile Include="Model\SupportedDevices.cs" />
     <Compile Include="Model\Timezone.cs" />
     <Compile Include="Model\Users.cs" />
-    <Compile Include="Internal\Services\DeviceService.cs" />
-    <Compile Include="Internal\Services\EmailService.cs" />
-    <Compile Include="Internal\Services\IDeviceService.cs" />
-    <Compile Include="Internal\Services\IEmailService.cs" />
     <Compile Include="Internal\Services\Model\BulkDeleteConnectionRequest.cs" />
     <Compile Include="Internal\Services\Model\BulkDeleteConnectionResponse.cs" />
     <Compile Include="Internal\Services\Model\BulkDeleteArticleRequest.cs" />
@@ -159,13 +158,6 @@
     <Compile Include="QueryDsl\Query.cs" />
     <Compile Include="QueryDsl\RadialSearchQuery.cs" />
     <Compile Include="QueryDsl\TimeFieldValue.cs" />
-    <Compile Include="Internal\Services\ArticleService.cs" />
-    <Compile Include="Internal\Services\ConnectionService.cs" />
-    <Compile Include="Internal\Services\FileService.cs" />
-    <Compile Include="Internal\Services\IArticleService.cs" />
-    <Compile Include="Internal\Services\IConnectionService.cs" />
-    <Compile Include="Internal\Services\ISessionService.cs" />
-    <Compile Include="Internal\Services\IUserService.cs" />
     <Compile Include="Internal\Services\Model.cs" />
     <Compile Include="Internal\Services\Model\ApiRequest.cs" />
     <Compile Include="Internal\Services\Model\ApiResponse.cs" />
@@ -207,7 +199,6 @@
     <Compile Include="Internal\Services\Model\GetUploadUrlResponse.cs" />
     <Compile Include="Internal\Services\Model\GetUserRequest.cs" />
     <Compile Include="Internal\Services\Model\GetUserResponse.cs" />
-    <Compile Include="Internal\Services\IFileService.cs" />
     <Compile Include="Internal\Services\Model\MultiGetArticleRequest.cs" />
     <Compile Include="Internal\Services\Model\MultiGetArticleResponse.cs" />
     <Compile Include="Internal\Services\Model\PagedConnectionList.cs" />
@@ -225,8 +216,6 @@
     <Compile Include="Internal\Services\Serializers\UpdateArticleRequestConverter.cs" />
     <Compile Include="Internal\Services\Serializers\UpdateUserRequestConverter.cs" />
     <Compile Include="Internal\Services\Serializers\UserConverter.cs" />
-    <Compile Include="Internal\Services\SessionService.cs" />
-    <Compile Include="Internal\Services\UserService.cs" />
     <Compile Include="Subscriptions.cs" />
     <Compile Include="Urls.cs" />
     <Compile Include="UserSession.cs" />

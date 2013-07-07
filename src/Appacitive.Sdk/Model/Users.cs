@@ -13,13 +13,12 @@ namespace Appacitive.Sdk
 
         public static async Task InitiateResetPassword(string username, string emailSubject = null)
         {
-            var service = ObjectFactory.Build<IUserService>();
             var request = new InitiateResetPasswordRequest
             {
                 Username = username, 
                 EmailSubject = emailSubject ?? "Reset your password"
             };
-            var response = await service.InitiateResetPassword(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful != true)
                 throw response.Status.ToFault();
         }
@@ -32,12 +31,11 @@ namespace Appacitive.Sdk
         /// <returns>The user with the specified id</returns>
         public static async Task<User> GetLoggedInUserAsync(IEnumerable<string> fields = null)
         {
-            var service = ObjectFactory.Build<IUserService>();
             var request = new GetUserRequest { UserIdType = "token" };
             if (fields != null)
                 request.Fields.AddRange(fields);
 
-            var response = await service.GetUserAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             Debug.Assert(response.User != null, "For a successful get call, article should always be returned.");
@@ -52,12 +50,11 @@ namespace Appacitive.Sdk
         /// <returns>The user with the specified id</returns>
         public static async Task<User> GetByIdAsync(string id, IEnumerable<string> fields = null)
         {
-            var service = ObjectFactory.Build<IUserService>();
             var request = new GetUserRequest { UserId = id };
             if (fields != null)
                 request.Fields.AddRange(fields);
 
-            var response = await service.GetUserAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             Debug.Assert(response.User != null, "For a successful get call, article should always be returned.");
@@ -72,12 +69,11 @@ namespace Appacitive.Sdk
         /// <returns>The user with the specified id</returns>
         public static async Task<User> GetByUsernameAsync(string username, IEnumerable<string> fields = null)
         {
-            var service = ObjectFactory.Build<IUserService>();
             var request = new GetUserRequest { UserId = username, UserIdType = "username" };
             if (fields != null)
                 request.Fields.AddRange(fields);
 
-            var response = await service.GetUserAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             Debug.Assert(response.User != null, "For a successful get call, article should always be returned.");
@@ -91,12 +87,11 @@ namespace Appacitive.Sdk
         /// <returns>Void</returns>
         public static async Task DeleteUserAsync(string id, bool deleteConnections = false)
         {
-            var service = ObjectFactory.Build<IUserService>();
-            var response = await service.DeleteUserAsync(new DeleteUserRequest()
+            var response = await new DeleteUserRequest()
             {
                 UserId = id,
                 DeleteConnections = deleteConnections
-            });
+            }.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
         }
@@ -111,7 +106,7 @@ namespace Appacitive.Sdk
         /// <returns>A paged list of users.</returns>
         public async static Task<PagedList<User>> FindAllAsync(string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
-            IUserService service = ObjectFactory.Build<IUserService>();
+            
             var request = new FindAllUsersRequest()
             {
                 Query = query,
@@ -122,7 +117,7 @@ namespace Appacitive.Sdk
             };
             if (fields != null)
                 request.Fields.AddRange(fields);
-            var response = await service.FindAllAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             var users = new PagedList<User>()

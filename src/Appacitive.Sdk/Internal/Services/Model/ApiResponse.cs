@@ -14,5 +14,7 @@ namespace Appacitive.Sdk.Services
 
         [JsonIgnore]
         public decimal TimeTaken { get; set; }
+
+        public static int Parse() { return 1; }
     }
 }

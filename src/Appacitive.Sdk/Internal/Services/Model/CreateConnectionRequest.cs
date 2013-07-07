@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class CreateConnectionRequest : ApiRequest
+    public class CreateConnectionRequest : PutOperation<CreateConnectionResponse>
     {
         public CreateConnectionRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -25,6 +25,28 @@ namespace Appacitive.Sdk.Services
         {
             var serializer = ObjectFactory.Build<IJsonSerializer>();
             return serializer.Serialize(this.Connection);
+        }
+
+        public override async Task<CreateConnectionResponse> ExecuteAsync()
+        {
+            var response = await base.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            // Update the ids if any new articles were passed in the this.
+            if (this.Connection.Endpoints.EndpointA.CreateEndpoint == true)
+            {
+                this.Connection.Endpoints.EndpointA.Content.Id = response.Connection.Endpoints.EndpointA.ArticleId;
+            }
+            if (this.Connection.Endpoints.EndpointB.CreateEndpoint == true)
+            {
+                this.Connection.Endpoints.EndpointB.Content.Id = response.Connection.Endpoints.EndpointB.ArticleId;
+            }
+            return response;
+        }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.CreateConnection(this.Connection.Type, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }

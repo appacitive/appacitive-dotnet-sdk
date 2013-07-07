@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Appacitive.Sdk.Realtime;
 
 
 namespace Appacitive.Sdk.Services
 {
-    public class AuthenticateUserRequest : ApiRequest
+    public class AuthenticateUserRequest : PostOperation<AuthenticateUserResponse>
     {
         public AuthenticateUserRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -48,6 +49,11 @@ namespace Appacitive.Sdk.Services
             {
                 this.Attributes[attribute] = value;
             }
+        }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.AuthenticateUser(this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }

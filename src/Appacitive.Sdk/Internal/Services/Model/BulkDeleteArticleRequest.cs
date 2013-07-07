@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class BulkDeleteArticleRequest : ApiRequest
+    public class BulkDeleteArticleRequest : PostOperation<BulkDeleteArticleResponse>
     {
         public BulkDeleteArticleRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -25,6 +25,11 @@ namespace Appacitive.Sdk.Services
         [JsonProperty("idlist")]
         public List<string> ArticleIds { get; set; }
 
-        
+
+
+        protected override string GetUrl()
+        {
+            return Urls.For.BulkDeleteArticle(this.Type, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+        }
     }
 }

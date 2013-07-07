@@ -12,11 +12,5 @@ namespace Appacitive.Sdk.Services
     {
         [JsonProperty("id")]
         public string Id { get; set; }
-
-        public static SendPushNotificationResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<SendPushNotificationResponse>(bytes);
-        }
     }
 }

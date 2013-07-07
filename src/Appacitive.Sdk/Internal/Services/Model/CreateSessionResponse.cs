@@ -12,11 +12,5 @@ namespace Appacitive.Sdk.Services
     {
         [JsonProperty("session")]
         public Session Session { get; set; }
-
-        public static CreateSessionResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = AppacitiveContext.ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<CreateSessionResponse>(bytes);
-        }
     }
 }

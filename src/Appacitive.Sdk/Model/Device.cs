@@ -31,22 +31,20 @@ namespace Appacitive.Sdk
 
         public async static Task DeleteAsync(string id)
         {
-            var service = ObjectFactory.Build<IDeviceService>();
-            var response = await service.DeleteDeviceAsync(new DeleteDeviceRequest()
+            var response = await (new DeleteDeviceRequest()
             {
                 Id = id
-            });
+            }).ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
         }
 
         public async static Task<Device> GetAsync(string id, IEnumerable<string> fields = null)
         {
-            var service = ObjectFactory.Build<IDeviceService>();
             var request = new GetDeviceRequest() { Id = id};
             if (fields != null)
                 request.Fields.AddRange(fields);
-            var response = await service.GetDeviceAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             Debug.Assert(response.Device != null, "For a successful get call, device should always be returned.");
@@ -169,11 +167,10 @@ namespace Appacitive.Sdk
         protected override async Task<Entity> CreateNewAsync()
         {
             // Create a new article
-            var service = ObjectFactory.Build<IDeviceService>();
-            var response = await service.RegisterDeviceAsync(new RegisterDeviceRequest()
+            var response = await (new RegisterDeviceRequest()
             {
                 Device = this
-            });
+            }).ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 
@@ -184,7 +181,6 @@ namespace Appacitive.Sdk
 
         protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
-            var deviceSerivce = ObjectFactory.Build<IDeviceService>();
             var request = new UpdateDeviceRequest()
             {
                 SessionToken = AppacitiveContext.SessionToken,
@@ -212,7 +208,7 @@ namespace Appacitive.Sdk
                 request.RemovedTags.Count == 0)
                 return null;
 
-            var response = await deviceSerivce.UpdateDeviceAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 

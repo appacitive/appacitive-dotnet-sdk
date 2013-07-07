@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class GetArticleRequest : ApiRequest
+    public class GetArticleRequest : GetOperation<GetArticleResponse>
     {
         public GetArticleRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -25,6 +25,11 @@ namespace Appacitive.Sdk.Services
         public override byte[] ToBytes()
         {
             return null;
+        }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.GetArticle(this.Type, this.Id, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }

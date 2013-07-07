@@ -8,12 +8,8 @@ using Appacitive.Sdk.Realtime;
 
 namespace Appacitive.Sdk.Services
 {
+    [JsonConverter(typeof(StatusResponseConverter<DeleteConnectionResponse>))]
     public class DeleteConnectionResponse : ApiResponse
-    {
-        public static DeleteConnectionResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return new DeleteConnectionResponse() { Status = serializer.Deserialize<Status>(bytes) };
-        }
+    {   
     }
 }

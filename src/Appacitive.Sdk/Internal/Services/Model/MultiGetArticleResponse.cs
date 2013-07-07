@@ -12,11 +12,5 @@ namespace Appacitive.Sdk.Services
     {
         [JsonProperty("articles")]
         public List<Article> Articles { get; set; }
-
-        public static MultiGetArticleResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<MultiGetArticleResponse>(bytes);
-        }
     }
 }

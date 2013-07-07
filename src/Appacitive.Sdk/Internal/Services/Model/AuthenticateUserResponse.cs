@@ -15,11 +15,5 @@ namespace Appacitive.Sdk.Services
 
         [JsonProperty("user")]
         public User User { get; set; }
-
-        public static AuthenticateUserResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<AuthenticateUserResponse>(bytes);
-        }
     }
 }

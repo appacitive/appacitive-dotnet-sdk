@@ -25,11 +25,10 @@ namespace Appacitive.Sdk.Tests
         public static async Task<string> AuthenticateAsync(string username, string password)
         {
             Console.WriteLine("Authenticating user with username {0} and password {1}", username, password);
-            IUserService userService = new UserService();
             var authRequest = new AuthenticateUserRequest();
             authRequest["username"] = username;
             authRequest["password"] = password;
-            var authResponse = await userService.AuthenticateAsync(authRequest);
+            var authResponse = await authRequest.ExecuteAsync();
             ApiHelper.EnsureValidResponse(authResponse);
             return authResponse.Token;
         }
@@ -38,9 +37,8 @@ namespace Appacitive.Sdk.Tests
         public static async Task<User> GetExistingUserAsync(string id)
         {
             Console.WriteLine("Getting existing user with id {0}.", id);
-            IUserService userService = new UserService();
             var getRequest = new GetUserRequest() { UserId = id };
-            var getResponse = await userService.GetUserAsync(getRequest);
+            var getResponse = await getRequest.ExecuteAsync();
             Assert.IsNotNull(getResponse, "Cannot get updated user for user id {0}.", id);
             Assert.IsNotNull(getResponse.Status, "Status for get user call is null.");
             if (getResponse.Status.IsSuccessful == false)
@@ -83,9 +81,8 @@ namespace Appacitive.Sdk.Tests
 
             Console.WriteLine("Creating new user with username {0}.", user.Username);
 
-            IUserService userService = new UserService();
             var createRequest = new CreateUserRequest() { User = user };
-            var createResponse = await userService.CreateUserAsync(createRequest);
+            var createResponse = await createRequest.ExecuteAsync(); 
             var created = createResponse.User;
             Assert.IsNotNull(created, "Initial user creation failed.");
             Console.WriteLine("Created new user with username {0} and id {1}.", created.Username, created.Id);

@@ -1,4 +1,5 @@
 ﻿using Appacitive.Sdk.Realtime;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,12 +8,8 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
+    [JsonConverter(typeof(StatusResponseConverter<BulkDeleteArticleResponse>))]
     public class BulkDeleteArticleResponse : ApiResponse
-    {
-        public static BulkDeleteArticleResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return new BulkDeleteArticleResponse() { Status = serializer.Deserialize<Status>(bytes) };
-        }
+    {   
     }
 }

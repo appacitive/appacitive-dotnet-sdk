@@ -12,11 +12,5 @@ namespace Appacitive.Sdk.Services
     {
         [JsonProperty("email")]
         public Email Email { get; set; }
-
-        public static SendEmailResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<SendEmailResponse>(bytes);
-        }
     }
 }

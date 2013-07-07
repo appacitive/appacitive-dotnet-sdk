@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class DeleteArticleRequest : ApiRequest
+    public class DeleteArticleRequest : DeleteOperation<DeleteArticleResponse>
     {
         public DeleteArticleRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -28,5 +29,15 @@ namespace Appacitive.Sdk.Services
         {
             return null;
         }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.DeleteArticle(this.Type, this.Id, this.DeleteConnections, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+        }
+    }
+
+    [JsonConverter(typeof(StatusResponseConverter<DeleteArticleResponse>))]
+    public class DeleteArticleResponse : ApiResponse
+    {
     }
 }

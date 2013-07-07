@@ -12,11 +12,5 @@ namespace Appacitive.Sdk.Services
     {
         [JsonProperty("result")]
         public bool Result { get; set; }
-
-        public static ValidateUserSessionResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<ValidateUserSessionResponse>(bytes);
-        }
     }
 }

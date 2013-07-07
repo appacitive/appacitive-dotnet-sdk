@@ -12,11 +12,5 @@ namespace Appacitive.Sdk.Services
     {
         [JsonProperty("article")]
         public Article Article { get; set; }
-
-        public static CreateArticleResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<CreateArticleResponse>(bytes);
-        }
     }
 }

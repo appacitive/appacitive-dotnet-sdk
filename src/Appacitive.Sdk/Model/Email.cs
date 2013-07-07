@@ -37,8 +37,7 @@ namespace Appacitive.Sdk
 
         public async Task<string> SendAsync()
         {
-            IEmailService emailService = ObjectFactory.Build<IEmailService>();
-            var response = await emailService.SendEmailAsync(new SendEmailRequest { Email = this });
+            var response = await (new SendEmailRequest { Email = this }).ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             Debug.Assert(response.Email != null, "For a successful call, Email should never by null.");

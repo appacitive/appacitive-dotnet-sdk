@@ -8,19 +8,13 @@ using Appacitive.Sdk.Realtime;
 
 namespace Appacitive.Sdk.Services
 {
-    public class FindAllConectionsResponse : ApiResponse
+    public class FindAllConnectionsResponse : ApiResponse
     {
         [JsonProperty("connections")]
         public List<Connection> Connections { get; set; }
 
         [JsonProperty("paginginfo")]
         public PagingInfo PagingInfo { get; set; }
-
-        internal static FindAllConectionsResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<FindAllConectionsResponse>(bytes);
-        }
     }
 
     

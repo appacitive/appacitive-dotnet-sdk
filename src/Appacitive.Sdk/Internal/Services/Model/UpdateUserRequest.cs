@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Appacitive.Sdk.Services
 {
-    public class UpdateUserRequest : ApiRequest
+    public class UpdateUserRequest : PostOperation<UpdateUserResponse>
     {
         public UpdateUserRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -44,5 +44,10 @@ namespace Appacitive.Sdk.Services
 
         [JsonIgnore]
         public List<string> RemovedTags { get; private set; }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.UpdateUser(this.UserId, this.IdType, this.Revision, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+        }
     }
 }

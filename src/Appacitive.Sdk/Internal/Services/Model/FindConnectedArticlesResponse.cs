@@ -15,11 +15,5 @@ namespace Appacitive.Sdk.Services
 
         [JsonProperty("connections")]
         public List<Connection> Connections { get; set; }
-
-        public static FindConnectedArticlesResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<FindConnectedArticlesResponse>(bytes);
-        }
     }
 }

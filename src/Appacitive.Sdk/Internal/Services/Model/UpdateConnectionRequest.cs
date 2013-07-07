@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Appacitive.Sdk.Services
 {
-    public class UpdateConnectionRequest : ApiRequest
+    public class UpdateConnectionRequest : PostOperation<UpdateConnectionResponse>
     {
         public UpdateConnectionRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -44,5 +44,10 @@ namespace Appacitive.Sdk.Services
 
         [JsonIgnore]
         public List<string> RemovedTags { get; private set; }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.UpdateConnection(this.Type, this.Id, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+        }
     }
 }

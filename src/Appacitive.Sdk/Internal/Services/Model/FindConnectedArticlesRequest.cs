@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class FindConnectedArticlesRequest : ApiRequest
+    public class FindConnectedArticlesRequest : GetOperation<FindConnectedArticlesResponse>
     {
         public FindConnectedArticlesRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -29,5 +29,10 @@ namespace Appacitive.Sdk.Services
         public int PageNumber { get; set; }
 
         public int PageSize { get; set; }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.FindConnectedArticles(this.Relation, this.ArticleId, this.Label, this.Query, this.PageNumber, this.PageSize, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+        }
     }
 }

@@ -12,11 +12,10 @@ namespace Appacitive.Sdk
     {
         public async static Task<Article> GetAsync(string type, string id, IEnumerable<string> fields = null)
         {
-            var service = ObjectFactory.Build<IArticleService>();
             var request = new GetArticleRequest() { Id = id, Type = type, };
             if (fields != null)
                 request.Fields.AddRange(fields);
-            var response = await service.GetArticleAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             Debug.Assert(response.Article != null, "For a successful get call, article should always be returned.");
@@ -25,12 +24,11 @@ namespace Appacitive.Sdk
 
         public async static Task<IEnumerable<Article>> MultiGetAsync(string type, IEnumerable<string> idList, IEnumerable<string> fields = null)
         {
-            var service = ObjectFactory.Build<IArticleService>();
             var request = new MultiGetArticleRequest() { Type = type, };
             request.IdList.AddRange(idList);
             if (fields != null)
                 request.Fields.AddRange(fields);
-            var response = await service.MultiGetArticleAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             return response.Articles;
@@ -38,7 +36,6 @@ namespace Appacitive.Sdk
 
         public async static Task<PagedList<Article>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
-            var service = ObjectFactory.Build<IArticleService>();
             var request = new FindAllArticleRequest()
             {
                 Type = type,
@@ -48,7 +45,7 @@ namespace Appacitive.Sdk
                 OrderBy = orderBy,
                 SortOrder = sortOrder
             };
-            var response = await service.FindAllAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             var articles = new PagedList<Article>()
@@ -65,33 +62,29 @@ namespace Appacitive.Sdk
 
         public async static Task DeleteAsync(string type, string id, bool deleteConnections = false)
         {
-            var service = ObjectFactory.Build<IArticleService>();
-            var status = await service.DeleteArticleAsync(new DeleteArticleRequest()
+            var response = await new DeleteArticleRequest()
             {
                 Id = id,
                 Type = type,
                 DeleteConnections = deleteConnections
-            });
-            if (status.IsSuccessful == false)
-                throw status.ToFault();
+            }.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
         }
 
         public async static Task MultiDeleteAsync(string type, params string[] ids)
         {
-            var service = ObjectFactory.Build<IArticleService>();
-            var response = await service.BulkDeleteAsync(
-                new BulkDeleteArticleRequest
+            var response = await new BulkDeleteArticleRequest
                 {
                     Type = type,
                     ArticleIds = ids.ToList()
-                });
+                }.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
         }
 
         public async static Task<PagedList<Article>> GetConnectedArticlesAsync(string relation, string articleId, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
-            IConnectionService connService = ObjectFactory.Build<IConnectionService>();
             var request = new FindConnectedArticlesRequest
             {
                 Relation = relation,
@@ -103,7 +96,7 @@ namespace Appacitive.Sdk
             };
             if (fields != null)
                 request.Fields.AddRange(fields);
-            var response = await connService.FindConnectedArticlesAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 
@@ -133,7 +126,6 @@ namespace Appacitive.Sdk
 
         public async static Task<PagedList<Connection>> GetConnectionsAsync(string relation, string articleId, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
-            IConnectionService connService = ObjectFactory.Build<IConnectionService>();
             var request = new FindConnectedArticlesRequest
             {
                 Relation = relation,
@@ -145,7 +137,7 @@ namespace Appacitive.Sdk
             };
             if (fields != null)
                 request.Fields.AddRange(fields);
-            var response = await connService.FindConnectedArticlesAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 

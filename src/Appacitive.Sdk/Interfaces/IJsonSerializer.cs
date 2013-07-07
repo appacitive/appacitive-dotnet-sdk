@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk.Realtime
+namespace Appacitive.Sdk
 {
     public interface IJsonSerializer
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class DeleteDeviceRequest : ApiRequest
+    public class DeleteDeviceRequest : DeleteOperation<DeleteArticleResponse>
     {
         public DeleteDeviceRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -19,5 +19,10 @@ namespace Appacitive.Sdk.Services
         }
 
         public string Id { get; set; }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.GetDevice(this.Id, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+        }
     }
 }

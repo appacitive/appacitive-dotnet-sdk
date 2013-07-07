@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class FindAllConnectionsRequest : ApiRequest
+    public class FindAllConnectionsRequest : GetOperation<FindAllConnectionsResponse>
     {
         public FindAllConnectionsRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -29,5 +29,10 @@ namespace Appacitive.Sdk.Services
         public int PageNumber { get; set; }
 
         public int PageSize { get; set; }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.FindAllConnectionsAsync(this.Type, this.Query, this.PageNumber, this.PageSize, this.OrderBy, this.SortOrder, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+        }
     }
 }

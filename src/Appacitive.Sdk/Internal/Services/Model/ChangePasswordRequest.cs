@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Appacitive.Sdk.Services
 {
-    public class ChangePasswordRequest : ApiRequest
+    public class ChangePasswordRequest : PostOperation<ChangePasswordResponse>
     {
         public ChangePasswordRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -31,6 +31,11 @@ namespace Appacitive.Sdk.Services
 
         [JsonProperty("newpassword")]
         public string NewPassword { get; set; }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.ChangePassword(this.UserId, this.IdType, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+        }
     }
 
     

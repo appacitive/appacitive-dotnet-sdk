@@ -9,7 +9,7 @@ using Appacitive.Sdk.Realtime;
 
 namespace Appacitive.Sdk.Services
 {
-    public class SendEmailRequest : ApiRequest
+    public class SendEmailRequest : PostOperation<SendEmailResponse>
     {
         public SendEmailRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -27,6 +27,11 @@ namespace Appacitive.Sdk.Services
         {
             var serializer = ObjectFactory.Build<IJsonSerializer>();
             return serializer.Serialize(this.Email);
+        }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.SendEmail(this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }

@@ -12,11 +12,5 @@ namespace Appacitive.Sdk.Services
     {
         [JsonProperty("uri")]
         public string Url { get; set; }
-
-        public static GetDownloadUrlResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<GetDownloadUrlResponse>(bytes);
-        }
     }
 }

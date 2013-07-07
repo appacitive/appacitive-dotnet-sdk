@@ -191,11 +191,10 @@ namespace Appacitive.Sdk
             }
 
             // Create a new article
-            IConnectionService service = ObjectFactory.Build<IConnectionService>();
-            var response = await service.CreateConnectionAsync(new CreateConnectionRequest()
+            var response = await (new CreateConnectionRequest()
             {
                 Connection = this
-            });
+            }).ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             Debug.Assert(response.Connection != null, "If status is successful, then created connection should not be null.");
@@ -212,7 +211,6 @@ namespace Appacitive.Sdk
 
         protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
-            var connService = ObjectFactory.Build<IConnectionService>();
             var request = new UpdateConnectionRequest{ Id = this.Id, Type = this.Type };
             if (propertyUpdates != null && propertyUpdates.Count > 0)
                 propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
@@ -230,7 +228,7 @@ namespace Appacitive.Sdk
                 request.RemovedTags.Count == 0)
                 return null;
 
-            var response = await connService.UpdateConnectionAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 

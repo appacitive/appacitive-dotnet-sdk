@@ -20,16 +20,15 @@ namespace Appacitive.Sdk.Tests
             var now = DateTime.Now;
             dynamic obj = ObjectHelper.NewInstance();
 
-            var service = ObjectFactory.Build<IArticleService>();
             CreateArticleResponse response = null;
-            var waitHandle = new ManualResetEvent(false);
+            
 
-            response = await service.CreateArticleAsync(new CreateArticleRequest()
+            response = await (new CreateArticleRequest()
             {
                 Article = obj,
                 Environment = TestConfiguration.Environment
-            });
-            waitHandle.Set();
+            }).ExecuteAsync();
+            
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Status);
             Assert.IsTrue(response.Status.IsSuccessful);
@@ -47,14 +46,13 @@ namespace Appacitive.Sdk.Tests
 
 
             // Get the article
-            IArticleService service = new ArticleService();
             GetArticleResponse getResponse = null;
-            getResponse = await service.GetArticleAsync(
+            getResponse = await (
                 new GetArticleRequest()
                 {   
                     Id = article.Id,
                     Type = article.Type
-                });
+                }).ExecuteAsync();
             Assert.IsNotNull(getResponse);
             Assert.IsNotNull(getResponse.Status);
             Assert.IsTrue(getResponse.Status.IsSuccessful);
@@ -82,12 +80,11 @@ namespace Appacitive.Sdk.Tests
             obj.SetAttribute("attr1", "value1");
             obj.SetAttribute("attr2", "value2");
 
-            var service = ObjectFactory.Build<IArticleService>();
             CreateArticleResponse response = null;
-            response = await service.CreateArticleAsync(new CreateArticleRequest()
+            response = await (new CreateArticleRequest()
                 {
                     Article = obj
-                });
+                }).ExecuteAsync();
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Status);
             Assert.IsTrue(response.Status.IsSuccessful);
@@ -96,23 +93,22 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Time taken: {0} seconds", response.TimeTaken);
 
             // Delete the article
-            Status deleteArticleResponse = null;
-            deleteArticleResponse = await service.DeleteArticleAsync(new DeleteArticleRequest()
+            var deleteArticleResponse = await (new DeleteArticleRequest()
                 {
                     Id = response.Article.Id,
                     Type = response.Article.Type
-                });
+                }).ExecuteAsync();
             Assert.IsNotNull(deleteArticleResponse, "Delete articler response is null.");
-            Assert.IsTrue(deleteArticleResponse.IsSuccessful == true,
-                          deleteArticleResponse.Message ?? "Delete article operation failed.");
+            Assert.IsTrue(deleteArticleResponse.Status.IsSuccessful == true,
+                          deleteArticleResponse.Status.Message ?? "Delete article operation failed.");
 
             // Try get the deleted article
-            var getArticleResponse = await service.GetArticleAsync(
+            var getArticleResponse = await (
                 new GetArticleRequest()
                     {
                         Id = response.Article.Id,
                         Type = response.Article.Type
-                    });
+                    }).ExecuteAsync();
             Assert.IsNotNull(getArticleResponse, "Get article response is null.");
             Assert.IsNull(getArticleResponse.Article, "Should not be able to get a deleted article.");
             Assert.IsTrue(getArticleResponse.Status.Code == "404", "Error code expected was not 404.");
@@ -131,11 +127,10 @@ namespace Appacitive.Sdk.Tests
             obj.stringfield = "initial";
             obj.Tags.Add("initial");
 
-            var service = ObjectFactory.Build<IArticleService>();
-            var createdResponse = await service.CreateArticleAsync(new CreateArticleRequest()
+            var createdResponse = await (new CreateArticleRequest()
                 {
                     Article = obj
-                });
+                }).ExecuteAsync();
             Assert.IsNotNull(createdResponse, "Article creation failed.");
             Assert.IsNotNull(createdResponse.Status, "Status is null.");
             Assert.IsTrue(createdResponse.Status.IsSuccessful,
@@ -154,7 +149,8 @@ namespace Appacitive.Sdk.Tests
             updateRequest.PropertyUpdates["datefield"] = "2013-11-20";
             updateRequest.AddedTags.AddRange(new[] {"tag1", "tag2"});
             updateRequest.RemovedTags.AddRange(new[] {"initial"});
-            var updatedResponse = await service.UpdateArticleAsync(updateRequest);
+            var updatedResponse = await updateRequest.ExecuteAsync();
+
 
             Assert.IsNotNull(updatedResponse, "Update article response is null.");
             Assert.IsNotNull(updatedResponse.Status, "Update article response status is null.");
@@ -181,11 +177,10 @@ namespace Appacitive.Sdk.Tests
             obj.decimalfield = 10.0m;
             obj.stringfield = null;
 
-            var service = ObjectFactory.Build<IArticleService>();
-            var createdResponse = await service.CreateArticleAsync(new CreateArticleRequest()
+            var createdResponse = await (new CreateArticleRequest()
             {
                 Article = obj
-            });
+            }).ExecuteAsync();
             Assert.IsNotNull(createdResponse, "Article creation failed.");
             Assert.IsNotNull(createdResponse.Status, "Status is null.");
             Assert.IsTrue(createdResponse.Status.IsSuccessful, createdResponse.Status.Message ?? "Create article failed.");
@@ -200,7 +195,7 @@ namespace Appacitive.Sdk.Tests
                     Type = created.Type
                 };
                 updateRequest.PropertyUpdates["stringfield"] = null;
-                var updatedResponse = await service.UpdateArticleAsync(updateRequest);
+                var updatedResponse = await updateRequest.ExecuteAsync();
 
                 Assert.IsNotNull(updatedResponse, "Update article response is null.");
                 Assert.IsNotNull(updatedResponse.Status, "Update article response status is null.");
@@ -228,18 +223,17 @@ namespace Appacitive.Sdk.Tests
             obj.listfield = "a";
 
 
-            var service = ObjectFactory.Build<IArticleService>();
             CreateArticleResponse response = null;
-            response = await service.CreateArticleAsync(new CreateArticleRequest()
+            response = await (new CreateArticleRequest()
             {
                 Article = obj
-            });
+            }).ExecuteAsync();
 
             ApiHelper.EnsureValidResponse(response);
 
             // Find all articles
             var findRequest = new FindAllArticleRequest() { Type = "object" };
-            var findResponse = await service.FindAllAsync(findRequest);
+            var findResponse = await findRequest.ExecuteAsync();
             ApiHelper.EnsureValidResponse(findResponse);
             findResponse.Articles.ForEach(x => Console.WriteLine("Found article id {0}.", x.Id));
             Assert.IsNotNull(findResponse.PagingInfo);

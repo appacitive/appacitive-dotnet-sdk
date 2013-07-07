@@ -28,11 +28,11 @@ namespace Appacitive.Sdk.Tests
                 Location = new Geocode(18, 19)
             };
 
-            IUserService userService = new UserService();
+            
 
             // Create user
             var request = new CreateUserRequest() { User = user };
-            var response = await userService.CreateUserAsync(request);
+            var response = await request.ExecuteAsync();
             ApiHelper.EnsureValidResponse(response);
             Assert.IsNotNull(response.User, "User in response is null.");
             Assert.IsTrue(string.IsNullOrWhiteSpace(response.User.Id) == false);
@@ -45,11 +45,10 @@ namespace Appacitive.Sdk.Tests
 
             // Create the user
             var user = await UserHelper.CreateNewUserAsync();
-            IUserService userService = new UserService();
             var authRequest = new AuthenticateUserRequest();
             authRequest["username"] = user.Username;
             authRequest["password"] = user.Password;
-            var authResponse = await userService.AuthenticateAsync(authRequest);
+            var authResponse = await authRequest.ExecuteAsync();
             ApiHelper.EnsureValidResponse(authResponse);
             Assert.IsTrue(string.IsNullOrWhiteSpace(authResponse.Token) == false, "Auth token is not valid.");
             Assert.IsNotNull(authResponse.User, "Authenticated user is null.");
@@ -68,10 +67,10 @@ namespace Appacitive.Sdk.Tests
             
             // Get the created user
             GetUserResponse getUserResponse = null;
-            IUserService userService = new UserService();
+            
             App.UserToken = token;
             var getUserRequest = new GetUserRequest() { UserId = created.Id };
-            getUserResponse = await userService.GetUserAsync(getUserRequest);
+            getUserResponse = await getUserRequest.ExecuteAsync();
             ApiHelper.EnsureValidResponse(getUserResponse);
             Assert.IsNotNull(getUserResponse.User);
 
@@ -102,10 +101,9 @@ namespace Appacitive.Sdk.Tests
             App.UserToken = token;
 
             // Get the created user
-            IUserService userService = new UserService();
             // Get the created user
             var getUserRequest = new GetUserRequest() { UserId = created.Username, UserIdType = "username" };
-            var getUserResponse = await userService.GetUserAsync(getUserRequest);
+            var getUserResponse = await getUserRequest.ExecuteAsync();
             ApiHelper.EnsureValidResponse(getUserResponse);
             Assert.IsNotNull(getUserResponse.User);
             
@@ -135,9 +133,8 @@ namespace Appacitive.Sdk.Tests
             App.UserToken = token;
 
             // Get the created user
-            IUserService userService = new UserService();
             var getUserRequest = new GetUserRequest() { UserId = token, UserIdType = "token" };
-            var getUserResponse = await userService.GetUserAsync(getUserRequest);
+            var getUserResponse = await getUserRequest.ExecuteAsync();
             ApiHelper.EnsureValidResponse(getUserResponse);
             Assert.IsNotNull(getUserResponse.User);
             Assert.IsTrue(getUserResponse.User.Username == created.Username);
@@ -184,8 +181,7 @@ namespace Appacitive.Sdk.Tests
             updateRequest.PropertyUpdates["phone"] = created.Phone;
             updateRequest.PropertyUpdates["location"] = created.Location.ToString();
             updateRequest.PropertyUpdates["birthdate"] = created.DateOfBirth.Value.ToString(Formats.Date);
-            IUserService userService = new UserService();
-            var response = await userService.UpdateUserAsync(updateRequest);
+            var response = await updateRequest.ExecuteAsync();
 
             // Ensure fields are updated
             Assert.IsNotNull(response, "Update user response is null.");
@@ -214,8 +210,7 @@ namespace Appacitive.Sdk.Tests
             // Change password
             var newPassword = "p@ssw0rd2";
             var request = new ChangePasswordRequest() { UserId = newUser.Id, OldPassword = newUser.Password, NewPassword = newPassword };
-            IUserService userService = new UserService();
-            var response = await userService.ChangePasswordAsync(request);
+            var response = await request.ExecuteAsync();
             ApiHelper.EnsureValidResponse(response);
 
             // Authenticate with new password
@@ -236,8 +231,7 @@ namespace Appacitive.Sdk.Tests
             // Change password
             var newPassword = "p@ssw0rd2";
             var request = new ChangePasswordRequest() { UserId = newUser.Username, IdType="username", OldPassword = newUser.Password, NewPassword = newPassword };
-            IUserService userService = new UserService();
-            var response = await userService.ChangePasswordAsync(request);
+            var response = await request.ExecuteAsync();
             ApiHelper.EnsureValidResponse(response);
 
             // Authenticate with new password
@@ -258,8 +252,7 @@ namespace Appacitive.Sdk.Tests
             // Change password
             var newPassword = "p@ssw0rd2";
             var request = new ChangePasswordRequest() { UserId = token, IdType = "token", OldPassword = newUser.Password, NewPassword = newPassword };
-            IUserService userService = new UserService();
-            var response = await userService.ChangePasswordAsync(request);
+            var response = await request.ExecuteAsync();
             ApiHelper.EnsureValidResponse(response);
 
             // Authenticate with new password
@@ -279,12 +272,12 @@ namespace Appacitive.Sdk.Tests
 
             // Delete the user
             var request = new DeleteUserRequest() { UserId = newUser.Id };
-            IUserService userService = new UserService();
-            var response = await userService.DeleteUserAsync(request);
+
+            var response = await request.ExecuteAsync();
             ApiHelper.EnsureValidResponse(response);
 
             // Try to get the user
-            var getResponse = await userService.GetUserAsync(new GetUserRequest() { UserId = newUser.Id });
+            var getResponse = await (new GetUserRequest() { UserId = newUser.Id }).ExecuteAsync();
             ApiHelper.EnsureValidResponse(getResponse, false);
             Assert.IsFalse(getResponse.Status.IsSuccessful, "Get for an non-existant user did not fail.");
             Console.WriteLine("Get user error message: {0}", getResponse.Status.Message);

@@ -16,10 +16,9 @@ namespace Appacitive.Sdk.Tests
         public async Task CreateSessionAsyncTest()
         {
             var waitHandle = new ManualResetEvent(false);
-            var service = ObjectFactory.Build<ISessionService>();
             CreateSessionResponse response = null;
 
-            response = await service.CreateSessionAsync(new CreateSessionRequest() { APIKey = TestConfiguration.ApiKey });
+            response = await (new CreateSessionRequest() { APIKey = TestConfiguration.ApiKey }).ExecuteAsync();
             waitHandle.Set();
 
             var isTimedOut = waitHandle.WaitOne(10000);

@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Appacitive.Sdk.Services
 {
-    public class UpdateDeviceRequest : ApiRequest
+    public class UpdateDeviceRequest : PostOperation<UpdateDeviceResponse>
     {
         public UpdateDeviceRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
@@ -44,5 +44,10 @@ namespace Appacitive.Sdk.Services
 
         [JsonIgnore]
         public List<string> RemovedTags { get; private set; }
+
+        protected override string GetUrl()
+        {
+            return Urls.For.GetDevice(this.Id, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+        }
     }
 }

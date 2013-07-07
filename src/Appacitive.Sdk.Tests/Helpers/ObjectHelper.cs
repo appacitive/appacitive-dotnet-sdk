@@ -30,14 +30,13 @@ namespace Appacitive.Sdk.Tests
                 obj.SetAttribute("attr2", "value2");
             }
 
-            var service = ObjectFactory.Build<IArticleService>();
             CreateArticleResponse response = null;
 
-            response = await service.CreateArticleAsync(new CreateArticleRequest()
+            response = await (new CreateArticleRequest()
             {
                 Article = obj,
                 Environment = Environment.Sandbox
-            });
+            }).ExecuteAsync();
             ApiHelper.EnsureValidResponse(response);
             Assert.IsNotNull(response.Article);
             Console.WriteLine("Created article id {0}", response.Article.Id);

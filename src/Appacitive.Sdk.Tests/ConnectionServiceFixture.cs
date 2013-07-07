@@ -23,8 +23,7 @@ namespace Appacitive.Sdk.Tests
             conn.field2 = 123;
 
             var request = new CreateConnectionRequest() { Connection = conn };
-            IConnectionService connService = new ConnectionService();
-            var response = await connService.CreateConnectionAsync(request);
+            var response = await request.ExecuteAsync();
             ApiHelper.EnsureValidResponse(response);
             Assert.IsNotNull(response.Connection, "Connection in create connection response is null.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(response.Connection.Id), "Connection id in response.connection is invalid.");
@@ -45,8 +44,7 @@ namespace Appacitive.Sdk.Tests
             conn.field2 = 123;
 
             var request = new CreateConnectionRequest() { Connection = conn };
-            IConnectionService connService = new ConnectionService();
-            var response = await connService.CreateConnectionAsync(request);
+            var response = await request.ExecuteAsync();
             ApiHelper.EnsureValidResponse(response);
             Assert.IsNotNull(response.Connection, "Connection in create connection response is null.");
             Assert.IsFalse(string.IsNullOrWhiteSpace(response.Connection.Id), "Connection id in response.connection is invalid.");

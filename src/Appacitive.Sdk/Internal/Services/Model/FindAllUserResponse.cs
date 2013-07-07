@@ -15,11 +15,5 @@ namespace Appacitive.Sdk.Services
 
         [JsonProperty("paginginfo")]
         public PagingInfo PagingInfo { get; set; }
-
-        internal static FindAllUsersResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<FindAllUsersResponse>(bytes);
-        }
     }
 }

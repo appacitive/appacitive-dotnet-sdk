@@ -138,8 +138,7 @@ namespace Appacitive.Sdk
 
         public async Task<string> SendAsync()
         {
-            var service = ObjectFactory.Build<IDeviceService>();
-            var response = await service.SendPushNotificationAsync(new SendPushNotificationRequest { Push = this });
+            var response = await new SendPushNotificationRequest { Push = this }.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             return response.Id;

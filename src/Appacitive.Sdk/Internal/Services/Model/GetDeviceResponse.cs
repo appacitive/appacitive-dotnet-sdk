@@ -12,11 +12,5 @@ namespace Appacitive.Sdk.Services
     {
         [JsonProperty("device")]
         public Device Device { get; set; }
-
-        public static GetDeviceResponse Parse(byte[] bytes)
-        {
-            IJsonSerializer serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Deserialize<GetDeviceResponse>(bytes);
-        }
     }
 }

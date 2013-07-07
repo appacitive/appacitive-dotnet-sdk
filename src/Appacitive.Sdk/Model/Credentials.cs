@@ -41,9 +41,8 @@ namespace Appacitive.Sdk
 
         public async Task<UserSession> AuthenticateAsync()
         {
-            IUserService userService = ObjectFactory.Build<IUserService>();
             var request = BuildAuthenticateRequest();
-            var response = await userService.AuthenticateAsync(request);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             else return new UserSession(response.User, response.Token);
