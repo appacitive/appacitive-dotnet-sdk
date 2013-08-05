@@ -22,6 +22,7 @@ namespace Appacitive.Sdk.Services
             private static readonly string DeviceServiceBase = "https://apis.appacitive.com/device";
             private static readonly string PushServiceBase = "https://apis.appacitive.com/push/";
             private static readonly string EmailServiceBase = "https://apis.appacitive.com/email";
+            public static readonly string GraphServiceBase = "https://apis.appacitive.com/search/";
 
             public static string CreateSession(bool enableDebug, Verbosity verbosity)
             {
@@ -370,6 +371,15 @@ namespace Appacitive.Sdk.Services
                 var url = new Url(PushServiceBase);
                 HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
                 return url.ToString();
+            }
+
+            public static string GraphFilter(string query, Geocode geocode, bool enableDebugging, Verbosity verbosity, List<string> fields)
+            {
+                var url = new Url(GraphServiceBase);
+                url.Append(query).Append("filter");
+                HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
+                return url.ToString();
+                
             }
         }
     }

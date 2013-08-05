@@ -37,13 +37,16 @@ namespace Appacitive.Sdk.Net45
             var request = new HttpRequestMessage(GetHttpMethod(httpMethod), url);
             if (data != null)
             {
-                request.Content = new ByteArrayContent(data);
+                var contents = new ByteArrayContent(data);
+                contents.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                request.Content = contents;
             }
             if (headers != null)
             {
                 foreach (var key in headers.Keys)
                     request.Headers.Add(key, headers[key]);
             }
+            
             HttpResponseMessage response = await client.SendAsync(request);
             var responseData = await response.Content.ReadAsByteArrayAsync();
             await LogTransaction(url, httpMethod, data, responseData, headers);

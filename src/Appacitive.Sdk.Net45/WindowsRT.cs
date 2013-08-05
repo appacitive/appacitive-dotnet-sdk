@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Net45
+namespace Appacitive.Sdk
 {
     public static class WindowsRT
     {

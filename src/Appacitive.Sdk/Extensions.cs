@@ -35,6 +35,32 @@ namespace Appacitive.Sdk
             removed = oldList.Except(common);
         }
 
+        public static IDictionary<string, string> FromQueryObject(this object obj)
+        {
+            var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            // Get list of properties and their values and convert to dictionary.
+            #if !WINDOWS_PHONE7
+            var type = obj.GetType().GetTypeInfo();
+            var properties = type.DeclaredProperties.Where(x => x.CanRead == true).ToList();
+            properties.For(x =>
+                {
+                    var value = x.GetValue(obj);
+                    if (value != null)
+                        result.Add(x.Name, value.ToString());
+                });
+            #else   
+            var type = obj.GetType();
+            var properties = type.GetProperties().Where(p => p.CanRead == true);
+            properties.For(x =>
+            {
+                var value = x.GetValue(obj, null);
+                if (value != null)
+                    result.Add(x.Name, value.ToString());
+            });
+            #endif
+            return result;
+        }
+
         internal static string AsString(this object obj)
         {
             if (obj == null)

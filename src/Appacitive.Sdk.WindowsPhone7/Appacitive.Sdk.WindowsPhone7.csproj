@@ -79,6 +79,9 @@
     <Compile Include="..\Appacitive.Sdk\Extensions.cs">
       <Link>Extensions.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Graph.cs">
+      <Link>Graph.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\HttpClient.cs">
       <Link>HttpClient.cs</Link>
     </Compile>
@@ -312,6 +315,12 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetUserResponse.cs">
       <Link>Internal\Services\Model\GetUserResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GraphFilterRequest.cs">
+      <Link>Internal\Services\Model\GraphFilterRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GraphFilterResponse.cs">
+      <Link>Internal\Services\Model\GraphFilterResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\HttpRequests.cs">
       <Link>Internal\Services\Model\HttpRequests.cs</Link>

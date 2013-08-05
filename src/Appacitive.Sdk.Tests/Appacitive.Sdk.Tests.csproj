@@ -70,6 +70,7 @@
     <Compile Include="ExceptionFactoryFixture.cs" />
     <Compile Include="FileFixture.cs" />
     <Compile Include="GeocodeFixture.cs" />
+    <Compile Include="GraphSearchFixture.cs" />
     <Compile Include="Helpers\ApiHelper.cs" />
     <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\DeviceHelper.cs" />

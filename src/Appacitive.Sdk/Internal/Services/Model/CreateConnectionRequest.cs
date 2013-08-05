@@ -35,11 +35,23 @@ namespace Appacitive.Sdk.Services
             // Update the ids if any new articles were passed in the this.
             if (this.Connection.Endpoints.EndpointA.CreateEndpoint == true)
             {
-                this.Connection.Endpoints.EndpointA.Content.Id = response.Connection.Endpoints.EndpointA.ArticleId;
+                if (this.Connection.Endpoints.EndpointA.Label == this.Connection.Endpoints.EndpointB.Label)
+                    this.Connection.Endpoints.EndpointA.Content.Id = response.Connection.Endpoints.EndpointA.ArticleId;
+                else
+                {
+                    var match = response.Connection.Endpoints[this.Connection.Endpoints.EndpointA.Label];
+                    this.Connection.Endpoints.EndpointA.Content.Id = match.ArticleId;
+                }
             }
             if (this.Connection.Endpoints.EndpointB.CreateEndpoint == true)
             {
-                this.Connection.Endpoints.EndpointB.Content.Id = response.Connection.Endpoints.EndpointB.ArticleId;
+                if (this.Connection.Endpoints.EndpointA.Label == this.Connection.Endpoints.EndpointB.Label)
+                    this.Connection.Endpoints.EndpointB.Content.Id = response.Connection.Endpoints.EndpointB.ArticleId;
+                else
+                {
+                    var match = response.Connection.Endpoints[this.Connection.Endpoints.EndpointB.Label];
+                    this.Connection.Endpoints.EndpointB.Content.Id = match.ArticleId;
+                }
             }
             return response;
         }

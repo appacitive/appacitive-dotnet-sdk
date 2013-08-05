@@ -1,4 +1,4 @@
-﻿using Appacitive.Net45;
+﻿
 using Appacitive.Sdk.Realtime;
 using Appacitive.Sdk.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

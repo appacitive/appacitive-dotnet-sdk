@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Appacitive.Sdk.Net45;
-using Appacitive.Net45;
 
 namespace Appacitive.Sdk.Tests
 {
