@@ -98,7 +98,6 @@ var matches = await Graph.Filter( "query_name",
 	});
 
 // Filter query with arguments passed in a query object.
-// Filter query with arguments
 var matches = await Graph.Filter( "query_name", 
 	new 
 	{
