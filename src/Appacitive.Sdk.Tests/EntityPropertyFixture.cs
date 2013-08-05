@@ -201,6 +201,24 @@ namespace Appacitive.Sdk.Tests
             }
         }
 
+        [TestMethod]
+        public void TestGeocodeSet()
+        {
+            var article = new Article("object");
+            article.Set("geofield", new Geocode(80.0m, 81.0m));
+            var value = article.Get<string>("geofield");
+            Assert.IsTrue(value == "80.0,81.0");
+        }
+
+        [TestMethod]
+        public void TestGeocodeGet()
+        {
+            var article = new Article("object");
+            article.Set("geofield", new Geocode(80.0m, 81.0m));
+            var geo = article.Get<Geocode>("geofield");
+            Assert.IsTrue(geo.ToString() == "80.0,81.0");
+        }
+
         private void AssertIndexerGetSet<T>(dynamic article, string field, T value)
         {
             article["field"] = value;

@@ -46,10 +46,17 @@ namespace Appacitive.Sdk.Internal
                     return result.ToLocalTime();
                 else throw new Exception("Unsupported date time format.");
             }
-
             // Handle Datetime to string conversion.
             if (type == typeof(string) && value is DateTime)
                 return ((DateTime)value).ToString("o");
+            // Handle geocode to string conversion
+            if (type == typeof(Geocode) && value is string)
+            {
+                Geocode geo = null;
+                if (Geocode.TryParse(value as string, out geo) == false)
+                    throw new Exception("Cannot convert " + value + " to a valid geocode.");
+                return geo;
+            }
 
             if (type.IsPrimitiveType() == true || type == typeof(string))
                 return System.Convert.ChangeType(value, type, null);

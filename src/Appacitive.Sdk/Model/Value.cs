@@ -17,7 +17,7 @@ namespace Appacitive.Sdk
                 return NullValue.Instance;
             if (obj.IsMultiValued() == true)
                 return new MultiValue(obj as IEnumerable);
-            if (obj.GetType().IsPrimitiveType() || obj is string || obj is DateTime )
+            if (SingleValue.IsAllowedValue(obj) == true) 
                 return new SingleValue(obj);
             throw new Exception(obj.GetType().Name + " cannot be converted to a Value object.");
         }
@@ -209,12 +209,21 @@ namespace Appacitive.Sdk
     {
         public SingleValue(object value)
         {
-            if( value.GetType().IsPrimitiveType() == false )
-                throw new ArgumentException("value must by a string, datetime or primitive type.");
+            if( SingleValue.IsAllowedValue(value) == false )
+                throw new ArgumentException("value must by a geocode, string, datetime or primitive type.");
             if( value is DateTime )
                 this.Value = ((DateTime)value).ToString("o");
             else
                 this.Value = value.ToString();
+        }
+
+        public static bool IsAllowedValue(object obj)
+        {
+            if (obj is string) return true;
+            if (obj is DateTime) return true;
+            if (obj is Geocode) return true;
+            if (obj.GetType().IsPrimitiveType() == true) return true;
+            return false;
         }
 
         public string Value { get; private set; }
