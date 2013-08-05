@@ -85,7 +85,28 @@ Articles.DeleteAsync("account", "32423453", deleteConnections);
 var ids = new [] { "234234", "71231230", "97637282" };
 await Articles.MultiDeleteAsync("account", ids);
 ```
+## Graph Query support
 
+### Filter query
+To run an existing filter query, use the Graph help class with the specific filter query name and arguments.
+``` C#
+// Filter query with arguments
+var matches = await Graph.Filter( "query_name", 
+	new Dictionary<string, string> { 
+		{ "arg1", "value1" },
+		{ "arg2", "value2" }
+	});
+
+// Filter query with arguments passed in a query object.
+// Filter query with arguments
+var matches = await Graph.Filter( "query_name", 
+	new 
+	{
+		arg1 = "value1",
+		arg2 = "value2"
+	});
+
+```
 
 ## User management
 
