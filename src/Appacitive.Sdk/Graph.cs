@@ -27,5 +27,25 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
             return response.Ids ?? new List<string>();
         }
+
+        public static async Task<List<GraphNode>> Project(string query, IEnumerable<string> ids, object queryObject = null)
+        {
+            IDictionary<string, string> args = queryObject.FromQueryObject();
+            return await Project(query, ids, args);
+        }
+
+        public static async Task<List<GraphNode>> Project(string query, IEnumerable<string> ids, IDictionary<string, string> args = null)
+        {
+            var request = new GraphProjectRequest
+            {
+                Query = query, 
+                Ids = ids.ToList(),
+                Placeholders = args
+            };
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            return response.Nodes;
+        }
     }
 }

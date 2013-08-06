@@ -107,6 +107,27 @@ var matches = await Graph.Filter( "query_name",
 
 ```
 
+### Projection query
+To run an existing filter query, use the Graph help class with the specific filter query name and arguments.
+``` C#
+// Filter query with arguments
+var ids = new [] {"33452852036895518", "33591826925617507"};
+var matches = await Graph.Project( "query_name", ids,
+	new Dictionary<string, string> { 
+		{ "arg1", "value1" },
+		{ "arg2", "value2" }
+	});
+
+// Filter query with arguments passed in a query object.
+var ids = new [] {"33452852036895518", "33591826925617507"};
+var matches = await Graph.Project( "query_name", ids,
+	new 
+	{
+		arg1 = "value1",
+		arg2 = "value2"
+	});
+
+```
 ## User management
 
 ### Adding or updating a new user

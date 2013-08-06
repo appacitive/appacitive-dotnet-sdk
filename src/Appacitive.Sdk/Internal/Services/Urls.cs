@@ -381,6 +381,14 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
                 
             }
+
+            public static string GraphProject(string query, Geocode geocode, bool enableDebugging, Verbosity verbosity, List<string> fields)
+            {
+                var url = new Url(GraphServiceBase);
+                url.Append(query).Append("project");
+                HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
+                return url.ToString();
+            }
         }
     }
 

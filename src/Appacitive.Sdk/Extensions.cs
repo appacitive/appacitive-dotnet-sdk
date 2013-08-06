@@ -37,6 +37,8 @@ namespace Appacitive.Sdk
 
         public static IDictionary<string, string> FromQueryObject(this object obj)
         {
+            if (obj == null)
+                return null;
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             // Get list of properties and their values and convert to dictionary.
             #if !WINDOWS_PHONE7

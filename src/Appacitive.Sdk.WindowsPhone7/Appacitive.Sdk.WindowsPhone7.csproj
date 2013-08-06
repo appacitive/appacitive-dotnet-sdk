@@ -322,6 +322,12 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GraphFilterResponse.cs">
       <Link>Internal\Services\Model\GraphFilterResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GraphProjectRequest.cs">
+      <Link>Internal\Services\Model\GraphProjectRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GraphProjectResponse.cs">
+      <Link>Internal\Services\Model\GraphProjectResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\HttpRequests.cs">
       <Link>Internal\Services\Model\HttpRequests.cs</Link>
     </Compile>
@@ -417,6 +423,12 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\EventTypeConverter.cs">
       <Link>Internal\Services\Serializers\EventTypeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\GraphNodeConverter.cs">
+      <Link>Internal\Services\Serializers\GraphNodeConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\GraphProjectResponseConverter.cs">
+      <Link>Internal\Services\Serializers\GraphProjectResponseConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\JsonPayloadConverter.cs">
       <Link>Internal\Services\Serializers\JsonPayloadConverter.cs</Link>
@@ -537,6 +549,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Geocode.cs">
       <Link>Model\Geocode.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\GraphNode.cs">
+      <Link>Model\GraphNode.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Guard.cs">
       <Link>Model\Guard.cs</Link>

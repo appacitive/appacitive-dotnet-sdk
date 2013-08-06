@@ -32,6 +32,8 @@ namespace Appacitive.Sdk
             serializer.Converters.Add(new UpdateDeviceRequestConverter());
             serializer.Converters.Add(new ConnectionConverter());
             serializer.Converters.Add(new UpdateConnectionRequestConverter());
+            serializer.Converters.Add(new GraphNodeConverter());
+            serializer.Converters.Add(new GraphProjectResponseConverter());
             return serializer;
         }
 

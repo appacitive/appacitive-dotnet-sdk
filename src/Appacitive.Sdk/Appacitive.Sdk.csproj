@@ -60,11 +60,16 @@
     <Compile Include="Internal\Messages.cs" />
     <Compile Include="Internal\MessageSubscriber.cs" />
     <Compile Include="Internal\EventProxy.cs" />
+    <Compile Include="Internal\Services\Model\GraphProjectRequest.cs" />
+    <Compile Include="Internal\Services\Model\GraphProjectResponse.cs" />
     <Compile Include="Internal\Services\Model\GraphFilterResponse.cs" />
     <Compile Include="Internal\Services\Model\GraphFilterRequest.cs" />
     <Compile Include="Internal\Services\Model\FindAllConnectionsResponse.cs" />
+    <Compile Include="Internal\Services\Serializers\GraphProjectResponseConverter.cs" />
     <Compile Include="Internal\Services\Model\HttpRequests.cs" />
+    <Compile Include="Internal\Services\Serializers\GraphNodeConverter.cs" />
     <Compile Include="Internal\Services\Serializers\StatusResponseConverter.cs" />
+    <Compile Include="Model\GraphNode.cs" />
     <Compile Include="Model\MultiValueCollection.cs" />
     <Compile Include="Internal\NamingConvention.cs">
       <SubType>Code</SubType>
