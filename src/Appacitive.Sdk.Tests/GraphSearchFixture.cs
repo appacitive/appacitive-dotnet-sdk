@@ -116,7 +116,7 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(results[0].Article != null);
             Assert.IsTrue(results[0].Article.Id == root.Id);
 
-            var level1Children = results[0].GetChildren("level1_children");
+            var level1Children = results[0]["level1_children"];
             Assert.IsTrue(level1Children.Count == 1);
             Assert.IsTrue(level1Children[0].Article != null);
             Assert.IsTrue(level1Children[0].Article.Id == level1Child.Id);

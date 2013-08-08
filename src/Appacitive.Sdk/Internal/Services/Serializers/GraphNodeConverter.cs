@@ -71,7 +71,11 @@ namespace Appacitive.Sdk.Services
 
         private Connection ParseConnection(string parentLabel, Article parentArticle, Article currentArticle, JObject json)
         {
-            var label = GetValue(json, "label", JTokenType.String, true).ToString();
+            string label = string.Empty;
+            if( json.Property("__label") != null ) 
+                label = GetValue(json, "__label", JTokenType.String, true).ToString();
+            else 
+                label = GetValue(json, "label", JTokenType.String, true).ToString();
             var relation = GetValue(json, "__relationtype", JTokenType.String, true).ToString();
             var id = GetValue(json, "__id", JTokenType.String, true).ToString();
             var conn = new Connection(relation, id);

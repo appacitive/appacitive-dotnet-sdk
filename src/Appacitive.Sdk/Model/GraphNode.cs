@@ -19,6 +19,19 @@ namespace Appacitive.Sdk
 
         internal Dictionary<string, List<GraphNode>> Children { get; private set; }
 
+        public List<GraphNode> this[string name]
+        {
+            get
+            {
+                return this.GetChildren(name);
+            }
+        }
+
+        public IEnumerable<string> Properties()
+        {
+            return this.Children.Keys;
+        }
+
         public GraphNode Parent { get; internal set; }
 
         public List<GraphNode> GetChildren(string name)
