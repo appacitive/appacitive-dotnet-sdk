@@ -13,13 +13,15 @@ namespace Appacitive.Sdk
             //typeof(Value),
             typeof(int), typeof(long), typeof(decimal), typeof(float), typeof(double), typeof(string), typeof(DateTime), typeof(bool),
             typeof(int[]), typeof(long[]), typeof(decimal[]), typeof(float[]), typeof(double[]), typeof(string[]), typeof(DateTime[]), typeof(bool[]),
-            typeof(List<int>), typeof(List<long>), typeof(List<decimal>), typeof(List<float>), typeof(List<double>), typeof(List<string>), typeof(List<DateTime>), typeof(List<bool>)
+            typeof(List<int>), typeof(List<long>), typeof(List<decimal>), typeof(List<float>), typeof(List<double>), typeof(List<string>), typeof(List<DateTime>), typeof(List<bool>),
+            typeof(Geocode)
         };
 
         private static readonly Type[] AllowedPrimitiveTypes = new Type[]
         {
             //typeof(Value),
-            typeof(int), typeof(long), typeof(decimal), typeof(float), typeof(double), typeof(string), typeof(DateTime), typeof(bool)
+            typeof(int), typeof(long), typeof(decimal), typeof(float), typeof(double), typeof(string), typeof(DateTime), typeof(bool),
+            typeof(Geocode)
         };
 
         public static void ValidateAllowedPrimitiveTypes(Type type)

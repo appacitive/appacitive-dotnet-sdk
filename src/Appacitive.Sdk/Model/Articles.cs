@@ -45,6 +45,8 @@ namespace Appacitive.Sdk
                 OrderBy = orderBy,
                 SortOrder = sortOrder
             };
+            if( fields != null )
+                request.Fields.AddRange(fields);
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
