@@ -23,6 +23,7 @@ namespace Appacitive.Sdk.Services
             private static readonly string PushServiceBase = "https://apis.appacitive.com/push/";
             private static readonly string EmailServiceBase = "https://apis.appacitive.com/email";
             public static readonly string GraphServiceBase = "https://apis.appacitive.com/search/";
+            public static readonly string ListServiceBase = "https://apis.appacitive.com/list/";
 
             public static string CreateSession(bool enableDebug, Verbosity verbosity)
             {
@@ -386,6 +387,19 @@ namespace Appacitive.Sdk.Services
             {
                 var url = new Url(GraphServiceBase);
                 url.Append(query).Append("project");
+                HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
+                return url.ToString();
+            }
+
+            public static string GetListContent(string name, int pageNumber, int pageSize, Geocode geocode, bool enableDebugging, Verbosity verbosity, List<string> fields)
+            {
+                //https://apis.appacitive.com/list/<listname>/contents
+                var url = new Url(ListServiceBase);
+                url.Append(name).Append("contents");
+                if (pageNumber != 1)
+                    url.QueryString["pnum"] = pageNumber.ToString();
+                if (pageSize > 0)
+                    url.QueryString["psize"] = pageSize.ToString();
                 HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
                 return url.ToString();
             }

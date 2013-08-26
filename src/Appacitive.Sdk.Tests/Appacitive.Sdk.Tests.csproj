@@ -80,6 +80,7 @@
     <Compile Include="HttpFixture.cs" />
     <Compile Include="InitializeAssembly.cs" />
     <Compile Include="Helpers\ObjectHelper.cs" />
+    <Compile Include="ListFixture.cs" />
     <Compile Include="MultiValuedFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PushFixture.cs" />
