@@ -39,7 +39,7 @@ namespace Appacitive.Sdk
             List<GraphNode> children = null;
             if (this.Children.TryGetValue(name, out children) == true)
                 return children;
-            else return null;
+            else return new List<GraphNode>();
         }
 
         internal void AddChildNode(string name, GraphNode node)

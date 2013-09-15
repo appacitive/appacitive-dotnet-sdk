@@ -10,6 +10,10 @@ namespace Appacitive.Sdk.Net45
 {
     public class HttpConnector : IHttpConnector
     {
+        public static readonly HttpConnector Instance = new HttpConnector();
+
+        public HttpClient _client = new HttpClient();
+
         public async Task<byte[]> GetAsync(string url, IDictionary<string, string> headers)
         {   
             return await ExecuteAsync("GET", url, headers, null);
@@ -33,8 +37,8 @@ namespace Appacitive.Sdk.Net45
         private static readonly byte[] Empty = new byte[0];
         private async Task<byte[]> ExecuteAsync(string httpMethod, string url, IDictionary<string, string> headers, byte[] data)
         {
-            var client = new HttpClient();
             var request = new HttpRequestMessage(GetHttpMethod(httpMethod), url);
+
             if (data != null)
             {
                 var contents = new ByteArrayContent(data);
@@ -47,7 +51,7 @@ namespace Appacitive.Sdk.Net45
                     request.Headers.Add(key, headers[key]);
             }
             
-            HttpResponseMessage response = await client.SendAsync(request);
+            HttpResponseMessage response = await _client.SendAsync(request);
             var responseData = await response.Content.ReadAsByteArrayAsync();
             await LogTransaction(url, httpMethod, data, responseData, headers);
             return responseData;

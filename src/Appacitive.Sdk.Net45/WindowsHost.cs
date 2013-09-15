@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,11 +21,32 @@ namespace Appacitive.Sdk.Net45
         protected virtual void InitializeContainer(IDependencyContainer container)
         {
             container
-                .Register<IHttpConnector, HttpConnector>(() => new HttpConnector())
+                .Register<IHttpConnector, HttpConnector>( () => HttpConnector.Instance)
                 .Register<IHttpFileHandler, WebClientHttpFileHandler>(() => new WebClientHttpFileHandler())
                 .Register<IExceptionFactory, ExceptionFactory>( () => ExceptionFactory.Instance )
                 .Register<IRealTimeTransport, SignalRTransport>(() => new SignalRTransport())
                 ;
         }
     }
+
+    internal class InstanceCache<T>
+    {
+        public InstanceCache( Func<T> createNew)
+        {
+            var t = createNew();
+            this.Instance = () => t;
+        }
+
+        public Func<T> Instance { get; private set; }
+    }
+
+    public static class Extensions
+    {
+        public static Func<T> AsSingleton<T>(this Func<T> func)
+        {
+            return new InstanceCache<T>(func).Instance;
+        }
+    }
 }
+
+
