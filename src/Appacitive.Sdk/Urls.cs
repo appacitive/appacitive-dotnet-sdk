@@ -8,6 +8,6 @@ namespace Appacitive.Sdk
 {
     public static class Urls
     {
-        public static readonly string RealTimeMessaging = "http://dev-rtm.appacitive.com/connection";
+        public static readonly string RealTimeMessaging = "http://appacitive-rtm.cloudapp.net/connection";
     }
 }

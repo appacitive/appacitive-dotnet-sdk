@@ -1,4 +1,5 @@
-﻿using Appacitive.Sdk.Realtime;
+﻿using Appacitive.Sdk.Interfaces;
+using Appacitive.Sdk.Realtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace Appacitive.Sdk.Net45
                 .Register<IHttpFileHandler, WebClientHttpFileHandler>(() => new WebClientHttpFileHandler())
                 .Register<IExceptionFactory, ExceptionFactory>( () => ExceptionFactory.Instance )
                 .Register<IRealTimeTransport, SignalRTransport>(() => new SignalRTransport())
+                .Register<ITraceWriter, DefaultTraceWriter>( () => DefaultTraceWriter.Instance) 
                 ;
         }
     }

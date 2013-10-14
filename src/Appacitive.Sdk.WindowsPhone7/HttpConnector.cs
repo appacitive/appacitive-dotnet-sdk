@@ -65,26 +65,10 @@ namespace Appacitive.Sdk.WindowsPhone7
                     responseData = memStream.ToArray();
                 }
             }
-            await LogTransaction(url, httpMethod, data, responseData, headers);
             return responseData;
 
         }
 
-        private async Task LogTransaction(string url, string httpMethod, byte[] request, byte[] response, IDictionary<string, string> headers)
-        {
-            try
-            {
-                var buffer = new StringBuilder();
-                buffer
-                    .Append("Method: ").AppendLine(httpMethod)
-                    .Append("Url: ").AppendLine(url);
-                foreach (var key in headers.Keys)
-                    buffer.Append(key).AppendLine(": ").AppendLine(headers[key]);
-                buffer.Append("Request: ").AppendLine(request == null ? string.Empty : Encoding.UTF8.GetString(request, 0, request.Length));
-                buffer.Append("Response: ").AppendLine(response == null ? string.Empty : Encoding.UTF8.GetString(response, 0, request.Length));
-                await Debugger.Log(buffer.ToString());
-            }
-            catch { }
-        }
+        
     }
 }

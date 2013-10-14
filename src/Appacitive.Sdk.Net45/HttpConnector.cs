@@ -53,25 +53,7 @@ namespace Appacitive.Sdk.Net45
             
             HttpResponseMessage response = await _client.SendAsync(request);
             var responseData = await response.Content.ReadAsByteArrayAsync();
-            await LogTransaction(url, httpMethod, data, responseData, headers);
             return responseData;
-        }
-
-        private async Task LogTransaction(string url, string httpMethod, byte[] request, byte[] response, IDictionary<string, string> headers)
-        {
-            try
-            {
-                var buffer = new StringBuilder();
-                buffer
-                    .Append("Method: ").AppendLine(httpMethod)
-                    .Append("Url: ").AppendLine(url);
-                foreach (var key in headers.Keys)
-                    buffer.Append(key).AppendLine(": ").AppendLine(headers[key]);
-                buffer.Append("Request: ").AppendLine(request == null ? string.Empty : Encoding.UTF8.GetString(request));
-                buffer.Append("Response: ").AppendLine(response == null ? string.Empty : Encoding.UTF8.GetString(response));
-                await Debugger.Log(buffer.ToString());
-            }
-            catch { }
         }
 
         private static readonly Dictionary<string, HttpMethod> HttpMethods = new Dictionary<string, HttpMethod>(StringComparer.OrdinalIgnoreCase)

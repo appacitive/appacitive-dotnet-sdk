@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="AppacitiveContext.cs" />
+    <Compile Include="AppacitiveSettings.cs" />
     <Compile Include="CannedLists.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Graph.cs" />
@@ -50,9 +51,11 @@
     <Compile Include="Interfaces\IObjectFactory.cs" />
     <Compile Include="Interfaces\IApplicationHost.cs" />
     <Compile Include="Interfaces\ISubscriptionManager.cs" />
+    <Compile Include="Interfaces\ITraceWriter.cs" />
     <Compile Include="Interfaces\IUploadHandler.cs" />
     <Compile Include="Interfaces\IUserContext.cs" />
     <Compile Include="Interfaces\IValueCollection.cs" />
+    <Compile Include="Internal\Debugger.cs" />
     <Compile Include="Internal\MapDiff.cs" />
     <Compile Include="Internal\HubSubscriber.cs" />
     <Compile Include="Internal\IDownstreamMessage.cs" />
@@ -61,6 +64,7 @@
     <Compile Include="Internal\Messages.cs" />
     <Compile Include="Internal\MessageSubscriber.cs" />
     <Compile Include="Internal\EventProxy.cs" />
+    <Compile Include="Internal\NullTraceWriter.cs" />
     <Compile Include="Internal\Services\Model\GetListContentRequest.cs" />
     <Compile Include="Internal\Services\Model\GetListContentResponse.cs" />
     <Compile Include="Internal\Services\Model\GraphProjectRequest.cs" />

@@ -9,6 +9,7 @@ using Appacitive.Sdk.Services;
 using Appacitive.Sdk.Realtime;
 using System.IO;
 using Appacitive.Sdk.Internal;
+using Appacitive.Sdk.Interfaces;
 
 namespace Appacitive.Sdk
 {
@@ -102,6 +103,7 @@ namespace Appacitive.Sdk
                     .Register<IUserContext, StaticUserContext>(() => new StaticUserContext())
                     .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer())
                     .Register<IExceptionFactory, ServiceExceptionFactory>( () => ServiceExceptionFactory.Instance )
+                    .Register<ITraceWriter, NullTraceWriter>(() => NullTraceWriter.Instance)
                     ;
         }
 
@@ -156,76 +158,23 @@ namespace Appacitive.Sdk
 
         public static Environment Environment { get; private set; }
 
-        public static class Debug
-        {
-            public static bool IsEnabled = false;
-
-            public static TextWriter Out { get; set; }
-        }
+        public static readonly Debugger Debug = new Debugger();
     }
 
-
-    public static class Debugger
+    [Flags]
+    public enum ApiLogFlags
     {
-        public static async Task Log(string data)
-        {
-            try
-            {
-                if (App.Debug.IsEnabled == false)
-                    return;
-                var tw = App.Debug.Out;
-                if (tw != null)
-                    await tw.WriteLineAsync(data);
-                await WriteDelimiter(tw);
-                await tw.FlushAsync();
-            }
-            catch { }
-        }
-
-        public static async Task Log(byte[] bytes)
-        {
-            try
-            {
-                if (App.Debug.IsEnabled == false)
-                    return;
-                var tw = App.Debug.Out;
-                if (tw != null)
-                    await tw.WriteLineAsync(Encoding.UTF8.GetString(bytes, 0, bytes.Length));
-                await WriteDelimiter(tw);
-                await tw.FlushAsync();
-            }
-            catch { }
-        }
-
-        private async static Task WriteDelimiter(TextWriter writer)
-        {
-            await writer.WriteLineAsync();
-            await writer.WriteLineAsync();
-        }
+        None = 1,
+        SuccessfulCalls  = 2,
+        FailedCalls = 4,
+        SlowLogs = 8,
+        Conditional = 16,
+        Everything = SuccessfulCalls | FailedCalls | SlowLogs 
     }
+
     
-    public class AppacitiveSettings
-    {
-        internal static readonly AppacitiveSettings Default = new AppacitiveSettings();
-
-        public AppacitiveSettings()
-        {
-            this.Factory = GetDefaultContainer();
-            this.UseApiSession = false;
-            this.EnableRealTimeSupport = false;
-        }
-
-        public IDependencyContainer Factory { get; set; }
-
-        public bool UseApiSession { get; set; }
-
-        public bool EnableRealTimeSupport { get; set; }
-
-        private static IDependencyContainer GetDefaultContainer()
-        {
-            return InProcContainer.Instance;
-        }
-    }
+    
+    
 
     
 

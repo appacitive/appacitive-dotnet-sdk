@@ -13,32 +13,32 @@ namespace Appacitive.Sdk.WindowsPhone7
     {
         private async void OnStatechange(StateChange obj)
         {
-            await Debugger.Log(string.Format("State changed from {0} to {1}.", obj.OldState, obj.NewState));
+            await App.Debug.LogAsync(string.Format("State changed from {0} to {1}.", obj.OldState, obj.NewState));
         }
 
         private async void OnReconnecting()
         {
-            await Debugger.Log("Reconnecting");
+            await App.Debug.LogAsync("Reconnecting");
         }
 
         private async void OnReconnected()
         {
-            await Debugger.Log("Reconnected");
+            await App.Debug.LogAsync("Reconnected");
         }
 
         private async void OnError(Exception obj)
         {
-            await Debugger.Log(string.Format("Faulted with exception {0}.", obj.ToString()));
+            await App.Debug.LogAsync(string.Format("Faulted with exception {0}.", obj.ToString()));
         }
 
         private async void OnConnectionSlow()
         {
-            await Debugger.Log("Connection is slow");
+            await App.Debug.LogAsync("Connection is slow");
         }
 
         private async void OnClosed()
         {
-            await Debugger.Log("Connection closed");
+            await App.Debug.LogAsync("Connection closed");
         }
 
         private Connection2 _conn = null;

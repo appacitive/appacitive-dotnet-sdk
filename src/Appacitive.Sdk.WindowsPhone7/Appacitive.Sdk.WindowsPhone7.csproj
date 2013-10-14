@@ -76,6 +76,9 @@
     <Compile Include="..\Appacitive.Sdk\AppacitiveContext.cs">
       <Link>AppacitiveContext.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\AppacitiveSettings.cs">
+      <Link>AppacitiveSettings.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Extensions.cs">
       <Link>Extensions.cs</Link>
     </Compile>
@@ -118,6 +121,9 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\ISubscriptionManager.cs">
       <Link>Interfaces\ISubscriptionManager.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\ITraceWriter.cs">
+      <Link>Interfaces\ITraceWriter.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IUploadHandler.cs">
       <Link>Interfaces\IUploadHandler.cs</Link>
     </Compile>
@@ -126,6 +132,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IValueCollection.cs">
       <Link>Internal\IValueCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Debugger.cs">
+      <Link>Internal\Debugger.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\EventProxy.cs">
       <Link>Internal\EventProxy.cs</Link>
@@ -153,6 +162,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\NamingConvention.cs">
       <Link>Internal\NamingConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\NullTraceWriter.cs">
+      <Link>Internal\NullTraceWriter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\ObjectSubscriber.cs">
       <Link>Internal\ObjectSubscriber.cs</Link>

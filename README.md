@@ -481,6 +481,33 @@ await PushNotification
 
 ```
 
+## Debugging the SDK
+
+Debugging in the sdk uses standard .NET trace infrastructure via the App.Debug class.
+The code below shows how to enable debugging for standard scenarios.
+
+``` C#
+
+	// To enable logging of all transactions.
+	App.Debug.ApiLogging.LogEverything();
+
+	// To log only failed calls.
+	App.Debug.ApiLogging.LogFailures();
+	
+	// To log calls taking more than 600ms.
+	App.Debug.ApiLogging.LogSlowCalls(600);
+
+	// To log calls based on runtime condition.
+	App.Debug.ApiLogging.LogIf(x => x.Status.Code == "400");
+
+	// To log failed and slow calls.
+	App.Debug.ApiLogging
+			 .LogFailures()
+			 .LogSlowCalls(600);
+
+```
+
+
 ## Real time messaging
 
 Real time functionality inside the SDK, leverages real time technology like web sockets, long polling and server sent events

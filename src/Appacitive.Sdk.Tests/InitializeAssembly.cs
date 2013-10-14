@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Appacitive.Sdk.Net45;
+using System.Diagnostics;
 
 namespace Appacitive.Sdk.Tests
 {
@@ -19,8 +20,13 @@ namespace Appacitive.Sdk.Tests
                 {
                     EnableRealTimeSupport = false
                 });
-            App.Debug.Out = Console.Out;
-            App.Debug.IsEnabled = true;
+            App.Debug.ApiLogging.LogEverything();
+            // App.Debug.ApiLogging.LogFailures();
+            // App.Debug.ApiLogging.LogSlowCalls(600);
+            // App.Debug.ApiLogging.LogIf(x => x.Status.Code == "400");
+            
+
+            
         }
 
         [AssemblyCleanup]
