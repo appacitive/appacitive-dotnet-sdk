@@ -88,7 +88,7 @@ namespace Appacitive.Sdk
         public ApiLogging LogSlowCalls(int logCallsSlowerThanInMs)
         {
             SetDebugFlag(ApiLogFlags.SlowLogs);
-            _slowLogThresholdInMilliSeconds = 500;
+            _slowLogThresholdInMilliSeconds = logCallsSlowerThanInMs;
             return this;
         }
 

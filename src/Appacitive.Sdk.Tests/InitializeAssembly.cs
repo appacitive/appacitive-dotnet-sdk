@@ -21,12 +21,9 @@ namespace Appacitive.Sdk.Tests
                     EnableRealTimeSupport = false
                 });
             App.Debug.ApiLogging.LogEverything();
+            // App.Debug.ApiLogging.LogSlowCalls(100);
             // App.Debug.ApiLogging.LogFailures();
-            // App.Debug.ApiLogging.LogSlowCalls(600);
             // App.Debug.ApiLogging.LogIf(x => x.Status.Code == "400");
-            
-
-            
         }
 
         [AssemblyCleanup]
