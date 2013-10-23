@@ -12,6 +12,7 @@ Except as otherwise noted, the .NET SDK for Appacitive is licensed under the Apa
 
 # Documentation 
 
+
 ## Data storage and retrieval
 
 ### Managing articles

@@ -14,16 +14,58 @@ namespace Appacitive.Sdk.Services
     {
         public static class For
         {
-            private static readonly string ArticleServiceBase = "https://apis.appacitive.com/article";
-            private static readonly string FileServiceBase = "https://apis.appacitive.com/file";
-            private static readonly string ConnectionServiceBase = "https://apis.appacitive.com/connection";
-            private static readonly string UserServiceBase = "https://apis.appacitive.com/user";
-            private static readonly string SessionServiceBase = "https://apis.appacitive.com/application/session";
-            private static readonly string DeviceServiceBase = "https://apis.appacitive.com/device";
-            private static readonly string PushServiceBase = "https://apis.appacitive.com/push/";
-            private static readonly string EmailServiceBase = "https://apis.appacitive.com/email";
-            public static readonly string GraphServiceBase = "https://apis.appacitive.com/search/";
-            public static readonly string ListServiceBase = "https://apis.appacitive.com/list/";
+            private static string ArticleServiceBase 
+            {
+                get { return CreateUrl("article"); }
+            }
+            private static string FileServiceBase
+            {
+                get { return CreateUrl("file"); }
+            }
+            private static string ConnectionServiceBase
+            {
+                get { return CreateUrl("connection"); }
+            }
+            private static string UserServiceBase
+            {
+                get { return CreateUrl("user"); }
+            }
+
+            private static string SessionServiceBase
+            {
+                get { return CreateUrl("application/session"); }
+            }
+            private static string DeviceServiceBase
+            {
+                get { return CreateUrl("device"); }
+            }
+            private static string PushServiceBase
+            {
+                get { return CreateUrl("push"); }
+            }
+            private static string EmailServiceBase
+            {
+                get { return CreateUrl("email"); }
+            }
+            public static string GraphServiceBase
+            {
+                get { return CreateUrl("search"); }
+            }
+            public static string ListServiceBase
+            {
+                get { return CreateUrl("list"); }
+            }
+            
+            private static string CreateUrl(string suffix)
+            {
+                var hostName = AppacitiveContext.HostName;
+                if (string.IsNullOrWhiteSpace(hostName) == true)
+                    hostName = "apis.appacitive.com";
+                if( AppacitiveContext.UseHttps == true )
+                    return string.Format("https://{0}/{1}", hostName, suffix);
+                else
+                    return string.Format("http://{0}/{1}", hostName, suffix);
+            }
 
             public static string CreateSession(bool enableDebug, Verbosity verbosity)
             {

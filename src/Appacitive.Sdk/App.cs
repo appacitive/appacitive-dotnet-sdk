@@ -19,9 +19,18 @@ namespace Appacitive.Sdk
         private static object _syncRoot = new object();
         public static void Initialize(IApplicationHost host, string apiKey, Environment environment, AppacitiveSettings settings = null)
         {
+            Initialize(host, "apis.appacitive.com", apiKey, environment, settings);
+        }
+
+        public static void Initialize(IApplicationHost host, string hostName, string apiKey, Environment environment, AppacitiveSettings settings = null)
+        {
             if (Interlocked.CompareExchange(ref _initialized, 1, 0) == 0)
             {
                 settings = settings ?? AppacitiveSettings.Default;
+                // Use https
+                AppacitiveContext.UseHttps = settings.UseHttps;
+                // Base url
+                AppacitiveContext.HostName = hostName;
                 // Set the api key
                 AppacitiveContext.ApiKey = App.Apikey = apiKey;
                 // Set the environment

@@ -10,6 +10,8 @@ namespace Appacitive.Sdk
 {
     internal static class AppacitiveContext
     {
+        public static string HostName { get; internal set; }
+
         public static string ApiKey { get; internal set; }
 
         public static Environment Environment { get; internal set; }
@@ -72,5 +74,7 @@ namespace Appacitive.Sdk
         public static Verbosity Verbosity { get; set; }
 
         public static bool EnableDebugging { get; set; }
+
+        public static bool UseHttps { get; set; }
     }
 }

@@ -16,7 +16,10 @@ namespace Appacitive.Sdk
             this.Factory = GetDefaultContainer();
             this.UseApiSession = false;
             this.EnableRealTimeSupport = false;
+            this.UseHttps = true;
         }
+
+        public bool UseHttps { get; set; } 
 
         public IDependencyContainer Factory { get; set; }
 
