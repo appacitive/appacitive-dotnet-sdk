@@ -72,6 +72,7 @@
     <Compile Include="Internal\Services\Model\GraphFilterResponse.cs" />
     <Compile Include="Internal\Services\Model\GraphFilterRequest.cs" />
     <Compile Include="Internal\Services\Model\FindAllConnectionsResponse.cs" />
+    <Compile Include="Internal\Services\Serializers\FindConnectedArticlesResponseConverter.cs" />
     <Compile Include="Internal\Services\Serializers\GraphProjectResponseConverter.cs" />
     <Compile Include="Internal\Services\Model\HttpRequests.cs" />
     <Compile Include="Internal\Services\Serializers\GraphNodeConverter.cs" />

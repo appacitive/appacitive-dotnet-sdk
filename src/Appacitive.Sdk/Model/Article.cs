@@ -82,12 +82,65 @@ namespace Appacitive.Sdk
 
         public async Task<PagedList<Article>> GetConnectedArticlesAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
-            return await Articles.GetConnectedArticlesAsync(relation, this.Id, query, label, fields, pageNumber, pageSize);
+            var request = new FindConnectedArticlesRequest
+            {
+                Relation = relation,
+                ArticleId = this.Id,
+                Article = this,
+                Label = label,
+                Query = query,
+                Type = this.Type,
+                ReturnEdge = false,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+            if (fields != null)
+                request.Fields.AddRange(fields);
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+
+            IEnumerable<Article> articles = response.Nodes.Select(n => n.Article);
+            var list = new PagedList<Article>()
+            {
+                PageNumber = response.PagingInfo.PageNumber,
+                PageSize = response.PagingInfo.PageSize,
+                TotalRecords = response.PagingInfo.TotalRecords,
+                GetNextPage = async skip => await this.GetConnectedArticlesAsync(relation, query, label, fields, pageNumber + skip + 1, pageSize)
+            };
+            list.AddRange(articles);
+            return list;
         }
 
         public async Task<PagedList<Connection>> GetConnectionsAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
-            return await Articles.GetConnectionsAsync(relation, this.Id, query, label, fields, pageNumber, pageSize);
+            var request = new FindConnectedArticlesRequest
+            {
+                Relation = relation,
+                ArticleId = this.Id,
+                Article = this,
+                Query = query,
+                Label = label,
+                Type = this.Type,
+                ReturnEdge = true,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
+            if (fields != null)
+                request.Fields.AddRange(fields);
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+
+            var list = new PagedList<Connection>
+            {
+                PageNumber = response.PagingInfo.PageNumber,
+                PageSize = response.PagingInfo.PageSize,
+                TotalRecords = response.PagingInfo.TotalRecords,
+                GetNextPage = async skip => await GetConnectionsAsync(relation, query, null, fields, pageNumber + skip + 1, pageSize)
+            };
+            list.AddRange(response.Nodes.Select(n => n.Connection));
+            return list;
         }
     }
 }

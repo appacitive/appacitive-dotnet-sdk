@@ -23,6 +23,7 @@ namespace Appacitive.Sdk.Services
             this.Verbosity = verbosity;
             this.UserToken = userToken;
             this.Environment = environment;
+            this.DebugEnabled = enableDebugging;
             this.Fields = new List<string>();
         }
 

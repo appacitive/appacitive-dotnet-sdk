@@ -101,6 +101,32 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(articles.Select(a => a.Id).Intersect(new[] { child1.Id, child2.Id }).Count() == 2);
         }
 
+
+
+        [TestMethod]
+        public async Task GetConnectionsOnConnectionWithSameTypeAndDifferentLabels()
+        {
+            var parent = await ObjectHelper.CreateNewAsync();
+            var child1 = await ObjectHelper.CreateNewAsync();
+            var child2 = await ObjectHelper.CreateNewAsync();
+            // Create connections
+            var conn1 = Connection.New("link")
+                .FromExistingArticle("parent", parent.Id)
+                .ToExistingArticle("child", child1.Id);
+            await conn1.SaveAsync();
+
+            var conn2 = Connection.New("link")
+                .FromExistingArticle("parent", parent.Id)
+                .ToExistingArticle("child", child2.Id);
+            await conn2.SaveAsync();
+
+            // Get connected articles
+            var connections = await parent.GetConnectionsAsync("link", label: "child");
+            Assert.IsTrue(connections.Count == 2);
+            Assert.IsTrue(connections.Select(a => a.Id).Intersect(new[] { conn1.Id, conn2.Id }).Count() == 2);
+        }
+
+
         [TestMethod]
         public async Task GetConnectedArticlesForSameTypeAndDifferentLabelsWithoutLabelTest()
         {
@@ -335,6 +361,16 @@ namespace Appacitive.Sdk.Tests
             {
                 Assert.IsTrue(aex.Code == "404");
             }
+        }
+
+
+        [TestMethod]
+        public async Task HotelTest()
+        {
+            App.EnableDebugMode();
+            var hotel = new Article("hotel", "39323115072914373");
+            var images = await hotel.GetConnectedArticlesAsync("hotel_image", pageSize: 200, fields: new [] {"supplier_image_url"});
+            images.ForEach(img => Console.WriteLine(img.Get<string>("supplier_image_url"))) ;
         }
     }
 }

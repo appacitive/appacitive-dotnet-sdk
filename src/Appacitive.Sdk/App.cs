@@ -51,6 +51,16 @@ namespace Appacitive.Sdk
             }
         }
 
+        public static void EnableDebugMode()
+        {
+            AppacitiveContext.EnableDebugging = true;
+        }
+
+        public static void DisableDebugMode()
+        {
+            AppacitiveContext.EnableDebugging = false;
+        }
+
         private static int _isShutdown = 0;
         public static void Shutdown()
         {

@@ -8,65 +8,60 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class GraphNodeConverter : JsonConverter
+    public class FindConnectedArticlesResponseConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(GraphNode) == objectType;
+            return typeof(FindConnectedArticlesResponse) == objectType;
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var value = JObject.ReadFrom(reader);
-            return ParseGraphNode(null, null, null, value as JObject, serializer);
+            JToken value = null;
+            var response = new FindConnectedArticlesResponse();
+            // status
+            var json = JObject.ReadFrom(reader) as JObject;
+            json.TryGetValue("status", out value);
+            response.Status = serializer.Deserialize<Status>(value.CreateReader());
+            if (response.Status.IsSuccessful == false)
+                return response;
+            json.Remove("status");
+
+            // paging info
+            // Extract paging info
+            json.TryGetValue("paginginfo", out value);
+            response.PagingInfo = serializer.Deserialize<PagingInfo>(value.CreateReader());
+            json.Remove("paginginfo");
+
+            // extract parent label
+            json.TryGetValue("parent", out value);
+            var parentLabel = value.ToString();
+
+            // Extract graph node.
+            json.TryGetValue("nodes", out value);
+            var nodes = value.Values<JObject>();
+
+            ParseNodes(response, parentLabel, nodes, serializer);
+            return response;
         }
 
-        private GraphNode ParseGraphNode(GraphNode parent, string name, string parentLabel, JObject json, JsonSerializer serializer)
+        private void ParseNodes(FindConnectedArticlesResponse response, string parentLabel, IEnumerable<JObject> nodes, JsonSerializer serializer)
+        {
+            response.Nodes = nodes.Select(x => ParseNode(parentLabel, x, serializer)).ToList();
+        }
+
+        private GraphNode ParseNode( string parentLabel, JObject json, JsonSerializer serializer)
         {
             GraphNode current = new GraphNode();
             // Parse the article
             var articleJson = ExtractArticleJson(json);
             current.Article = serializer.Deserialize<Article>(articleJson.CreateReader());
-            // Parse edge
-            if (parent != null)
-            {
-                var edgeJson = ExtractEdgeJson(json);
-                if (edgeJson != null)
-                    current.Connection = ParseConnection(parentLabel, parent.Article, current.Article, edgeJson);
-            }
-            // Parse children
-            ParseChildNodes(json, current, serializer);
-            // Set parent context
-            if (parent != null)
-            {
-                parent.AddChildNode(name, current);
-                current.Parent = parent;
-            }
+
+            var edgeJson = ExtractEdgeJson(json);
+            if (edgeJson != null)
+                current.Connection = ParseConnection(parentLabel, null, current.Article, edgeJson);
+
             return current;
-        }
-
-        private void ParseChildNodes(JObject json, GraphNode current, JsonSerializer serializer)
-        {
-            JToken value = null;
-            if (json.TryGetValue("__children", out value) == false || value.Type != JTokenType.Object)
-                return;
-            foreach (var property in ((JObject)value).Properties())
-            {
-                if (property.Value.Type != JTokenType.Object) continue;
-                ParseChildNodes(property.Name, property.Value as JObject, current, serializer);
-            }
-        }
-
-        private void ParseChildNodes(string name, JObject json, GraphNode current, JsonSerializer serializer)
-        {
-            var parentLabel = GetValue(json, "parent", JTokenType.String, true).ToString();
-            var values = json.Property("values");
-            if (values.Value.Type == JTokenType.Array)
-            {
-                var nodeJsons = values.Values().Select(x => x as JObject);
-                foreach (var nodeJson in nodeJsons)
-                    ParseGraphNode(current, name, parentLabel, nodeJson, serializer);
-            }
         }
 
         private Connection ParseConnection(string parentLabel, Article parentArticle, Article currentArticle, JObject json)
@@ -80,8 +75,8 @@ namespace Appacitive.Sdk.Services
             var id = GetValue(json, "__id", JTokenType.String, true).ToString();
             var conn = new Connection(relation, id);
             conn.Endpoints = new EndpointPair(
-                new Endpoint(parentLabel, parentArticle) { ArticleId = parentArticle.Id },
-                new Endpoint(label, currentArticle) { ArticleId = currentArticle.Id });
+                new Endpoint(parentLabel, parentArticle),
+                new Endpoint(label, currentArticle));
             // Parse system properties
             JToken value = null;
             // Id

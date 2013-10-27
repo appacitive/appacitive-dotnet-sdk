@@ -292,9 +292,11 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string FindConnectedArticles(string relation, string articleId, string label, string query, int pageNumber, int pageSize, Geocode location, bool debugEnabled, Verbosity verbosity, List<string> fields)
+            public static string FindConnectedArticles(string relation, string type, string articleId, bool returnEdge, string label, string query, int pageNumber, int pageSize, Geocode location, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
-                var url = new Url(ConnectionServiceBase).Append(relation).Append(articleId).Append("find");
+                // https://apis.appacitive.com/connection/{connection_type}/{article_type}/{article_id}/find?returnedge={true/false}
+                var url = new Url(ConnectionServiceBase).Append(relation).Append(type).Append(articleId).Append("find");
+                url.QueryString["returnedge"] = returnEdge ? "true" : "false";
                 if (string.IsNullOrWhiteSpace(label) == false)
                     url.QueryString["label"] = label;
                 if (string.IsNullOrWhiteSpace(query) == false)

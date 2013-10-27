@@ -250,7 +250,9 @@ namespace Appacitive.Sdk
         public Endpoint(string label, Article content)
         {
             this.Label = label;
-            this.Content = content;
+            this.Content = content; 
+            if( content != null )
+                this.ArticleId = content.Id;
         }
 
         internal bool CreateEndpoint

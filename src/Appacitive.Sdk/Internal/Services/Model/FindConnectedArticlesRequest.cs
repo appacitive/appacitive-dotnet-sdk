@@ -20,7 +20,13 @@ namespace Appacitive.Sdk.Services
 
         public string Relation { get; set; }
 
+        public string Type { get; set; }
+
         public string ArticleId { get; set; }
+
+        public Article Article { get; set; }
+
+        public bool ReturnEdge { get; set; }
 
         public string Label { get; set; }
 
@@ -32,7 +38,29 @@ namespace Appacitive.Sdk.Services
 
         protected override string GetUrl()
         {
-            return Urls.For.FindConnectedArticles(this.Relation, this.ArticleId, this.Label, this.Query, this.PageNumber, this.PageSize, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+            return Urls.For.FindConnectedArticles(this.Relation, this.Type, this.ArticleId, this.ReturnEdge, 
+                this.Label, this.Query, this.PageNumber, this.PageSize, this.CurrentLocation, this.DebugEnabled, 
+                this.Verbosity, this.Fields);
+        }
+
+        public override async Task<FindConnectedArticlesResponse> ExecuteAsync()
+        {
+            var response = await base.ExecuteAsync();
+            // Set article in connection.
+            if (response.Nodes != null && this.ReturnEdge == true )
+            {
+                foreach (var node in response.Nodes)
+                {
+                    var endpoint = string.IsNullOrWhiteSpace(node.Connection.Endpoints.EndpointA.ArticleId) ?
+                        node.Connection.Endpoints.EndpointA :
+                        node.Connection.Endpoints.EndpointB;
+                    if (this.Article != null)
+                        endpoint = new Endpoint(endpoint.Label, this.Article);
+                    else
+                        endpoint = new Endpoint(endpoint.Label, this.ArticleId);
+                }
+            }
+            return response;
         }
     }
 }

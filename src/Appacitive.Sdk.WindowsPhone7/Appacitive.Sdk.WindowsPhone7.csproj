@@ -436,6 +436,9 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\EventTypeConverter.cs">
       <Link>Internal\Services\Serializers\EventTypeConverter.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\FindConnectedArticlesResponseConverter.cs">
+      <Link>Internal\Services\Serializers\FindConnectedArticlesResponseConverter.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\GraphNodeConverter.cs">
       <Link>Internal\Services\Serializers\GraphNodeConverter.cs</Link>
     </Compile>

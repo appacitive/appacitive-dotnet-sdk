@@ -8,12 +8,20 @@ using Appacitive.Sdk.Realtime;
 
 namespace Appacitive.Sdk.Services
 {
-    public class FindConnectedArticlesResponse : ApiResponse
+    public class FindConnectedArticlesResponse2 : ApiResponse
     {
         [JsonProperty("paginginfo")]
         public PagingInfo PagingInfo { get; set; }
 
         [JsonProperty("connections")]
         public List<Connection> Connections { get; set; }
+    }
+
+
+    public class FindConnectedArticlesResponse : ApiResponse
+    {
+        public PagingInfo PagingInfo { get; set; }
+
+        public List<GraphNode> Nodes { get; set; }
     }
 }
