@@ -39,9 +39,13 @@ namespace Appacitive.Sdk.Services
 
             // Extract graph node.
             json.TryGetValue("nodes", out value);
-            var nodes = value.Values<JObject>();
-
-            ParseNodes(response, parentLabel, nodes, serializer);
+            if (value.Type != JTokenType.Null)
+            {
+                var nodes = value.Values<JObject>();
+                ParseNodes(response, parentLabel, nodes, serializer);
+            }
+            else
+                response.Nodes = new List<GraphNode>();
             return response;
         }
 

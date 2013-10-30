@@ -316,6 +316,24 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
+        public async Task FindAllArticlesAsyncWithSpecialCharacterInQueryTest()
+        {
+            // Create the article
+            dynamic article = new Article("object");
+            article.stringfield = "129764_TouricoTGS_Museum of Modern Art and Casemates du Bock (tunnels in the city’s cliffs)";
+                //Unique.String + "&" + "12las@";
+            dynamic obj = await ObjectHelper.CreateNewAsync(article as Article);
+
+            // Search
+            string stringToSearch = obj.stringfield;
+            var articles = await Articles.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch).AsString());
+            Assert.IsNotNull(articles);
+            Assert.IsTrue(articles.Count == 1);
+            Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+
+        }
+
+        [TestMethod]
         public async Task FindAllArticlesAsyncWithNestedQueryTest()
         {
 
@@ -373,6 +391,18 @@ namespace Appacitive.Sdk.Tests
                     break;
             } while (true);
             Console.WriteLine("Finished.");
+        }
+
+        [TestMethod]
+        public async Task GetConnectedArticlesWithZeroConnectionsAsyncTest()
+        {
+
+            // Create objects
+            var obj1 = await ObjectHelper.CreateNewAsync();
+            // Get connected. Should return zero articles
+            var connectedArticles = await obj1.GetConnectedArticlesAsync("sibling");
+            Assert.IsTrue(connectedArticles != null);
+            Assert.IsTrue(connectedArticles.TotalRecords == 0);
         }
 
         [TestMethod]
