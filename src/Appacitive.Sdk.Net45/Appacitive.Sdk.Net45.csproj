@@ -47,6 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssembly.cs">
+      <Link>Properties\CommonAssembly.cs</Link>
+    </Compile>
     <Compile Include="AppacitiveException.cs" />
     <Compile Include="Aspnet\AspnetApplicationHost.cs" />
     <Compile Include="Aspnet\AspnetUserContext.cs" />

@@ -481,6 +481,9 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Urls.cs">
       <Link>Internal\Services\Urls.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\StringUtils.cs">
+      <Link>Internal\StringUtils.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Subscription.cs">
       <Link>Internal\Subscription.cs</Link>
     </Compile>
@@ -654,6 +657,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\UserSession.cs">
       <Link>UserSession.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonAssembly.cs">
+      <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
     <Compile Include="ExceptionFactory.cs" />
     <Compile Include="HttpConnector.cs" />

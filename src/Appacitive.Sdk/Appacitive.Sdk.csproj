@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssembly.cs">
+      <Link>Properties\CommonAssembly.cs</Link>
+    </Compile>
     <Compile Include="App.cs" />
     <Compile Include="AppacitiveContext.cs" />
     <Compile Include="AppacitiveSettings.cs" />
@@ -174,6 +177,7 @@
     <Compile Include="QueryDsl\PropertyExpression.cs" />
     <Compile Include="QueryDsl\Query.cs" />
     <Compile Include="QueryDsl\RadialSearchQuery.cs" />
+    <Compile Include="Internal\StringUtils.cs" />
     <Compile Include="QueryDsl\TimeFieldValue.cs" />
     <Compile Include="Internal\Services\Model.cs" />
     <Compile Include="Internal\Services\Model\ApiRequest.cs" />

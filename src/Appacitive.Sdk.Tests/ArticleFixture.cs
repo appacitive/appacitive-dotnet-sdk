@@ -426,5 +426,19 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(connectedArticles.TotalRecords == 4);
             Assert.IsTrue(connectedArticles.Select(x => x.Id).Intersect(new[] { obj2.Id, obj3.Id, obj4.Id, obj5.Id }).Count() == 4);
         }
+
+
+        [TestMethod]
+        public async Task QueryArticleWithSingleQuotedValueTest()
+        {
+            dynamic obj = new Article("object");
+            var stringValue = "Pan's Labyrinth" + Unique.String;
+            obj.stringfield = stringValue;
+            await obj.SaveAsync();
+
+            PagedList<Article> result = await Articles.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringValue).ToString());
+            Assert.IsTrue(result.TotalRecords == 1, "Expected single record but multiple records were returned.");
+            Assert.IsTrue(result.Single().Id == obj.Id);
+        }
     }
 }

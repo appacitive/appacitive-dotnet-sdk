@@ -22,7 +22,7 @@ namespace Appacitive.Sdk
             // Hack!!! __id mapping to be fixed inside API.
             if( this.Field.Equals("__id", StringComparison.OrdinalIgnoreCase) == true )
                 return FieldQuery.IsEqualTo(FieldType.Property, this.Field, long.Parse(value));
-            return FieldQuery.IsEqualTo(FieldType.Property, this.Field,  Uri.EscapeDataString(value));
+            return FieldQuery.IsEqualTo(FieldType.Property, this.Field,  StringUtils.EscapeAndEncode(value));
         }
 
         public IQuery IsEqualTo(bool value)
@@ -152,17 +152,17 @@ namespace Appacitive.Sdk
 
         public IQuery Like(string value)
         {
-            return FieldQuery.Like(FieldType.Property, this.Field, Uri.EscapeDataString(value));
+            return FieldQuery.Like(FieldType.Property, this.Field, StringUtils.EscapeAndEncode(value));
         }
 
         public IQuery StartsWith(string value)
         {
-            return FieldQuery.StartsWith(FieldType.Property, this.Field, Uri.EscapeDataString(value));
+            return FieldQuery.StartsWith(FieldType.Property, this.Field, StringUtils.EscapeAndEncode(value));
         }
 
         public IQuery EndsWith(string value)
         {
-            return FieldQuery.EndsWith(FieldType.Property, this.Field, Uri.EscapeDataString(value));
+            return FieldQuery.EndsWith(FieldType.Property, this.Field, StringUtils.EscapeAndEncode(value));
         }
 
         public IQuery WithinCircle(Geocode center, decimal radius, DistanceUnit unit = DistanceUnit.Miles)

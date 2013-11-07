@@ -53,6 +53,24 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
+        public void QueryWithSingleQuoteShouldBeEscapedTest()
+        {
+            var query = Query.Property("string_field").IsEqualTo("steve's house").ToString();
+            var expected = @"*string_field == '" + Uri.EscapeDataString(@"steve\'s house") + "'";
+            Assert.AreEqual(query, expected);
+        }
+
+
+        [TestMethod]
+        public void NonLiteralsInStringQueryShouldBeEscapedTest()
+        {
+            var query = Query.Property("string_field").IsEqualTo("hello world").ToString();
+            var expected = @"*string_field == '" + Uri.EscapeDataString("hello world") + "'";
+            Assert.AreEqual(query, expected);
+        }
+
+
+        [TestMethod]
         public void PolygonQueryTest()
         {
             var query = Query.Property("location").WithinPolygon( 
