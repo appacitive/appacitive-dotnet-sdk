@@ -36,7 +36,7 @@ namespace Appacitive.Sdk
 
         public async static Task<PagedList<Article>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
-            var request = new FindAllArticleRequest()
+            var request = new FindAllArticlesRequest()
             {
                 Type = type,
                 Query = query,
@@ -56,6 +56,34 @@ namespace Appacitive.Sdk
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
                 GetNextPage = async skip => await FindAllAsync(type, query, fields, page + skip + 1, pageSize, orderBy, sortOrder)
+            };
+            articles.AddRange(response.Articles);
+            return articles;
+
+        }
+
+        public async static Task<PagedList<Article>> FreeTextSearchAsync(string type, string freeTextExpression, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        {
+            var request = new FreeTextSearchArticlesRequest()
+            {
+                Type = type,
+                FreeTextExpression = freeTextExpression,
+                PageNumber = page,
+                PageSize = pageSize,
+                OrderBy = orderBy,
+                SortOrder = sortOrder
+            };
+            if (fields != null)
+                request.Fields.AddRange(fields);
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            var articles = new PagedList<Article>()
+            {
+                PageNumber = response.PagingInfo.PageNumber,
+                PageSize = response.PagingInfo.PageSize,
+                TotalRecords = response.PagingInfo.TotalRecords,
+                GetNextPage = async skip => await FreeTextSearchAsync(type, freeTextExpression, fields, page + skip + 1, pageSize, orderBy, sortOrder)
             };
             articles.AddRange(response.Articles);
             return articles;

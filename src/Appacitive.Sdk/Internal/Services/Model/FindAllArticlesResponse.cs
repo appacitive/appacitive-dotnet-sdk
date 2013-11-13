@@ -8,7 +8,7 @@ using Appacitive.Sdk.Realtime;
 
 namespace Appacitive.Sdk.Services
 {
-    public class FindAllArticleResponse : ApiResponse
+    public class FindAllArticlesResponse : ApiResponse
     {
         [JsonProperty("articles")]
         public List<Article> Articles { get; set; }

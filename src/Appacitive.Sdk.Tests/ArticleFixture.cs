@@ -484,5 +484,95 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(matches[0].Id == obj1.Id || matches[1].Id == obj1.Id);
             Assert.IsTrue(matches[0].Id == obj2.Id || matches[1].Id == obj2.Id);
         }
+
+        [TestMethod]
+        public async Task FreeTextSearchTest()
+        {
+            var value = Unique.String + " " + Unique.String;
+            var obj = new Article("object");
+            obj.Set<string>("stringfield", value);
+            await obj.SaveAsync();
+
+            var results = await Articles.FreeTextSearchAsync("object", value);
+            Assert.IsTrue(results != null);
+            Assert.IsTrue(results.Count == 1);
+            Assert.IsTrue(results[0].Id == obj.Id);
+        }
+
+
+        [TestMethod]
+        public async Task FreeTextSearchWithMinusOperatorTest()
+        {
+            var mandatoryToken = Unique.String;
+            var optionalToken = Unique.String;
+            
+            // Create one object with only the mandatory token.
+            var obj1 = new Article("object");
+            obj1.Set<string>("stringfield", mandatoryToken);
+            
+
+            // Create one object with the mandatory token and optional token.
+            var obj2 = new Article("object");
+            obj2.Set<string>("stringfield", mandatoryToken + " " + optionalToken);
+            
+
+            // Create one object with only optional token
+            var obj3 = new Article("object");
+            obj3.Set<string>("stringfield", optionalToken);
+
+            await Task.WhenAll(obj1.SaveAsync(), obj2.SaveAsync(), obj3.SaveAsync());
+
+            var results = await Articles.FreeTextSearchAsync("object", mandatoryToken + " -" + optionalToken);
+            Assert.IsTrue(results != null);
+            Assert.IsTrue(results.Count == 1);
+            Assert.IsTrue(results[0].Id == obj1.Id );
+        }
+
+        [TestMethod]
+        public async Task FreeTextSearchWithQuestionMarkOperatorTest()
+        {
+            var prefix = Unique.String;
+            var suffix = Unique.String;
+
+            // Create one object with only the mandatory token.
+            var obj1 = new Article("object");
+            obj1.Set<string>("stringfield", prefix + "X" + suffix);
+
+
+            // Create one object with the mandatory token and optional token.
+            var obj2 = new Article("object");
+            obj2.Set<string>("stringfield", prefix + "Y" + suffix);
+
+            await Task.WhenAll(obj1.SaveAsync(), obj2.SaveAsync());
+
+            var results = await Articles.FreeTextSearchAsync("object", prefix + "?" + suffix);
+            Assert.IsTrue(results != null);
+            Assert.IsTrue(results.Count == 2);
+            Assert.IsTrue(results[0].Id == obj1.Id || results[0].Id == obj2.Id);
+            Assert.IsTrue(results[1].Id == obj1.Id || results[1].Id == obj2.Id);
+        }
+
+        [Ignore]
+        public async Task FreeTextSearchWithProximityOperatorTest()
+        {
+            var prefix = Unique.String;
+            var suffix = Unique.String;
+
+            // Create one object with only the mandatory token.
+            var obj1 = new Article("object");
+            obj1.Set<string>("stringfield", prefix + " word1" + " word2" + " word3 " + suffix);
+
+
+            // Create one object with the mandatory token and optional token.
+            var obj2 = new Article("object");
+            obj2.Set<string>("stringfield", prefix + " word1" + " word2" + " word3" + " word4" + " word5 " + suffix);
+
+            await Task.WhenAll(obj1.SaveAsync(), obj2.SaveAsync());
+
+            var results = await Articles.FreeTextSearchAsync("object", "\"" + prefix + " " + suffix + "\"~4");
+            Assert.IsTrue(results != null);
+            Assert.IsTrue(results.Count == 1);
+            Assert.IsTrue(results[0].Id == obj1.Id);
+        }
     }
 }

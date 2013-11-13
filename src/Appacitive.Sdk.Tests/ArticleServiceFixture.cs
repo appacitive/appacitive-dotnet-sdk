@@ -232,7 +232,7 @@ namespace Appacitive.Sdk.Tests
             ApiHelper.EnsureValidResponse(response);
 
             // Find all articles
-            var findRequest = new FindAllArticleRequest() { Type = "object" };
+            var findRequest = new FindAllArticlesRequest() { Type = "object" };
             var findResponse = await findRequest.ExecuteAsync();
             ApiHelper.EnsureValidResponse(findResponse);
             findResponse.Articles.ForEach(x => Console.WriteLine("Found article id {0}.", x.Id));

@@ -68,6 +68,8 @@
     <Compile Include="Internal\MessageSubscriber.cs" />
     <Compile Include="Internal\EventProxy.cs" />
     <Compile Include="Internal\NullTraceWriter.cs" />
+    <Compile Include="Internal\Services\Model\FreeTextSearchArticlesResponse.cs" />
+    <Compile Include="Internal\Services\Model\FreeTextSearchArticlesRequest.cs" />
     <Compile Include="Internal\Services\Model\GetListContentRequest.cs" />
     <Compile Include="Internal\Services\Model\GetListContentResponse.cs" />
     <Compile Include="Internal\Services\Model\GraphProjectRequest.cs" />
@@ -204,8 +206,8 @@
     <Compile Include="Internal\Services\Model\DeleteUserRequest.cs" />
     <Compile Include="Internal\Services\Model\DeleteUserResponse.cs" />
     <Compile Include="Internal\Services\Model\Enums.cs" />
-    <Compile Include="Internal\Services\Model\FindAllArticleRequest.cs" />
-    <Compile Include="Internal\Services\Model\FindAllArticleResponse.cs" />
+    <Compile Include="Internal\Services\Model\FindAllArticlesRequest.cs" />
+    <Compile Include="Internal\Services\Model\FindAllArticlesResponse.cs" />
     <Compile Include="Internal\Services\Model\FindAllUserResponse.cs" />
     <Compile Include="Internal\Services\Model\FindAllUsersRequest.cs" />
     <Compile Include="Internal\Services\Model\FindConnectedArticlesRequest.cs" />
