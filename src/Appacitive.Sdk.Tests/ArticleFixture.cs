@@ -440,5 +440,49 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(result.TotalRecords == 1, "Expected single record but multiple records were returned.");
             Assert.IsTrue(result.Single().Id == obj.Id);
         }
+
+        [TestMethod]
+        public async Task QueryWithTagsMatchAllTest()
+        {
+            // Create the test object.
+            Article obj = new Article("object");
+            var tags = new string[] { Unique.String, Unique.String };
+            obj.Set<string>("stringfield", Unique.String);
+            obj.AddTags(tags);
+            await obj.SaveAsync();
+
+            // Search for the object with tags.
+            var matches = await Articles.FindAllAsync("object", Query.Tags.MatchAll(tags).ToString());
+            Assert.IsTrue(matches != null);
+            Assert.IsTrue(matches.Count == 1);
+            Assert.IsTrue(matches[0] != null);
+            Assert.IsTrue(matches[0].Id == obj.Id);
+        }
+
+
+        [TestMethod]
+        public async Task QueryWithTagsMatchOneOrMoreTest()
+        {
+            var tag1 = Unique.String;
+            var tag2 = Unique.String;
+            // Create the test object 1.
+            Article obj1 = new Article("object");
+            obj1.Set<string>("stringfield", Unique.String);
+            obj1.AddTag(tag1);
+            await obj1.SaveAsync();
+
+            Article obj2 = new Article("object");
+            obj2.Set<string>("stringfield", Unique.String);
+            obj2.AddTag(tag2);
+            await obj2.SaveAsync();
+
+            // Search for the object with tags.
+            var matches = await Articles.FindAllAsync("object", Query.Tags.MatchOneOrMore(tag1, tag2).ToString());
+            Assert.IsTrue(matches != null);
+            Assert.IsTrue(matches.Count == 2);
+            Assert.IsTrue(matches[0] != null && matches[1] != null );
+            Assert.IsTrue(matches[0].Id == obj1.Id || matches[1].Id == obj1.Id);
+            Assert.IsTrue(matches[0].Id == obj2.Id || matches[1].Id == obj2.Id);
+        }
     }
 }

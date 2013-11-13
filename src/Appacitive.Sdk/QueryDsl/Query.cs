@@ -24,6 +24,11 @@ namespace Appacitive.Sdk
         {
             return new AggregateExpression(name);
         }
+
+        public static TagExpression Tags
+        {
+            get { return new TagExpression(); }
+        }
     }
 
     public enum BoolOperator
