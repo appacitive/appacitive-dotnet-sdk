@@ -87,25 +87,20 @@ namespace Appacitive.Sdk.Tests
         public void NestedQueryTest()
         {
             var query =
-                BooleanOperator.Or( new [] 
-                { 
+                BooleanOperator.Or(
                     Query.Property("name").StartsWith("x"),
-                    BooleanOperator.And(new[] 
-                    {
+                    BooleanOperator.And(
                         Query.Property("name").IsEqualTo("nikhil"),
-                        Query.Property("age").IsGreaterThanEqualTo(10),
-                    }),
+                        Query.Property("age").IsGreaterThanEqualTo(10)
+                        ),
                     Query.Property("location").WithinCircle(new Geocode(10, 10), 15, DistanceUnit.Kilometers),
-                    Query.Property("location").WithinPolygon( 
-                    new [] 
-                    {
+                    Query.Property("location").WithinPolygon(
                         new Geocode(10,10),
                         new Geocode(13,14),
                         new Geocode(20,20)
-                    })
-                });
+                        )
+                );
             Console.WriteLine(query.ToString());
         }
-
     }
 }

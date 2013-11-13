@@ -175,6 +175,11 @@ namespace Appacitive.Sdk
             return new PolygonSearchQuery(this.Field, points);
         }
 
+        public IQuery WithinPolygon(params Geocode[] points)
+        {
+            return new PolygonSearchQuery(this.Field, points);
+        }
+
         public IQuery Between(decimal before, decimal after)
         {
             return BetweenQuery.Between(FieldType.Property, this.Field, before, after);

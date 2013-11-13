@@ -17,5 +17,15 @@ namespace Appacitive.Sdk
         {
             return new AggregateQuery(BoolOperator.Or, innerQueries);
         }
+
+        public static IQuery And(params IQuery[] innerQueries)
+        {
+            return new AggregateQuery(BoolOperator.And, innerQueries);
+        }
+
+        public static IQuery Or(params IQuery[] innerQueries)
+        {
+            return new AggregateQuery(BoolOperator.Or, innerQueries);
+        }
     }
 }
