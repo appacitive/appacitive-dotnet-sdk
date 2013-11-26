@@ -80,7 +80,7 @@ namespace Appacitive.Sdk
             return response.Article;
         }
 
-        public async Task<PagedList<Article>> GetConnectedArticlesAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
+        public async Task<PagedList<Article>> GetConnectedArticlesAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
             var request = new FindConnectedArticlesRequest
             {
@@ -92,7 +92,9 @@ namespace Appacitive.Sdk
                 Type = this.Type,
                 ReturnEdge = false,
                 PageNumber = pageNumber,
-                PageSize = pageSize
+                PageSize = pageSize,
+                SortOrder = sortOrder,
+                OrderBy = orderBy
             };
             if (fields != null)
                 request.Fields.AddRange(fields);
@@ -112,7 +114,7 @@ namespace Appacitive.Sdk
             return list;
         }
 
-        public async Task<PagedList<Connection>> GetConnectionsAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
+        public async Task<PagedList<Connection>> GetConnectionsAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
             var request = new FindConnectedArticlesRequest
             {
@@ -124,7 +126,9 @@ namespace Appacitive.Sdk
                 Type = this.Type,
                 ReturnEdge = true,
                 PageNumber = pageNumber,
-                PageSize = pageSize
+                PageSize = pageSize,
+                SortOrder = sortOrder,
+                OrderBy = orderBy
             };
             if (fields != null)
                 request.Fields.AddRange(fields);

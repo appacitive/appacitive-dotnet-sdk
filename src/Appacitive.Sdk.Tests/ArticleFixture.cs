@@ -552,7 +552,7 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(results[1].Id == obj1.Id || results[1].Id == obj2.Id);
         }
 
-        [Ignore]
+        [TestMethod]
         public async Task FreeTextSearchWithProximityOperatorTest()
         {
             var prefix = Unique.String;
@@ -573,6 +573,32 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(results != null);
             Assert.IsTrue(results.Count == 1);
             Assert.IsTrue(results[0].Id == obj1.Id);
+        }
+
+        [TestMethod]
+        public async Task GetConnectedArticlesWithSortingSupportTest()
+        {
+            // Create 5 connected articles and request page 2 with page size of 2.
+            // With sorting, it should return specific articles.
+            var root = await ObjectHelper.CreateNewAsync();
+
+            List<Article> children = new List<Article>();
+            children.Add(ObjectHelper.NewInstance());
+            children.Add(ObjectHelper.NewInstance());
+            children.Add(ObjectHelper.NewInstance());
+            children.Add(ObjectHelper.NewInstance());
+            children.Add(ObjectHelper.NewInstance());
+
+            var tasks = children.ConvertAll(x =>
+                Connection.New("sibling").FromExistingArticle("object", root.Id).ToNewArticle("object", x).SaveAsync());
+            await Task.WhenAll(tasks);
+
+            children = children.OrderBy(x => x.Id).ToList();
+            var results = await root.GetConnectedArticlesAsync("sibling", orderBy: "__id", sortOrder: SortOrder.Ascending,
+                pageSize:2, pageNumber: 2);
+            Assert.IsTrue(results.Count == 2);
+            Assert.IsTrue(results[0].Id == children[2].Id);
+            Assert.IsTrue(results[1].Id == children[3].Id);
         }
     }
 }

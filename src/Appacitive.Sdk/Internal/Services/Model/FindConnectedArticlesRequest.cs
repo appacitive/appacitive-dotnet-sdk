@@ -36,11 +36,15 @@ namespace Appacitive.Sdk.Services
 
         public int PageSize { get; set; }
 
+        public string OrderBy { get; set; }
+
+        public SortOrder SortOrder { get; set; }
+
         protected override string GetUrl()
         {
             return Urls.For.FindConnectedArticles(this.Relation, this.Type, this.ArticleId, this.ReturnEdge, 
-                this.Label, this.Query, this.PageNumber, this.PageSize, this.CurrentLocation, this.DebugEnabled, 
-                this.Verbosity, this.Fields);
+                this.Label, this.Query, this.PageNumber, this.PageSize, this.OrderBy, this.SortOrder,
+                this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
 
         public override async Task<FindConnectedArticlesResponse> ExecuteAsync()

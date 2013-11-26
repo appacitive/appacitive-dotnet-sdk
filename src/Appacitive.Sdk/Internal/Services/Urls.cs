@@ -292,7 +292,7 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string FindConnectedArticles(string relation, string type, string articleId, bool returnEdge, string label, string query, int pageNumber, int pageSize, Geocode location, bool debugEnabled, Verbosity verbosity, List<string> fields)
+            public static string FindConnectedArticles(string relation, string type, string articleId, bool returnEdge, string label, string query, int pageNumber, int pageSize, string orderBy, SortOrder sortOrder, Geocode location, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 // https://apis.appacitive.com/connection/{connection_type}/{article_type}/{article_id}/find?returnedge={true/false}
                 var url = new Url(ConnectionServiceBase).Append(relation).Append(type).Append(articleId).Append("find");
@@ -305,6 +305,12 @@ namespace Appacitive.Sdk.Services
                     url.QueryString["pnum"] = pageNumber.ToString();
                 if (pageSize > 0)
                     url.QueryString["psize"] = pageSize.ToString();
+                if (string.IsNullOrWhiteSpace(orderBy) == false)
+                {
+                    url.QueryString["orderby"] = orderBy;
+                    if (sortOrder == SortOrder.Ascending)
+                        url.QueryString["isAsc"] = "true";
+                }
                 HandleDefaults(url, location, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
