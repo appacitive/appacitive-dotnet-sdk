@@ -40,6 +40,7 @@ namespace Appacitive.Sdk
         protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var request = new UpdateArticleRequest {Id = this.Id, Type = this.Type};
+            request.Revision = specificRevision;
             if (propertyUpdates != null && propertyUpdates.Count > 0)
                 propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
             if (attributeUpdates != null && attributeUpdates.Count > 0)

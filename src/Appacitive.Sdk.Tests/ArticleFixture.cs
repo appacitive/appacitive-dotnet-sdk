@@ -600,5 +600,29 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(results[0].Id == children[2].Id);
             Assert.IsTrue(results[1].Id == children[3].Id);
         }
+
+        [TestMethod]
+        public async Task ArticleUpdateWithVersioningMvccTest()
+        {
+            var article = await ObjectHelper.CreateNewAsync();
+            // This should work
+            article.Set<string>("stringfield", Unique.String);
+            await article.SaveAsync();
+            // This should fail as I am trying to update with an older revision
+            article.Set<string>("stringfield", Unique.String);
+            bool isFault = false;
+            try
+            {
+                await article.SaveAsync(article.Revision - 1);
+            }
+            catch (Net45.AppacitiveException ex)
+            {
+                if (ex.Code == "14008")
+                    isFault = true;
+                else Assert.Fail(ex.Message);
+            }
+            if (isFault == false) 
+                Assert.Fail("No fault was raised on a bad revision update.");
+        }
     }
 }

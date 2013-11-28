@@ -353,6 +353,7 @@ namespace Appacitive.Sdk
                 this.LastUpdatedBy = entity.LastUpdatedBy;
                 this.UtcCreateDate = entity.UtcCreateDate;
                 this.UtcLastUpdated = entity.UtcLastUpdated;
+                this.Revision = entity.Revision;
                 _lastKnownFields = newLastKnownFields;
                 _lastKnownAttributes = newLastKnownAttributes;
                 _currentFields = newCurrentFields;
