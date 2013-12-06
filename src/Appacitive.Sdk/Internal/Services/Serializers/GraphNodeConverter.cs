@@ -139,22 +139,21 @@ namespace Appacitive.Sdk.Services
             }
             json.Remove("__attributes");
 
-            // Parse connection properties
+            // properties
             foreach (var property in json.Properties())
             {
-                if (property.Type == JTokenType.Array)
+                // Ignore objects
+                if (property.Value.Type == JTokenType.Object) continue;
+                // Check for arrays
+                else if (property.Value.Type == JTokenType.Array)
                 {
-                    var items = property.Values<string>();
-                    conn.SetList<string>(property.Name, items);
+                    conn.SetList<string>(property.Name, property.Value.Values<string>(), true);
                 }
-                else if (property.Type != JTokenType.Null)
-                {
-                    conn.Set<string>(property.Name, property.Value.ToString());
-                }
+                // Set value of the property
+                else if (property.Value.Type == JTokenType.Date)
+                    conn.SetField(property.Name, ((DateTime)property.Value).ToString("o"), true);
                 else
-                {
-                    conn.Set<string>(property.Name, null);
-                }
+                    conn.SetField(property.Name, property.Value.Type == JTokenType.Null ? null : property.Value.ToString(), true);
             }
 
             return conn;
