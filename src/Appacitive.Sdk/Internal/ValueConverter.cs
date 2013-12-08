@@ -41,9 +41,12 @@ namespace Appacitive.Sdk.Internal
             if (type == typeof(DateTime))
             {
                 DateTime result;
-                // Return parsed date in local time zone
-                if (DateTime.TryParseExact(value.ToString(), new[] { Formats.DateTime, Formats.Date }, null, System.Globalization.DateTimeStyles.AdjustToUniversal, out result) == true)
-                    return result.ToLocalTime();
+                // First try and parse it as a date
+                if (DateTime.TryParseExact(value.ToString(), new[] { Formats.Date }, null, System.Globalization.DateTimeStyles.AssumeLocal, out result) == true)
+                    return result;
+                // Then parse it as a date time
+                else if (DateTime.TryParse(value.ToString(), out result) == true)
+                    return result;
                 else throw new Exception("Unsupported date time format.");
             }
             // Handle Datetime to string conversion.

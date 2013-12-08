@@ -121,7 +121,10 @@ namespace Appacitive.Sdk
         // date time
         public static implicit operator DateTime(DynamicValue value)
         {
-            return DateTime.ParseExact(value.StringValue, new [] { "o",Formats.Date,Formats.Time }, null, System.Globalization.DateTimeStyles.AdjustToUniversal);
+            DateTime date;
+            if( DateTime.TryParse(value.StringValue, out date) == false )
+                return DateTime.ParseExact(value.StringValue, new[] { "o", Formats.Date, Formats.Time }, null, System.Globalization.DateTimeStyles.None);
+            return date;
         }
 
         public static implicit operator DynamicValue(DateTime d)

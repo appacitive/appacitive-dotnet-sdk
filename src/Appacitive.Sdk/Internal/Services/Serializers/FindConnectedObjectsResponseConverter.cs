@@ -104,7 +104,7 @@ namespace Appacitive.Sdk.Services
             // Create date
             if (json.TryGetValue("__utcdatecreated", out value) == true && value.Type != JTokenType.Null)
             {
-                conn.UtcCreateDate = (DateTime)value;
+                conn.CreatedAt = (DateTime)value;
                 json.Remove("__utcdatecreated");
             }
             // Last updated by
@@ -116,7 +116,7 @@ namespace Appacitive.Sdk.Services
             // Last update date
             if (json.TryGetValue("__utclastupdateddate", out value) == true && value.Type != JTokenType.Null)
             {
-                conn.UtcLastUpdated = (DateTime)value;
+                conn.LastUpdatedAt = (DateTime)value;
                 json.Remove("__utclastupdateddate");
             }
 

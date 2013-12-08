@@ -22,8 +22,8 @@ namespace Appacitive.Sdk
             // Copy
             this.CreatedBy = existing.CreatedBy;
             this.LastUpdatedBy = existing.LastUpdatedBy;
-            this.UtcCreateDate = existing.UtcCreateDate;
-            this.UtcLastUpdated = existing.UtcLastUpdated;
+            this.CreatedAt = existing.CreatedAt;
+            this.LastUpdatedAt = existing.LastUpdatedAt;
 
             // Copy properties
             lock (_syncRoot)
@@ -93,10 +93,9 @@ namespace Appacitive.Sdk
 
         public string LastUpdatedBy { get; internal set; }
 
-        public DateTime UtcCreateDate { get; internal set; }
+        public DateTime CreatedAt { get; internal set; }
 
-        public DateTime UtcLastUpdated { get; internal set; }
-
+        public DateTime LastUpdatedAt { get; internal set; }
 
         public IEnumerable<KeyValuePair<string, Value>> Properties
         {
@@ -108,6 +107,14 @@ namespace Appacitive.Sdk
                     clone = new Dictionary<string, object>(_currentFields, StringComparer.OrdinalIgnoreCase);
                 }
                 return clone.Select(x => new KeyValuePair<string, Value>(x.Key, Value.FromObject(x.Value)));
+            }
+        }
+
+        public bool HasProperty(string propertyName)
+        {
+            lock (_syncRoot)
+            {
+                return _currentFields.ContainsKey(propertyName);
             }
         }
 
@@ -351,8 +358,8 @@ namespace Appacitive.Sdk
                 this.Id = this.Id ?? entity.Id;
                 this.CreatedBy = entity.CreatedBy;
                 this.LastUpdatedBy = entity.LastUpdatedBy;
-                this.UtcCreateDate = entity.UtcCreateDate;
-                this.UtcLastUpdated = entity.UtcLastUpdated;
+                this.CreatedAt = entity.CreatedAt;
+                this.LastUpdatedAt = entity.LastUpdatedAt;
                 this.Revision = entity.Revision;
                 _lastKnownFields = newLastKnownFields;
                 _lastKnownAttributes = newLastKnownAttributes;

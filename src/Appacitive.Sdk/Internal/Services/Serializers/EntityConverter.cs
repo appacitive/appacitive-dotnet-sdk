@@ -122,13 +122,13 @@ namespace Appacitive.Sdk.Services
                 entity.CreatedBy = value.ToString();
             // Create date
             if (json.TryGetValue("__utcdatecreated", out value) == true && value.Type != JTokenType.Null)
-                entity.UtcCreateDate = (DateTime)value;
+                entity.CreatedAt = ((DateTime)value).ToLocalTime();
             // Last updated by
             if (json.TryGetValue("__lastmodifiedby", out value) == true && value.Type != JTokenType.Null)
                 entity.LastUpdatedBy = value.ToString();
             // Last update date
             if (json.TryGetValue("__utclastupdateddate", out value) == true && value.Type != JTokenType.Null)
-                entity.UtcLastUpdated = (DateTime)value;
+                entity.LastUpdatedAt = ((DateTime)value).ToLocalTime();
             // tags
             if (json.TryGetValue("__tags", out value) == true && value.Type != JTokenType.Null)
                 entity.AddTags(value.Values<string>(), true);

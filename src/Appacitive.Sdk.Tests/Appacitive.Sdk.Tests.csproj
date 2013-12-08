@@ -58,6 +58,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="EntityFixture.cs" />
     <Compile Include="ObjectFixture.cs" />
     <Compile Include="ObjectServiceFixture.cs" />
     <Compile Include="AuthenticationFixture.cs" />

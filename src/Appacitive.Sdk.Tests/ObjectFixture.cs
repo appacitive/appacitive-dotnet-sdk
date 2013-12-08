@@ -149,7 +149,7 @@ namespace Appacitive.Sdk.Tests
             obj.decimalfield = pi;
 
             var saved = await ObjectHelper.CreateNewAsync(obj as APObject);
-            var firstUpdateTime = saved.UtcLastUpdated;
+            var firstUpdateTime = saved.LastUpdatedAt;
 
             stopWatch.Start();
 
