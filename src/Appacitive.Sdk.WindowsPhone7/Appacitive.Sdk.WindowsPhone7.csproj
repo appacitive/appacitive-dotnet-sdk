@@ -577,6 +577,9 @@
     <Compile Include="..\Appacitive.Sdk\Model\ErrorSpace.cs">
       <Link>Model\ErrorSpace.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\EventArgs.cs">
+      <Link>Model\EventArgs.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Extensions.cs">
       <Link>Model\Extensions.cs</Link>
     </Compile>

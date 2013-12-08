@@ -21,6 +21,18 @@ namespace Appacitive.Sdk
 
         public string FileName { get; private set; }
 
+        public event EventHandler<DownloadCompletedEventArgs> DownloadCompleted
+        {
+            add { this.FileHandler.DownloadCompleted += value; }
+            remove { this.FileHandler.DownloadCompleted -= value; }
+        }
+
+        public event EventHandler<DownloadProgressChangedEventArgs> DownloadProgressChanged
+        {
+            add { this.FileHandler.DownloadProgressChanged += value; }
+            remove { this.FileHandler.DownloadProgressChanged -= value; }
+        }
+
         public IHttpFileHandler FileHandler { get; set; }
 
         public async Task<string> GetDownloadUrl(int expiryTimeInMinutes = 5)

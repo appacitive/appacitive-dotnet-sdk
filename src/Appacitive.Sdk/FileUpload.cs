@@ -18,6 +18,7 @@ namespace Appacitive.Sdk
             this.MimeType = mimeType;
             this.FileName = filename;
             this.FileHandler = ObjectFactory.Build<IHttpFileHandler>();
+            
         }
 
         public string MimeType { get; private set; }
@@ -25,6 +26,18 @@ namespace Appacitive.Sdk
         public string FileName { get; private set; }
 
         public IHttpFileHandler FileHandler { get; set; }
+
+        public event EventHandler<UploadCompletedEventArgs> UploadCompleted
+        {
+            add { this.FileHandler.UploadCompleted += value; }
+            remove { this.FileHandler.UploadCompleted -= value; }
+        }
+
+        public event EventHandler<UploadProgressChangedEventArgs> UploadProgressChanged
+        {
+            add { this.FileHandler.UploadProgressChanged += value; }
+            remove { this.FileHandler.UploadProgressChanged -= value; }
+        }
 
         public async Task<string> UploadAsync(byte[] data)
         {
