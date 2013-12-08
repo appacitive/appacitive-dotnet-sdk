@@ -23,8 +23,8 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void AggregatedQueryTest()
         {
-            var query = 
-                BooleanOperator.And( new [] {
+            var query =
+                Query.And(new[] {
                     Query.Property("name").IsEqualTo("nikhil"),
                     Query.Property("age").IsGreaterThanEqualTo(10),
                 });
@@ -87,9 +87,9 @@ namespace Appacitive.Sdk.Tests
         public void NestedQueryTest()
         {
             var query =
-                BooleanOperator.Or(
+                Query.Or(
                     Query.Property("name").StartsWith("x"),
-                    BooleanOperator.And(
+                    Query.And(
                         Query.Property("name").IsEqualTo("nikhil"),
                         Query.Property("age").IsGreaterThanEqualTo(10)
                         ),
@@ -101,6 +101,29 @@ namespace Appacitive.Sdk.Tests
                         )
                 );
             Console.WriteLine(query.ToString());
+        }
+
+
+        [TestMethod]
+        public async Task MatchQueryTest()
+        {
+            var propertyValue = Unique.String;
+            var attrValue = Unique.String;
+            var obj = new APObject("object");
+            obj.Set<string>("stringfield", propertyValue);
+            obj.SetAttribute("test_attribute", attrValue);
+            await obj.SaveAsync();
+
+            var propertyQuery = Query.Property("stringfield").FreeTextMatches(propertyValue).ToString();
+            var attrQuery = Query.Attribute("test_attribute").FreeTextMatches(attrValue).ToString();
+            var result1 = await APObjects.FindAllAsync("object", propertyQuery);
+            var result2 = await APObjects.FindAllAsync("object", attrQuery);
+            Assert.IsNotNull(result1);
+            Assert.IsTrue(result1.Count == 1);
+            Assert.IsNotNull(result2);
+            Assert.IsTrue(result2.Count == 1);
+            Assert.IsTrue(result1.Single().Id == obj.Id);
+            Assert.IsTrue(result2.Single().Id == obj.Id);
         }
     }
 }

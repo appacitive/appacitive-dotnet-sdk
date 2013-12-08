@@ -101,9 +101,16 @@ namespace Appacitive.Sdk
         }
 
         public IQuery IsLessThan(long value)
-        {
+        {   
             return FieldQuery.IsLessThan(FieldType.Property, this.Field, value);
         }
+
+        public IQuery FreeTextMatches(string freeTextExpression)
+        {
+            return FieldQuery.FreeTextMatches(FieldType.Property, this.Field, freeTextExpression);
+        }
+
+
 
         public IQuery IsLessThan(decimal value)
         {

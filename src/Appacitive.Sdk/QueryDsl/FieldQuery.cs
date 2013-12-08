@@ -16,6 +16,7 @@ namespace Appacitive.Sdk
             public static readonly string IsLessThan = "<";
             public static readonly string IsLessThanEqualTo = "<=";
             public static readonly string Like = "like";
+            public static readonly string Match = "match";
         }
 
         public static FieldQuery IsEqualTo(FieldType type, string name, string value)
@@ -205,6 +206,11 @@ namespace Appacitive.Sdk
                 this.Field.ToLower(),
                 this.Operator,
                 this.Value.GetStringValue());
+        }
+
+        internal static IQuery FreeTextMatches(Sdk.FieldType fieldType, string name, string freeTextExpression)
+        {
+            return new FieldQuery { FieldType = fieldType, Field = name, Operator = Operators.Match, Value = new PrimtiveFieldValue(freeTextExpression) };
         }
     }
 }

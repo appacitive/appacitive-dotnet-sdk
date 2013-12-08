@@ -345,7 +345,7 @@ namespace Appacitive.Sdk.Tests
 
             // Search
             string stringToSearch = obj.stringfield;
-            var query = BooleanOperator.And(new[] 
+            var query = Query.And(new[] 
                         {
                             Query.Property("stringfield").IsEqualTo(stringToSearch),
                             Query.Property("intfield").IsEqualTo(10)
