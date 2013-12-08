@@ -20,7 +20,7 @@ namespace Appacitive.Sdk.Services
         {
         }
 
-        public Device Device { get; set; }
+        public APDevice Device { get; set; }
 
         public override byte[] ToBytes()
         {

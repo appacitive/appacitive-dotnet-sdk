@@ -11,7 +11,7 @@ namespace Appacitive.Sdk.Services
     public class FindAllConnectionsResponse : ApiResponse
     {
         [JsonProperty("connections")]
-        public List<Connection> Connections { get; set; }
+        public List<APConnection> Connections { get; set; }
 
         [JsonProperty("paginginfo")]
         public PagingInfo PagingInfo { get; set; }

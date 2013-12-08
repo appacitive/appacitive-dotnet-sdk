@@ -8,9 +8,9 @@ using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
-    public static partial class Connections
+    public static partial class APConnections
     {   
-        public async static Task<Connection> GetAsync(string relation, string endpointObjectId1, string endpointObjectId2)
+        public async static Task<APConnection> GetAsync(string relation, string endpointObjectId1, string endpointObjectId2)
         {
             var response = await (new GetConnectionByEndpointRequest
             {
@@ -23,7 +23,7 @@ namespace Appacitive.Sdk
             else return response.Connections.SingleOrDefault();
         }
 
-        public async static Task<Connection> GetAsync(string relation, string id)
+        public async static Task<APConnection> GetAsync(string relation, string id)
         {
             var response = await (new GetConnectionRequest
                                                         {
@@ -46,7 +46,7 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
         }
 
-        public async static Task<PagedList<Connection>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async static Task<PagedList<APConnection>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
             var request = new FindAllConnectionsRequest()
             {
@@ -61,7 +61,7 @@ namespace Appacitive.Sdk
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
-            var connections = new PagedList<Connection>()
+            var connections = new PagedList<APConnection>()
             {
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,

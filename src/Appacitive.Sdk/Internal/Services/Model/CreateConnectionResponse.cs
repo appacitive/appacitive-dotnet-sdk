@@ -11,7 +11,7 @@ namespace Appacitive.Sdk.Services
     public class CreateConnectionResponse : ApiResponse
     {
         [JsonProperty("connection")]
-        public Connection Connection { get; set; }
+        public APConnection Connection { get; set; }
 
         public static CreateConnectionResponse Parse(byte[] bytes)
         {

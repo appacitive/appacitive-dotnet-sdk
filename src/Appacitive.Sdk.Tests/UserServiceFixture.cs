@@ -16,7 +16,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public async Task CreateUserAsyncTest()
         {
-            var user = new User()
+            var user = new APUser()
             {
                 Username = "john.doe_async_" + Unique.String,                  // ensure unique user name
                 Email = "john.doe@" + Unique.String + ".com",           // unique but useless email address

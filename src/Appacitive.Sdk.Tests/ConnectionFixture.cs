@@ -18,7 +18,7 @@ namespace Appacitive.Sdk.Tests
             parent["stringfield"] = "parent";
             var child = ObjectHelper.NewInstance();
             child["stringfield"] = "child";
-            var conn = Connection.New("link").FromNewObject("parent", parent).ToNewObject("child", child);
+            var conn = APConnection.New("link").FromNewObject("parent", parent).ToNewObject("child", child);
             await conn.SaveAsync();
 
             var parent2 = await conn.Endpoints["parent"].GetObjectAsync();
@@ -32,7 +32,7 @@ namespace Appacitive.Sdk.Tests
             parent["stringfield"] = "parent";
             child = ObjectHelper.NewInstance();
             child["stringfield"] = "child";
-            conn = Connection.New("link").FromNewObject("child", child).ToNewObject("parent", parent);
+            conn = APConnection.New("link").FromNewObject("child", child).ToNewObject("parent", parent);
             await conn.SaveAsync();
 
             parent2 = await conn.Endpoints["parent"].GetObjectAsync();
@@ -47,7 +47,7 @@ namespace Appacitive.Sdk.Tests
         {
             var existing = await ObjectHelper.CreateNewAsync();
             var newObj = ObjectHelper.NewInstance();
-            var conn = Connection
+            var conn = APConnection
                 .New("link")
                 .FromExistingObject("parent", existing.Id)
                 .ToNewObject("child", newObj);
@@ -69,7 +69,7 @@ namespace Appacitive.Sdk.Tests
         {
             var device = DeviceHelper.NewDevice();
             var user = UserHelper.NewUser();
-            var conn = Connection.New("my_device")
+            var conn = APConnection.New("my_device")
                 .FromNewObject("device", device)
                 .ToNewObject("user", user);
             await conn.SaveAsync();
@@ -85,12 +85,12 @@ namespace Appacitive.Sdk.Tests
             var child1 = await ObjectHelper.CreateNewAsync();
             var child2 = await ObjectHelper.CreateNewAsync();
             // Create connections
-            await Connection.New("link")
+            await APConnection.New("link")
                 .FromExistingObject("parent", parent.Id)
                 .ToExistingObject("child", child1.Id)
                 .SaveAsync();
 
-            await Connection.New("link")
+            await APConnection.New("link")
                 .FromExistingObject("parent", parent.Id)
                 .ToExistingObject("child", child2.Id)
                 .SaveAsync();
@@ -110,12 +110,12 @@ namespace Appacitive.Sdk.Tests
             var child1 = await ObjectHelper.CreateNewAsync();
             var child2 = await ObjectHelper.CreateNewAsync();
             // Create connections
-            var conn1 = Connection.New("link")
+            var conn1 = APConnection.New("link")
                 .FromExistingObject("parent", parent.Id)
                 .ToExistingObject("child", child1.Id);
             await conn1.SaveAsync();
 
-            var conn2 = Connection.New("link")
+            var conn2 = APConnection.New("link")
                 .FromExistingObject("parent", parent.Id)
                 .ToExistingObject("child", child2.Id);
             await conn2.SaveAsync();
@@ -134,12 +134,12 @@ namespace Appacitive.Sdk.Tests
             var child1 = await ObjectHelper.CreateNewAsync();
             var child2 = await ObjectHelper.CreateNewAsync();
             // Create connections
-            await Connection.New("link")
+            await APConnection.New("link")
                 .FromExistingObject("parent", parent.Id)
                 .ToExistingObject("child", child1.Id)
                 .SaveAsync();
 
-            await Connection.New("link")
+            await APConnection.New("link")
                 .FromExistingObject("parent", parent.Id)
                 .ToExistingObject("child", child2.Id)
                 .SaveAsync();
@@ -161,7 +161,7 @@ namespace Appacitive.Sdk.Tests
         {
             var obj1 = new APObject("object");
             var obj2 = new APObject("object");
-            var conn = Connection
+            var conn = APConnection
                             .New("sibling")
                             .FromNewObject("object", obj1)
                             .ToNewObject("object", obj2);
@@ -179,7 +179,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public async Task UpdateConnectionAsyncTest()
         {
-            dynamic conn = Connection
+            dynamic conn = APConnection
                 .New("sibling")
                 .FromNewObject("object", ObjectHelper.NewInstance())
                 .ToNewObject("object", ObjectHelper.NewInstance());
@@ -195,7 +195,7 @@ namespace Appacitive.Sdk.Tests
             await conn.SaveAsync();
 
             // Get the connection
-            Connection read = await Connections.GetAsync("sibling", conn.Id);
+            APConnection read = await APConnections.GetAsync("sibling", conn.Id);
             // Asserts
             Assert.IsTrue( read.Get<string>("field1") == "updated");
             Assert.IsTrue( read.Get<int>("field2") == 11L);
@@ -206,7 +206,7 @@ namespace Appacitive.Sdk.Tests
         {
             var obj1 = await ObjectHelper.CreateNewAsync();
             var obj2 = new APObject("object");
-            var conn = Connection
+            var conn = APConnection
                             .New("sibling")
                             .FromExistingObject("object", obj1.Id)
                             .ToNewObject("object", obj2);
@@ -226,19 +226,19 @@ namespace Appacitive.Sdk.Tests
             // Create new connection
             var obj1 = await ObjectHelper.CreateNewAsync();
             var obj2 = new APObject("object");
-            var conn = Connection
+            var conn = APConnection
                             .New("sibling")
                             .FromExistingObject("object", obj1.Id)
                             .ToNewObject("object", obj2);
             await conn.SaveAsync();
 
             // Update
-            var conn2 = new Connection("sibling", conn.Id);
+            var conn2 = new APConnection("sibling", conn.Id);
             var value = Guid.NewGuid().ToString();
             conn["field1"] = value;
             await conn.SaveAsync();
 
-            var updated = await Connections.GetAsync("sibling", conn.Id);
+            var updated = await APConnections.GetAsync("sibling", conn.Id);
             Assert.IsTrue(updated.Get<string>("field1") == value);
         }
 
@@ -247,7 +247,7 @@ namespace Appacitive.Sdk.Tests
         {
             var obj1 = await ObjectHelper.CreateNewAsync();
             var obj2 = new APObject("object");
-            var conn = Connection
+            var conn = APConnection
                             .New("sibling")
                             .FromExistingObject("object", obj1.Id)
                             .ToNewObject("object", obj2);
@@ -265,7 +265,7 @@ namespace Appacitive.Sdk.Tests
         {
             var obj1 = await ObjectHelper.CreateNewAsync();
             var obj2 = await ObjectHelper.CreateNewAsync();
-            var conn = Connection
+            var conn = APConnection
                             .New("sibling")
                             .FromExistingObject("object", obj1.Id)
                             .ToExistingObject("object", obj2.Id);
@@ -283,7 +283,7 @@ namespace Appacitive.Sdk.Tests
         {
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
-            var read = await Connections.GetAsync(conn.Type, conn.Id);
+            var read = await APConnections.GetAsync(conn.Type, conn.Id);
             Assert.IsTrue(read != null);
             Assert.IsTrue(read.Id == conn.Id);
             Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ObjectId).Intersect(read.Endpoints.ToArray().Select( x => x.ObjectId)).Count() == 2);
@@ -295,7 +295,7 @@ namespace Appacitive.Sdk.Tests
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
             var endpoints = conn.Endpoints.ToArray();
-            var read = await Connections.GetAsync(conn.Type, endpoints[0].ObjectId, endpoints[1].ObjectId);
+            var read = await APConnections.GetAsync(conn.Type, endpoints[0].ObjectId, endpoints[1].ObjectId);
             Assert.IsTrue(read != null);
             Assert.IsTrue(read.Id == conn.Id);
             Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ObjectId).Intersect(read.Endpoints.ToArray().Select(x => x.ObjectId)).Count() == 2);
@@ -307,7 +307,7 @@ namespace Appacitive.Sdk.Tests
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
             // Find all
-            var connections = await Connections.FindAllAsync("sibling");
+            var connections = await APConnections.FindAllAsync("sibling");
             Assert.IsTrue(connections != null);
             Assert.IsTrue(connections.Count > 0);
             Console.WriteLine("Total connections: {0}", connections.TotalRecords);
@@ -320,11 +320,11 @@ namespace Appacitive.Sdk.Tests
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
             // Delete the connection
-            await Connections.DeleteAsync(conn.Type, conn.Id);
+            await APConnections.DeleteAsync(conn.Type, conn.Id);
             // Try and get the connection
             try
             {
-                var read = await Connections.GetAsync(conn.Type, conn.Id);
+                var read = await APConnections.GetAsync(conn.Type, conn.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
             catch (Net45.AppacitiveException aex)
@@ -340,11 +340,11 @@ namespace Appacitive.Sdk.Tests
             var conn1 = await ConnectionHelper.CreateNew();
             var conn2 = await ConnectionHelper.CreateNew();
             // Delete the connection
-            await Connections.MultiDeleteAsync(conn1.Type, new[] { conn1.Id, conn2.Id });
+            await APConnections.MultiDeleteAsync(conn1.Type, new[] { conn1.Id, conn2.Id });
             // Try and get the connection
             try
             {
-                var read = await Connections.GetAsync(conn1.Type, conn1.Id);
+                var read = await APConnections.GetAsync(conn1.Type, conn1.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
             catch (Net45.AppacitiveException aex)
@@ -354,7 +354,7 @@ namespace Appacitive.Sdk.Tests
 
             try
             {
-                var read = await Connections.GetAsync(conn2.Type, conn2.Id);
+                var read = await APConnections.GetAsync(conn2.Type, conn2.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
             catch (Net45.AppacitiveException aex)

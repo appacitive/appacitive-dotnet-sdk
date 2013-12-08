@@ -16,7 +16,7 @@ namespace Appacitive.Sdk.Services
         {
             // Type should not be a User or Device since these have their specific serializers.
             // This serializer should be used for any other type that inherits from object.
-            if (objectType != typeof(User) && objectType != typeof(Device))
+            if (objectType != typeof(APUser) && objectType != typeof(APDevice))
                 return objectType.Is<APObject>();
             else 
                 return false;
@@ -46,9 +46,9 @@ namespace Appacitive.Sdk.Services
 
             // Check for inheritance.
             if (obj.Type.Equals("user", StringComparison.OrdinalIgnoreCase) == true)
-                return new User(obj);
+                return new APUser(obj);
             else if (obj.Type.Equals("device", StringComparison.OrdinalIgnoreCase) == true)
-                return new Device(obj);
+                return new APDevice(obj);
             else return obj;
         }
 

@@ -18,7 +18,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public async Task CreateUserAsyncTest()
         {
-            var user = new User()
+            var user = new APUser()
             {
                 Username = "john.doe_" + Unique.String,                  // ensure unique user name
                 Email = "john.doe@" + Unique.String + ".com",           // unique but useless email address
@@ -40,7 +40,7 @@ namespace Appacitive.Sdk.Tests
             // Create a new user
             var newUser = await UserHelper.CreateNewUserAsync();
             // Get list of users
-            var users = await Users.FindAllAsync();
+            var users = await APUsers.FindAllAsync();
             users.ForEach(x => Console.WriteLine("id: {0} username: {1}",
                 x.Id,
                 x.Username));
@@ -52,7 +52,7 @@ namespace Appacitive.Sdk.Tests
             // Create a new user
             var newUser = await UserHelper.CreateNewUserAsync();
             // Get list of users
-            var users = await Users.FindAllAsync( Query.Property("username").IsEqualTo(newUser.Username).AsString() );
+            var users = await APUsers.FindAllAsync( Query.Property("username").IsEqualTo(newUser.Username).AsString() );
             Assert.IsTrue(users != null && users.Count == 1);
             Assert.IsTrue(users[0].Id == newUser.Id);
             users.ForEach(x => Console.WriteLine("id: {0} username: {1}",
@@ -73,7 +73,7 @@ namespace Appacitive.Sdk.Tests
             Assert.IsNotNull(userSession.LoggedInUser);
 
             
-            var loggedInUser = await Users.GetLoggedInUserAsync();
+            var loggedInUser = await APUsers.GetLoggedInUserAsync();
             Assert.IsNotNull(loggedInUser);
             Assert.IsTrue(loggedInUser.Id == userSession.LoggedInUser.Id);
             
@@ -86,7 +86,7 @@ namespace Appacitive.Sdk.Tests
             user.Email = "nikhil@appacitive.com";
             var created = await UserHelper.CreateNewUserAsync(user);
 
-            await Users.InitiateResetPassword(user.Username);
+            await APUsers.InitiateResetPassword(user.Username);
         }
 
         [TestMethod]

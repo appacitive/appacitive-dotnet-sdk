@@ -37,13 +37,14 @@
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
     <Compile Include="App.cs" />
-    <Compile Include="AppacitiveContext.cs" />
-    <Compile Include="AppacitiveSettings.cs" />
+    <Compile Include="APDevice.cs" />
+    <Compile Include="Internal\AppacitiveContext.cs" />
+    <Compile Include="Model\AppacitiveSettings.cs" />
     <Compile Include="CannedLists.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Model\Extensions.cs" />
     <Compile Include="Graph.cs" />
-    <Compile Include="HttpClient.cs" />
-    <Compile Include="InProcContainer.cs" />
+    <Compile Include="Internal\HttpClient.cs" />
+    <Compile Include="Internal\InProcContainer.cs" />
     <Compile Include="Interfaces\IJsonObject.cs" />
     <Compile Include="Interfaces\IRealTimeChannelFactory.cs" />
     <Compile Include="Interfaces\IRealTimeTransport.cs" />
@@ -102,16 +103,16 @@
     <Compile Include="Internal\Topics.cs" />
     <Compile Include="Internal\TypeSubscriber.cs" />
     <Compile Include="Internal\ValueConverter.cs" />
-    <Compile Include="IUserFactory.cs" />
+    <Compile Include="Interfaces\IUserFactory.cs" />
     <Compile Include="Messaging.cs" />
-    <Compile Include="Model\APObjects.cs" />
-    <Compile Include="Model\Connections.cs" />
-    <Compile Include="Model\Device.cs" />
+    <Compile Include="APObjects.cs" />
+    <Compile Include="APConnections.cs" />
+    <Compile Include="APDevices.cs" />
     <Compile Include="Model\Email.cs" />
     <Compile Include="Model\PushNotification.cs" />
     <Compile Include="Model\SupportedDevices.cs" />
     <Compile Include="Model\Timezone.cs" />
-    <Compile Include="Model\Users.cs" />
+    <Compile Include="APUsers.cs" />
     <Compile Include="Internal\Services\Model\BulkDeleteConnectionRequest.cs" />
     <Compile Include="Internal\Services\Model\BulkDeleteConnectionResponse.cs" />
     <Compile Include="Internal\Services\Model\BulkDeleteObjectRequest.cs" />
@@ -142,12 +143,12 @@
     <Compile Include="Internal\Services\Serializers\UpdateConnectionRequestConverter.cs" />
     <Compile Include="Internal\Services\ServiceExceptionFactory.cs" />
     <Compile Include="Internal\Services\Urls.cs" />
-    <Compile Include="JsonNetSerializer.cs" />
-    <Compile Include="Measure.cs" />
+    <Compile Include="Internal\JsonNetSerializer.cs" />
+    <Compile Include="Internal\Measure.cs" />
     <Compile Include="Model\AppacitiveException.cs" />
-    <Compile Include="Model\APObject.cs" />
+    <Compile Include="APObject.cs" />
     <Compile Include="Model\AuthenticationToken.cs" />
-    <Compile Include="Model\Connection.cs" />
+    <Compile Include="APConnection.cs" />
     <Compile Include="Model\Constants.cs" />
     <Compile Include="Model\Credentials.cs" />
     <Compile Include="Model\Entity.cs" />
@@ -155,15 +156,15 @@
     <Compile Include="Model\Entity.Extensions.cs" />
     <Compile Include="Model\Enums.cs" />
     <Compile Include="Model\ErrorSpace.cs" />
-    <Compile Include="Model\FileDownload.cs" />
-    <Compile Include="Model\FileUpload.cs" />
+    <Compile Include="FileDownload.cs" />
+    <Compile Include="FileUpload.cs" />
     <Compile Include="Model\FileUrl.cs" />
     <Compile Include="Model\Geocode.cs" />
     <Compile Include="Model\Guard.cs" />
     <Compile Include="Model\ObjectFactory.cs" />
     <Compile Include="Model\PagedList.cs" />
     <Compile Include="Model\StaticUserContext.cs" />
-    <Compile Include="Model\User.cs" />
+    <Compile Include="APUser.cs" />
     <Compile Include="Model\DynamicValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryDsl\AggregateExpression.cs" />
@@ -243,7 +244,7 @@
     <Compile Include="Internal\Services\Serializers\UpdateUserRequestConverter.cs" />
     <Compile Include="Internal\Services\Serializers\UserConverter.cs" />
     <Compile Include="Subscriptions.cs" />
-    <Compile Include="Urls.cs" />
+    <Compile Include="Model\Urls.cs" />
     <Compile Include="UserSession.cs" />
     <Compile Include="Model\Value.cs" />
   </ItemGroup>

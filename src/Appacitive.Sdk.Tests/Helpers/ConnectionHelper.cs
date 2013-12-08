@@ -9,11 +9,11 @@ namespace Appacitive.Sdk.Tests
 {
     public class ConnectionHelper
     {
-        public async static Task<Connection> CreateNew(Connection conn = null)
+        public async static Task<APConnection> CreateNew(APConnection conn = null)
         {
             if (conn == null)
             {
-                conn = Connection
+                conn = APConnection
                     .New("sibling")
                     .FromNewObject("object", ObjectHelper.NewInstance())
                     .ToNewObject("object", ObjectHelper.NewInstance());

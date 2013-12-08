@@ -10,7 +10,7 @@ namespace Appacitive.Sdk.Tests
 {
     internal class UserHelper
     {
-        public static void MatchUsers(User user1, User user2)
+        public static void MatchUsers(APUser user1, APUser user2)
         {
             Assert.IsTrue(user1.Username == user2.Username, "Usernames do not match.");
             Assert.IsTrue(user1.FirstName == user2.FirstName, "First names do not match.");
@@ -34,7 +34,7 @@ namespace Appacitive.Sdk.Tests
         }
 
 
-        public static async Task<User> GetExistingUserAsync(string id)
+        public static async Task<APUser> GetExistingUserAsync(string id)
         {
             Console.WriteLine("Getting existing user with id {0}.", id);
             var getRequest = new GetUserRequest() { UserId = id };
@@ -47,10 +47,10 @@ namespace Appacitive.Sdk.Tests
             return getResponse.User;
         }
 
-        public static User NewUser()
+        public static APUser NewUser()
         {
             // Create user
-            return new User()
+            return new APUser()
             {
                 Username = "john.doe_" + Unique.String,                  // ensure unique user name
                 Email = "john.doe@" + Unique.String + ".com",           // unique but useless email address
@@ -64,10 +64,10 @@ namespace Appacitive.Sdk.Tests
             
         }
 
-        public static async Task<User> CreateNewUserAsync(User user = null)
+        public static async Task<APUser> CreateNewUserAsync(APUser user = null)
         {
             // Create user
-            user = user ?? new User()
+            user = user ?? new APUser()
             {
                 Username = "john.doe_" + Unique.String,                  // ensure unique user name
                 Email = "john.doe@" + Unique.String + ".com",           // unique but useless email address

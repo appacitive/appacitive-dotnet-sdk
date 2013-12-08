@@ -15,7 +15,7 @@ namespace Appacitive.Sdk
 
         public APObject Object { get; internal set; }
 
-        public Connection Connection { get; internal set; }
+        public APConnection Connection { get; internal set; }
 
         internal Dictionary<string, List<GraphNode>> Children { get; private set; }
 

@@ -115,7 +115,7 @@ namespace Appacitive.Sdk
             return list;
         }
 
-        public async Task<PagedList<Connection>> GetConnectionsAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async Task<PagedList<APConnection>> GetConnectionsAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
             var request = new FindConnectedObjectsRequest
             {
@@ -137,7 +137,7 @@ namespace Appacitive.Sdk
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 
-            var list = new PagedList<Connection>
+            var list = new PagedList<APConnection>
             {
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,

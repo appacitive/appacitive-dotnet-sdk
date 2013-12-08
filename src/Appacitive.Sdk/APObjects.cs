@@ -119,7 +119,7 @@ namespace Appacitive.Sdk
             return await new APObject(type, objectId).GetConnectedObjectsAsync(relation, query, label, fields, pageNumber, pageSize);
         }
 
-        public async static Task<PagedList<Connection>> GetConnectionsAsync(string relation, string schemaType, string objectId, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
+        public async static Task<PagedList<APConnection>> GetConnectionsAsync(string relation, string schemaType, string objectId, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
             return await new APObject(schemaType, objectId).GetConnectionsAsync(relation, query, label, fields, pageNumber, pageSize);
         }

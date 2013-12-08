@@ -17,7 +17,7 @@ namespace Appacitive.Sdk.Tests
             var unique = Unique.String;
             var child = ObjectHelper.NewInstance();
             child.Set<string>("stringfield", unique);
-            var conn = Connection.New("link").FromExistingObject("parent", parent.Id).ToNewObject("child", child);
+            var conn = APConnection.New("link").FromExistingObject("parent", parent.Id).ToNewObject("child", child);
             await conn.SaveAsync();
 
             // Run filter
@@ -33,7 +33,7 @@ namespace Appacitive.Sdk.Tests
             var unique = Unique.String;
             var child = ObjectHelper.NewInstance();
             child.Set<string>("stringfield", unique);
-            var conn = Connection.New("link").FromExistingObject("parent", parent.Id).ToNewObject("child", child);
+            var conn = APConnection.New("link").FromExistingObject("parent", parent.Id).ToNewObject("child", child);
             await conn.SaveAsync();
 
             // Run filter
@@ -50,12 +50,12 @@ namespace Appacitive.Sdk.Tests
             var root = await ObjectHelper.CreateNewAsync();
             var level1Child = ObjectHelper.NewInstance();
             level1Child.Set<string>("stringfield", val1);
-            var level1Edge = Connection.New("link").FromExistingObject("parent", root.Id).ToNewObject("child", level1Child);
+            var level1Edge = APConnection.New("link").FromExistingObject("parent", root.Id).ToNewObject("child", level1Child);
             await level1Edge.SaveAsync();
 
             var level2Child = ObjectHelper.NewInstance();
             level2Child.Set<string>("stringfield", val2);
-            var level2Edge = Connection.New("link").FromExistingObject("parent", level1Child.Id).ToNewObject("child", level2Child);
+            var level2Edge = APConnection.New("link").FromExistingObject("parent", level1Child.Id).ToNewObject("child", level2Child);
             await level2Edge.SaveAsync();
 
             // Run filter
@@ -95,12 +95,12 @@ namespace Appacitive.Sdk.Tests
             var root = await ObjectHelper.CreateNewAsync();
             var level1Child = ObjectHelper.NewInstance();
             level1Child.Set<string>("stringfield", val1);
-            var level1Edge = Connection.New("link").FromExistingObject("parent", root.Id).ToNewObject("child", level1Child);
+            var level1Edge = APConnection.New("link").FromExistingObject("parent", root.Id).ToNewObject("child", level1Child);
             await level1Edge.SaveAsync();
 
             var level2Child = ObjectHelper.NewInstance();
             level2Child.Set<string>("stringfield", val2);
-            var level2Edge = Connection.New("link").FromExistingObject("parent", level1Child.Id).ToNewObject("child", level2Child);
+            var level2Edge = APConnection.New("link").FromExistingObject("parent", level1Child.Id).ToNewObject("child", level2Child);
             await level2Edge.SaveAsync();
 
             // Run filter

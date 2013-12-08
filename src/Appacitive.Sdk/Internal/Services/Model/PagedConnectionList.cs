@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services.Model
 {
-    public class PagedConnectionList : List<Connection>
+    public class PagedConnectionList : List<APConnection>
     {
         internal string Type { get; set; }
 

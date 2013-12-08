@@ -17,12 +17,12 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("devicetype", out value) == true && value.Type != JTokenType.Null)
                 type = value.ToString();
             else throw new Exception("DeviceType not present in response.");
-            return new Device( SupportedDevices.ResolveDeviceType(type) );
+            return new APDevice( SupportedDevices.ResolveDeviceType(type) );
         }
 
         public override bool CanConvert(Type objectType)
         {
-            return typeof(Device) == objectType;
+            return typeof(APDevice) == objectType;
         }
 
         protected override Entity ReadJson(Entity entity, Type objectType, JObject json, JsonSerializer serializer)
@@ -30,7 +30,7 @@ namespace Appacitive.Sdk.Services
             if (json == null || json.Type == JTokenType.Null)
                 return null;
             JToken value;
-            var device = base.ReadJson(entity, objectType, json, serializer) as Device;
+            var device = base.ReadJson(entity, objectType, json, serializer) as APDevice;
             if (device != null)
             {
                 // Schema Id
@@ -47,7 +47,7 @@ namespace Appacitive.Sdk.Services
         {
             if (entity == null)
                 return;
-            var device = entity as Device;
+            var device = entity as APDevice;
             if (device != null)
             {
                 writer

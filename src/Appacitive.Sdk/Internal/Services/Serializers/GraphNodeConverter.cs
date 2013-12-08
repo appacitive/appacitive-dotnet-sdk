@@ -69,7 +69,7 @@ namespace Appacitive.Sdk.Services
             }
         }
 
-        private Connection ParseConnection(string parentLabel, APObject parentObj, APObject currentObj, JObject json)
+        private APConnection ParseConnection(string parentLabel, APObject parentObj, APObject currentObj, JObject json)
         {
             string label = string.Empty;
             if( json.Property("__label") != null ) 
@@ -78,7 +78,7 @@ namespace Appacitive.Sdk.Services
                 label = GetValue(json, "label", JTokenType.String, true).ToString();
             var relation = GetValue(json, "__relationtype", JTokenType.String, true).ToString();
             var id = GetValue(json, "__id", JTokenType.String, true).ToString();
-            var conn = new Connection(relation, id);
+            var conn = new APConnection(relation, id);
             conn.Endpoints = new EndpointPair(
                 new Endpoint(parentLabel, parentObj) { ObjectId = parentObj.Id },
                 new Endpoint(label, currentObj) { ObjectId = currentObj.Id });

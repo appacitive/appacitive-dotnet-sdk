@@ -30,7 +30,7 @@ namespace Appacitive.Sdk.Tests
         {
             var created = await DeviceHelper.CreateNewAsync();
             var devices = await APObjects.FindAllAsync("device");
-            Assert.IsFalse(devices.Exists(d => d is Device == false));
+            Assert.IsFalse(devices.Exists(d => d is APDevice == false));
         }
 
         [TestMethod]
@@ -38,7 +38,7 @@ namespace Appacitive.Sdk.Tests
         {
             var created = await UserHelper.CreateNewUserAsync();
             var users = await APObjects.FindAllAsync("user");
-            Assert.IsFalse(users.Exists(d => d is User == false));
+            Assert.IsFalse(users.Exists(d => d is APUser == false));
         }
 
         [TestMethod]
@@ -416,10 +416,10 @@ namespace Appacitive.Sdk.Tests
             var obj4 = await ObjectHelper.CreateNewAsync();
             var obj5 = await ObjectHelper.CreateNewAsync();
             // Create connections
-            await Connection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj2.Id).SaveAsync();
-            await Connection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj3.Id).SaveAsync();
-            await Connection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj4.Id).SaveAsync();
-            await Connection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj5.Id).SaveAsync();
+            await APConnection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj2.Id).SaveAsync();
+            await APConnection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj3.Id).SaveAsync();
+            await APConnection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj4.Id).SaveAsync();
+            await APConnection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj5.Id).SaveAsync();
             // Get connected
             var connectedObjects = await obj1.GetConnectedObjectsAsync("sibling");
             Assert.IsTrue(connectedObjects != null);
@@ -590,7 +590,7 @@ namespace Appacitive.Sdk.Tests
             children.Add(ObjectHelper.NewInstance());
 
             var tasks = children.ConvertAll(x =>
-                Connection.New("sibling").FromExistingObject("object", root.Id).ToNewObject("object", x).SaveAsync());
+                APConnection.New("sibling").FromExistingObject("object", root.Id).ToNewObject("object", x).SaveAsync());
             await Task.WhenAll(tasks);
 
             children = children.OrderBy(x => x.Id).ToList();

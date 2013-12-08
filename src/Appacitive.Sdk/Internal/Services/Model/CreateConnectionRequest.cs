@@ -19,7 +19,7 @@ namespace Appacitive.Sdk.Services
         {
         }
 
-        public Connection Connection { get; set; }
+        public APConnection Connection { get; set; }
 
         public override byte[] ToBytes()
         {

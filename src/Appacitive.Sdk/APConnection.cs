@@ -40,7 +40,7 @@ namespace Appacitive.Sdk
             return this;
         }
 
-        public Connection ToNewObject( string endpointLabel, APObject obj )
+        public APConnection ToNewObject( string endpointLabel, APObject obj )
         {
             this.EndpointBLabel = endpointLabel;
             this.EndpointBContent = obj;
@@ -48,7 +48,7 @@ namespace Appacitive.Sdk
             return Build();
         }
 
-        public Connection ToExistingObject( string endpointLabel, string objectId )
+        public APConnection ToExistingObject( string endpointLabel, string objectId )
         {
             this.EndpointBLabel = endpointLabel;
             this.EndpointBContent = null;
@@ -56,36 +56,36 @@ namespace Appacitive.Sdk
             return Build();
         }
 
-        private Connection Build()
+        private APConnection Build()
         {
-            Connection conn = null;
+            APConnection conn = null;
             if( this.EndpointAContent != null && this.EndpointBContent != null )
-                conn = new Connection(this.RelationName, EndpointALabel, EndpointAContent, EndpointBLabel, EndpointBContent );
+                conn = new APConnection(this.RelationName, EndpointALabel, EndpointAContent, EndpointBLabel, EndpointBContent );
             else if( this.EndpointAContent == null && this.EndpointBContent != null )
-                conn = new Connection(this.RelationName, EndpointBLabel, EndpointBContent, EndpointALabel, EndpointAId);
+                conn = new APConnection(this.RelationName, EndpointBLabel, EndpointBContent, EndpointALabel, EndpointAId);
             else if (this.EndpointAContent != null && this.EndpointBContent == null)
-                conn = new Connection(this.RelationName, EndpointALabel, EndpointAContent, EndpointBLabel, EndpointBId);
+                conn = new APConnection(this.RelationName, EndpointALabel, EndpointAContent, EndpointBLabel, EndpointBId);
             else 
-                conn = new Connection(this.RelationName, EndpointALabel, EndpointAId, EndpointBLabel, EndpointBId);
+                conn = new APConnection(this.RelationName, EndpointALabel, EndpointAId, EndpointBLabel, EndpointBId);
             return conn;
         }
 
         
     }
 
-    public class Connection : Entity
+    public class APConnection : Entity
     {
-        public Connection(string type) : base(type) 
+        public APConnection(string type) : base(type) 
         {
             this.Endpoints = new EndpointPair(null, null);
         }
 
-        public Connection(string type, string id) : base(type, id) 
+        public APConnection(string type, string id) : base(type, id) 
         {
             this.Endpoints = new EndpointPair(null, null);
         }
 
-        public Connection(string type, string labelA, string objectIdA, string labelB, string objectIdB) 
+        public APConnection(string type, string labelA, string objectIdA, string labelB, string objectIdB) 
             : base(type)
         {
             var ep1 = new Endpoint(labelA, objectIdA);
@@ -93,7 +93,7 @@ namespace Appacitive.Sdk
             this.Endpoints = new EndpointPair(ep1, ep2);
         }
 
-        public Connection(string type, string labelA, APObject objectA, string labelB, string objectIdB)
+        public APConnection(string type, string labelA, APObject objectA, string labelB, string objectIdB)
             : base(type)
         {
             Endpoint ep1, ep2;
@@ -112,7 +112,7 @@ namespace Appacitive.Sdk
             this.Endpoints = new EndpointPair(ep1, ep2);
         }
 
-        public Connection(string type, string labelA, APObject objectA, string labelB, APObject objectB)
+        public APConnection(string type, string labelA, APObject objectA, string labelB, APObject objectB)
             : base(type)
         {
             Endpoint ep1, ep2;
@@ -203,7 +203,7 @@ namespace Appacitive.Sdk
 
         protected override void UpdateState(Entity entity)
         {
-            var other = entity as Connection;
+            var other = entity as APConnection;
             if (other == null) return;
             this.Endpoints.EndpointA = other.Endpoints.EndpointA;
             this.Endpoints.EndpointB = other.Endpoints.EndpointB;

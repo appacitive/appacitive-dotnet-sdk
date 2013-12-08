@@ -14,12 +14,12 @@ namespace Appacitive.Sdk.Services
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(Connection);
+            return objectType == typeof(APConnection);
         }
 
         protected override void WriteJson(Entity entity, JsonWriter writer, JsonSerializer serializer)
         {
-            var conn = entity as Connection;
+            var conn = entity as APConnection;
             if (conn == null)
                 return;
 
@@ -73,12 +73,12 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("__relationtype", out value) == false || value.Type == JTokenType.Null)
                 throw new Exception("Relation type missing.");
             var type = value.ToString();
-            return new Connection(type);
+            return new APConnection(type);
         }
 
         protected override Entity ReadJson(Entity entity, Type objectType, Newtonsoft.Json.Linq.JObject json, JsonSerializer serializer)
         {
-            var conn = base.ReadJson(entity, objectType, json, serializer) as Connection;
+            var conn = base.ReadJson(entity, objectType, json, serializer) as APConnection;
             if (conn == null)
                 return null;
             // Parse the relation information

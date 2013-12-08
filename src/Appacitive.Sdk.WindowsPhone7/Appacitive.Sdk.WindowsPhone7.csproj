@@ -70,26 +70,41 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Appacitive.Sdk\APConnection.cs">
+      <Link>APConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\APConnections.cs">
+      <Link>APConnections.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\APDevice.cs">
+      <Link>APDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\APDevices.cs">
+      <Link>APDevices.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\APObject.cs">
+      <Link>APObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\APObjects.cs">
+      <Link>APObjects.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\App.cs">
       <Link>App.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\AppacitiveContext.cs">
-      <Link>AppacitiveContext.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\APUser.cs">
+      <Link>APUser.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\AppacitiveSettings.cs">
-      <Link>AppacitiveSettings.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\APUsers.cs">
+      <Link>APUsers.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Extensions.cs">
-      <Link>Extensions.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\FileDownload.cs">
+      <Link>FileDownload.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\FileUpload.cs">
+      <Link>FileUpload.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Graph.cs">
       <Link>Graph.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\HttpClient.cs">
-      <Link>HttpClient.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\InProcContainer.cs">
-      <Link>InProcContainer.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IApplicationHost.cs">
       <Link>Interfaces\IApplicationHost.cs</Link>
@@ -130,8 +145,14 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\IUserContext.cs">
       <Link>Interfaces\IUserContext.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IUserFactory.cs">
+      <Link>Interfaces\IUserFactory.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IValueCollection.cs">
       <Link>Internal\IValueCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\AppacitiveContext.cs">
+      <Link>Internal\AppacitiveContext.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Debugger.cs">
       <Link>Internal\Debugger.cs</Link>
@@ -139,20 +160,32 @@
     <Compile Include="..\Appacitive.Sdk\Internal\EventProxy.cs">
       <Link>Internal\EventProxy.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\HttpClient.cs">
+      <Link>Internal\HttpClient.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\HubSubscriber.cs">
       <Link>Internal\HubSubscriber.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\IDownstreamMessage.cs">
       <Link>Internal\IDownstreamMessage.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\InProcContainer.cs">
+      <Link>Internal\InProcContainer.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\IUpstreamMessage.cs">
       <Link>Internal\IUpstreamMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\JsonNetSerializer.cs">
+      <Link>Internal\JsonNetSerializer.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\JsonObject.cs">
       <Link>Internal\JsonObject.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\MapDiff.cs">
       <Link>Internal\MapDiff.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Measure.cs">
+      <Link>Internal\Measure.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Messages.cs">
       <Link>Internal\Messages.cs</Link>
@@ -508,44 +541,23 @@
     <Compile Include="..\Appacitive.Sdk\Internal\ValueConverter.cs">
       <Link>Internal\ValueConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\IUserFactory.cs">
-      <Link>IUserFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\JsonNetSerializer.cs">
-      <Link>JsonNetSerializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Measure.cs">
-      <Link>Measure.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Messaging.cs">
       <Link>Messaging.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\APObject.cs">
-      <Link>Model\APObject.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\APObjects.cs">
-      <Link>Model\APObjects.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\AppacitiveException.cs">
       <Link>Model\AppacitiveException.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\AppacitiveSettings.cs">
+      <Link>Model\AppacitiveSettings.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\AuthenticationToken.cs">
       <Link>Model\AuthenticationToken.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\Connection.cs">
-      <Link>Model\Connection.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\Connections.cs">
-      <Link>Model\Connections.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Constants.cs">
       <Link>Model\Constants.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Credentials.cs">
       <Link>Model\Credentials.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\Device.cs">
-      <Link>Model\Device.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Email.cs">
       <Link>Model\Email.cs</Link>
@@ -565,11 +577,8 @@
     <Compile Include="..\Appacitive.Sdk\Model\ErrorSpace.cs">
       <Link>Model\ErrorSpace.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\FileDownload.cs">
-      <Link>Model\FileDownload.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\FileUpload.cs">
-      <Link>Model\FileUpload.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Model\Extensions.cs">
+      <Link>Model\Extensions.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\FileUrl.cs">
       <Link>Model\FileUrl.cs</Link>
@@ -604,11 +613,8 @@
     <Compile Include="..\Appacitive.Sdk\Model\Timezone.cs">
       <Link>Model\Timezone.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\User.cs">
-      <Link>Model\User.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\Users.cs">
-      <Link>Model\Users.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Model\Urls.cs">
+      <Link>Model\Urls.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Value.cs">
       <Link>Model\Value.cs</Link>
@@ -666,9 +672,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Subscriptions.cs">
       <Link>Subscriptions.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Urls.cs">
-      <Link>Urls.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\UserSession.cs">
       <Link>UserSession.cs</Link>

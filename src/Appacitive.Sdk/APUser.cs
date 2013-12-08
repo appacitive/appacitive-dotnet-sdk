@@ -9,18 +9,18 @@ using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
-    public class User : APObject
+    public class APUser : APObject
     {
-        public User() : base("user")
+        public APUser() : base("user")
         {
         }
 
-        public User(string id)
+        public APUser(string id)
             : base("user", id)
         {
         }
 
-        public User(APObject device)
+        public APUser(APObject device)
             : base(device)
         {   
         }
