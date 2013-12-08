@@ -54,7 +54,7 @@ namespace Appacitive.Sdk.Tests
             try
             {
                 var shouldNotExist = await Devices.GetAsync(created.Id);
-                Assert.Fail("Able to retrieve deleted article.");
+                Assert.Fail("Able to retrieve deleted apObject.");
             }
             catch (Appacitive.Sdk.Net45.AppacitiveException)
             {   

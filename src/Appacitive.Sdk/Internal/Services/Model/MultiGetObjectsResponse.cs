@@ -8,9 +8,9 @@ using Appacitive.Sdk.Realtime;
 
 namespace Appacitive.Sdk.Services
 {
-    public class GetArticleResponse : ApiResponse
+    public class MultiGetObjectsResponse : ApiResponse
     {
-        [JsonProperty("article")]
-        public Article Article { get; set; }
+        [JsonProperty("articles")]
+        public List<APObject> Objects { get; set; }
     }
 }

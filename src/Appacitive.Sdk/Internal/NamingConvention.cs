@@ -20,11 +20,11 @@ namespace Appacitive.Sdk.Internal
                 case "cd":
                     return EventType.ConnectionDelete;
                 case "ac":
-                    return EventType.ArticleCreate;
+                    return EventType.ObjectCreate;
                 case "au":
-                    return EventType.ArticleUpdate;
+                    return EventType.ObjectUpdate;
                 case "ad":
-                    return EventType.ArticleDelete;
+                    return EventType.ObjectDelete;
                 default:
                     throw new Exception("Unsupported event code + " + eventCode + ".");
             }
@@ -34,11 +34,11 @@ namespace Appacitive.Sdk.Internal
         {
             switch (type)
             {
-                case EventType.ArticleCreate:
+                case EventType.ObjectCreate:
                     return "ac";
-                case EventType.ArticleUpdate:
+                case EventType.ObjectUpdate:
                     return "au";
-                case EventType.ArticleDelete:
+                case EventType.ObjectDelete:
                     return "ad";
                 case EventType.ConnectionCreate:
                     return "cc";

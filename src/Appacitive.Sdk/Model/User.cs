@@ -9,7 +9,7 @@ using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
-    public class User : Article
+    public class User : APObject
     {
         public User() : base("user")
         {
@@ -20,7 +20,7 @@ namespace Appacitive.Sdk
         {
         }
 
-        public User(Article device)
+        public User(APObject device)
             : base(device)
         {   
         }
@@ -126,7 +126,7 @@ namespace Appacitive.Sdk
 
         protected override async Task<Entity> CreateNewAsync()
         {
-            // Create a new article
+            // Create a new object
             var response = await new CreateUserRequest()
             {
                 User = this

@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class FindConnectedArticlesRequest : GetOperation<FindConnectedArticlesResponse>
+    public class FindConnectedObjectsRequest : GetOperation<FindConnectedObjectsResponse>
     {
-        public FindConnectedArticlesRequest() :
+        public FindConnectedObjectsRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
         {
         }
 
-        public FindConnectedArticlesRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
+        public FindConnectedObjectsRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
             base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
         {
         }
@@ -22,9 +22,9 @@ namespace Appacitive.Sdk.Services
 
         public string Type { get; set; }
 
-        public string ArticleId { get; set; }
+        public string ObjectId { get; set; }
 
-        public Article Article { get; set; }
+        public APObject Object { get; set; }
 
         public bool ReturnEdge { get; set; }
 
@@ -42,26 +42,26 @@ namespace Appacitive.Sdk.Services
 
         protected override string GetUrl()
         {
-            return Urls.For.FindConnectedArticles(this.Relation, this.Type, this.ArticleId, this.ReturnEdge, 
+            return Urls.For.FindConnectedObjects(this.Relation, this.Type, this.ObjectId, this.ReturnEdge, 
                 this.Label, this.Query, this.PageNumber, this.PageSize, this.OrderBy, this.SortOrder,
                 this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
 
-        public override async Task<FindConnectedArticlesResponse> ExecuteAsync()
+        public override async Task<FindConnectedObjectsResponse> ExecuteAsync()
         {
             var response = await base.ExecuteAsync();
-            // Set article in connection.
+            // Set object in connection.
             if (response.Nodes != null && this.ReturnEdge == true )
             {
                 foreach (var node in response.Nodes)
                 {
-                    var endpoint = string.IsNullOrWhiteSpace(node.Connection.Endpoints.EndpointA.ArticleId) ?
+                    var endpoint = string.IsNullOrWhiteSpace(node.Connection.Endpoints.EndpointA.ObjectId) ?
                         node.Connection.Endpoints.EndpointA :
                         node.Connection.Endpoints.EndpointB;
-                    if (this.Article != null)
-                        endpoint = new Endpoint(endpoint.Label, this.Article);
+                    if (this.Object != null)
+                        endpoint = new Endpoint(endpoint.Label, this.Object);
                     else
-                        endpoint = new Endpoint(endpoint.Label, this.ArticleId);
+                        endpoint = new Endpoint(endpoint.Label, this.ObjectId);
                 }
             }
             return response;

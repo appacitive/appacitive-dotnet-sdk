@@ -14,7 +14,7 @@ namespace Appacitive.Sdk.Tests
         public void ItemAddTest()
         {
             
-            Article obj = new Article("object");
+            APObject obj = new APObject("object");
             obj.SetList<int>("field1", new[] { 1, 2, 3, 4, 5, 6 });
             var field1 = obj.GetList<int>("field1");
             Assert.IsFalse(field1.Contains(10));
@@ -28,7 +28,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void ItemAddTestWithoutDuplication()
         {
-            Article obj = new Article("object");
+            APObject obj = new APObject("object");
             obj.SetList<int>("field1", new[] { 1, 2, 3, 4, 5, 6 });
             var field1 = obj.GetList<int>("field1");
             Assert.IsTrue(field1.Count() == 6);
@@ -40,7 +40,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void RemoveFirstOccurenceOfItemTest()
         {
-            Article obj = new Article("object");
+            APObject obj = new APObject("object");
             obj.SetList<int>("field1", new [] { 1,2,3,1,2,3 });
             var removed = obj.RemoveItems("field1", 1, true);
             Assert.IsTrue(removed == true);
@@ -53,7 +53,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void InvalidAddItemsTest()
         {
-            var obj = new Article("object");
+            var obj = new APObject("object");
             obj["age"] = 10;
             try
             {
@@ -69,7 +69,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void InvalidRemoveItemsTest()
         {
-            var obj = new Article("object");
+            var obj = new APObject("object");
             obj["age"] = 10;
             try
             {
@@ -85,7 +85,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void RemoveAllOccurencesOfItemTest()
         {
-            Article obj = new Article("object");
+            APObject obj = new APObject("object");
             obj.SetList<int>("field1", new[] { 1, 2, 3, 1, 2, 3 });
             var removed = obj.RemoveItems("field1", 1, false);
             Assert.IsTrue(removed == true);
@@ -97,7 +97,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void AddItemsToNullPropertyTest()
         {
-            Article obj = new Article("object");
+            APObject obj = new APObject("object");
             obj.AddItems("field1", 5, 6);
             Assert.IsTrue(obj.GetList<string>("field1").Count() == 2);
         }
@@ -105,7 +105,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void ItemAddTestWithDuplication()
         {
-            Article obj = new Article("object");
+            APObject obj = new APObject("object");
             obj.SetList<int>("field1", new[] { 1, 2, 3, 4, 5, 6 });
             var field1 = obj.GetList<int>("field1");
             Assert.IsTrue(field1.Count() == 6);
@@ -117,46 +117,46 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void EntityIndexerReadWriteTest()
         {
-            dynamic article = new Article("object");
-            AssertIndexerGetSet<int>(article, "intfield", 10);
-            AssertIndexerGetSet<uint>(article, "intfield", 10);
-            AssertIndexerGetSet<long>(article, "intfield", 10);
-            AssertIndexerGetSet<float>(article, "decimalfield", 10.0f);
-            AssertIndexerGetSet<double>(article, "decimalfield", 10.0);
-            AssertIndexerGetSet<decimal>(article, "decimalfield", 10.0m);
-            AssertIndexerGetSet<string>(article, "strinfield", "test value");
-            AssertIndexerGetSet<bool>(article, "boolfield", true);
-            AssertIndexerGetSet<char>(article, "stringfield", 'x');
-            AssertIndexerGetSet<DateTime>(article, "datetimefield", DateTime.Now);
+            dynamic apObject = new APObject("object");
+            AssertIndexerGetSet<int>(apObject, "intfield", 10);
+            AssertIndexerGetSet<uint>(apObject, "intfield", 10);
+            AssertIndexerGetSet<long>(apObject, "intfield", 10);
+            AssertIndexerGetSet<float>(apObject, "decimalfield", 10.0f);
+            AssertIndexerGetSet<double>(apObject, "decimalfield", 10.0);
+            AssertIndexerGetSet<decimal>(apObject, "decimalfield", 10.0m);
+            AssertIndexerGetSet<string>(apObject, "strinfield", "test value");
+            AssertIndexerGetSet<bool>(apObject, "boolfield", true);
+            AssertIndexerGetSet<char>(apObject, "stringfield", 'x');
+            AssertIndexerGetSet<DateTime>(apObject, "datetimefield", DateTime.Now);
         }
 
 
         [TestMethod]
         public void MultiValuedGetSetTest()
         {
-            dynamic article = new Article("object");
-            AssertMultiValuedGetSet<int>(article, "field1", new int[] { 1, 2, 3, 4, 5, 6 });
-            AssertMultiValuedGetSet<uint>(article, "field2", new uint[] { 1, 2, 3, 4, 5, 6 });
-            AssertMultiValuedGetSet<long>(article, "field3", new long[] { 1, 2, 3, 4, 5, 6 });
-            AssertMultiValuedGetSet<ulong>(article, "field4", new ulong[] { 1, 2, 3, 4, 5, 6 });
+            dynamic apObject = new APObject("object");
+            AssertMultiValuedGetSet<int>(apObject, "field1", new int[] { 1, 2, 3, 4, 5, 6 });
+            AssertMultiValuedGetSet<uint>(apObject, "field2", new uint[] { 1, 2, 3, 4, 5, 6 });
+            AssertMultiValuedGetSet<long>(apObject, "field3", new long[] { 1, 2, 3, 4, 5, 6 });
+            AssertMultiValuedGetSet<ulong>(apObject, "field4", new ulong[] { 1, 2, 3, 4, 5, 6 });
 
-            AssertMultiValuedGetSet<float>(article, "field5", new float[] { 1, 2, 3, 4, 5, 6 });
-            AssertMultiValuedGetSet<double>(article, "field6", new double[] { 1, 2, 3, 4, 5, 6 });
-            AssertMultiValuedGetSet<decimal>(article, "field7", new decimal[] { 1, 2, 3, 4, 5, 6 });
+            AssertMultiValuedGetSet<float>(apObject, "field5", new float[] { 1, 2, 3, 4, 5, 6 });
+            AssertMultiValuedGetSet<double>(apObject, "field6", new double[] { 1, 2, 3, 4, 5, 6 });
+            AssertMultiValuedGetSet<decimal>(apObject, "field7", new decimal[] { 1, 2, 3, 4, 5, 6 });
 
-            AssertMultiValuedGetSet<string>(article, "field8", new string[] { "a", "b", "c" });
-            AssertMultiValuedGetSet<bool>(article, "field9", new bool[] { true, true, false, true, false});
-            AssertMultiValuedGetSet<DateTime>(article, "field10", new DateTime[] { DateTime.Now, DateTime.Now, DateTime.Now });
-            AssertMultiValuedGetSet<char>(article, "field11", new char[] { 'a', 'b', 'c' });
+            AssertMultiValuedGetSet<string>(apObject, "field8", new string[] { "a", "b", "c" });
+            AssertMultiValuedGetSet<bool>(apObject, "field9", new bool[] { true, true, false, true, false});
+            AssertMultiValuedGetSet<DateTime>(apObject, "field10", new DateTime[] { DateTime.Now, DateTime.Now, DateTime.Now });
+            AssertMultiValuedGetSet<char>(apObject, "field11", new char[] { 'a', 'b', 'c' });
         }
 
-        private void AssertMultiValuedGetSet<T>(dynamic article, string field, IEnumerable<T> values)
+        private void AssertMultiValuedGetSet<T>(dynamic apObject, string field, IEnumerable<T> values)
         {
-            Console.WriteLine("Testing for Article.GetList<{0}>() and Article.SetList<{0}>().", typeof(T).Name);
+            Console.WriteLine("Testing for Object.GetList<{0}>() and Object.SetList<{0}>().", typeof(T).Name);
             var initial = values.ToList();
-            article.SetList<T>(field, initial);
+            apObject.SetList<T>(field, initial);
             List<T> other = new List<T>();
-            other.AddRange(article.GetList<T>(field));
+            other.AddRange(apObject.GetList<T>(field));
             Assert.IsTrue(initial.Count == other.Count);
             for (int i = 0; i < initial.Count; i++)
                 Assert.IsTrue(initial[i].Equals(other[i]));
@@ -166,26 +166,26 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void EntityGetSetTest()
         {
-            dynamic article = new Article("object");
-            AssertGetSet<int>(article, "field1", 10);
-            AssertGetSet<uint>(article, "field2", 10);
-            AssertGetSet<long>(article, "field3", 10);
-            AssertGetSet<float>(article, "field4", 10.0f);
-            AssertGetSet<double>(article, "field5", 10.0d);
-            AssertGetSet<decimal>(article, "field6", 10.0m);
-            AssertGetSet<string>(article, "field7", "test string");
-            AssertGetSet<char>(article, "field8", 'x');
-            AssertGetSet<DateTime>(article, "field9", DateTime.Now);
+            dynamic apObject = new APObject("object");
+            AssertGetSet<int>(apObject, "field1", 10);
+            AssertGetSet<uint>(apObject, "field2", 10);
+            AssertGetSet<long>(apObject, "field3", 10);
+            AssertGetSet<float>(apObject, "field4", 10.0f);
+            AssertGetSet<double>(apObject, "field5", 10.0d);
+            AssertGetSet<decimal>(apObject, "field6", 10.0m);
+            AssertGetSet<string>(apObject, "field7", "test string");
+            AssertGetSet<char>(apObject, "field8", 'x');
+            AssertGetSet<DateTime>(apObject, "field9", DateTime.Now);
         }
 
         [TestMethod]
         public void TryGetSetMultiValuedPropertyTest()
         {
-            var article = new Article("object");
+            var apObject = new APObject("object");
             try
             {
-                article.Set<int[]>("field1", new[] { 1, 3, 4, 5, 6 });
-                Assert.Fail("Multivalue set should not be allowed on Article.Set<T>().");
+                apObject.Set<int[]>("field1", new[] { 1, 3, 4, 5, 6 });
+                Assert.Fail("Multivalue set should not be allowed on Object.Set<T>().");
             }
             catch (ArgumentException)
             {
@@ -193,8 +193,8 @@ namespace Appacitive.Sdk.Tests
 
             try
             {
-                var values = article.Get<int[]>("field1");
-                Assert.Fail("Multivalue get should not be allowed on Article.Get<T>().");
+                var values = apObject.Get<int[]>("field1");
+                Assert.Fail("Multivalue get should not be allowed on Object.Get<T>().");
             }
             catch (ArgumentException)
             {
@@ -204,31 +204,31 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void TestGeocodeSet()
         {
-            var article = new Article("object");
-            article.Set("geofield", new Geocode(80.0m, 81.0m));
-            var value = article.Get<string>("geofield");
+            var apObject = new APObject("object");
+            apObject.Set("geofield", new Geocode(80.0m, 81.0m));
+            var value = apObject.Get<string>("geofield");
             Assert.IsTrue(value == "80.0,81.0");
         }
 
         [TestMethod]
         public void TestGeocodeGet()
         {
-            var article = new Article("object");
-            article.Set("geofield", new Geocode(80.0m, 81.0m));
-            var geo = article.Get<Geocode>("geofield");
+            var apObject = new APObject("object");
+            apObject.Set("geofield", new Geocode(80.0m, 81.0m));
+            var geo = apObject.Get<Geocode>("geofield");
             Assert.IsTrue(geo.ToString() == "80.0,81.0");
         }
 
-        private void AssertIndexerGetSet<T>(dynamic article, string field, T value)
+        private void AssertIndexerGetSet<T>(dynamic apObject, string field, T value)
         {
-            article["field"] = value;
-            Assert.IsTrue(article["field"].GetValue<T>() == value);
+            apObject["field"] = value;
+            Assert.IsTrue(apObject["field"].GetValue<T>() == value);
         }
 
-        private void AssertGetSet<T>(dynamic article, string field, T value)
+        private void AssertGetSet<T>(dynamic apObject, string field, T value)
         {
-            article.Set<T>(field, value);
-            Assert.IsTrue(article.Get<T>(field) == value);
+            apObject.Set<T>(field, value);
+            Assert.IsTrue(apObject.Get<T>(field) == value);
         }
         
     }

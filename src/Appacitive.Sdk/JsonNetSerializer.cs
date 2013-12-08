@@ -20,10 +20,10 @@ namespace Appacitive.Sdk
         {
             var serializer = new JsonSerializer();
             // TODO: Move this to objectfactory
-            serializer.Converters.Add(new ArticleConverter());
+            serializer.Converters.Add(new ObjectConverter());
             serializer.Converters.Add(new RealTimeMessageConverter());
             serializer.Converters.Add(new EmailConverter());
-            serializer.Converters.Add(new UpdateArticleRequestConverter());
+            serializer.Converters.Add(new UpdateObjectRequestConverter());
             serializer.Converters.Add(new UserConverter());
             serializer.Converters.Add(new PushNotificationConverter());
             serializer.Converters.Add(new DeviceConverter());
@@ -34,7 +34,7 @@ namespace Appacitive.Sdk
             serializer.Converters.Add(new UpdateConnectionRequestConverter());
             serializer.Converters.Add(new GraphNodeConverter());
             serializer.Converters.Add(new GraphProjectResponseConverter());
-            serializer.Converters.Add(new FindConnectedArticlesResponseConverter());
+            serializer.Converters.Add(new FindConnectedObjectsResponseConverter());
             return serializer;
         }
 

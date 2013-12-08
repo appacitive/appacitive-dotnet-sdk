@@ -58,8 +58,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ArticleFixture.cs" />
-    <Compile Include="ArticleServiceFixture.cs" />
+    <Compile Include="ObjectFixture.cs" />
+    <Compile Include="ObjectServiceFixture.cs" />
     <Compile Include="AuthenticationFixture.cs" />
     <Compile Include="ConnectionFixture.cs" />
     <Compile Include="ConnectionServiceFixture.cs" />

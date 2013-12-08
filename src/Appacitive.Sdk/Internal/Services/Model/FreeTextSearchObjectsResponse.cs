@@ -8,9 +8,13 @@ using Appacitive.Sdk.Realtime;
 
 namespace Appacitive.Sdk.Services
 {
-    public class MultiGetArticleResponse : ApiResponse
+    public class FreeTextSearchObjectsResponse : ApiResponse
     {
         [JsonProperty("articles")]
-        public List<Article> Articles { get; set; }
+        public List<APObject> Objects { get; set; }
+
+        [JsonProperty("paginginfo")]
+        public PagingInfo PagingInfo { get; set; }
     }
+
 }

@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class FindConnectedArticlesResponseConverter : JsonConverter
+    public class FindConnectedObjectsResponseConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(FindConnectedArticlesResponse) == objectType;
+            return typeof(FindConnectedObjectsResponse) == objectType;
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JToken value = null;
-            var response = new FindConnectedArticlesResponse();
+            var response = new FindConnectedObjectsResponse();
             // status
             var json = JObject.ReadFrom(reader) as JObject;
             json.TryGetValue("status", out value);
@@ -49,7 +49,7 @@ namespace Appacitive.Sdk.Services
             return response;
         }
 
-        private void ParseNodes(FindConnectedArticlesResponse response, string parentLabel, IEnumerable<JObject> nodes, JsonSerializer serializer)
+        private void ParseNodes(FindConnectedObjectsResponse response, string parentLabel, IEnumerable<JObject> nodes, JsonSerializer serializer)
         {
             response.Nodes = nodes.Select(x => ParseNode(parentLabel, x, serializer)).ToList();
         }
@@ -57,18 +57,18 @@ namespace Appacitive.Sdk.Services
         private GraphNode ParseNode( string parentLabel, JObject json, JsonSerializer serializer)
         {
             GraphNode current = new GraphNode();
-            // Parse the article
-            var articleJson = ExtractArticleJson(json);
-            current.Article = serializer.Deserialize<Article>(articleJson.CreateReader());
+            // Parse the object
+            var objectJson = ExtractObjectJson(json);
+            current.Object = serializer.Deserialize<APObject>(objectJson.CreateReader());
 
             var edgeJson = ExtractEdgeJson(json);
             if (edgeJson != null)
-                current.Connection = ParseConnection(parentLabel, null, current.Article, edgeJson);
+                current.Connection = ParseConnection(parentLabel, null, current.Object, edgeJson);
 
             return current;
         }
 
-        private Connection ParseConnection(string parentLabel, Article parentArticle, Article currentArticle, JObject json)
+        private Connection ParseConnection(string parentLabel, APObject parentObj, APObject currentObj, JObject json)
         {
             string label = string.Empty;
             if( json.Property("__label") != null ) 
@@ -79,8 +79,8 @@ namespace Appacitive.Sdk.Services
             var id = GetValue(json, "__id", JTokenType.String, true).ToString();
             var conn = new Connection(relation, id);
             conn.Endpoints = new EndpointPair(
-                new Endpoint(parentLabel, parentArticle),
-                new Endpoint(label, currentArticle));
+                new Endpoint(parentLabel, parentObj),
+                new Endpoint(label, currentObj));
             // Parse system properties
             JToken value = null;
             // Id
@@ -182,19 +182,19 @@ namespace Appacitive.Sdk.Services
             return value.DeepClone() as JObject;
         }
 
-        private JObject ExtractArticleJson(JObject json)
+        private JObject ExtractObjectJson(JObject json)
         {
             var clone = json.DeepClone() as JObject;
             var properties = clone.Properties().ToArray();
             for (int i = 0; i < properties.Length; i++)
             {
-                if( IsArticleProperty(properties[i].Name) == false )
+                if( IsObjectProperty(properties[i].Name) == false )
                     clone.Remove(properties[i].Name);
             }
             return clone;
         }
 
-        private bool IsArticleProperty(string propertyName)
+        private bool IsObjectProperty(string propertyName)
         {
             if (propertyName.Equals("__edge", StringComparison.OrdinalIgnoreCase) == true)
                 return false;

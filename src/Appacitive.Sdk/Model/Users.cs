@@ -26,7 +26,7 @@ namespace Appacitive.Sdk
         /// <summary>
         /// Get user by id.
         /// </summary>
-        /// <param name="id">Id of the user article</param>
+        /// <param name="id">Id of the user object</param>
         /// <param name="fields">Optional fields that you want to get. </param>
         /// <returns>The user with the specified id</returns>
         public static async Task<User> GetLoggedInUserAsync(IEnumerable<string> fields = null)
@@ -38,14 +38,14 @@ namespace Appacitive.Sdk
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
-            Debug.Assert(response.User != null, "For a successful get call, article should always be returned.");
+            Debug.Assert(response.User != null, "For a successful get call, object should always be returned.");
             return response.User;
         }
 
         /// <summary>
         /// Get user by id.
         /// </summary>
-        /// <param name="id">Id of the user article</param>
+        /// <param name="id">Id of the user object</param>
         /// <param name="fields">Optional fields that you want to get. </param>
         /// <returns>The user with the specified id</returns>
         public static async Task<User> GetByIdAsync(string id, IEnumerable<string> fields = null)
@@ -57,14 +57,14 @@ namespace Appacitive.Sdk
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
-            Debug.Assert(response.User != null, "For a successful get call, article should always be returned.");
+            Debug.Assert(response.User != null, "For a successful get call, object should always be returned.");
             return response.User;
         }
 
         /// <summary>
         /// Get user by id.
         /// </summary>
-        /// <param name="id">Id of the user article</param>
+        /// <param name="id">Id of the user object</param>
         /// <param name="fields">Optional fields that you want to get. </param>
         /// <returns>The user with the specified id</returns>
         public static async Task<User> GetByUsernameAsync(string username, IEnumerable<string> fields = null)
@@ -76,14 +76,14 @@ namespace Appacitive.Sdk
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
-            Debug.Assert(response.User != null, "For a successful get call, article should always be returned.");
+            Debug.Assert(response.User != null, "For a successful get call, object should always be returned.");
             return response.User;
         }
 
         /// <summary>
         /// Delete the user with the specified id
         /// </summary>
-        /// <param name="id">Id of the user article to delete</param>
+        /// <param name="id">Id of the user object to delete</param>
         /// <returns>Void</returns>
         public static async Task DeleteUserAsync(string id, bool deleteConnections = false)
         {
@@ -127,7 +127,7 @@ namespace Appacitive.Sdk
                 TotalRecords = response.PagingInfo.TotalRecords,
                 GetNextPage = async skip => await FindAllAsync(query, fields, page + skip + 1, pageSize)
             };
-            users.AddRange(response.Articles);
+            users.AddRange(response.Users);
             return users;
         }
 

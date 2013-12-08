@@ -54,7 +54,7 @@ namespace Appacitive.Sdk
             this.Id = id;
         }
 
-        // Represents the saved state of the article
+        // Represents the saved state of the object
         private IDictionary<string, object> _currentFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private IDictionary<string, object> _lastKnownFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private IDictionary<string, string> _currentAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -308,7 +308,7 @@ namespace Appacitive.Sdk
             IEnumerable<string> addedTags, removedTags;
             _lastKnownTags.GetDifferences(_currentTags, out addedTags, out removedTags);
 
-            // 3. update the article
+            // 3. update the object
             var updated = await UpdateAsync(propertyDifferences, attributeDifferences, addedTags, removedTags, specificRevision);
             if (updated != null)
             {

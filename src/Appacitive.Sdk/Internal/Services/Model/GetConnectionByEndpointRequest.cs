@@ -20,13 +20,13 @@ namespace Appacitive.Sdk.Services
 
         public string Relation { get; set; }
 
-        public string ArticleId1 { get; set; }
+        public string ObjectId1 { get; set; }
 
-        public string ArticleId2 { get; set; }
+        public string ObjectId2 { get; set; }
 
         protected override string GetUrl()
         {
-            return Urls.For.GetConnectionByEndpointAsync(this.Relation, this.ArticleId1, this.ArticleId2, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+            return Urls.For.GetConnectionByEndpointAsync(this.Relation, this.ObjectId1, this.ObjectId2, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }

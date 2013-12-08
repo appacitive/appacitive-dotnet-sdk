@@ -10,26 +10,26 @@ using Moq;
 namespace Appacitive.Sdk.Tests
 {
     [TestClass]
-    public class ArticleFixture
+    public class ObjectFixture
     {
         [TestMethod]
-        public async Task CreateArticleAsyncTest()
+        public async Task CreateObjectAsyncTest()
         {
-            dynamic obj = new Article("object");
+            dynamic obj = new APObject("object");
             obj.intfield = 1;
             obj.decimalfield = 22m / 7m;
             await obj.SaveAsync();
-            var saved = obj as Article;
+            var saved = obj as APObject;
             Assert.IsNotNull(saved);
             Assert.IsTrue(string.IsNullOrWhiteSpace(saved.Id) == false);
-            Console.WriteLine("Created article with id {0}.", saved.Id);
+            Console.WriteLine("Created apObject with id {0}.", saved.Id);
         }
 
         [TestMethod]
         public async Task GetDevicesShouldReturnDeviceObjectsTest()
         {
             var created = await DeviceHelper.CreateNewAsync();
-            var devices = await Articles.FindAllAsync("device");
+            var devices = await APObjects.FindAllAsync("device");
             Assert.IsFalse(devices.Exists(d => d is Device == false));
         }
 
@@ -37,22 +37,22 @@ namespace Appacitive.Sdk.Tests
         public async Task GetUsersShouldReturnUserObjectsTest()
         {
             var created = await UserHelper.CreateNewUserAsync();
-            var users = await Articles.FindAllAsync("user");
+            var users = await APObjects.FindAllAsync("user");
             Assert.IsFalse(users.Exists(d => d is User == false));
         }
 
         [TestMethod]
-        public async Task GetArticleAsyncTest()
+        public async Task GetObjectAsyncTest()
         {
-            // Create new article
-            dynamic article = new Article("object");
+            // Create new object
+            dynamic obj = new APObject("object");
             decimal pi = 22.0m / 7.0m;
-            article.intfield = 1;
-            article.decimalfield = pi;
-            var saved = await ObjectHelper.CreateNewAsync(article as Article);
+            obj.intfield = 1;
+            obj.decimalfield = pi;
+            var saved = await ObjectHelper.CreateNewAsync(obj as APObject);
 
-            // Get the created article
-            dynamic copy = await Articles.GetAsync("object", saved.Id);
+            // Get the created object
+            dynamic copy = await APObjects.GetAsync("object", saved.Id);
             Assert.IsNotNull(copy);
             int intfield = copy.intfield;
             decimal decimalField = copy.decimalfield;
@@ -62,27 +62,27 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public async Task MultiValueArticleTest()
+        public async Task MultiValueObjectTest()
         {
-            var obj = new Article("object");
+            var obj = new APObject("object");
             obj.SetList<string>("multifield", new[] { "1", "2", "3", "4" });
             await obj.SaveAsync();
 
-            var read = await Articles.GetAsync("object", obj.Id);
+            var read = await APObjects.GetAsync("object", obj.Id);
             var value = read.GetList<string>("multifield");
             var strList = read.GetList<string>("multifield");
             var intList = read.GetList<int>("multifield");
         }
 
         [TestMethod]
-        public async Task MultiGetArticleAsyncTest()
+        public async Task MultiGetObjectAsyncTest()
         {
-            // Create new article
+            // Create new object
             var obj1 = await ObjectHelper.CreateNewAsync();
             var obj2 = await ObjectHelper.CreateNewAsync();
 
-            // Get the created article
-            var enumerable = await Articles.MultiGetAsync("object", new[] { obj1.Id, obj2.Id });
+            // Get the created objects
+            var enumerable = await APObjects.MultiGetAsync("object", new[] { obj1.Id, obj2.Id });
 
             // Asserts
             Assert.IsNotNull(enumerable);
@@ -92,23 +92,23 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public async Task BulkDeleteArticleAsyncTest()
+        public async Task BulkDeleteObjectAsyncTest()
         {
             var a1 = await ObjectHelper.CreateNewAsync();
             var a2 = await ObjectHelper.CreateNewAsync();
             var a3 = await ObjectHelper.CreateNewAsync();
             var a4 = await ObjectHelper.CreateNewAsync();
 
-            await Articles.MultiDeleteAsync(a1.Type, a1.Id, a2.Id, a3.Id, a4.Id);
+            await APObjects.MultiDeleteAsync(a1.Type, a1.Id, a2.Id, a3.Id, a4.Id);
             var ids = new[] { a1.Id, a2.Id, a3.Id, a4.Id };
             for (int i = 0; i < ids.Length; i++)
             {
                 try
                 {
-                    var copy = await Articles.GetAsync("object", ids[i]);
-                    Assert.Fail("Operation should have faulted since the article has been deleted.");
+                    var copy = await APObjects.GetAsync("object", ids[i]);
+                    Assert.Fail("Operation should have faulted since the object has been deleted.");
                 }
-                catch (Net45.AppacitiveException ex)
+                catch (Net45.AppacitiveException)
                 {   
                 }
             }
@@ -116,39 +116,39 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public async Task DeleteArticleAsyncTest()
+        public async Task DeleteObjectAsyncTest()
         {
 
-            // Create the article
+            // Create the object
             var saved = await ObjectHelper.CreateNewAsync();
 
-            // Delete the article
-            await Articles.DeleteAsync("object", saved.Id);
+            // Delete the object
+            await APObjects.DeleteAsync("object", saved.Id);
 
-            // Try and get and confirm that the article is deleted.
+            // Try and get and confirm that the object is deleted.
             try
             {
-                var copy = await Articles.GetAsync("object", saved.Id);
-                Assert.Fail("Operation should have faulted since the article has been deleted.");
+                var copy = await APObjects.GetAsync("object", saved.Id);
+                Assert.Fail("Operation should have faulted since the object has been deleted.");
             }
-            catch (Net45.AppacitiveException ex)
+            catch (Net45.AppacitiveException)
             {   
             }
 
         }
 
         [TestMethod]
-        public async Task UpdateArticleWithNoUpdateAsyncTest()
+        public async Task UpdateObjectWithNoUpdateAsyncTest()
         {
             var stopWatch = new System.Diagnostics.Stopwatch();
 
-            // Create the article
-            dynamic article = new Article("object");
+            // Create the object
+            dynamic obj = new APObject("object");
             decimal pi = 22.0m / 7.0m;
-            article.intfield = 1;
-            article.decimalfield = pi;
+            obj.intfield = 1;
+            obj.decimalfield = pi;
 
-            var saved = await ObjectHelper.CreateNewAsync(article as Article);
+            var saved = await ObjectHelper.CreateNewAsync(obj as APObject);
             var firstUpdateTime = saved.UtcLastUpdated;
 
             stopWatch.Start();
@@ -162,36 +162,36 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine(stopWatch.ElapsedMilliseconds);
 
             //Cleanup
-            await Articles.DeleteAsync(saved.Type, saved.Id);
+            await APObjects.DeleteAsync(saved.Type, saved.Id);
         }
 
         [TestMethod]
-        public async Task UpdateArticlePropertyAsyncTest()
+        public async Task UpdateObjectPropertyAsyncTest()
         {
-            // Create the article
-            dynamic article = new Article("object");
+            // Create the object
+            dynamic obj = new APObject("object");
             decimal pi = 22.0m / 7.0m;
-            article.intfield = 1;
-            article.decimalfield = pi;
-            var saved = await ObjectHelper.CreateNewAsync(article as Article);
+            obj.intfield = 1;
+            obj.decimalfield = pi;
+            var saved = await ObjectHelper.CreateNewAsync(obj as APObject);
 
 
-            // Get the newly created article
-            dynamic copy = await Articles.GetAsync("object", saved.Id);
+            // Get the newly created object
+            dynamic copy = await APObjects.GetAsync("object", saved.Id);
             Assert.IsNotNull(copy);
             int intfield = copy.intfield;
             decimal decimalField = copy.decimalfield;
             Assert.IsTrue(intfield == 1);
             Assert.IsTrue(decimalField == pi);
 
-            // Update the article
+            // Update the object
             copy.intfield = 2;
             copy.decimalfield = 30m;
             copy.stringfield = "Test";
             await copy.SaveAsync();
 
             // Get updated copy and verify
-            dynamic updated = await Articles.GetAsync("object", saved.Id);
+            dynamic updated = await APObjects.GetAsync("object", saved.Id);
             Assert.IsNotNull(updated);
             intfield = updated.intfield;
             decimalField = updated.decimalfield;
@@ -204,26 +204,26 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public async Task UpdateArticleTagAsyncTest()
+        public async Task UpdateObjectTagAsyncTest()
         {
             string tagToRemove = "one";
             string tagPersist = "two";
             string tagToAdd = "three";
 
-            // Create the article
-            dynamic article = new Article("object");
+            // Create the object
+            dynamic obj = new APObject("object");
             decimal pi = 22.0m / 7.0m;
-            article.intfield = 1;
-            article.decimalfield = pi;
+            obj.intfield = 1;
+            obj.decimalfield = pi;
 
             //Add tag
-            article.AddTag(tagToRemove);
-            article.AddTag(tagPersist);
+            obj.AddTag(tagToRemove);
+            obj.AddTag(tagPersist);
 
-            var saved = await ObjectHelper.CreateNewAsync(article as Article);
+            var saved = await ObjectHelper.CreateNewAsync(obj as APObject);
 
-            // Get the newly created article
-            var afterFirstUpdate = await Articles.GetAsync("object", saved.Id);
+            // Get the newly created object
+            var afterFirstUpdate = await APObjects.GetAsync("object", saved.Id);
             Assert.IsNotNull(afterFirstUpdate);
             Assert.IsTrue(afterFirstUpdate.Tags.Count(tag => string.Equals(tag, tagPersist, StringComparison.OrdinalIgnoreCase)) == 1);
             Assert.IsTrue(afterFirstUpdate.Tags.Count(tag => string.Equals(tag, tagToRemove, StringComparison.OrdinalIgnoreCase)) == 1);
@@ -234,37 +234,37 @@ namespace Appacitive.Sdk.Tests
             afterFirstUpdate.AddTag(tagToAdd);
             await afterFirstUpdate.SaveAsync();
 
-            var afterSecondUpdate = await Articles.GetAsync("object", saved.Id);
+            var afterSecondUpdate = await APObjects.GetAsync("object", saved.Id);
 
             Assert.IsTrue(afterSecondUpdate.Tags.Count(tag => string.Equals(tag, tagToRemove, StringComparison.OrdinalIgnoreCase)) == 0);
             Assert.IsTrue(afterSecondUpdate.Tags.Count(tag => string.Equals(tag, tagToAdd, StringComparison.OrdinalIgnoreCase)) == 1);
             Assert.IsTrue(afterSecondUpdate.Tags.Count() == 2);
 
             //Cleanup
-            await Articles.DeleteAsync(afterSecondUpdate.Type, afterSecondUpdate.Id);
+            await APObjects.DeleteAsync(afterSecondUpdate.Type, afterSecondUpdate.Id);
         }
 
         [TestMethod]
-        public async Task UpdateArticleAttributeAsyncTest()
+        public async Task UpdateObjectAttributeAsyncTest()
         {
             string attrToRemove = "one";
             string attrPersist = "two";
             string attrToAdd = "three";
 
-            // Create the article
-            dynamic article = new Article("object");
+            // Create the object
+            dynamic obj = new APObject("object");
             decimal pi = 22.0m / 7.0m;
-            article.intfield = 1;
-            article.decimalfield = pi;
+            obj.intfield = 1;
+            obj.decimalfield = pi;
 
             //Add Attributes
-            article.SetAttribute(attrToRemove, attrToRemove);
-            article.SetAttribute(attrPersist, attrPersist);
+            obj.SetAttribute(attrToRemove, attrToRemove);
+            obj.SetAttribute(attrPersist, attrPersist);
 
-            var saved = await ObjectHelper.CreateNewAsync(article as Article);
+            var saved = await ObjectHelper.CreateNewAsync(obj as APObject);
 
-            // Get the newly created article
-            var afterFirstUpdate = await Articles.GetAsync("object", saved.Id);
+            // Get the newly created object
+            var afterFirstUpdate = await APObjects.GetAsync("object", saved.Id);
             Assert.IsNotNull(afterFirstUpdate);
             Assert.IsTrue(afterFirstUpdate.Attributes.Count(tag => string.Equals(tag.Key, attrPersist, StringComparison.OrdinalIgnoreCase)) == 1);
             Assert.IsTrue(afterFirstUpdate.Attributes.Count(tag => string.Equals(tag.Key, attrToRemove, StringComparison.OrdinalIgnoreCase)) == 1);
@@ -275,73 +275,73 @@ namespace Appacitive.Sdk.Tests
             afterFirstUpdate.SetAttribute(attrToAdd, attrToAdd);
             await afterFirstUpdate.SaveAsync();
 
-            var afterSecondUpdate = await Articles.GetAsync("object", saved.Id);
+            var afterSecondUpdate = await APObjects.GetAsync("object", saved.Id);
 
             Assert.IsTrue(afterSecondUpdate.Attributes.Count(tag => string.Equals(tag.Key, attrPersist, StringComparison.OrdinalIgnoreCase)) == 1);
             Assert.IsTrue(afterSecondUpdate.Attributes.Count(tag => string.Equals(tag.Key, attrToAdd, StringComparison.OrdinalIgnoreCase)) == 1);
             Assert.IsTrue(afterSecondUpdate.Attributes.Count() == 2);
 
             //Cleanup
-            await Articles.DeleteAsync(afterSecondUpdate.Type, afterSecondUpdate.Id);
+            await APObjects.DeleteAsync(afterSecondUpdate.Type, afterSecondUpdate.Id);
         }
 
         [TestMethod]
-        public async Task FindAllArticlesAsyncTest()
+        public async Task FindAllObjectsAsyncTest()
         {
-            // Create the article
+            // Create the object
             var saved = await ObjectHelper.CreateNewAsync();
 
             // Search
-            var articles = await Articles.FindAllAsync("object");
-            articles.ForEach(a => Console.WriteLine(a.Id));
-            Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+            var objects = await APObjects.FindAllAsync("object");
+            objects.ForEach(a => Console.WriteLine(a.Id));
+            Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
 
         }
 
         [TestMethod]
-        public async Task FindAllArticlesAsyncWithQueryTest()
+        public async Task FindAllObjectsAsyncWithQueryTest()
         {
-            // Create the article
-            dynamic article = new Article("object");
-            article.stringfield = Unique.String;
-            dynamic obj = await ObjectHelper.CreateNewAsync(article as Article);
+            // Create the object
+            dynamic apObject = new APObject("object");
+            apObject.stringfield = Unique.String;
+            dynamic obj = await ObjectHelper.CreateNewAsync(apObject as APObject);
 
             // Search
             string stringToSearch = obj.stringfield;
-            var articles = await Articles.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch).AsString());
-            Assert.IsNotNull(articles);
-            Assert.IsTrue(articles.Count == 1);
-            Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+            var objects = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch).AsString());
+            Assert.IsNotNull(objects);
+            Assert.IsTrue(objects.Count == 1);
+            Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
 
         }
 
         [TestMethod]
-        public async Task FindAllArticlesAsyncWithSpecialCharacterInQueryTest()
+        public async Task FindAllObjectsAsyncWithSpecialCharacterInQueryTest()
         {
-            // Create the article
-            dynamic article = new Article("object");
-            article.stringfield = "129764_TouricoTGS_Museum of Modern Art and Casemates du Bock (tunnels in the city’s cliffs)";
+            // Create the object
+            dynamic apObject = new APObject("object");
+            apObject.stringfield = Unique.String + " 129764_TouricoTGS_Museum (tunnels in the city’s cliffs)";
                 //Unique.String + "&" + "12las@";
-            dynamic obj = await ObjectHelper.CreateNewAsync(article as Article);
+            dynamic obj = await ObjectHelper.CreateNewAsync(apObject as APObject);
 
             // Search
             string stringToSearch = obj.stringfield;
-            var articles = await Articles.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch).AsString());
-            Assert.IsNotNull(articles);
-            Assert.IsTrue(articles.Count == 1);
-            Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+            var objects = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch).AsString());
+            Assert.IsNotNull(objects);
+            Assert.IsTrue(objects.Count == 1);
+            Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
 
         }
 
         [TestMethod]
-        public async Task FindAllArticlesAsyncWithNestedQueryTest()
+        public async Task FindAllObjectsAsyncWithNestedQueryTest()
         {
 
-            // Create the article
-            dynamic article = new Article("object");
-            article.stringfield = Unique.String;
-            article.intfield = 10;
-            dynamic obj = await ObjectHelper.CreateNewAsync(article as Article);
+            // Create the object
+            dynamic apObject = new APObject("object");
+            apObject.stringfield = Unique.String;
+            apObject.intfield = 10;
+            dynamic obj = await ObjectHelper.CreateNewAsync(apObject as APObject);
 
             // Search
             string stringToSearch = obj.stringfield;
@@ -351,10 +351,10 @@ namespace Appacitive.Sdk.Tests
                             Query.Property("intfield").IsEqualTo(10)
                         });
 
-            var articles = await Articles.FindAllAsync("object", query.AsString());
-            Assert.IsNotNull(articles);
-            Assert.IsTrue(articles.Count == 1);
-            Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+            var objects = await APObjects.FindAllAsync("object", query.AsString());
+            Assert.IsNotNull(objects);
+            Assert.IsTrue(objects.Count == 1);
+            Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
 
         }
 
@@ -362,31 +362,31 @@ namespace Appacitive.Sdk.Tests
         public async Task FindNonExistantPageTest()
         {
             // Search
-            var articles = await Articles.FindAllAsync("object", Query.None, Article.AllFields, 10000, 500);
-            Assert.IsNotNull(articles);
-            Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
+            var objects = await APObjects.FindAllAsync("object", Query.None, APObject.AllFields, 10000, 500);
+            Assert.IsNotNull(objects);
+            Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
         }
 
         [TestMethod]
-        public async Task FindAndDisplayAllArticlesTest()
+        public async Task FindAndDisplayAllObjectsTest()
         {
             var waitHandle = new ManualResetEvent(false);
 
-            // Create the article
-            dynamic obj = new Article("object");
+            // Create the object
+            dynamic obj = new APObject("object");
             obj.stringfield = Unique.String;
             await obj.SaveAsync();
-            var saved = obj as Article;
-            Console.WriteLine("Created articled with id {0}", saved.Id);
+            var saved = obj as APObject;
+            Console.WriteLine("Created apObj with id {0}", saved.Id);
             var index = 1;
             // Search
-            var articles = await Articles.FindAllAsync("object", Query.None, Article.AllFields, 1, 100);
+            var objects = await APObjects.FindAllAsync("object", Query.None, APObject.AllFields, 1, 100);
             do
             {
-                articles.ForEach(a => Console.WriteLine("{0}) {1}", index++, a.Id));
-                Console.WriteLine("page:{0} pageSize:{1} total: {2}", articles.PageNumber, articles.PageSize, articles.TotalRecords);
-                if (articles.IsLastPage == false)
-                    articles = await articles.NextPageAsync();
+                objects.ForEach(a => Console.WriteLine("{0}) {1}", index++, a.Id));
+                Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
+                if (objects.IsLastPage == false)
+                    objects = await objects.NextPageAsync();
                 else
                     break;
             } while (true);
@@ -394,19 +394,19 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public async Task GetConnectedArticlesWithZeroConnectionsAsyncTest()
+        public async Task GetConnectedObjectsWithZeroConnectionsAsyncTest()
         {
 
             // Create objects
             var obj1 = await ObjectHelper.CreateNewAsync();
-            // Get connected. Should return zero articles
-            var connectedArticles = await obj1.GetConnectedArticlesAsync("sibling");
-            Assert.IsTrue(connectedArticles != null);
-            Assert.IsTrue(connectedArticles.TotalRecords == 0);
+            // Get connected. Should return zero objects
+            var connectedObjects = await obj1.GetConnectedObjectsAsync("sibling");
+            Assert.IsTrue(connectedObjects != null);
+            Assert.IsTrue(connectedObjects.TotalRecords == 0);
         }
 
         [TestMethod]
-        public async Task GetConnectedArticlesAsyncTest()
+        public async Task GetConnectedObjectsAsyncTest()
         {
 
             // Create objects
@@ -416,27 +416,27 @@ namespace Appacitive.Sdk.Tests
             var obj4 = await ObjectHelper.CreateNewAsync();
             var obj5 = await ObjectHelper.CreateNewAsync();
             // Create connections
-            await Connection.New("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj2.Id).SaveAsync();
-            await Connection.New("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj3.Id).SaveAsync();
-            await Connection.New("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj4.Id).SaveAsync();
-            await Connection.New("sibling").FromExistingArticle("object", obj1.Id).ToExistingArticle("object", obj5.Id).SaveAsync();
+            await Connection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj2.Id).SaveAsync();
+            await Connection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj3.Id).SaveAsync();
+            await Connection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj4.Id).SaveAsync();
+            await Connection.New("sibling").FromExistingObject("object", obj1.Id).ToExistingObject("object", obj5.Id).SaveAsync();
             // Get connected
-            var connectedArticles = await obj1.GetConnectedArticlesAsync("sibling");
-            Assert.IsTrue(connectedArticles != null);
-            Assert.IsTrue(connectedArticles.TotalRecords == 4);
-            Assert.IsTrue(connectedArticles.Select(x => x.Id).Intersect(new[] { obj2.Id, obj3.Id, obj4.Id, obj5.Id }).Count() == 4);
+            var connectedObjects = await obj1.GetConnectedObjectsAsync("sibling");
+            Assert.IsTrue(connectedObjects != null);
+            Assert.IsTrue(connectedObjects.TotalRecords == 4);
+            Assert.IsTrue(connectedObjects.Select(x => x.Id).Intersect(new[] { obj2.Id, obj3.Id, obj4.Id, obj5.Id }).Count() == 4);
         }
 
 
         [TestMethod]
-        public async Task QueryArticleWithSingleQuotedValueTest()
+        public async Task QueryObjectWithSingleQuotedValueTest()
         {
-            dynamic obj = new Article("object");
+            dynamic obj = new APObject("object");
             var stringValue = "Pan's Labyrinth" + Unique.String;
             obj.stringfield = stringValue;
             await obj.SaveAsync();
 
-            PagedList<Article> result = await Articles.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringValue).ToString());
+            PagedList<APObject> result = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringValue).ToString());
             Assert.IsTrue(result.TotalRecords == 1, "Expected single record but multiple records were returned.");
             Assert.IsTrue(result.Single().Id == obj.Id);
         }
@@ -445,14 +445,14 @@ namespace Appacitive.Sdk.Tests
         public async Task QueryWithTagsMatchAllTest()
         {
             // Create the test object.
-            Article obj = new Article("object");
+            APObject obj = new APObject("object");
             var tags = new string[] { Unique.String, Unique.String };
             obj.Set<string>("stringfield", Unique.String);
             obj.AddTags(tags);
             await obj.SaveAsync();
 
             // Search for the object with tags.
-            var matches = await Articles.FindAllAsync("object", Query.Tags.MatchAll(tags).ToString());
+            var matches = await APObjects.FindAllAsync("object", Query.Tags.MatchAll(tags).ToString());
             Assert.IsTrue(matches != null);
             Assert.IsTrue(matches.Count == 1);
             Assert.IsTrue(matches[0] != null);
@@ -466,18 +466,18 @@ namespace Appacitive.Sdk.Tests
             var tag1 = Unique.String;
             var tag2 = Unique.String;
             // Create the test object 1.
-            Article obj1 = new Article("object");
+            APObject obj1 = new APObject("object");
             obj1.Set<string>("stringfield", Unique.String);
             obj1.AddTag(tag1);
             await obj1.SaveAsync();
 
-            Article obj2 = new Article("object");
+            APObject obj2 = new APObject("object");
             obj2.Set<string>("stringfield", Unique.String);
             obj2.AddTag(tag2);
             await obj2.SaveAsync();
 
             // Search for the object with tags.
-            var matches = await Articles.FindAllAsync("object", Query.Tags.MatchOneOrMore(tag1, tag2).ToString());
+            var matches = await APObjects.FindAllAsync("object", Query.Tags.MatchOneOrMore(tag1, tag2).ToString());
             Assert.IsTrue(matches != null);
             Assert.IsTrue(matches.Count == 2);
             Assert.IsTrue(matches[0] != null && matches[1] != null );
@@ -489,11 +489,11 @@ namespace Appacitive.Sdk.Tests
         public async Task FreeTextSearchTest()
         {
             var value = Unique.String + " " + Unique.String;
-            var obj = new Article("object");
+            var obj = new APObject("object");
             obj.Set<string>("stringfield", value);
             await obj.SaveAsync();
 
-            var results = await Articles.FreeTextSearchAsync("object", value);
+            var results = await APObjects.FreeTextSearchAsync("object", value);
             Assert.IsTrue(results != null);
             Assert.IsTrue(results.Count == 1);
             Assert.IsTrue(results[0].Id == obj.Id);
@@ -507,22 +507,22 @@ namespace Appacitive.Sdk.Tests
             var optionalToken = Unique.String;
             
             // Create one object with only the mandatory token.
-            var obj1 = new Article("object");
+            var obj1 = new APObject("object");
             obj1.Set<string>("stringfield", mandatoryToken);
             
 
             // Create one object with the mandatory token and optional token.
-            var obj2 = new Article("object");
+            var obj2 = new APObject("object");
             obj2.Set<string>("stringfield", mandatoryToken + " " + optionalToken);
             
 
             // Create one object with only optional token
-            var obj3 = new Article("object");
+            var obj3 = new APObject("object");
             obj3.Set<string>("stringfield", optionalToken);
 
             await Task.WhenAll(obj1.SaveAsync(), obj2.SaveAsync(), obj3.SaveAsync());
 
-            var results = await Articles.FreeTextSearchAsync("object", mandatoryToken + " -" + optionalToken);
+            var results = await APObjects.FreeTextSearchAsync("object", mandatoryToken + " -" + optionalToken);
             Assert.IsTrue(results != null);
             Assert.IsTrue(results.Count == 1);
             Assert.IsTrue(results[0].Id == obj1.Id );
@@ -535,17 +535,17 @@ namespace Appacitive.Sdk.Tests
             var suffix = Unique.String;
 
             // Create one object with only the mandatory token.
-            var obj1 = new Article("object");
+            var obj1 = new APObject("object");
             obj1.Set<string>("stringfield", prefix + "X" + suffix);
 
 
             // Create one object with the mandatory token and optional token.
-            var obj2 = new Article("object");
+            var obj2 = new APObject("object");
             obj2.Set<string>("stringfield", prefix + "Y" + suffix);
 
             await Task.WhenAll(obj1.SaveAsync(), obj2.SaveAsync());
 
-            var results = await Articles.FreeTextSearchAsync("object", prefix + "?" + suffix);
+            var results = await APObjects.FreeTextSearchAsync("object", prefix + "?" + suffix);
             Assert.IsTrue(results != null);
             Assert.IsTrue(results.Count == 2);
             Assert.IsTrue(results[0].Id == obj1.Id || results[0].Id == obj2.Id);
@@ -559,30 +559,30 @@ namespace Appacitive.Sdk.Tests
             var suffix = Unique.String;
 
             // Create one object with only the mandatory token.
-            var obj1 = new Article("object");
+            var obj1 = new APObject("object");
             obj1.Set<string>("stringfield", prefix + " word1" + " word2" + " word3 " + suffix);
 
 
             // Create one object with the mandatory token and optional token.
-            var obj2 = new Article("object");
+            var obj2 = new APObject("object");
             obj2.Set<string>("stringfield", prefix + " word1" + " word2" + " word3" + " word4" + " word5 " + suffix);
 
             await Task.WhenAll(obj1.SaveAsync(), obj2.SaveAsync());
 
-            var results = await Articles.FreeTextSearchAsync("object", "\"" + prefix + " " + suffix + "\"~4");
+            var results = await APObjects.FreeTextSearchAsync("object", "\"" + prefix + " " + suffix + "\"~4");
             Assert.IsTrue(results != null);
             Assert.IsTrue(results.Count == 1);
             Assert.IsTrue(results[0].Id == obj1.Id);
         }
 
         [TestMethod]
-        public async Task GetConnectedArticlesWithSortingSupportTest()
+        public async Task GetConnectedObjectsWithSortingSupportTest()
         {
-            // Create 5 connected articles and request page 2 with page size of 2.
-            // With sorting, it should return specific articles.
+            // Create 5 connected objects and request page 2 with page size of 2.
+            // With sorting, it should return specific objects.
             var root = await ObjectHelper.CreateNewAsync();
 
-            List<Article> children = new List<Article>();
+            List<APObject> children = new List<APObject>();
             children.Add(ObjectHelper.NewInstance());
             children.Add(ObjectHelper.NewInstance());
             children.Add(ObjectHelper.NewInstance());
@@ -590,11 +590,11 @@ namespace Appacitive.Sdk.Tests
             children.Add(ObjectHelper.NewInstance());
 
             var tasks = children.ConvertAll(x =>
-                Connection.New("sibling").FromExistingArticle("object", root.Id).ToNewArticle("object", x).SaveAsync());
+                Connection.New("sibling").FromExistingObject("object", root.Id).ToNewObject("object", x).SaveAsync());
             await Task.WhenAll(tasks);
 
             children = children.OrderBy(x => x.Id).ToList();
-            var results = await root.GetConnectedArticlesAsync("sibling", orderBy: "__id", sortOrder: SortOrder.Ascending,
+            var results = await root.GetConnectedObjectsAsync("sibling", orderBy: "__id", sortOrder: SortOrder.Ascending,
                 pageSize:2, pageNumber: 2);
             Assert.IsTrue(results.Count == 2);
             Assert.IsTrue(results[0].Id == children[2].Id);
@@ -602,18 +602,18 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public async Task ArticleUpdateWithVersioningMvccTest()
+        public async Task ObjectUpdateWithVersioningMvccTest()
         {
-            var article = await ObjectHelper.CreateNewAsync();
+            var obj = await ObjectHelper.CreateNewAsync();
             // This should work
-            article.Set<string>("stringfield", Unique.String);
-            await article.SaveAsync();
+            obj.Set<string>("stringfield", Unique.String);
+            await obj.SaveAsync();
             // This should fail as I am trying to update with an older revision
-            article.Set<string>("stringfield", Unique.String);
+            obj.Set<string>("stringfield", Unique.String);
             bool isFault = false;
             try
             {
-                await article.SaveAsync(article.Revision - 1);
+                await obj.SaveAsync(obj.Revision - 1);
             }
             catch (Net45.AppacitiveException ex)
             {

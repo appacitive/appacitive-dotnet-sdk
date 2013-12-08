@@ -13,7 +13,7 @@ namespace Appacitive.Sdk
             this.Children = new Dictionary<string, List<GraphNode>>();
         }
 
-        public Article Article { get; internal set; }
+        public APObject Object { get; internal set; }
 
         public Connection Connection { get; internal set; }
 

@@ -8,12 +8,9 @@ using Appacitive.Sdk.Realtime;
 
 namespace Appacitive.Sdk.Services
 {
-    public class FindAllUsersResponse : ApiResponse
+    public class UpdateObjectResponse : ApiResponse
     {
-        [JsonProperty("articles")]
-        public List<User> Users { get; set; }
-
-        [JsonProperty("paginginfo")]
-        public PagingInfo PagingInfo { get; set; }
+        [JsonProperty("article")]
+        public APObject Object { get; set; }
     }
 }

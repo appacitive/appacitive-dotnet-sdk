@@ -16,13 +16,13 @@ namespace Appacitive.Sdk
     {
         public async static Task<PagedList<Device>> FindAllAsync(string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
-            var articles = await Articles.FindAllAsync("device", query, fields, page, pageSize, orderBy, sortOrder);
-            var devices = articles.Select(x => new Device(x));
+            var objects = await APObjects.FindAllAsync("device", query, fields, page, pageSize, orderBy, sortOrder);
+            var devices = objects.Select(x => new Device(x));
             var list =  new PagedList<Device>()
             {
-                PageNumber = articles.PageNumber,
-                PageSize = articles.PageSize,
-                TotalRecords = articles.TotalRecords,
+                PageNumber = objects.PageNumber,
+                PageSize = objects.PageSize,
+                TotalRecords = objects.TotalRecords,
                 GetNextPage = async skip => await FindAllAsync(query, fields, page + skip + 1, pageSize, orderBy, sortOrder)
             };
             list.AddRange(devices);
@@ -54,7 +54,7 @@ namespace Appacitive.Sdk
         
     }
 
-    public class Device : Article
+    public class Device : APObject
     {
         public Device(DeviceType type) : base("device")
         {
@@ -68,7 +68,7 @@ namespace Appacitive.Sdk
             this.Channels = new MultiValueCollection<string>(this, "channels");
         }
 
-        public Device(Article device)
+        public Device(APObject device)
             : base(device)
         {
             this.Channels = new MultiValueCollection<string>(this, "channels");
@@ -166,7 +166,7 @@ namespace Appacitive.Sdk
 
         protected override async Task<Entity> CreateNewAsync()
         {
-            // Create a new article
+            // Create a new object
             var response = await (new RegisterDeviceRequest()
             {
                 Device = this

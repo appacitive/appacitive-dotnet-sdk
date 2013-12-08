@@ -7,14 +7,14 @@ using Newtonsoft.Json;
 
 namespace Appacitive.Sdk.Services
 {
-    public class UpdateArticleRequest : PostOperation<UpdateArticleResponse>
+    public class UpdateObjectRequest : PostOperation<UpdateObjectResponse>
     {
-        public UpdateArticleRequest() :
+        public UpdateObjectRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
         {
         }
 
-        public UpdateArticleRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
+        public UpdateObjectRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
             base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
         {
             this.PropertyUpdates = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -47,7 +47,7 @@ namespace Appacitive.Sdk.Services
 
         protected override string GetUrl()
         {
-            return Urls.For.UpdateArticle(this.Type, this.Id, this.Revision, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+            return Urls.For.UpdateObject(this.Type, this.Id, this.Revision, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }

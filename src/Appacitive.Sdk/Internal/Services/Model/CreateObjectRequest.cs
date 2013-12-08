@@ -7,29 +7,29 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class CreateArticleRequest : PutOperation<CreateArticleResponse>
+    public class CreateObjectRequest : PutOperation<CreateObjectResponse>
     {
-        public CreateArticleRequest() :
+        public CreateObjectRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
         {
         }
 
-        public CreateArticleRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
+        public CreateObjectRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
             base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
         {
         }
 
-        public Article Article { get; set; }
+        public APObject Object { get; set; }
 
         public override byte[] ToBytes()
         {
             var serializer = ObjectFactory.Build<IJsonSerializer>();
-            return serializer.Serialize(this.Article);
+            return serializer.Serialize(this.Object);
         }
 
         protected override string GetUrl()
         {
-            return Urls.For.CreateArticle(this.Article.Type, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+            return Urls.For.CreateObject(this.Object.Type, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }

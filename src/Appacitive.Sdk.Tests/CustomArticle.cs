@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Tests
 {
-    public class CustomArticle : Article
+    public class CustomObject : APObject
     {
-        public CustomArticle()
+        public CustomObject()
             : base("object")
         {
         }

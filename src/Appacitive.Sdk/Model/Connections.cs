@@ -10,13 +10,13 @@ namespace Appacitive.Sdk
 {
     public static partial class Connections
     {   
-        public async static Task<Connection> GetAsync(string relation, string endpointArticleId1, string endpointArticleId2)
+        public async static Task<Connection> GetAsync(string relation, string endpointObjectId1, string endpointObjectId2)
         {
             var response = await (new GetConnectionByEndpointRequest
             {
                 Relation = relation,
-                ArticleId1 = endpointArticleId1,
-                ArticleId2 = endpointArticleId2
+                ObjectId1 = endpointObjectId1,
+                ObjectId2 = endpointObjectId2
             }).ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();

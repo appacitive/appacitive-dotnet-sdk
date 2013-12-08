@@ -18,41 +18,41 @@ namespace Appacitive.Sdk
         private string RelationName {get; set;}
         private string EndpointALabel {get; set;}
         private string EndpointAId {get; set;}
-        private Article EndpointAContent {get; set;}
+        private APObject EndpointAContent {get; set;}
         private string EndpointBLabel {get; set;}
         private string EndpointBId {get; set;}
-        private Article EndpointBContent {get; set;}
+        private APObject EndpointBContent {get; set;}
 
 
-        public ConnectionBuilder FromNewArticle(string endpointLabel, Article article )
+        public ConnectionBuilder FromNewObject(string endpointLabel, APObject obj )
         {
             this.EndpointALabel = endpointLabel;
-            this.EndpointAContent = article;
+            this.EndpointAContent = obj;
             this.EndpointAId = null;
             return this;
         }
 
-        public ConnectionBuilder FromExistingArticle(string endpointLabel, string articleId )
+        public ConnectionBuilder FromExistingObject(string endpointLabel, string objectId )
         {
             this.EndpointALabel = endpointLabel;
             this.EndpointAContent = null;
-            this.EndpointAId = articleId;
+            this.EndpointAId = objectId;
             return this;
         }
 
-        public Connection ToNewArticle( string endpointLabel, Article article )
+        public Connection ToNewObject( string endpointLabel, APObject obj )
         {
             this.EndpointBLabel = endpointLabel;
-            this.EndpointBContent = article;
+            this.EndpointBContent = obj;
             this.EndpointBId = null;
             return Build();
         }
 
-        public Connection ToExistingArticle( string endpointLabel, string articleId )
+        public Connection ToExistingObject( string endpointLabel, string objectId )
         {
             this.EndpointBLabel = endpointLabel;
             this.EndpointBContent = null;
-            this.EndpointBId = articleId;
+            this.EndpointBId = objectId;
             return Build();
         }
 
@@ -85,53 +85,53 @@ namespace Appacitive.Sdk
             this.Endpoints = new EndpointPair(null, null);
         }
 
-        public Connection(string type, string labelA, string articleIdA, string labelB, string ArticleIdB) 
+        public Connection(string type, string labelA, string objectIdA, string labelB, string objectIdB) 
             : base(type)
         {
-            var ep1 = new Endpoint(labelA, articleIdA);
-            var ep2 = new Endpoint(labelB, ArticleIdB);
+            var ep1 = new Endpoint(labelA, objectIdA);
+            var ep2 = new Endpoint(labelB, objectIdB);
             this.Endpoints = new EndpointPair(ep1, ep2);
         }
 
-        public Connection(string type, string labelA, Article articleA, string labelB, string ArticleIdB)
+        public Connection(string type, string labelA, APObject objectA, string labelB, string objectIdB)
             : base(type)
         {
             Endpoint ep1, ep2;
-            if (articleA.IsNewInstance == false)
+            if (objectA.IsNewInstance == false)
             {
-                ep1 = new Endpoint(labelA, articleA.Id);
-                ep2 = new Endpoint(labelB, ArticleIdB);
+                ep1 = new Endpoint(labelA, objectA.Id);
+                ep2 = new Endpoint(labelB, objectIdB);
             }
             else
             {
                 string nullId = null;
                 ep1 = new Endpoint(labelA, nullId);
-                ep2 = new Endpoint(labelB, ArticleIdB);
-                ep1.Content = articleA;
+                ep2 = new Endpoint(labelB, objectIdB);
+                ep1.Content = objectA;
             }
             this.Endpoints = new EndpointPair(ep1, ep2);
         }
 
-        public Connection(string type, string labelA, Article articleA, string labelB, Article articleB)
+        public Connection(string type, string labelA, APObject objectA, string labelB, APObject objectB)
             : base(type)
         {
             Endpoint ep1, ep2;
             string nullId = null;
-            if (articleA.IsNewInstance == true)
+            if (objectA.IsNewInstance == true)
             {
                 ep1 = new Endpoint(labelA, nullId);
-                ep1.Content = articleA;
+                ep1.Content = objectA;
             }
             else
-                ep1 = new Endpoint(labelA, articleA.Id);
+                ep1 = new Endpoint(labelA, objectA.Id);
 
-            if (articleB.IsNewInstance == true)
+            if (objectB.IsNewInstance == true)
             {   
                 ep2 = new Endpoint(labelB, nullId);
-                ep2.Content = articleB;
+                ep2.Content = objectB;
             }
             else
-                ep2 = new Endpoint(labelB, articleB.Id);
+                ep2 = new Endpoint(labelB, objectB.Id);
 
             this.Endpoints = new EndpointPair(ep1, ep2);
         }
@@ -152,21 +152,21 @@ namespace Appacitive.Sdk
 
         public EndpointPair Endpoints { get; set; }
 
-        public async Task<Article> GetEndpointArticleAsync(string label)
+        public async Task<APObject> GetEndpointObjectAsync(string label)
         {
             if (string.Compare(this.Endpoints.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
-                return await this.Endpoints.EndpointA.GetArticleAsync();
+                return await this.Endpoints.EndpointA.GetObjectAsync();
             if (string.Compare(this.Endpoints.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
-                return await this.Endpoints.EndpointB.GetArticleAsync();
+                return await this.Endpoints.EndpointB.GetObjectAsync();
             throw new AppacitiveException("Invalid label " + label);
         }
 
         public string GetEndpointId(string label)
         {
             if (string.Compare(this.Endpoints.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
-                return this.Endpoints.EndpointA.ArticleId;
+                return this.Endpoints.EndpointA.ObjectId;
             if (string.Compare(this.Endpoints.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
-                return this.Endpoints.EndpointB.ArticleId;
+                return this.Endpoints.EndpointB.ObjectId;
             throw new AppacitiveException("Invalid label " + label);
         }
 
@@ -174,7 +174,7 @@ namespace Appacitive.Sdk
 
         protected async override Task<Entity> CreateNewAsync()
         {
-            // Handling for special case when endpoint contains a new article or device.
+            // Handling for special case when endpoint contains a new object or device.
             // Since these cannot be created on the fly when creating a new connection.
             var endpoints = this.Endpoints.ToArray();
             for (int i = 0; i < endpoints.Length; i++)
@@ -183,14 +183,14 @@ namespace Appacitive.Sdk
                 if (endpoints[i].Content.Type.Equals("user", StringComparison.OrdinalIgnoreCase) == true ||
                     endpoints[i].Content.Type.Equals("device", StringComparison.OrdinalIgnoreCase) == true)
                 {
-                    // Create the article
+                    // Create the object
                     await endpoints[i].Content.SaveAsync();
-                    // Update endpoint articleid
-                    endpoints[i].ArticleId = endpoints[i].Content.Id;
+                    // Update endpoint object ids
+                    endpoints[i].ObjectId = endpoints[i].Content.Id;
                 }
             }
 
-            // Create a new article
+            // Create a new object
             var response = await (new CreateConnectionRequest()
             {
                 Connection = this
@@ -242,39 +242,39 @@ namespace Appacitive.Sdk
 
     public class Endpoint
     {
-        public Endpoint(string label, string articleId)
+        public Endpoint(string label, string obectId)
         {
             this.Label = label;
-            this.ArticleId = articleId;
+            this.ObjectId = obectId;
         }
 
-        public Endpoint(string label, Article content)
+        public Endpoint(string label, APObject content)
         {
             this.Label = label;
             this.Content = content; 
             if( content != null )
-                this.ArticleId = content.Id;
+                this.ObjectId = content.Id;
         }
 
         internal bool CreateEndpoint
         {
-            get { return string.IsNullOrWhiteSpace(this.ArticleId); }
+            get { return string.IsNullOrWhiteSpace(this.ObjectId); }
         }
 
-        internal Article Content { get; set; }
+        internal APObject Content { get; set; }
 
-        public string ArticleId { get; set; }
+        public string ObjectId { get; set; }
 
         public string Label { get; set; }
 
         public string Type { get; set; }
 
-        public async Task<Article> GetArticleAsync()
+        public async Task<APObject> GetObjectAsync()
         {
             if (this.Content != null)
                 return this.Content;
             else 
-                return await Articles.GetAsync(this.Type, this.ArticleId);
+                return await APObjects.GetAsync(this.Type, this.ObjectId);
         }
     }
 

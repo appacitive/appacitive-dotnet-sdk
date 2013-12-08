@@ -11,19 +11,19 @@ using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
-    public partial class Article : Entity, INotifyPropertyChanged
+    public partial class APObject : Entity, INotifyPropertyChanged
     {   
-        protected Article(Article existing) : base(existing)
+        protected APObject(APObject existing) : base(existing)
         {
             // Copy
             this.SchemaId = existing.SchemaId;
         }
 
-        public Article(string type) : base(type)
+        public APObject(string type) : base(type)
         {   
         }
 
-        public Article(string type, string id)
+        public APObject(string type, string id)
             : base(type, id)
         {
         }
@@ -39,7 +39,7 @@ namespace Appacitive.Sdk
 
         protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
-            var request = new UpdateArticleRequest {Id = this.Id, Type = this.Type};
+            var request = new UpdateObjectRequest {Id = this.Id, Type = this.Type};
             request.Revision = specificRevision;
             if (propertyUpdates != null && propertyUpdates.Count > 0)
                 propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
@@ -62,32 +62,32 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
 
             // 3. Update the last known state based on the differences
-            Debug.Assert(response.Article != null, "If status is successful, then updated article should not be null.");
-            return response.Article;
+            Debug.Assert(response.Object != null, "If status is successful, then updated object should not be null.");
+            return response.Object;
         }
 
         protected override async Task<Entity> CreateNewAsync()
         {
-            // Create a new article
-            var response = await new CreateArticleRequest()
+            // Create a new object
+            var response = await new CreateObjectRequest()
             {
-                Article = this
+                Object = this
             }.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 
             // 3. Update the last known state based on the differences
-            Debug.Assert(response.Article != null, "If status is successful, then created article should not be null.");
-            return response.Article;
+            Debug.Assert(response.Object != null, "If status is successful, then created object should not be null.");
+            return response.Object;
         }
 
-        public async Task<PagedList<Article>> GetConnectedArticlesAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async Task<PagedList<APObject>> GetConnectedObjectsAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
-            var request = new FindConnectedArticlesRequest
+            var request = new FindConnectedObjectsRequest
             {
                 Relation = relation,
-                ArticleId = this.Id,
-                Article = this,
+                ObjectId = this.Id,
+                Object = this,
                 Label = label,
                 Query = query,
                 Type = this.Type,
@@ -103,25 +103,25 @@ namespace Appacitive.Sdk
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 
-            IEnumerable<Article> articles = response.Nodes.Select(n => n.Article);
-            var list = new PagedList<Article>()
+            IEnumerable<APObject> objects = response.Nodes.Select(n => n.Object);
+            var list = new PagedList<APObject>()
             {
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await this.GetConnectedArticlesAsync(relation, query, label, fields, pageNumber + skip + 1, pageSize)
+                GetNextPage = async skip => await this.GetConnectedObjectsAsync(relation, query, label, fields, pageNumber + skip + 1, pageSize)
             };
-            list.AddRange(articles);
+            list.AddRange(objects);
             return list;
         }
 
         public async Task<PagedList<Connection>> GetConnectionsAsync(string relation, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
-            var request = new FindConnectedArticlesRequest
+            var request = new FindConnectedObjectsRequest
             {
                 Relation = relation,
-                ArticleId = this.Id,
-                Article = this,
+                ObjectId = this.Id,
+                Object = this,
                 Query = query,
                 Label = label,
                 Type = this.Type,

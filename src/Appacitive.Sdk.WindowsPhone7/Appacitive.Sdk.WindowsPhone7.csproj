@@ -196,17 +196,17 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\AuthenticateUserResponse.cs">
       <Link>Internal\Services\Model\AuthenticateUserResponse.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\BulkDeleteArticleRequest.cs">
-      <Link>Internal\Services\Model\BulkDeleteArticleRequest.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\BulkDeleteArticleResponse.cs">
-      <Link>Internal\Services\Model\BulkDeleteArticleResponse.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\BulkDeleteConnectionRequest.cs">
       <Link>Internal\Services\Model\BulkDeleteConnectionRequest.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\BulkDeleteConnectionResponse.cs">
       <Link>Internal\Services\Model\BulkDeleteConnectionResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\BulkDeleteObjectRequest.cs">
+      <Link>Internal\Services\Model\BulkDeleteObjectRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\BulkDeleteObjectResponse.cs">
+      <Link>Internal\Services\Model\BulkDeleteObjectResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\ChangePasswordRequest.cs">
       <Link>Internal\Services\Model\ChangePasswordRequest.cs</Link>
@@ -214,17 +214,17 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\ChangePasswordResponse.cs">
       <Link>Internal\Services\Model\ChangePasswordResponse.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateArticleRequest.cs">
-      <Link>Internal\Services\Model\CreateArticleRequest.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateArticleResponse.cs">
-      <Link>Internal\Services\Model\CreateArticleResponse.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateConnectionRequest.cs">
       <Link>Internal\Services\Model\CreateConnectionRequest.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateConnectionResponse.cs">
       <Link>Internal\Services\Model\CreateConnectionResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateObjectRequest.cs">
+      <Link>Internal\Services\Model\CreateObjectRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateObjectResponse.cs">
+      <Link>Internal\Services\Model\CreateObjectResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateSessionRequest.cs">
       <Link>Internal\Services\Model\CreateSessionRequest.cs</Link>
@@ -238,9 +238,6 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateUserResponse.cs">
       <Link>Internal\Services\Model\CreateUserResponse.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\DeleteArticleRequest.cs">
-      <Link>Internal\Services\Model\DeleteArticleRequest.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\DeleteConnectionRequest.cs">
       <Link>Internal\Services\Model\DeleteConnectionRequest.cs</Link>
     </Compile>
@@ -253,6 +250,12 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\DeleteDeviceResponse.cs">
       <Link>Internal\Services\Model\DeleteDeviceResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\DeleteObjectRequest.cs">
+      <Link>Internal\Services\Model\DeleteObjectRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\DeleteObjectResponse.cs">
+      <Link>Internal\Services\Model\DeleteObjectResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\DeleteUserRequest.cs">
       <Link>Internal\Services\Model\DeleteUserRequest.cs</Link>
     </Compile>
@@ -262,17 +265,17 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\Enums.cs">
       <Link>Internal\Services\Model\Enums.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindAllArticlesRequest.cs">
-      <Link>Internal\Services\Model\FindAllArticlesRequest.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindAllArticlesResponse.cs">
-      <Link>Internal\Services\Model\FindAllArticlesResponse.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindAllConnectionRequest.cs">
       <Link>Internal\Services\Model\FindAllConnectionRequest.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindAllConnectionResponse.cs">
       <Link>Internal\Services\Model\FindAllConnectionResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindAllObjectsRequest.cs">
+      <Link>Internal\Services\Model\FindAllObjectsRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindAllObjectsResponse.cs">
+      <Link>Internal\Services\Model\FindAllObjectsResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindAllUserResponse.cs">
       <Link>Internal\Services\Model\FindAllUserResponse.cs</Link>
@@ -280,23 +283,17 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindAllUsersRequest.cs">
       <Link>Internal\Services\Model\FindAllUsersRequest.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindConnectedArticlesRequest.cs">
-      <Link>Internal\Services\Model\FindConnectedArticlesRequest.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindConnectedObjectsRequest.cs">
+      <Link>Internal\Services\Model\FindConnectedObjectsRequest.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindConnectedArticlesResponse.cs">
-      <Link>Internal\Services\Model\FindConnectedArticlesResponse.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FindConnectedObjectsResponse.cs">
+      <Link>Internal\Services\Model\FindConnectedObjectsResponse.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FreeTextSearchArticlesRequest.cs">
-      <Link>Internal\Services\Model\FreeTextSearchArticlesRequest.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FreeTextSearchObjectsRequest.cs">
+      <Link>Internal\Services\Model\FreeTextSearchObjectsRequest.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FreeTextSearchArticlesResponse.cs">
-      <Link>Internal\Services\Model\FreeTextSearchArticlesResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetArticleRequest.cs">
-      <Link>Internal\Services\Model\GetArticleRequest.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetArticleResponse.cs">
-      <Link>Internal\Services\Model\GetArticleResponse.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\FreeTextSearchObjectsResponse.cs">
+      <Link>Internal\Services\Model\FreeTextSearchObjectsResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetConnectionByEndpointRequest.cs">
       <Link>Internal\Services\Model\GetConnectionByEndpointRequest.cs</Link>
@@ -321,6 +318,12 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetDownloadUrlResponse.cs">
       <Link>Internal\Services\Model\GetDownloadUrlResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetObjectRequest.cs">
+      <Link>Internal\Services\Model\GetObjectRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetObjectResponse.cs">
+      <Link>Internal\Services\Model\GetObjectResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetUploadUrlRequest.cs">
       <Link>Internal\Services\Model\GetUploadUrlRequest.cs</Link>
@@ -358,11 +361,11 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\InvalidateUserSessionResponse.cs">
       <Link>Internal\Services\Model\InvalidateUserSessionResponse.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\MultiGetArticleRequest.cs">
-      <Link>Internal\Services\Model\MultiGetArticleRequest.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\MultiGetObjectsRequest.cs">
+      <Link>Internal\Services\Model\MultiGetObjectsRequest.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\MultiGetArticleResponse.cs">
-      <Link>Internal\Services\Model\MultiGetArticleResponse.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\MultiGetObjectsResponse.cs">
+      <Link>Internal\Services\Model\MultiGetObjectsResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\PagedConnectionList.cs">
       <Link>Internal\Services\Model\PagedConnectionList.cs</Link>
@@ -391,12 +394,6 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\Status.cs">
       <Link>Internal\Services\Model\Status.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateArticleRequest.cs">
-      <Link>Internal\Services\Model\UpdateArticleRequest.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateArticleResponse.cs">
-      <Link>Internal\Services\Model\UpdateArticleResponse.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateConnectionRequest.cs">
       <Link>Internal\Services\Model\UpdateConnectionRequest.cs</Link>
     </Compile>
@@ -409,6 +406,12 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateDeviceResponse.cs">
       <Link>Internal\Services\Model\UpdateDeviceResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateObjectRequest.cs">
+      <Link>Internal\Services\Model\UpdateObjectRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateObjectResponse.cs">
+      <Link>Internal\Services\Model\UpdateObjectResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateUserRequest.cs">
       <Link>Internal\Services\Model\UpdateUserRequest.cs</Link>
     </Compile>
@@ -420,9 +423,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\ValidateUserSessionResponse.cs">
       <Link>Internal\Services\Model\ValidateUserSessionResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\ArticleConverter.cs">
-      <Link>Internal\Services\Serializers\ArticleConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\AuthenticateUserRequestConverter.cs">
       <Link>Internal\Services\Serializers\AuthenticateUserRequestConverter.cs</Link>
@@ -442,8 +442,8 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\EventTypeConverter.cs">
       <Link>Internal\Services\Serializers\EventTypeConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\FindConnectedArticlesResponseConverter.cs">
-      <Link>Internal\Services\Serializers\FindConnectedArticlesResponseConverter.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\FindConnectedObjectsResponseConverter.cs">
+      <Link>Internal\Services\Serializers\FindConnectedObjectsResponseConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\GraphNodeConverter.cs">
       <Link>Internal\Services\Serializers\GraphNodeConverter.cs</Link>
@@ -453,6 +453,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\JsonPayloadConverter.cs">
       <Link>Internal\Services\Serializers\JsonPayloadConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\ObjectConverter.cs">
+      <Link>Internal\Services\Serializers\ObjectConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\PushNotificationConverter.cs">
       <Link>Internal\Services\Serializers\PushNotificationConverter.cs</Link>
@@ -466,14 +469,14 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\StatusResponseConverter.cs">
       <Link>Internal\Services\Serializers\StatusResponseConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateArticleRequestConverter.cs">
-      <Link>Internal\Services\Serializers\UpdateArticleRequestConverter.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateConnectionRequestConverter.cs">
       <Link>Internal\Services\Serializers\UpdateConnectionRequestConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateDeviceRequestConverter.cs">
       <Link>Internal\Services\Serializers\UpdateDeviceRequestConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateObjectRequestConverter.cs">
+      <Link>Internal\Services\Serializers\UpdateObjectRequestConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateUserRequestConverter.cs">
       <Link>Internal\Services\Serializers\UpdateUserRequestConverter.cs</Link>
@@ -517,14 +520,14 @@
     <Compile Include="..\Appacitive.Sdk\Messaging.cs">
       <Link>Messaging.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\APObject.cs">
+      <Link>Model\APObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\APObjects.cs">
+      <Link>Model\APObjects.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\AppacitiveException.cs">
       <Link>Model\AppacitiveException.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\Article.cs">
-      <Link>Model\Article.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\Articles.cs">
-      <Link>Model\Articles.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\AuthenticationToken.cs">
       <Link>Model\AuthenticationToken.cs</Link>

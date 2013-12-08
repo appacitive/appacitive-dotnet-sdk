@@ -10,14 +10,14 @@ using Newtonsoft.Json.Linq;
 
 namespace Appacitive.Sdk.Services
 {   
-    public class ArticleConverter : EntityConverter
+    public class ObjectConverter : EntityConverter
     {
         public override bool CanConvert(Type objectType)
         {
             // Type should not be a User or Device since these have their specific serializers.
-            // This serializer should be used for any other type that inherits from article.
+            // This serializer should be used for any other type that inherits from object.
             if (objectType != typeof(User) && objectType != typeof(Device))
-                return objectType.Is<Article>();
+                return objectType.Is<APObject>();
             else 
                 return false;
         }
@@ -28,7 +28,7 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("__schematype", out value) == false || value.Type == JTokenType.Null)
                 throw new Exception("Schema type missing.");
             var type = value.ToString();
-            return new Article(type);
+            return new APObject(type);
         }
 
         protected override Entity ReadJson(Entity entity, Type objectType, JObject json, JsonSerializer serializer)
@@ -36,32 +36,32 @@ namespace Appacitive.Sdk.Services
             if (json == null || json.Type == JTokenType.Null)
                 return null;
             JToken value;
-            var article = base.ReadJson(entity, objectType, json, serializer) as Article;
-            if (article != null)
+            var obj = base.ReadJson(entity, objectType, json, serializer) as APObject;
+            if (obj != null)
             {
                 // Schema Id
                 if (json.TryGetValue("__schemaid", out value) == true && value.Type != JTokenType.Null)
-                    article.SchemaId = value.ToString();
+                    obj.SchemaId = value.ToString();
             }
 
             // Check for inheritance.
-            if (article.Type.Equals("user", StringComparison.OrdinalIgnoreCase) == true)
-                return new User(article);
-            else if (article.Type.Equals("device", StringComparison.OrdinalIgnoreCase) == true)
-                return new Device(article);
-            else return article;
+            if (obj.Type.Equals("user", StringComparison.OrdinalIgnoreCase) == true)
+                return new User(obj);
+            else if (obj.Type.Equals("device", StringComparison.OrdinalIgnoreCase) == true)
+                return new Device(obj);
+            else return obj;
         }
 
         protected override void WriteJson(Entity entity, JsonWriter writer, JsonSerializer serializer)
         {
             if (entity == null)
                 return;
-            var article = entity as Article;
-            if (article != null)
+            var obj = entity as APObject;
+            if (obj != null)
             {
                 writer
-                    .WriteProperty("__schematype", article.Type)
-                    .WriteProperty("__schemaid", article.SchemaId);
+                    .WriteProperty("__schematype", obj.Type)
+                    .WriteProperty("__schemaid", obj.SchemaId);
             }
         }
 

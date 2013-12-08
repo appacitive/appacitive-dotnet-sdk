@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    [JsonConverter(typeof(StatusResponseConverter<BulkDeleteArticleResponse>))]
-    public class BulkDeleteArticleResponse : ApiResponse
+    [JsonConverter(typeof(StatusResponseConverter<BulkDeleteObjectResponse>))]
+    public class BulkDeleteObjectResponse : ApiResponse
     {   
     }
 }

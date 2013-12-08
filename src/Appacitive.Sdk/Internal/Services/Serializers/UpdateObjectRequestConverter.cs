@@ -10,11 +10,11 @@ using System.Collections;
 
 namespace Appacitive.Sdk.Services
 {
-    public class UpdateArticleRequestConverter : JsonConverter
+    public class UpdateObjectRequestConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(UpdateArticleRequest) == objectType;
+            return typeof(UpdateObjectRequest) == objectType;
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -45,7 +45,7 @@ namespace Appacitive.Sdk.Services
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var request = value as UpdateArticleRequest;
+            var request = value as UpdateObjectRequest;
             if (request == null)
             {
                 writer.WriteNull();

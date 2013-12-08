@@ -8,7 +8,7 @@ namespace Appacitive.Sdk.Services.Model
 {
     public class PagedConnectionList : List<Connection>
     {
-        internal string ArticleType { get; set; }
+        internal string Type { get; set; }
 
         public int PageNumber { get; set; }
 

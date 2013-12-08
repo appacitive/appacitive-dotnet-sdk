@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class MultiGetArticleRequest : GetOperation<MultiGetArticleResponse>
+    public class MultiGetObjectsRequest : GetOperation<MultiGetObjectsResponse>
     {
-        public MultiGetArticleRequest() :
+        public MultiGetObjectsRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
         {
             this.IdList = new List<string>();
         }
 
-        public MultiGetArticleRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
+        public MultiGetObjectsRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
             base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
         {
             this.IdList = new List<string>();
@@ -26,7 +26,7 @@ namespace Appacitive.Sdk.Services
 
         protected override string GetUrl()
         {
-            return Urls.For.MultiGetArticle(this.Type, this.IdList, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+            return Urls.For.MultiGetObjects(this.Type, this.IdList, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }

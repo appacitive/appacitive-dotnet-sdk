@@ -24,15 +24,15 @@ namespace Appacitive.Sdk.Services
         private GraphNode ParseGraphNode(GraphNode parent, string name, string parentLabel, JObject json, JsonSerializer serializer)
         {
             GraphNode current = new GraphNode();
-            // Parse the article
-            var articleJson = ExtractArticleJson(json);
-            current.Article = serializer.Deserialize<Article>(articleJson.CreateReader());
+            // Parse the object
+            var objectJson = ExtractObjectJson(json);
+            current.Object = serializer.Deserialize<APObject>(objectJson.CreateReader());
             // Parse edge
             if (parent != null)
             {
                 var edgeJson = ExtractEdgeJson(json);
                 if (edgeJson != null)
-                    current.Connection = ParseConnection(parentLabel, parent.Article, current.Article, edgeJson);
+                    current.Connection = ParseConnection(parentLabel, parent.Object, current.Object, edgeJson);
             }
             // Parse children
             ParseChildNodes(json, current, serializer);
@@ -69,7 +69,7 @@ namespace Appacitive.Sdk.Services
             }
         }
 
-        private Connection ParseConnection(string parentLabel, Article parentArticle, Article currentArticle, JObject json)
+        private Connection ParseConnection(string parentLabel, APObject parentObj, APObject currentObj, JObject json)
         {
             string label = string.Empty;
             if( json.Property("__label") != null ) 
@@ -80,8 +80,8 @@ namespace Appacitive.Sdk.Services
             var id = GetValue(json, "__id", JTokenType.String, true).ToString();
             var conn = new Connection(relation, id);
             conn.Endpoints = new EndpointPair(
-                new Endpoint(parentLabel, parentArticle) { ArticleId = parentArticle.Id },
-                new Endpoint(label, currentArticle) { ArticleId = currentArticle.Id });
+                new Endpoint(parentLabel, parentObj) { ObjectId = parentObj.Id },
+                new Endpoint(label, currentObj) { ObjectId = currentObj.Id });
             // Parse system properties
             JToken value = null;
             // Id
@@ -183,19 +183,19 @@ namespace Appacitive.Sdk.Services
             return value.DeepClone() as JObject;
         }
 
-        private JObject ExtractArticleJson(JObject json)
+        private JObject ExtractObjectJson(JObject json)
         {
             var clone = json.DeepClone() as JObject;
             var properties = clone.Properties().ToArray();
             for (int i = 0; i < properties.Length; i++)
             {
-                if( IsArticleProperty(properties[i].Name) == false )
+                if( IsObjectProperty(properties[i].Name) == false )
                     clone.Remove(properties[i].Name);
             }
             return clone;
         }
 
-        private bool IsArticleProperty(string propertyName)
+        private bool IsObjectProperty(string propertyName)
         {
             if (propertyName.Equals("__edge", StringComparison.OrdinalIgnoreCase) == true)
                 return false;

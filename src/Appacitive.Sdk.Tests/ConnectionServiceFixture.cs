@@ -30,11 +30,11 @@ namespace Appacitive.Sdk.Tests
             var endpoints = response.Connection.Endpoints.ToArray();
             Assert.IsNotNull(endpoints[0], "Endpoint A is null.");
             Assert.IsNotNull(endpoints[1], "Endpoint B is null.");
-            Assert.IsTrue(endpoints.Select(x => x.ArticleId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
+            Assert.IsTrue(endpoints.Select(x => x.ObjectId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
         }
 
         [TestMethod]
-        public async Task CreateConnectionWithNewArticlesAsyncTest()
+        public async Task CreateConnectionWithNewObjectsAsyncTest()
         {
 
             var obj1 = ObjectHelper.NewInstance();

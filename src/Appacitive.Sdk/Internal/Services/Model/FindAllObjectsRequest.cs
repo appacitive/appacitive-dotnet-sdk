@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    public class FreeTextSearchArticlesRequest : GetOperation<FreeTextSearchArticlesResponse>
+    public class FindAllObjectsRequest : GetOperation<FindAllObjectsResponse>
     {
-        public FreeTextSearchArticlesRequest() :
+        public FindAllObjectsRequest() :
             this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
         {
         }
 
-        public FreeTextSearchArticlesRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
+        public FindAllObjectsRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
             base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
         {
         }
 
         public string Type { get; set; }
 
-        public string FreeTextExpression { get; set; }
+        public string Query { get; set; }
 
         public string OrderBy { get; set; }
 
@@ -32,7 +32,7 @@ namespace Appacitive.Sdk.Services
 
         protected override string GetUrl()
         {
-            return Urls.For.FreeTextSearchArticle(this.Type, this.FreeTextExpression, this.PageNumber, this.PageSize, this.OrderBy, this.SortOrder, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+            return Urls.For.FindAllObjects(this.Type, this.Query, this.PageNumber, this.PageSize, this.OrderBy, this.SortOrder, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }
