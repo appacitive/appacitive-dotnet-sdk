@@ -13,13 +13,15 @@ namespace Appacitive.Sdk.Net45
     {
         public async Task<byte[]> DownloadAsync(string url, IDictionary<string, string> headers, string method)
         {
-            var client = new WebClient();
-            if (headers != null)
+            using (var client = new WebClient())
             {
-                foreach (var header in headers)
-                    client.Headers[header.Key] = header.Value;
+                if (headers != null)
+                {
+                    foreach (var header in headers)
+                        client.Headers[header.Key] = header.Value;
+                }
+                return await client.DownloadDataTaskAsync(url);
             }
-            return await client.DownloadDataTaskAsync(url);
         }
 
         public async Task DownloadAsync(string url, IDictionary<string, string> headers, string method, string saveAs)
@@ -39,13 +41,15 @@ namespace Appacitive.Sdk.Net45
 
         public async Task UploadAsync(string url, IDictionary<string, string> headers, string method, byte[] data)
         {
-            var client = new WebClient();
-            if (headers != null)
-            {
-                foreach (var header in headers)
-                    client.Headers[header.Key] = header.Value;
+            using (var client = new WebClient())
+            {   
+                if (headers != null)
+                {
+                    foreach (var header in headers)
+                        client.Headers[header.Key] = header.Value;
+                }
+                await client.UploadDataTaskAsync(url, "PUT", data);
             }
-            await client.UploadDataTaskAsync(url, "PUT", data);
         }
 
 
