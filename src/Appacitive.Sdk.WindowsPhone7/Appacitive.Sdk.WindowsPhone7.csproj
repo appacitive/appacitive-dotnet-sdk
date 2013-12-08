@@ -661,6 +661,9 @@
     <Compile Include="..\Appacitive.Sdk\QueryDsl\RadialSearchQuery.cs">
       <Link>QueryDsl\RadialSearchQuery.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\RawQuery.cs">
+      <Link>QueryDsl\RawQuery.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\QueryDsl\TagExpression.cs">
       <Link>QueryDsl\TagExpression.cs</Link>
     </Compile>

@@ -104,12 +104,12 @@ namespace Appacitive.Sdk
         /// <param name="page">Page number</param>
         /// <param name="pageSize">Page size</param>
         /// <returns>A paged list of users.</returns>
-        public async static Task<PagedList<APUser>> FindAllAsync(string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async static Task<PagedList<APUser>> FindAllAsync(IQuery query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
-            
+            query = query ?? Query.None;
             var request = new FindAllUsersRequest()
             {
-                Query = query,
+                Query = query.AsString(),
                 PageNumber = page,
                 PageSize = pageSize,
                 OrderBy = orderBy,

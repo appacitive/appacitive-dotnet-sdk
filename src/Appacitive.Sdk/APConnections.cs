@@ -46,12 +46,13 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
         }
 
-        public async static Task<PagedList<APConnection>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async static Task<PagedList<APConnection>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
+            query = query ?? Query.None;
             var request = new FindAllConnectionsRequest()
             {
                 Type = type,
-                Query = query,
+                Query = query.AsString(),
                 PageNumber = page,
                 PageSize = pageSize,
                 OrderBy = orderBy,

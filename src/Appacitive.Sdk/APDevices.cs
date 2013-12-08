@@ -14,7 +14,7 @@ namespace Appacitive.Sdk
 {
     public static class APDevices
     {
-        public async static Task<PagedList<APDevice>> FindAllAsync(string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async static Task<PagedList<APDevice>> FindAllAsync(IQuery query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
             var objects = await APObjects.FindAllAsync("device", query, fields, page, pageSize, orderBy, sortOrder);
             var devices = objects.Select(x => new APDevice(x));

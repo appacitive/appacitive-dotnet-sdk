@@ -34,12 +34,13 @@ namespace Appacitive.Sdk
             return response.Objects;
         }
 
-        public async static Task<PagedList<APObject>> FindAllAsync(string type, string query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async static Task<PagedList<APObject>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
+            query = query ?? Query.None;
             var request = new FindAllObjectsRequest()
             {
                 Type = type,
-                Query = query,
+                Query = query.AsString(),
                 PageNumber = page,
                 PageSize = pageSize,
                 OrderBy = orderBy,
@@ -114,14 +115,16 @@ namespace Appacitive.Sdk
         }
 
 
-        public async static Task<PagedList<APObject>> GetConnectedObjectsAsync(string relation, string type, string objectId, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
+        public async static Task<PagedList<APObject>> GetConnectedObjectsAsync(string relation, string type, string objectId, IQuery query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
-            return await new APObject(type, objectId).GetConnectedObjectsAsync(relation, query, label, fields, pageNumber, pageSize);
+            query = query ?? Query.None;
+            return await new APObject(type, objectId).GetConnectedObjectsAsync(relation, query.AsString(), label, fields, pageNumber, pageSize);
         }
 
-        public async static Task<PagedList<APConnection>> GetConnectionsAsync(string relation, string schemaType, string objectId, string query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
+        public async static Task<PagedList<APConnection>> GetConnectionsAsync(string relation, string schemaType, string objectId, IQuery query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
-            return await new APObject(schemaType, objectId).GetConnectionsAsync(relation, query, label, fields, pageNumber, pageSize);
+            query = query ?? Query.None;
+            return await new APObject(schemaType, objectId).GetConnectionsAsync(relation, query.AsString(), label, fields, pageNumber, pageSize);
         }
     }
 }

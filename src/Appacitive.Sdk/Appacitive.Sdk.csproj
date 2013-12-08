@@ -182,6 +182,7 @@
     <Compile Include="QueryDsl\Query.cs" />
     <Compile Include="QueryDsl\RadialSearchQuery.cs" />
     <Compile Include="Internal\StringUtils.cs" />
+    <Compile Include="QueryDsl\RawQuery.cs" />
     <Compile Include="QueryDsl\TagExpression.cs" />
     <Compile Include="QueryDsl\TagQuery.cs" />
     <Compile Include="QueryDsl\TimeFieldValue.cs" />

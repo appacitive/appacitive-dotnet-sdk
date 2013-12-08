@@ -8,7 +8,12 @@ namespace Appacitive.Sdk
 {
     public static class Query
     {
-        public static readonly string None = string.Empty;
+        public static readonly IQuery None = new RawQuery(null);
+
+        public static IQuery FromRawQuery(string query)
+        {
+            return new RawQuery(query);
+        }
 
         public static PropertyExpression Property(string name)
         {

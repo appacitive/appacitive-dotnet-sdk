@@ -105,6 +105,22 @@ namespace Appacitive.Sdk.Tests
 
 
         [TestMethod]
+        public async Task RawQueryTest()
+        {
+            var propertyValue = Unique.String;
+            var obj = new APObject("object");
+            obj.Set<string>("stringfield", propertyValue);
+            await obj.SaveAsync();
+
+            var rawQuery = string.Format("*stringfield == '{0}'", propertyValue);
+            var results = await APObjects.FindAllAsync("object", Query.FromRawQuery(rawQuery));
+            Assert.IsNotNull(results);
+            Assert.IsTrue(results.Count == 1);
+            Assert.IsTrue(results.Single().Id == obj.Id);
+        }
+
+
+        [TestMethod]
         public async Task MatchQueryTest()
         {
             var propertyValue = Unique.String;
@@ -114,8 +130,8 @@ namespace Appacitive.Sdk.Tests
             obj.SetAttribute("test_attribute", attrValue);
             await obj.SaveAsync();
 
-            var propertyQuery = Query.Property("stringfield").FreeTextMatches(propertyValue).ToString();
-            var attrQuery = Query.Attribute("test_attribute").FreeTextMatches(attrValue).ToString();
+            var propertyQuery = Query.Property("stringfield").FreeTextMatches(propertyValue);
+            var attrQuery = Query.Attribute("test_attribute").FreeTextMatches(attrValue);
             var result1 = await APObjects.FindAllAsync("object", propertyQuery);
             var result2 = await APObjects.FindAllAsync("object", attrQuery);
             Assert.IsNotNull(result1);

@@ -308,7 +308,7 @@ namespace Appacitive.Sdk.Tests
 
             // Search
             string stringToSearch = obj.stringfield;
-            var objects = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch).AsString());
+            var objects = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch));
             Assert.IsNotNull(objects);
             Assert.IsTrue(objects.Count == 1);
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
@@ -326,7 +326,7 @@ namespace Appacitive.Sdk.Tests
 
             // Search
             string stringToSearch = obj.stringfield;
-            var objects = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch).AsString());
+            var objects = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch));
             Assert.IsNotNull(objects);
             Assert.IsTrue(objects.Count == 1);
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
@@ -351,7 +351,7 @@ namespace Appacitive.Sdk.Tests
                             Query.Property("intfield").IsEqualTo(10)
                         });
 
-            var objects = await APObjects.FindAllAsync("object", query.AsString());
+            var objects = await APObjects.FindAllAsync("object", query);
             Assert.IsNotNull(objects);
             Assert.IsTrue(objects.Count == 1);
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
@@ -436,7 +436,7 @@ namespace Appacitive.Sdk.Tests
             obj.stringfield = stringValue;
             await obj.SaveAsync();
 
-            PagedList<APObject> result = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringValue).ToString());
+            PagedList<APObject> result = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringValue));
             Assert.IsTrue(result.TotalRecords == 1, "Expected single record but multiple records were returned.");
             Assert.IsTrue(result.Single().Id == obj.Id);
         }
@@ -452,7 +452,7 @@ namespace Appacitive.Sdk.Tests
             await obj.SaveAsync();
 
             // Search for the object with tags.
-            var matches = await APObjects.FindAllAsync("object", Query.Tags.MatchAll(tags).ToString());
+            var matches = await APObjects.FindAllAsync("object", Query.Tags.MatchAll(tags));
             Assert.IsTrue(matches != null);
             Assert.IsTrue(matches.Count == 1);
             Assert.IsTrue(matches[0] != null);
@@ -477,7 +477,7 @@ namespace Appacitive.Sdk.Tests
             await obj2.SaveAsync();
 
             // Search for the object with tags.
-            var matches = await APObjects.FindAllAsync("object", Query.Tags.MatchOneOrMore(tag1, tag2).ToString());
+            var matches = await APObjects.FindAllAsync("object", Query.Tags.MatchOneOrMore(tag1, tag2));
             Assert.IsTrue(matches != null);
             Assert.IsTrue(matches.Count == 2);
             Assert.IsTrue(matches[0] != null && matches[1] != null );

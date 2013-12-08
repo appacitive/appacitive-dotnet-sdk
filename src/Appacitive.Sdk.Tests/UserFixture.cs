@@ -52,7 +52,7 @@ namespace Appacitive.Sdk.Tests
             // Create a new user
             var newUser = await UserHelper.CreateNewUserAsync();
             // Get list of users
-            var users = await APUsers.FindAllAsync( Query.Property("username").IsEqualTo(newUser.Username).AsString() );
+            var users = await APUsers.FindAllAsync( Query.Property("username").IsEqualTo(newUser.Username) );
             Assert.IsTrue(users != null && users.Count == 1);
             Assert.IsTrue(users[0].Id == newUser.Id);
             users.ForEach(x => Console.WriteLine("id: {0} username: {1}",
