@@ -52,7 +52,7 @@ namespace Appacitive.Sdk
             this.ApiLogFlags = Sdk.ApiLogFlags.None;
         }
 
-        private ApiLogFlags ApiLogFlags { get; set; }
+        internal ApiLogFlags ApiLogFlags { get; private set; }
         private int _slowLogThresholdInMilliSeconds = 500;
         private Predicate<ApiResponse> _condition = null;
 

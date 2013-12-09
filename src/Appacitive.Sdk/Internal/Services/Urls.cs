@@ -98,6 +98,8 @@ namespace Appacitive.Sdk.Services
                     url.QueryString["location"] = location.ToString();
                 if (fields != null && fields.Count > 0)
                     url.QueryString["fields"] = fields.Select(x => x.ToLower() ).ToDelimitedList(",");
+                if (App.Debug.ApiLogging.ApiLogFlags != ApiLogFlags.None)
+                    url.QueryString["pretty"] = "true";
                 return url;
             }
 
