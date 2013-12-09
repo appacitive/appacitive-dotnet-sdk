@@ -10,7 +10,7 @@ namespace Appacitive.Sdk.Services
 {
     public class CreateObjectResponse : ApiResponse
     {
-        [JsonProperty("article")]
+        [JsonProperty("object")]
         public APObject Object { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Appacitive.Sdk.Tests
         [AssemblyInitialize]
         public static void Init(TestContext context)
         {
-            App.Initialize(WindowsRT.Host, TestConfiguration.ApiKey, TestConfiguration.Environment,
+            App.Initialize(WindowsRT.Host, "napis.appacitive.com/v1.0", TestConfiguration.ApiKey, TestConfiguration.Environment,
                 new AppacitiveSettings
                 {
                     EnableRealTimeSupport = false

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    [JsonConverter(typeof(StatusResponseConverter<DeleteObjectResponse>))]
     public class DeleteObjectResponse : ApiResponse
     {
     }

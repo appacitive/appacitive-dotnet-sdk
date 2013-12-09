@@ -25,7 +25,7 @@ namespace Appacitive.Sdk.Services
         protected override Entity CreateEntity(JObject json)
         {
             JToken value;
-            if (json.TryGetValue("__schematype", out value) == false || value.Type == JTokenType.Null)
+            if (json.TryGetValue("__type", out value) == false || value.Type == JTokenType.Null)
                 throw new Exception("Schema type missing.");
             var type = value.ToString();
             return new APObject(type);
@@ -35,13 +35,13 @@ namespace Appacitive.Sdk.Services
         {
             if (json == null || json.Type == JTokenType.Null)
                 return null;
-            JToken value;
+            // JToken value;
             var obj = base.ReadJson(entity, objectType, json, serializer) as APObject;
             if (obj != null)
             {
-                // Schema Id
-                if (json.TryGetValue("__schemaid", out value) == true && value.Type != JTokenType.Null)
-                    obj.SchemaId = value.ToString();
+                //// Schema Id
+                //if (json.TryGetValue("__schemaid", out value) == true && value.Type != JTokenType.Null)
+                //    obj.SchemaId = value.ToString();
             }
 
             // Check for inheritance.
@@ -60,8 +60,8 @@ namespace Appacitive.Sdk.Services
             if (obj != null)
             {
                 writer
-                    .WriteProperty("__schematype", obj.Type)
-                    .WriteProperty("__schemaid", obj.SchemaId);
+                    .WriteProperty("__type", obj.Type);
+                    //.WriteProperty("__schemaid", obj.SchemaId);
             }
         }
 

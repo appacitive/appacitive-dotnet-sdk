@@ -31,7 +31,7 @@ namespace Appacitive.Sdk.Services
                     .WriteProperty("__endpointa")
                     .StartObject()
                     .WriteProperty("label", conn.Endpoints.EndpointA.Label)
-                    .WriteProperty("articleid", conn.Endpoints.EndpointA.ObjectId)
+                    .WriteProperty("objectid", conn.Endpoints.EndpointA.ObjectId)
                     .EndObject();
             }
             else
@@ -40,7 +40,7 @@ namespace Appacitive.Sdk.Services
                     .WriteProperty("__endpointa")
                     .StartObject()
                     .WriteProperty("label", conn.Endpoints.EndpointA.Label)
-                    .WriteProperty("article")
+                    .WriteProperty("object")
                     .WithWriter( w => WriteObject(w, conn.Endpoints.EndpointA.Content) )
                     .EndObject();
             }
@@ -52,7 +52,7 @@ namespace Appacitive.Sdk.Services
                     .WriteProperty("__endpointb")
                     .StartObject()
                     .WriteProperty("label", conn.Endpoints.EndpointB.Label)
-                    .WriteProperty("articleid", conn.Endpoints.EndpointB.ObjectId)
+                    .WriteProperty("objectid", conn.Endpoints.EndpointB.ObjectId)
                     .EndObject();
             }
             else
@@ -61,7 +61,7 @@ namespace Appacitive.Sdk.Services
                     .WriteProperty("__endpointb")
                     .StartObject()
                     .WriteProperty("label", conn.Endpoints.EndpointB.Label)
-                    .WriteProperty("article")
+                    .WriteProperty("object")
                     .WithWriter(w => WriteObject(w, conn.Endpoints.EndpointB.Content))
                     .EndObject();
             }
@@ -113,11 +113,11 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("type", out value) == true && value.Type != JTokenType.Null)
                 type = value.ToString();
             // Parse the object id
-            if (json.TryGetValue("articleid", out value) == true && value.Type != JTokenType.Null)
+            if (json.TryGetValue("objectid", out value) == true && value.Type != JTokenType.Null)
                 objectId = value.ToString();
             // Parse the object
             APObject obj = null;
-            if (json.TryGetValue("article", out value) == true && value.Type != JTokenType.Null && value.Type == JTokenType.Object)
+            if (json.TryGetValue("object", out value) == true && value.Type != JTokenType.Null && value.Type == JTokenType.Object)
             {
                 using (var reader = value.CreateReader())
                 {

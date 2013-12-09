@@ -10,7 +10,7 @@ namespace Appacitive.Sdk.Services
 {
     public class FreeTextSearchObjectsResponse : ApiResponse
     {
-        [JsonProperty("articles")]
+        [JsonProperty("objects")]
         public List<APObject> Objects { get; set; }
 
         [JsonProperty("paginginfo")]

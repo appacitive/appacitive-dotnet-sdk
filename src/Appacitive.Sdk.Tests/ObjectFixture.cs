@@ -22,6 +22,10 @@ namespace Appacitive.Sdk.Tests
             var saved = obj as APObject;
             Assert.IsNotNull(saved);
             Assert.IsTrue(string.IsNullOrWhiteSpace(saved.Id) == false);
+            Assert.IsTrue(saved.Type == "object");
+            Assert.IsTrue(saved.Revision == 1);
+            Assert.IsTrue(saved.CreatedAt.Subtract(DateTime.Now).Duration().Seconds < 15);
+            Assert.IsTrue(saved.LastUpdatedAt.Subtract(DateTime.Now).Duration().Seconds < 15);
             Console.WriteLine("Created apObject with id {0}.", saved.Id);
         }
 
@@ -58,6 +62,10 @@ namespace Appacitive.Sdk.Tests
             decimal decimalField = copy.decimalfield;
             Assert.IsTrue(intfield == 1);
             Assert.IsTrue(decimalField == pi);
+            Assert.IsTrue(copy.Type == "object");
+            Assert.IsTrue(copy.Revision == 1);
+            Assert.IsTrue(copy.CreatedAt.Subtract(DateTime.Now).Duration().Seconds < 15);
+            Assert.IsTrue(copy.LastUpdatedAt.Subtract(DateTime.Now).Duration().Seconds < 15);
 
         }
 

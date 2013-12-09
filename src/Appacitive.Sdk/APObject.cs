@@ -16,7 +16,7 @@ namespace Appacitive.Sdk
         protected APObject(APObject existing) : base(existing)
         {
             // Copy
-            this.SchemaId = existing.SchemaId;
+            // this.SchemaId = existing.SchemaId;
         }
 
         public APObject(string type) : base(type)
@@ -28,7 +28,7 @@ namespace Appacitive.Sdk
         {
         }
 
-        internal string SchemaId { get; set; }
+        // internal string SchemaId { get; set; }
 
         internal bool IsNewInstance
         {

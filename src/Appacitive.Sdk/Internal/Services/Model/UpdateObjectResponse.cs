@@ -10,7 +10,7 @@ namespace Appacitive.Sdk.Services
 {
     public class UpdateObjectResponse : ApiResponse
     {
-        [JsonProperty("article")]
+        [JsonProperty("object")]
         public APObject Object { get; set; }
     }
 }

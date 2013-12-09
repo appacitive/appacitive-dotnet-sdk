@@ -16,7 +16,7 @@ namespace Appacitive.Sdk.Services
         {
             private static string ObjectServiceBase 
             {
-                get { return CreateUrl("article"); }
+                get { return CreateUrl("data"); }
             }
             private static string FileServiceBase
             {

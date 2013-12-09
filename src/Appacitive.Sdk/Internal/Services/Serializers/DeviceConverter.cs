@@ -34,8 +34,8 @@ namespace Appacitive.Sdk.Services
             if (device != null)
             {
                 // Schema Id
-                if (json.TryGetValue("__schemaid", out value) == true && value.Type != JTokenType.Null)
-                    device.SchemaId = value.ToString();
+                //if (json.TryGetValue("__schemaid", out value) == true && value.Type != JTokenType.Null)
+                //    device.SchemaId = value.ToString();
                 // Revision
                 if (json.TryGetValue("__revision", out value) == true && value.Type != JTokenType.Null)
                     device.Revision = int.Parse(value.ToString());
@@ -48,11 +48,11 @@ namespace Appacitive.Sdk.Services
             if (entity == null)
                 return;
             var device = entity as APDevice;
-            if (device != null)
-            {
-                writer
-                    .WriteProperty("__schemaid", device.SchemaId);
-            }
+            //if (device != null)
+            //{
+            //    writer
+            //        .WriteProperty("__schemaid", device.SchemaId);
+            //}
         }
 
         private static readonly Dictionary<string, bool> _internal = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase)

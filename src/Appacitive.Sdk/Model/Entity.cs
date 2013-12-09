@@ -83,7 +83,7 @@ namespace Appacitive.Sdk
             }
         }
 
-        public string Type { get; private set; }
+        public string Type { get; internal set; }
 
         public string Id { get; internal set; }
 

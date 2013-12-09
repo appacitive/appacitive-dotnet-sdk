@@ -10,6 +10,29 @@ LICENSE
 Except as otherwise noted, the .NET SDK for Appacitive is licensed under the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html).
 
 
+# What's new in this version.
+
+* This version of the SDK targets v1.0 of the appacitive apis.
+
+## Breaking changes
+
+1. Core objects have been renamed to comply with new nomenclature.
+	Article		------>		APObject
+	Articles	------>		APObjects
+	Connection	------>		APConnection
+	Connections	------>		APConnections	
+	User		------>		APUser
+	Users		------>		APUsers
+	Device		------>		APDevice
+	Devices		------>		APDevices
+
+2. AppacitiveException has been moved from platform specific SDK to Appacitive.SDK.
+3. UtcCreateDate and UtcLastUpdated have been renamed to CreatedAt and LastUpdatedAt and will
+always consistently return time in local time zone of the client.
+4. FindAll() apis will now accept IQuery object instead of a string.
+5. To pass a string based query, helper method `WithRawQuery()` has been provided in Query class.
+6. Download and upload progress events are now supported with FileUpload and FileDownload classes.	
+
 # Documentation 
 
 
