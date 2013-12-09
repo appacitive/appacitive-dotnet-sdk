@@ -68,7 +68,6 @@
     <Compile Include="DeviceFixture.cs" />
     <Compile Include="EmailFixture.cs" />
     <Compile Include="EntityPropertyFixture.cs" />
-    <Compile Include="ExceptionFactoryFixture.cs" />
     <Compile Include="FileFixture.cs" />
     <Compile Include="GeocodeFixture.cs" />
     <Compile Include="GraphSearchFixture.cs" />

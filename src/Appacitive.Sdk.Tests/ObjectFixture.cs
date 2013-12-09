@@ -108,7 +108,7 @@ namespace Appacitive.Sdk.Tests
                     var copy = await APObjects.GetAsync("object", ids[i]);
                     Assert.Fail("Operation should have faulted since the object has been deleted.");
                 }
-                catch (Net45.AppacitiveException)
+                catch (AppacitiveException)
                 {   
                 }
             }
@@ -131,7 +131,7 @@ namespace Appacitive.Sdk.Tests
                 var copy = await APObjects.GetAsync("object", saved.Id);
                 Assert.Fail("Operation should have faulted since the object has been deleted.");
             }
-            catch (Net45.AppacitiveException)
+            catch (AppacitiveException)
             {   
             }
 
@@ -615,7 +615,7 @@ namespace Appacitive.Sdk.Tests
             {
                 await obj.SaveAsync(obj.Revision - 1);
             }
-            catch (Net45.AppacitiveException ex)
+            catch (AppacitiveException ex)
             {
                 if (ex.Code == "14008")
                     isFault = true;

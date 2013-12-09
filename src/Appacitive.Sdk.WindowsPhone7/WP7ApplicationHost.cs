@@ -17,12 +17,12 @@ namespace Appacitive.Sdk.WindowsPhone7
         
         public void InitializeContainer(IDependencyContainer container)
         {
-            
+
             container
-                .Register <IRealTimeTransport, SignalRTransport>( () => new SignalRTransport() )
+                .Register<IRealTimeTransport, SignalRTransport>(() => new SignalRTransport())
                 .Register<IHttpConnector, HttpConnector>(() => new HttpConnector())
                 .Register<IHttpFileHandler, WebClientHttpFileHandler>(() => new WebClientHttpFileHandler())
-                .Register<IExceptionFactory, ExceptionFactory>(() => new ExceptionFactory());
+                ;
         }
     }
 }

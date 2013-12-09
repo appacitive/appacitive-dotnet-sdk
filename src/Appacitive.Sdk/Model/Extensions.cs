@@ -161,10 +161,15 @@ namespace Appacitive.Sdk
 
         public static Exception ToFault(this Status status)
         {
-            if (status.IsSuccessful == true)
+            if (status == null || status.IsSuccessful == true)
                 return null;
-            var factory = ObjectFactory.Build<IExceptionFactory>();
-            return factory.CreateFault(status);
+            return new AppacitiveException(status.Message)
+            {
+                Code = status.Code,
+                ReferenceId = status.ReferenceId,
+                FaultType = status.FaultType,
+                AdditionalMessages = status.AdditionalMessages == null ? null : status.AdditionalMessages.ToArray()
+            };
         }
 
         public static HttpOperation WithAppacitiveKeyOrSession(this HttpOperation client, string apiKey, string session, bool useApiSession)

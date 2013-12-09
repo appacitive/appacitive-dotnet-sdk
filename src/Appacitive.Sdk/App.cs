@@ -121,7 +121,6 @@ namespace Appacitive.Sdk
                     .Register<IRealTimeChannel, RealTimeChannel>(  () => new RealTimeChannel() )
                     .Register<IUserContext, StaticUserContext>(() => new StaticUserContext())
                     .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer())
-                    .Register<IExceptionFactory, ServiceExceptionFactory>( () => ServiceExceptionFactory.Instance )
                     .Register<ITraceWriter, NullTraceWriter>(() => NullTraceWriter.Instance)
                     ;
         }

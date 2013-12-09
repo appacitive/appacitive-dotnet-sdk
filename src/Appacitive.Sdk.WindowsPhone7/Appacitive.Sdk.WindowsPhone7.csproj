@@ -59,6 +59,8 @@
     <Reference Include="System.Runtime">
       <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\sl4-windowsphone71\System.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Servicemodel" />
     <Reference Include="System.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\sl4-windowsphone71\System.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -108,9 +110,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IApplicationHost.cs">
       <Link>Interfaces\IApplicationHost.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Interfaces\IExceptionFactory.cs">
-      <Link>Interfaces\IExceptionFactory.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IHttpConnector.cs">
       <Link>Interfaces\IHttpConnector.cs</Link>
@@ -517,9 +516,6 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UserConverter.cs">
       <Link>Internal\Services\Serializers\UserConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\ServiceExceptionFactory.cs">
-      <Link>Internal\Services\ServiceExceptionFactory.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Urls.cs">
       <Link>Internal\Services\Urls.cs</Link>
     </Compile>
@@ -685,7 +681,6 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
-    <Compile Include="ExceptionFactory.cs" />
     <Compile Include="HttpConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalRTransport.cs" />

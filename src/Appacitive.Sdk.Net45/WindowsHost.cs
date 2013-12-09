@@ -24,7 +24,6 @@ namespace Appacitive.Sdk.Net45
             container
                 .Register<IHttpConnector, HttpConnector>( () => HttpConnector.Instance)
                 .Register<IHttpFileHandler, WebClientHttpFileHandler>(() => new WebClientHttpFileHandler())
-                .Register<IExceptionFactory, ExceptionFactory>( () => ExceptionFactory.Instance )
                 .Register<IRealTimeTransport, SignalRTransport>(() => new SignalRTransport())
                 .Register<ITraceWriter, DefaultTraceWriter>( () => DefaultTraceWriter.Instance) 
                 ;

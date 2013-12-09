@@ -49,7 +49,6 @@
     <Compile Include="Interfaces\IJsonObject.cs" />
     <Compile Include="Interfaces\IRealTimeChannelFactory.cs" />
     <Compile Include="Interfaces\IRealTimeTransport.cs" />
-    <Compile Include="Interfaces\IExceptionFactory.cs" />
     <Compile Include="Interfaces\IHttpConnector.cs" />
     <Compile Include="Interfaces\IJsonSerializer.cs" />
     <Compile Include="Interfaces\IRealTimeChannel.cs" />
@@ -142,7 +141,6 @@
     <Compile Include="Internal\Services\Serializers\EmailConverter.cs" />
     <Compile Include="Internal\Services\Serializers\PushNotificationConverter.cs" />
     <Compile Include="Internal\Services\Serializers\UpdateConnectionRequestConverter.cs" />
-    <Compile Include="Internal\Services\ServiceExceptionFactory.cs" />
     <Compile Include="Internal\Services\Urls.cs" />
     <Compile Include="Internal\JsonNetSerializer.cs" />
     <Compile Include="Internal\Measure.cs" />
