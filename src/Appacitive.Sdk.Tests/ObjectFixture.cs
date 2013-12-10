@@ -632,5 +632,6 @@ namespace Appacitive.Sdk.Tests
             if (isFault == false) 
                 Assert.Fail("No fault was raised on a bad revision update.");
         }
+
     }
 }

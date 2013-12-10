@@ -85,7 +85,10 @@ namespace Appacitive.Sdk.Tests
             var filePath = FileHelper.TestFilePath;
             var upload = new FileUpload("image/png", Unique.String + ".png");
             var filename = await upload.UploadFileAsync(filePath);
-
+            upload.UploadCompleted += (s, e) =>
+                {
+                    Console.WriteLine("Upload completed.");
+                };
             // Get download url
             var download = new FileDownload(filename);
             var url = await download.GetDownloadUrl();

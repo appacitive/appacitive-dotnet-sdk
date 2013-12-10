@@ -10,7 +10,7 @@ namespace Appacitive.Sdk.Services
 {
     public class MultiGetObjectsResponse : ApiResponse
     {
-        [JsonProperty("articles")]
+        [JsonProperty("objects")]
         public List<APObject> Objects { get; set; }
     }
 }

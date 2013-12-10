@@ -498,9 +498,6 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\SerializerExtensions.cs">
       <Link>Internal\Services\Serializers\SerializerExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\StatusResponseConverter.cs">
-      <Link>Internal\Services\Serializers\StatusResponseConverter.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateConnectionRequestConverter.cs">
       <Link>Internal\Services\Serializers\UpdateConnectionRequestConverter.cs</Link>
     </Compile>
