@@ -17,13 +17,21 @@ Except as otherwise noted, the .NET SDK for Appacitive is licensed under the Apa
 ## Breaking changes
 
 1. Core objects have been renamed to comply with new nomenclature.
+
 	Article		------>		APObject
+
 	Articles	------>		APObjects
+
 	Connection	------>		APConnection
+
 	Connections	------>		APConnections	
+
 	User		------>		APUser
+
 	Users		------>		APUsers
+
 	Device		------>		APDevice
+
 	Devices		------>		APDevices
 
 2. AppacitiveException has been moved from platform specific SDK to Appacitive.SDK.
