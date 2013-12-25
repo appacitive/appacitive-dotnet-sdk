@@ -14,6 +14,6 @@ namespace Appacitive.Sdk.Services
         public string Token { get; set; }
 
         [JsonProperty("user")]
-        public User User { get; set; }
+        public APUser User { get; set; }
     }
 }

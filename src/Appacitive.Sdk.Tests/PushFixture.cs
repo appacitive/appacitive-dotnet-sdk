@@ -11,6 +11,7 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class PushFixture
     {
+        [Ignore]
         [TestMethod]
         public async Task BroadcastPushAsyncTest()
         {
@@ -22,6 +23,7 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Send push notification with id {0}.", id);
         }
 
+        [Ignore]
         [TestMethod]
         public async Task QueryBasedPushAsyncTest()
         {
@@ -32,6 +34,7 @@ namespace Appacitive.Sdk.Tests
                 .SendAsync();
             Console.WriteLine("Send push notification with id {0}.", id);
         }
+
 
         [TestMethod]
         public void SerializerToastMessageTest()

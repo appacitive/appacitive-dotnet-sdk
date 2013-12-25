@@ -12,12 +12,12 @@ namespace Appacitive.Sdk.Services
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(User) == objectType;
+            return typeof(APUser) == objectType;
         }
 
         protected override Entity CreateEntity(JObject json)
         {
-            return new User();
+            return new APUser();
         }
 
         protected override Entity ReadJson(Entity entity, Type objectType, JObject json, JsonSerializer serializer)
@@ -25,12 +25,12 @@ namespace Appacitive.Sdk.Services
             if (json == null || json.Type == JTokenType.Null)
                 return null;
             JToken value;
-            var user = base.ReadJson(entity, objectType, json, serializer) as User;
+            var user = base.ReadJson(entity, objectType, json, serializer) as APUser;
             if (user != null)
             {
                 // Schema Id
-                if (json.TryGetValue("__schemaid", out value) == true && value.Type != JTokenType.Null)
-                    user.SchemaId = value.ToString();
+                //if (json.TryGetValue("__schemaid", out value) == true && value.Type != JTokenType.Null)
+                //    user.SchemaId = value.ToString();
                 // Revision
                 if (json.TryGetValue("__revision", out value) == true && value.Type != JTokenType.Null)
                     user.Revision = int.Parse(value.ToString());
@@ -42,12 +42,12 @@ namespace Appacitive.Sdk.Services
         {
             if (entity == null)
                 return;
-            var user = entity as User;
-            if (user != null)
-            {
-                writer
-                    .WriteProperty("__schemaid", user.SchemaId);
-            }
+            var user = entity as APUser;
+            //if (user != null)
+            //{
+            //    writer
+            //        .WriteProperty("__schemaid", user.SchemaId);
+            //}
         }
 
         private static readonly Dictionary<string, bool> _internal = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase)

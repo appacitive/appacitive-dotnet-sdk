@@ -19,7 +19,7 @@ namespace Appacitive.Sdk.Services
         {
         }
 
-        public Connection Connection { get; set; }
+        public APConnection Connection { get; set; }
 
         public override byte[] ToBytes()
         {
@@ -32,25 +32,25 @@ namespace Appacitive.Sdk.Services
             var response = await base.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
-            // Update the ids if any new articles were passed in the this.
+            // Update the ids if any new objects were passed in the this.
             if (this.Connection.Endpoints.EndpointA.CreateEndpoint == true)
             {
                 if (this.Connection.Endpoints.EndpointA.Label == this.Connection.Endpoints.EndpointB.Label)
-                    this.Connection.Endpoints.EndpointA.Content.Id = response.Connection.Endpoints.EndpointA.ArticleId;
+                    this.Connection.Endpoints.EndpointA.Content.Id = response.Connection.Endpoints.EndpointA.ObjectId;
                 else
                 {
                     var match = response.Connection.Endpoints[this.Connection.Endpoints.EndpointA.Label];
-                    this.Connection.Endpoints.EndpointA.Content.Id = match.ArticleId;
+                    this.Connection.Endpoints.EndpointA.Content.Id = match.ObjectId;
                 }
             }
             if (this.Connection.Endpoints.EndpointB.CreateEndpoint == true)
             {
                 if (this.Connection.Endpoints.EndpointA.Label == this.Connection.Endpoints.EndpointB.Label)
-                    this.Connection.Endpoints.EndpointB.Content.Id = response.Connection.Endpoints.EndpointB.ArticleId;
+                    this.Connection.Endpoints.EndpointB.Content.Id = response.Connection.Endpoints.EndpointB.ObjectId;
                 else
                 {
                     var match = response.Connection.Endpoints[this.Connection.Endpoints.EndpointB.Label];
-                    this.Connection.Endpoints.EndpointB.Content.Id = match.ArticleId;
+                    this.Connection.Endpoints.EndpointB.Content.Id = match.ObjectId;
                 }
             }
             return response;

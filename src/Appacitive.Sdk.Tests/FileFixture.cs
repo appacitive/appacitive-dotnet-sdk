@@ -45,6 +45,15 @@ namespace Appacitive.Sdk.Tests
             var filename = Unique.String + ".png";
             Console.WriteLine("Generated file name: {0}", filename);
             var handler = new FileUpload("image/png", filename);
+            handler.UploadProgressChanged += (s, e) =>
+                {
+                    Console.WriteLine("Uploading bytes {0} out of {1}.",
+                        e.BytesSent, e.TotalBytesToSend);
+                };
+            handler.UploadCompleted += (s, e) =>
+                {
+                    Console.WriteLine("Upload completed.");
+                };
             var uploadedFilename = await handler.UploadAsync(bytes);
             Console.WriteLine("Uploaded to file {0}", uploadedFilename);
         }
@@ -56,6 +65,15 @@ namespace Appacitive.Sdk.Tests
             var filename = Unique.String + ".png";
             Console.WriteLine("Generated file name: {0}", filename);
             var handler = new FileUpload("image/png", filename);
+            handler.UploadProgressChanged += (s, e) =>
+            {
+                Console.WriteLine("Uploading bytes {0} out of {1}.",
+                    e.BytesSent, e.TotalBytesToSend);
+            };
+            handler.UploadCompleted +=  (s, e) =>
+            {
+                Console.WriteLine("Upload completed.");
+            };
             var uploadedFilename = await handler.UploadFileAsync(file);
             Console.WriteLine("Uploaded to file {0}", uploadedFilename);
         }
@@ -67,7 +85,10 @@ namespace Appacitive.Sdk.Tests
             var filePath = FileHelper.TestFilePath;
             var upload = new FileUpload("image/png", Unique.String + ".png");
             var filename = await upload.UploadFileAsync(filePath);
-
+            upload.UploadCompleted += (s, e) =>
+                {
+                    Console.WriteLine("Upload completed.");
+                };
             // Get download url
             var download = new FileDownload(filename);
             var url = await download.GetDownloadUrl();
@@ -83,7 +104,16 @@ namespace Appacitive.Sdk.Tests
             var filename = await FileHelper.UploadTestFileAsync();
 
             // Download the file
-            var bytes = await new FileDownload(filename).DownloadAsync();
+            var handler = new FileDownload(filename);
+            handler.DownloadCompleted += (s, e) =>
+                {
+                    Console.WriteLine("Download completed. Downloaded {0} bytes.", e.Result.Length);
+                };
+            handler.DownloadProgressChanged += (s, e) =>
+                {
+                    Console.WriteLine("Downloading {0} bytes out of {1}.", e.BytesReceived, e.TotalBytesToReceive);
+                };
+            var bytes = await handler.DownloadAsync();
             Assert.IsTrue(FileHelper.Md5ChecksumMatch(bytes));
         }
 
@@ -94,7 +124,16 @@ namespace Appacitive.Sdk.Tests
             var filename = await FileHelper.UploadTestFileAsync();
             var downloadTo = FileHelper.GenerateNewDownloadFilePath();
             // Download the file
-            await new FileDownload(filename).DownloadFileAsync(downloadTo);
+            var handler = new FileDownload(filename);
+            handler.DownloadCompleted += (s, e) =>
+            {
+                Console.WriteLine("Download completed. Downloaded {0} bytes.", e.Result.Length);
+            };
+            handler.DownloadProgressChanged += (s, e) =>
+            {
+                Console.WriteLine("Downloading {0} bytes out of {1}.", e.BytesReceived, e.TotalBytesToReceive);
+            };
+            await handler.DownloadFileAsync(downloadTo);
             Assert.IsTrue(FileHelper.Md5ChecksumMatch(downloadTo));
         }
 

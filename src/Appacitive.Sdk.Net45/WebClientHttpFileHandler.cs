@@ -13,13 +13,20 @@ namespace Appacitive.Sdk.Net45
     {
         public async Task<byte[]> DownloadAsync(string url, IDictionary<string, string> headers, string method)
         {
-            var client = new WebClient();
-            if (headers != null)
+            using (var client = new WebClient())
             {
-                foreach (var header in headers)
-                    client.Headers[header.Key] = header.Value;
+                SubscribeToDownloadEvents(client);
+                if (headers != null)
+                {
+                    foreach (var header in headers)
+                        client.Headers[header.Key] = header.Value;
+                }
+                
+                var result = await client.DownloadDataTaskAsync(url);
+                UnsubscribeFromDownloadEvents(client);
+                return result;
+                
             }
-            return await client.DownloadDataTaskAsync(url);
         }
 
         public async Task DownloadAsync(string url, IDictionary<string, string> headers, string method, string saveAs)
@@ -39,17 +46,18 @@ namespace Appacitive.Sdk.Net45
 
         public async Task UploadAsync(string url, IDictionary<string, string> headers, string method, byte[] data)
         {
-            var client = new WebClient();
-            if (headers != null)
+            using (var client = new WebClient())
             {
-                foreach (var header in headers)
-                    client.Headers[header.Key] = header.Value;
+                SubscribeToUploadEvents(client);
+                if (headers != null)
+                {
+                    foreach (var header in headers)
+                        client.Headers[header.Key] = header.Value;
+                }
+                await client.UploadDataTaskAsync(url, "PUT", data);
+                UnsubscribeFromUploadEvents(client);
             }
-            await client.UploadDataTaskAsync(url, "PUT", data);
         }
-
-
-
 
         public async Task UploadAsync(string url, IDictionary<string, string> headers, string method, string file)
         {
@@ -64,5 +72,87 @@ namespace Appacitive.Sdk.Net45
             }
             await UploadAsync(url, headers, method, data);
         }
+
+
+        private void UnsubscribeFromDownloadEvents(WebClient client)
+        {
+            client.DownloadDataCompleted -= client_DownloadDataCompleted;
+            client.DownloadProgressChanged -= client_DownloadProgressChanged;
+        }
+
+        private void SubscribeToDownloadEvents(WebClient client)
+        {
+            client.DownloadDataCompleted += client_DownloadDataCompleted;
+            client.DownloadProgressChanged += client_DownloadProgressChanged;
+        }
+
+        private void UnsubscribeFromUploadEvents(WebClient client)
+        {
+            client.UploadDataCompleted -= client_UploadDataCompleted;
+            client.UploadProgressChanged -= client_UploadProgressChanged;
+        }
+
+        private void SubscribeToUploadEvents(WebClient client)
+        {
+            client.UploadDataCompleted += client_UploadDataCompleted;
+            client.UploadProgressChanged += client_UploadProgressChanged;
+        }
+
+        void client_UploadProgressChanged(object sender, System.Net.UploadProgressChangedEventArgs e)
+        {
+            OnUploadProgressChanged(e);
+        }
+
+        void client_UploadDataCompleted(object sender, UploadDataCompletedEventArgs e)
+        {
+            OnUploadCompleted(e);
+        }
+
+        private void client_DownloadDataCompleted(object sender, DownloadDataCompletedEventArgs e)
+        {
+            OnDownloadCompleted(e);
+        }
+
+        private void client_DownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+        {
+            OnDownloadProgressChanged(e);
+        }
+
+        private void OnDownloadCompleted(DownloadDataCompletedEventArgs e)
+        {
+            var copy = DownloadCompleted;
+            if (copy != null)
+                copy(this, new DownloadCompletedEventArgs(e.Result, e.Error, e.Cancelled, e.UserState));
+        }
+
+        private void OnUploadCompleted(UploadDataCompletedEventArgs e)
+        {
+            var copy = UploadCompleted;
+            if (copy != null)
+                copy(this, new UploadCompletedEventArgs(e.Error, e.Cancelled, e.UserState));
+        }
+
+        private void OnDownloadProgressChanged(System.Net.DownloadProgressChangedEventArgs e)
+        {
+            var copy = DownloadProgressChanged;
+            if (copy != null)
+                copy(this, new DownloadProgressChangedEventArgs(e.BytesReceived, e.TotalBytesToReceive, e.ProgressPercentage, e.UserState));
+        }
+
+        private void OnUploadProgressChanged(System.Net.UploadProgressChangedEventArgs e)
+        {
+            var copy = UploadProgressChanged;
+            if (copy != null)
+                copy(this, new UploadProgressChangedEventArgs(e.BytesReceived, e.TotalBytesToReceive, e.BytesSent, e.TotalBytesToSend,
+                    e.ProgressPercentage, e.UserState));
+        }
+
+        public event EventHandler<DownloadCompletedEventArgs> DownloadCompleted;
+
+        public event EventHandler<DownloadProgressChangedEventArgs> DownloadProgressChanged;
+
+        public event EventHandler<UploadCompletedEventArgs> UploadCompleted;
+
+        public event EventHandler<UploadProgressChangedEventArgs> UploadProgressChanged;
     }
 }

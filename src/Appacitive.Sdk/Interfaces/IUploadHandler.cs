@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk.Realtime
+namespace Appacitive.Sdk
 {
     public interface IHttpFileHandler
     {
@@ -15,5 +15,15 @@ namespace Appacitive.Sdk.Realtime
         Task UploadAsync(string url, IDictionary<string, string> headers, string method, byte[] data);
 
         Task UploadAsync(string url, IDictionary<string, string> headers, string method, string file);
+
+        event EventHandler<DownloadCompletedEventArgs> DownloadCompleted;
+
+        event EventHandler<DownloadProgressChangedEventArgs> DownloadProgressChanged;
+
+        event EventHandler<UploadCompletedEventArgs> UploadCompleted;
+
+        event EventHandler<UploadProgressChangedEventArgs> UploadProgressChanged;
+        
+
     }
 }

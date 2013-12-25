@@ -282,11 +282,11 @@ namespace Appacitive.Sdk.Services
 
                     log["request"] = request == null ?
                             null :
-                            GetJObject(request);
+                            new JRaw(Encoding.UTF8.GetString(request, 0, request.Length));
 
                     log["response"] = response == null ?
                             null :
-                            GetJObject(response);
+                            new JRaw(Encoding.UTF8.GetString(response, 0, response.Length));
                     if (fault != null)
                         log["fault"] = fault.ToString();
 

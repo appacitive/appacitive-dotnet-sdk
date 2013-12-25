@@ -15,21 +15,29 @@ namespace Appacitive.Sdk.WindowsPhone7
         public async Task<byte[]> DownloadAsync(string url, IDictionary<string, string> headers, string method)
         {
             var client = new WebClient();
-            if (headers != null)
+            SubscribeToDownloadEvents(client);
+            try
             {
-                foreach (var header in headers)
-                    client.Headers[header.Key] = header.Value;
-            }
-            var downloadStream = await client.OpenReadTaskAsync(url);
-            byte[] buffer = new byte[1024];
-            using (MemoryStream stream = new MemoryStream())
-            {
-                while (downloadStream.Read(buffer, 0, buffer.Length) > 0)
+                if (headers != null)
                 {
-                    stream.Write(buffer, 0, buffer.Length);
+                    foreach (var header in headers)
+                        client.Headers[header.Key] = header.Value;
                 }
-                await stream.FlushAsync();
-                return stream.ToArray();
+                var downloadStream = await client.OpenReadTaskAsync(url);
+                byte[] buffer = new byte[1024];
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    while (downloadStream.Read(buffer, 0, buffer.Length) > 0)
+                    {
+                        stream.Write(buffer, 0, buffer.Length);
+                    }
+                    await stream.FlushAsync();
+                    return stream.ToArray();
+                }
+            }
+            finally
+            {
+                UnsubscribeFromDownloadEvents(client);
             }
 
         }
@@ -56,12 +64,20 @@ namespace Appacitive.Sdk.WindowsPhone7
         public async Task UploadAsync(string url, IDictionary<string, string> headers, string method, byte[] data)
         {
             var client = new WebClient();
-            if (headers != null)
+            SubscribeToUploadEvents(client);
+            try
             {
-                foreach (var header in headers)
-                    client.Headers[header.Key] = header.Value;
+                if (headers != null)
+                {
+                    foreach (var header in headers)
+                        client.Headers[header.Key] = header.Value;
+                }
+                await client.UploadData(url, method, data);
             }
-            await client.UploadData(url, method, data);
+            finally
+            {
+                UnsubscribeFromUploadEvents(client);
+            }
         }
 
         public async Task UploadAsync(string url, IDictionary<string, string> headers, string method, string file)
@@ -83,5 +99,70 @@ namespace Appacitive.Sdk.WindowsPhone7
             }
             await UploadAsync(url, headers, method, data);
         }
+
+
+        private void UnsubscribeFromDownloadEvents(WebClient client)
+        {
+            client.DownloadProgressChanged -= client_DownloadProgressChanged;
+        }
+
+        private void SubscribeToDownloadEvents(WebClient client)
+        {
+            client.DownloadProgressChanged += client_DownloadProgressChanged;
+        }
+
+        private void UnsubscribeFromUploadEvents(WebClient client)
+        {
+            client.UploadProgressChanged -= client_UploadProgressChanged;
+        }
+
+        private void SubscribeToUploadEvents(WebClient client)
+        {
+            client.UploadProgressChanged += client_UploadProgressChanged;
+        }
+
+        void client_UploadProgressChanged(object sender, System.Net.UploadProgressChangedEventArgs e)
+        {
+            OnUploadProgressChanged(e);
+        }
+
+        private void client_DownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+        {
+            OnDownloadProgressChanged(e);
+        }
+
+        
+        private void OnDownloadProgressChanged(System.Net.DownloadProgressChangedEventArgs e)
+        {
+            var copy = DownloadProgressChanged;
+            if (copy != null)
+                copy(this, new DownloadProgressChangedEventArgs(e.BytesReceived, e.TotalBytesToReceive, e.ProgressPercentage, e.UserState));
+        }
+
+        private void OnUploadProgressChanged(System.Net.UploadProgressChangedEventArgs e)
+        {
+            var copy = UploadProgressChanged;
+            if (copy != null)
+                copy(this, new UploadProgressChangedEventArgs(e.BytesReceived, e.TotalBytesToReceive, e.BytesSent, e.TotalBytesToSend,
+                    e.ProgressPercentage, e.UserState));
+        }
+
+        public event EventHandler<DownloadCompletedEventArgs> DownloadCompleted
+        {
+            add { throw new NotSupportedException("DownloadCompleted event is not supported on WP7."); }
+            remove { throw new NotSupportedException("DownloadCompleted event is not supported on WP7."); }
+        }
+
+        public event EventHandler<UploadCompletedEventArgs> UploadCompleted
+        {   
+            add { throw new NotSupportedException("UploadCompleted event is not supported on WP7."); }
+            remove { throw new NotSupportedException("UploadCompleted event is not supported on WP7."); }
+        }
+
+        public event EventHandler<DownloadProgressChangedEventArgs> DownloadProgressChanged;
+
+        
+
+        public event EventHandler<UploadProgressChangedEventArgs> UploadProgressChanged;
     }
 }

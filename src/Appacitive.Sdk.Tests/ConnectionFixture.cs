@@ -18,11 +18,11 @@ namespace Appacitive.Sdk.Tests
             parent["stringfield"] = "parent";
             var child = ObjectHelper.NewInstance();
             child["stringfield"] = "child";
-            var conn = Connection.New("link").FromNewArticle("parent", parent).ToNewArticle("child", child);
+            var conn = APConnection.New("link").FromNewObject("parent", parent).ToNewObject("child", child);
             await conn.SaveAsync();
 
-            var parent2 = await conn.Endpoints["parent"].GetArticleAsync();
-            var child2 = await conn.Endpoints["child"].GetArticleAsync();
+            var parent2 = await conn.Endpoints["parent"].GetObjectAsync();
+            var child2 = await conn.Endpoints["child"].GetObjectAsync();
             Assert.IsTrue(parent2 != null && child2 != null);
             Assert.IsTrue(parent2.Get<string>("stringfield") == "parent");
             Assert.IsTrue(child2.Get<string>("stringfield") == "child");
@@ -32,11 +32,11 @@ namespace Appacitive.Sdk.Tests
             parent["stringfield"] = "parent";
             child = ObjectHelper.NewInstance();
             child["stringfield"] = "child";
-            conn = Connection.New("link").FromNewArticle("child", child).ToNewArticle("parent", parent);
+            conn = APConnection.New("link").FromNewObject("child", child).ToNewObject("parent", parent);
             await conn.SaveAsync();
 
-            parent2 = await conn.Endpoints["parent"].GetArticleAsync();
-            child2 = await conn.Endpoints["child"].GetArticleAsync();
+            parent2 = await conn.Endpoints["parent"].GetObjectAsync();
+            child2 = await conn.Endpoints["child"].GetObjectAsync();
             Assert.IsTrue(parent2 != null && child2 != null);
             Assert.IsTrue(parent2.Get<string>("stringfield") == "parent");
             Assert.IsTrue(child2.Get<string>("stringfield") == "child");
@@ -47,18 +47,18 @@ namespace Appacitive.Sdk.Tests
         {
             var existing = await ObjectHelper.CreateNewAsync();
             var newObj = ObjectHelper.NewInstance();
-            var conn = Connection
+            var conn = APConnection
                 .New("link")
-                .FromExistingArticle("parent", existing.Id)
-                .ToNewArticle("child", newObj);
+                .FromExistingObject("parent", existing.Id)
+                .ToNewObject("child", newObj);
             await conn.SaveAsync();
 
             Assert.IsTrue(conn.GetEndpointId("parent") == existing.Id);
             Assert.IsTrue( string.IsNullOrWhiteSpace(conn.GetEndpointId("child")) == false );
             
             // Get endpoints
-            var child = await conn.GetEndpointArticleAsync("child");
-            var parent = await conn.GetEndpointArticleAsync("parent");
+            var child = await conn.GetEndpointObjectAsync("child");
+            var parent = await conn.GetEndpointObjectAsync("parent");
             Assert.IsNotNull(child);
             Assert.IsNotNull(parent);
             Assert.IsTrue(parent.Id == existing.Id);
@@ -69,9 +69,9 @@ namespace Appacitive.Sdk.Tests
         {
             var device = DeviceHelper.NewDevice();
             var user = UserHelper.NewUser();
-            var conn = Connection.New("my_device")
-                .FromNewArticle("device", device)
-                .ToNewArticle("user", user);
+            var conn = APConnection.New("my_device")
+                .FromNewObject("device", device)
+                .ToNewObject("user", user);
             await conn.SaveAsync();
 
             Assert.IsTrue(string.IsNullOrWhiteSpace(conn.Id) == false);
@@ -79,26 +79,26 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public async Task GetConnectedArticlesOnConnectionWithSameTypeAndDifferentLabels()
+        public async Task GetConnectedObjectsOnConnectionWithSameTypeAndDifferentLabels()
         {
             var parent = await ObjectHelper.CreateNewAsync();
             var child1 = await ObjectHelper.CreateNewAsync();
             var child2 = await ObjectHelper.CreateNewAsync();
             // Create connections
-            await Connection.New("link")
-                .FromExistingArticle("parent", parent.Id)
-                .ToExistingArticle("child", child1.Id)
+            await APConnection.New("link")
+                .FromExistingObject("parent", parent.Id)
+                .ToExistingObject("child", child1.Id)
                 .SaveAsync();
 
-            await Connection.New("link")
-                .FromExistingArticle("parent", parent.Id)
-                .ToExistingArticle("child", child2.Id)
+            await APConnection.New("link")
+                .FromExistingObject("parent", parent.Id)
+                .ToExistingObject("child", child2.Id)
                 .SaveAsync();
 
-            // Get connected articles
-            var articles = await parent.GetConnectedArticlesAsync("link", label: "child");
-            Assert.IsTrue(articles.Count == 2);
-            Assert.IsTrue(articles.Select(a => a.Id).Intersect(new[] { child1.Id, child2.Id }).Count() == 2);
+            // Get connected objects
+            var objects = await parent.GetConnectedObjectsAsync("link", label: "child");
+            Assert.IsTrue(objects.Count == 2);
+            Assert.IsTrue(objects.Select(a => a.Id).Intersect(new[] { child1.Id, child2.Id }).Count() == 2);
         }
 
 
@@ -110,17 +110,17 @@ namespace Appacitive.Sdk.Tests
             var child1 = await ObjectHelper.CreateNewAsync();
             var child2 = await ObjectHelper.CreateNewAsync();
             // Create connections
-            var conn1 = Connection.New("link")
-                .FromExistingArticle("parent", parent.Id)
-                .ToExistingArticle("child", child1.Id);
+            var conn1 = APConnection.New("link")
+                .FromExistingObject("parent", parent.Id)
+                .ToExistingObject("child", child1.Id);
             await conn1.SaveAsync();
 
-            var conn2 = Connection.New("link")
-                .FromExistingArticle("parent", parent.Id)
-                .ToExistingArticle("child", child2.Id);
+            var conn2 = APConnection.New("link")
+                .FromExistingObject("parent", parent.Id)
+                .ToExistingObject("child", child2.Id);
             await conn2.SaveAsync();
 
-            // Get connected articles
+            // Get connected objects
             var connections = await parent.GetConnectionsAsync("link", label: "child");
             Assert.IsTrue(connections.Count == 2);
             Assert.IsTrue(connections.Select(a => a.Id).Intersect(new[] { conn1.Id, conn2.Id }).Count() == 2);
@@ -128,26 +128,26 @@ namespace Appacitive.Sdk.Tests
 
 
         [TestMethod]
-        public async Task GetConnectedArticlesForSameTypeAndDifferentLabelsWithoutLabelTest()
+        public async Task GetConnectedObjectsForSameTypeAndDifferentLabelsWithoutLabelTest()
         {
             var parent = await ObjectHelper.CreateNewAsync();
             var child1 = await ObjectHelper.CreateNewAsync();
             var child2 = await ObjectHelper.CreateNewAsync();
             // Create connections
-            await Connection.New("link")
-                .FromExistingArticle("parent", parent.Id)
-                .ToExistingArticle("child", child1.Id)
+            await APConnection.New("link")
+                .FromExistingObject("parent", parent.Id)
+                .ToExistingObject("child", child1.Id)
                 .SaveAsync();
 
-            await Connection.New("link")
-                .FromExistingArticle("parent", parent.Id)
-                .ToExistingArticle("child", child2.Id)
+            await APConnection.New("link")
+                .FromExistingObject("parent", parent.Id)
+                .ToExistingObject("child", child2.Id)
                 .SaveAsync();
 
-            // Get connected articles
+            // Get connected objects
             try
             {
-                var articles = await parent.GetConnectedArticlesAsync("link");
+                var objects = await parent.GetConnectedObjectsAsync("link");
                 Assert.Fail("This call should have failed since we did not specify the label to retreive.");
             }
             catch (Exception ex)
@@ -157,32 +157,32 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
-        public async Task CreateConnectionBetweenNewArticlesAsyncTest()
+        public async Task CreateConnectionBetweenNewObjectsAsyncTest()
         {
-            var obj1 = new Article("object");
-            var obj2 = new Article("object");
-            var conn = Connection
+            var obj1 = new APObject("object");
+            var obj2 = new APObject("object");
+            var conn = APConnection
                             .New("sibling")
-                            .FromNewArticle("object", obj1)
-                            .ToNewArticle("object", obj2);
+                            .FromNewObject("object", obj1)
+                            .ToNewObject("object", obj2);
 
             await conn.SaveAsync();
             Assert.IsTrue(string.IsNullOrWhiteSpace(conn.Id) == false);
             Console.WriteLine("Created connection with id: {0}", conn.Id);
             Assert.IsTrue(string.IsNullOrWhiteSpace(obj1.Id) == false);
-            Console.WriteLine("Created new article with id: {0}", obj1.Id);
+            Console.WriteLine("Created new apObject with id: {0}", obj1.Id);
             Assert.IsTrue(string.IsNullOrWhiteSpace(obj2.Id) == false);
-            Console.WriteLine("Created new article with id: {0}", obj2.Id);
+            Console.WriteLine("Created new apObject with id: {0}", obj2.Id);
         }
 
 
         [TestMethod]
         public async Task UpdateConnectionAsyncTest()
         {
-            dynamic conn = Connection
+            dynamic conn = APConnection
                 .New("sibling")
-                .FromNewArticle("object", ObjectHelper.NewInstance())
-                .ToNewArticle("object", ObjectHelper.NewInstance());
+                .FromNewObject("object", ObjectHelper.NewInstance())
+                .ToNewObject("object", ObjectHelper.NewInstance());
             conn.field1 = "test";
             conn.field2 = 15L;
             await conn.SaveAsync();
@@ -195,28 +195,28 @@ namespace Appacitive.Sdk.Tests
             await conn.SaveAsync();
 
             // Get the connection
-            Connection read = await Connections.GetAsync("sibling", conn.Id);
+            APConnection read = await APConnections.GetAsync("sibling", conn.Id);
             // Asserts
             Assert.IsTrue( read.Get<string>("field1") == "updated");
             Assert.IsTrue( read.Get<int>("field2") == 11L);
         }
 
         [TestMethod]
-        public async Task CreateConnectionBetweenNewAndExistingArticlesAsyncTest()
+        public async Task CreateConnectionBetweenNewAndExistingObjectsAsyncTest()
         {
             var obj1 = await ObjectHelper.CreateNewAsync();
-            var obj2 = new Article("object");
-            var conn = Connection
+            var obj2 = new APObject("object");
+            var conn = APConnection
                             .New("sibling")
-                            .FromExistingArticle("object", obj1.Id)
-                            .ToNewArticle("object", obj2);
+                            .FromExistingObject("object", obj1.Id)
+                            .ToNewObject("object", obj2);
             await conn.SaveAsync();
             Assert.IsTrue(string.IsNullOrWhiteSpace(conn.Id) == false);
             Console.WriteLine("Created connection with id: {0}", conn.Id);
             Assert.IsTrue(string.IsNullOrWhiteSpace(obj2.Id) == false);
-            Console.WriteLine("Created new article with id: {0}", obj1.Id);
+            Console.WriteLine("Created new apObject with id: {0}", obj1.Id);
             // Ensure that the endpoint ids match
-            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
+            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ObjectId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
         }
 
 
@@ -225,57 +225,57 @@ namespace Appacitive.Sdk.Tests
         {
             // Create new connection
             var obj1 = await ObjectHelper.CreateNewAsync();
-            var obj2 = new Article("object");
-            var conn = Connection
+            var obj2 = new APObject("object");
+            var conn = APConnection
                             .New("sibling")
-                            .FromExistingArticle("object", obj1.Id)
-                            .ToNewArticle("object", obj2);
+                            .FromExistingObject("object", obj1.Id)
+                            .ToNewObject("object", obj2);
             await conn.SaveAsync();
 
             // Update
-            var conn2 = new Connection("sibling", conn.Id);
+            var conn2 = new APConnection("sibling", conn.Id);
             var value = Guid.NewGuid().ToString();
             conn["field1"] = value;
             await conn.SaveAsync();
 
-            var updated = await Connections.GetAsync("sibling", conn.Id);
+            var updated = await APConnections.GetAsync("sibling", conn.Id);
             Assert.IsTrue(updated.Get<string>("field1") == value);
         }
 
         [TestMethod]
-        public async Task CreateConnection2BetweenNewAndExistingArticlesAsyncTest()
+        public async Task CreateConnection2BetweenNewAndExistingObjectsAsyncTest()
         {
             var obj1 = await ObjectHelper.CreateNewAsync();
-            var obj2 = new Article("object");
-            var conn = Connection
+            var obj2 = new APObject("object");
+            var conn = APConnection
                             .New("sibling")
-                            .FromExistingArticle("object", obj1.Id)
-                            .ToNewArticle("object", obj2);
+                            .FromExistingObject("object", obj1.Id)
+                            .ToNewObject("object", obj2);
             await conn.SaveAsync();
             Assert.IsTrue(string.IsNullOrWhiteSpace(conn.Id) == false);
             Console.WriteLine("Created connection with id: {0}", conn.Id);
             Assert.IsTrue(string.IsNullOrWhiteSpace(obj2.Id) == false);
-            Console.WriteLine("Created new article with id: {0}", obj1.Id);
+            Console.WriteLine("Created new apObject with id: {0}", obj1.Id);
             // Ensure that the endpoint ids match
-            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
+            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ObjectId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
         }
 
         [TestMethod]
-        public async Task CreateConnectionBetweenExistingArticlesAsyncTest()
+        public async Task CreateConnectionBetweenExistingObjectsAsyncTest()
         {
             var obj1 = await ObjectHelper.CreateNewAsync();
             var obj2 = await ObjectHelper.CreateNewAsync();
-            var conn = Connection
+            var conn = APConnection
                             .New("sibling")
-                            .FromExistingArticle("object", obj1.Id)
-                            .ToExistingArticle("object", obj2.Id);
+                            .FromExistingObject("object", obj1.Id)
+                            .ToExistingObject("object", obj2.Id);
             await conn.SaveAsync();
             Assert.IsTrue(string.IsNullOrWhiteSpace(conn.Id) == false);
             Console.WriteLine("Created connection with id: {0}", conn.Id);
             Assert.IsTrue(string.IsNullOrWhiteSpace(obj2.Id) == false);
-            Console.WriteLine("Created new article with id: {0}", obj1.Id);
+            Console.WriteLine("Created new apObject with id: {0}", obj1.Id);
             // Ensure that the endpoint ids match
-            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
+            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ObjectId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
         }
 
         [TestMethod]
@@ -283,10 +283,10 @@ namespace Appacitive.Sdk.Tests
         {
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
-            var read = await Connections.GetAsync(conn.Type, conn.Id);
+            var read = await APConnections.GetAsync(conn.Type, conn.Id);
             Assert.IsTrue(read != null);
             Assert.IsTrue(read.Id == conn.Id);
-            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(read.Endpoints.ToArray().Select( x => x.ArticleId)).Count() == 2);
+            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ObjectId).Intersect(read.Endpoints.ToArray().Select( x => x.ObjectId)).Count() == 2);
         }
 
         [TestMethod]
@@ -295,10 +295,10 @@ namespace Appacitive.Sdk.Tests
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
             var endpoints = conn.Endpoints.ToArray();
-            var read = await Connections.GetAsync(conn.Type, endpoints[0].ArticleId, endpoints[1].ArticleId);
+            var read = await APConnections.GetAsync(conn.Type, endpoints[0].ObjectId, endpoints[1].ObjectId);
             Assert.IsTrue(read != null);
             Assert.IsTrue(read.Id == conn.Id);
-            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ArticleId).Intersect(read.Endpoints.ToArray().Select(x => x.ArticleId)).Count() == 2);
+            Assert.IsTrue(conn.Endpoints.ToArray().Select(x => x.ObjectId).Intersect(read.Endpoints.ToArray().Select(x => x.ObjectId)).Count() == 2);
         }
 
         [TestMethod]
@@ -307,7 +307,7 @@ namespace Appacitive.Sdk.Tests
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
             // Find all
-            var connections = await Connections.FindAllAsync("sibling");
+            var connections = await APConnections.FindAllAsync("sibling");
             Assert.IsTrue(connections != null);
             Assert.IsTrue(connections.Count > 0);
             Console.WriteLine("Total connections: {0}", connections.TotalRecords);
@@ -320,14 +320,14 @@ namespace Appacitive.Sdk.Tests
             // Create a new connection
             var conn = await ConnectionHelper.CreateNew();
             // Delete the connection
-            await Connections.DeleteAsync(conn.Type, conn.Id);
+            await APConnections.DeleteAsync(conn.Type, conn.Id);
             // Try and get the connection
             try
             {
-                var read = await Connections.GetAsync(conn.Type, conn.Id);
+                var read = await APConnections.GetAsync(conn.Type, conn.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (Net45.AppacitiveException aex)
+            catch (AppacitiveException aex)
             {
                 Assert.IsTrue(aex.Code == "404");
             }
@@ -340,37 +340,27 @@ namespace Appacitive.Sdk.Tests
             var conn1 = await ConnectionHelper.CreateNew();
             var conn2 = await ConnectionHelper.CreateNew();
             // Delete the connection
-            await Connections.MultiDeleteAsync(conn1.Type, new[] { conn1.Id, conn2.Id });
+            await APConnections.MultiDeleteAsync(conn1.Type, new[] { conn1.Id, conn2.Id });
             // Try and get the connection
             try
             {
-                var read = await Connections.GetAsync(conn1.Type, conn1.Id);
+                var read = await APConnections.GetAsync(conn1.Type, conn1.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (Net45.AppacitiveException aex)
+            catch (AppacitiveException aex)
             {
                 Assert.IsTrue(aex.Code == "404");
             }
 
             try
             {
-                var read = await Connections.GetAsync(conn2.Type, conn2.Id);
+                var read = await APConnections.GetAsync(conn2.Type, conn2.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (Net45.AppacitiveException aex)
+            catch (AppacitiveException aex)
             {
                 Assert.IsTrue(aex.Code == "404");
             }
-        }
-
-
-        [TestMethod]
-        public async Task HotelTest()
-        {
-            App.EnableDebugMode();
-            var hotel = new Article("hotel", "39323115072914373");
-            var images = await hotel.GetConnectedArticlesAsync("hotel_image", pageSize: 200, fields: new [] {"supplier_image_url"});
-            images.ForEach(img => Console.WriteLine(img.Get<string>("supplier_image_url"))) ;
         }
     }
 }

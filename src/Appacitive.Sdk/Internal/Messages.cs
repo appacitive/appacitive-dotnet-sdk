@@ -11,9 +11,9 @@ namespace Appacitive.Sdk.Realtime
 {
     public enum EventType
     {
-        ArticleCreate,
-        ArticleUpdate,
-        ArticleDelete,
+        ObjectCreate,
+        ObjectUpdate,
+        ObjectDelete,
         ConnectionCreate,
         ConnectionUpdate,
         ConnectionDelete,

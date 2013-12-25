@@ -10,8 +10,8 @@ namespace Appacitive.Sdk.Services
 {
     public class FindAllUsersResponse : ApiResponse
     {
-        [JsonProperty("articles")]
-        public List<User> Articles { get; set; }
+        [JsonProperty("objects")]
+        public List<APUser> Users { get; set; }
 
         [JsonProperty("paginginfo")]
         public PagingInfo PagingInfo { get; set; }

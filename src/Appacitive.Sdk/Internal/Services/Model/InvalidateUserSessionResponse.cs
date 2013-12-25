@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Services
 {
-    [JsonConverter(typeof(StatusResponseConverter<InvalidateUserSessionResponse>))]
     public class InvalidateUserSessionResponse : ApiResponse
     {   
     }

@@ -9,13 +9,13 @@ namespace Appacitive.Sdk
 {
     public class UserSession
     {   
-        public UserSession(User user, string token)
+        public UserSession(APUser user, string token)
         {
             this.UserToken = token;
             this.LoggedInUser = user;
         }
 
-        public User LoggedInUser { get; set; }
+        public APUser LoggedInUser { get; set; }
 
         public string UserToken { get; set; }
 

@@ -13,9 +13,9 @@ namespace Appacitive.Sdk
             this.Children = new Dictionary<string, List<GraphNode>>();
         }
 
-        public Article Article { get; internal set; }
+        public APObject Object { get; internal set; }
 
-        public Connection Connection { get; internal set; }
+        public APConnection Connection { get; internal set; }
 
         internal Dictionary<string, List<GraphNode>> Children { get; private set; }
 

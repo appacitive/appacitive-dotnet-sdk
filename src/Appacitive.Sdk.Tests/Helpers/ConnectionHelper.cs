@@ -9,14 +9,14 @@ namespace Appacitive.Sdk.Tests
 {
     public class ConnectionHelper
     {
-        public async static Task<Connection> CreateNew(Connection conn = null)
+        public async static Task<APConnection> CreateNew(APConnection conn = null)
         {
             if (conn == null)
             {
-                conn = Connection
+                conn = APConnection
                     .New("sibling")
-                    .FromNewArticle("object", ObjectHelper.NewInstance())
-                    .ToNewArticle("object", ObjectHelper.NewInstance());
+                    .FromNewObject("object", ObjectHelper.NewInstance())
+                    .ToNewObject("object", ObjectHelper.NewInstance());
             }
             await conn.SaveAsync();
             Assert.IsTrue(string.IsNullOrWhiteSpace(conn.Id) == false);

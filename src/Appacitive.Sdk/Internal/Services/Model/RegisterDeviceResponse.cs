@@ -11,6 +11,6 @@ namespace Appacitive.Sdk.Services
     public class RegisterDeviceResponse : ApiResponse
     {
         [JsonProperty("device")]
-        public Device Device { get; set; }
+        public APDevice Device { get; set; }
     }
 }

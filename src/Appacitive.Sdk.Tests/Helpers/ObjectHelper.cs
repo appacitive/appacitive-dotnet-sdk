@@ -10,12 +10,12 @@ namespace Appacitive.Sdk.Tests
 {
     internal static class ObjectHelper
     {
-        public static async Task<Article> CreateNewAsync(Article article = null)
+        public static async Task<APObject> CreateNewAsync(APObject apObject = null)
         {
-            Console.WriteLine("Creating new article");
+            Console.WriteLine("Creating new apObject");
             var now = DateTime.Now;
-            dynamic obj = article ?? new Article("object");
-            if (article == null)
+            dynamic obj = apObject ?? new APObject("object");
+            if (apObject == null)
             {
                 obj.intfield = 1;
                 obj.decimalfield = 10.0m;
@@ -30,24 +30,24 @@ namespace Appacitive.Sdk.Tests
                 obj.SetAttribute("attr2", "value2");
             }
 
-            CreateArticleResponse response = null;
+            CreateObjectResponse response = null;
 
-            response = await (new CreateArticleRequest()
+            response = await (new CreateObjectRequest()
             {
-                Article = obj,
+                Object = obj,
                 Environment = Environment.Sandbox
             }).ExecuteAsync();
             ApiHelper.EnsureValidResponse(response);
-            Assert.IsNotNull(response.Article);
-            Console.WriteLine("Created article id {0}", response.Article.Id);
-            return response.Article;
+            Assert.IsNotNull(response.Object);
+            Console.WriteLine("Created apObject id {0}", response.Object.Id);
+            return response.Object;
         }
 
-        public static Article NewInstance()
+        public static APObject NewInstance()
         {
-            Console.WriteLine("Creating new article instance without saving");
+            Console.WriteLine("Creating new apObject instance without saving");
             var now = DateTime.Now;
-            dynamic obj = new Article("object");
+            dynamic obj = new APObject("object");
             obj.intfield = 1;
             obj.decimalfield = 10.0m;
             obj.datefield = "2012-12-20";
@@ -59,7 +59,7 @@ namespace Appacitive.Sdk.Tests
             obj.listfield = "a";
             obj.SetAttribute("attr1", "value1");
             obj.SetAttribute("attr2", "value2");
-            return obj as Article;
+            return obj as APObject;
         }
     
     }

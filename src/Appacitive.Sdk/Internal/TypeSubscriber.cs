@@ -23,12 +23,12 @@ namespace Appacitive.Sdk.Internal
         {
             add
             {
-                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ArticleCreate : EventType.ConnectionCreate;
+                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ObjectCreate : EventType.ConnectionCreate;
                 EventProxy.Add(new TypeTopic(eventType, this.DataType), value);
             }
             remove
             {
-                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ArticleCreate : EventType.ConnectionCreate;
+                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ObjectCreate : EventType.ConnectionCreate;
                 EventProxy.Remove(new TypeTopic(eventType, this.DataType), value);
             }
         }
@@ -37,12 +37,12 @@ namespace Appacitive.Sdk.Internal
         {
             add
             {
-                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ArticleUpdate : EventType.ConnectionUpdate;
+                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ObjectUpdate : EventType.ConnectionUpdate;
                 EventProxy.Add(new TypeTopic(eventType, this.DataType), value);
             }
             remove
             {
-                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ArticleUpdate : EventType.ConnectionUpdate;
+                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ObjectUpdate : EventType.ConnectionUpdate;
                 EventProxy.Remove(new TypeTopic(eventType, this.DataType), value);
             }
         }
@@ -51,12 +51,12 @@ namespace Appacitive.Sdk.Internal
         {
             add
             {
-                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ArticleDelete : EventType.ConnectionDelete;
+                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ObjectDelete : EventType.ConnectionDelete;
                 EventProxy.Add(new TypeTopic(eventType, this.DataType), value);
             }
             remove
             {
-                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ArticleDelete : EventType.ConnectionDelete;
+                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ObjectDelete : EventType.ConnectionDelete;
                 EventProxy.Remove(new TypeTopic(eventType, this.DataType), value);
             }
         }

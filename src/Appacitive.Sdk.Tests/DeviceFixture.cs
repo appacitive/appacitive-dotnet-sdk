@@ -13,7 +13,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public async Task RegisterDeviceAsyncTest()
         {
-            Device device = new Device(DeviceType.iOS)
+            APDevice device = new APDevice(DeviceType.iOS)
             {
                 DeviceToken = Guid.NewGuid().ToString(),
                 Badge = 1,
@@ -34,7 +34,7 @@ namespace Appacitive.Sdk.Tests
             created.Channels.AddRange(new[] { "x", "y", "z" });
             var count = created.Channels.Count;
             await created.SaveAsync();
-            var device = await Devices.GetAsync(created.Id);
+            var device = await APDevices.GetAsync(created.Id);
             Assert.IsTrue(device.Channels.Count == count);
             Assert.IsNotNull(device);
             Assert.IsTrue(device.Id == created.Id);
@@ -49,14 +49,14 @@ namespace Appacitive.Sdk.Tests
         public async Task DeleteDeviceAsyncTest()
         {
             var created = await DeviceHelper.CreateNewAsync();
-            await Devices.DeleteAsync(created.Id);
+            await APDevices.DeleteAsync(created.Id);
             // Try to get it.
             try
             {
-                var shouldNotExist = await Devices.GetAsync(created.Id);
-                Assert.Fail("Able to retrieve deleted article.");
+                var shouldNotExist = await APDevices.GetAsync(created.Id);
+                Assert.Fail("Able to retrieve deleted apObject.");
             }
-            catch (Appacitive.Sdk.Net45.AppacitiveException)
+            catch (AppacitiveException)
             {   
             }
         }
@@ -72,7 +72,7 @@ namespace Appacitive.Sdk.Tests
             created.IsActive = false;
             await created.SaveAsync();
 
-            var updated = await Devices.GetAsync(created.Id);
+            var updated = await APDevices.GetAsync(created.Id);
             Assert.IsTrue(updated != null);
             Assert.IsTrue(updated.Id == created.Id);
             Assert.IsTrue(updated.DeviceType == created.DeviceType);

@@ -8,7 +8,12 @@ namespace Appacitive.Sdk
 {
     public static class Query
     {
-        public static readonly string None = string.Empty;
+        public static readonly IQuery None = new RawQuery(null);
+
+        public static IQuery FromRawQuery(string query)
+        {
+            return new RawQuery(query);
+        }
 
         public static PropertyExpression Property(string name)
         {
@@ -28,6 +33,26 @@ namespace Appacitive.Sdk
         public static TagExpression Tags
         {
             get { return new TagExpression(); }
+        }
+
+        public static IQuery And(IEnumerable<IQuery> innerQueries)
+        {
+            return new AggregateQuery(BoolOperator.And, innerQueries);
+        }
+
+        public static IQuery Or(IEnumerable<IQuery> innerQueries)
+        {
+            return new AggregateQuery(BoolOperator.Or, innerQueries);
+        }
+
+        public static IQuery And(params IQuery[] innerQueries)
+        {
+            return new AggregateQuery(BoolOperator.And, innerQueries);
+        }
+
+        public static IQuery Or(params IQuery[] innerQueries)
+        {
+            return new AggregateQuery(BoolOperator.Or, innerQueries);
         }
     }
 

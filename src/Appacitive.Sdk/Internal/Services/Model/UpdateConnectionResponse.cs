@@ -11,6 +11,6 @@ namespace Appacitive.Sdk.Services
     public class UpdateConnectionResponse : ApiResponse
     {
         [JsonProperty("connection")]
-        public Connection Connection { get; set; }
+        public APConnection Connection { get; set; }
     }
 }

@@ -18,7 +18,7 @@ namespace Appacitive.Sdk.Tests
         {
             var obj1 = await ObjectHelper.CreateNewAsync();
             var obj2 = await ObjectHelper.CreateNewAsync();
-            dynamic conn = new Connection("sibling", "object", obj1.Id, "object", obj2.Id);
+            dynamic conn = new APConnection("sibling", "object", obj1.Id, "object", obj2.Id);
             conn.field1 = Unique.String;
             conn.field2 = 123;
 
@@ -30,16 +30,16 @@ namespace Appacitive.Sdk.Tests
             var endpoints = response.Connection.Endpoints.ToArray();
             Assert.IsNotNull(endpoints[0], "Endpoint A is null.");
             Assert.IsNotNull(endpoints[1], "Endpoint B is null.");
-            Assert.IsTrue(endpoints.Select(x => x.ArticleId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
+            Assert.IsTrue(endpoints.Select(x => x.ObjectId).Intersect(new[] { obj1.Id, obj2.Id }).Count() == 2);
         }
 
         [TestMethod]
-        public async Task CreateConnectionWithNewArticlesAsyncTest()
+        public async Task CreateConnectionWithNewObjectsAsyncTest()
         {
 
             var obj1 = ObjectHelper.NewInstance();
             var obj2 = ObjectHelper.NewInstance();
-            dynamic conn = new Connection("sibling", "object", obj1, "object", obj2);
+            dynamic conn = new APConnection("sibling", "object", obj1, "object", obj2);
             conn.field1 = Unique.String;
             conn.field2 = 123;
 

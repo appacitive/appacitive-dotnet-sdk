@@ -12,7 +12,7 @@ namespace Appacitive.Sdk.Realtime
     {
         public static readonly object _syncRoot = new object();
 
-        public static ObjectSubscriber ForArticle(string schema, string id)
+        public static ObjectSubscriber ForObject(string schema, string id)
         {
             return new ObjectSubscriber(TypeClassification.Schema, schema, id);
         }

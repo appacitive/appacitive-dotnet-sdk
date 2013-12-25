@@ -33,12 +33,12 @@ namespace Appacitive.Sdk.Internal
         {
             add 
             {
-                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ArticleUpdate : EventType.ConnectionUpdate;
+                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ObjectUpdate : EventType.ConnectionUpdate;
                 EventProxy.Add(new ObjectTopic(eventType, this.DataType, this.Id), value); 
             }
             remove 
             {
-                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ArticleUpdate : EventType.ConnectionUpdate;
+                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ObjectUpdate : EventType.ConnectionUpdate;
                 EventProxy.Remove(new ObjectTopic(eventType, this.DataType, this.Id), value); 
             }
         }
@@ -47,12 +47,12 @@ namespace Appacitive.Sdk.Internal
         {
             add
             {
-                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ArticleDelete : EventType.ConnectionDelete;
+                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ObjectDelete : EventType.ConnectionDelete;
                 EventProxy.Add(new ObjectTopic(eventType, this.DataType, this.Id), value);
             }
             remove
             {
-                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ArticleDelete : EventType.ConnectionDelete;
+                var eventType = this.TypeClassification == Internal.TypeClassification.Schema ? EventType.ObjectDelete : EventType.ConnectionDelete;
                 EventProxy.Remove(new ObjectTopic(eventType, this.DataType, this.Id), value);
             }
         }

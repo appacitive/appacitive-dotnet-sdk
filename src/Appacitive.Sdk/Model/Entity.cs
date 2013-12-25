@@ -22,8 +22,8 @@ namespace Appacitive.Sdk
             // Copy
             this.CreatedBy = existing.CreatedBy;
             this.LastUpdatedBy = existing.LastUpdatedBy;
-            this.UtcCreateDate = existing.UtcCreateDate;
-            this.UtcLastUpdated = existing.UtcLastUpdated;
+            this.CreatedAt = existing.CreatedAt;
+            this.LastUpdatedAt = existing.LastUpdatedAt;
 
             // Copy properties
             lock (_syncRoot)
@@ -54,7 +54,7 @@ namespace Appacitive.Sdk
             this.Id = id;
         }
 
-        // Represents the saved state of the article
+        // Represents the saved state of the object
         private IDictionary<string, object> _currentFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private IDictionary<string, object> _lastKnownFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         private IDictionary<string, string> _currentAttributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -83,7 +83,7 @@ namespace Appacitive.Sdk
             }
         }
 
-        public string Type { get; private set; }
+        public string Type { get; internal set; }
 
         public string Id { get; internal set; }
 
@@ -93,10 +93,9 @@ namespace Appacitive.Sdk
 
         public string LastUpdatedBy { get; internal set; }
 
-        public DateTime UtcCreateDate { get; internal set; }
+        public DateTime CreatedAt { get; internal set; }
 
-        public DateTime UtcLastUpdated { get; internal set; }
-
+        public DateTime LastUpdatedAt { get; internal set; }
 
         public IEnumerable<KeyValuePair<string, Value>> Properties
         {
@@ -108,6 +107,14 @@ namespace Appacitive.Sdk
                     clone = new Dictionary<string, object>(_currentFields, StringComparer.OrdinalIgnoreCase);
                 }
                 return clone.Select(x => new KeyValuePair<string, Value>(x.Key, Value.FromObject(x.Value)));
+            }
+        }
+
+        public bool HasProperty(string propertyName)
+        {
+            lock (_syncRoot)
+            {
+                return _currentFields.ContainsKey(propertyName);
             }
         }
 
@@ -308,7 +315,7 @@ namespace Appacitive.Sdk
             IEnumerable<string> addedTags, removedTags;
             _lastKnownTags.GetDifferences(_currentTags, out addedTags, out removedTags);
 
-            // 3. update the article
+            // 3. update the object
             var updated = await UpdateAsync(propertyDifferences, attributeDifferences, addedTags, removedTags, specificRevision);
             if (updated != null)
             {
@@ -351,8 +358,8 @@ namespace Appacitive.Sdk
                 this.Id = this.Id ?? entity.Id;
                 this.CreatedBy = entity.CreatedBy;
                 this.LastUpdatedBy = entity.LastUpdatedBy;
-                this.UtcCreateDate = entity.UtcCreateDate;
-                this.UtcLastUpdated = entity.UtcLastUpdated;
+                this.CreatedAt = entity.CreatedAt;
+                this.LastUpdatedAt = entity.LastUpdatedAt;
                 this.Revision = entity.Revision;
                 _lastKnownFields = newLastKnownFields;
                 _lastKnownAttributes = newLastKnownAttributes;

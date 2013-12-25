@@ -34,5 +34,10 @@ namespace Appacitive.Sdk
         {
             return FieldQuery.EndsWith(FieldType.Attribute, this.Field, value);
         }
+
+        public IQuery FreeTextMatches(string freeTextExpression)
+        {
+            return FieldQuery.FreeTextMatches(FieldType.Attribute, this.Field, freeTextExpression);
+        }
     }
 }

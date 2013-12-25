@@ -11,6 +11,6 @@ namespace Appacitive.Sdk.Services
     public class UpdateUserResponse : ApiResponse
     {
         [JsonProperty("user")]
-        public User User { get; set; }
+        public APUser User { get; set; }
     }
 }

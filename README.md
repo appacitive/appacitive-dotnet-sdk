@@ -10,81 +10,112 @@ LICENSE
 Except as otherwise noted, the .NET SDK for Appacitive is licensed under the Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0.html).
 
 
+# What's new in this version.
+
+* This version of the SDK targets v1.0 of the appacitive apis.
+
+## Breaking changes
+
+1. Core objects have been renamed to comply with new nomenclature.
+
+	Article		------>		APObject
+
+	Articles	------>		APObjects
+
+	Connection	------>		APConnection
+
+	Connections	------>		APConnections	
+
+	User		------>		APUser
+
+	Users		------>		APUsers
+
+	Device		------>		APDevice
+
+	Devices		------>		APDevices
+
+2. AppacitiveException has been moved from platform specific SDK to Appacitive.SDK.
+3. UtcCreateDate and UtcLastUpdated have been renamed to CreatedAt and LastUpdatedAt and will
+always consistently return time in local time zone of the client.
+4. FindAll() apis will now accept IQuery object instead of a string.
+5. To pass a string based query, helper method `WithRawQuery()` has been provided in Query class.
+6. Download and upload progress events are now supported with FileUpload and FileDownload classes.	
+
 # Documentation 
 
 
 ## Data storage and retrieval
 
-### Managing articles
-Articles in the SDK are managed via the Article object and the Articles static helper class.
-The snippets below show how common actions are performed on articles.
+### Managing objects
+APObjects in the SDK are managed via the APObject object and the APObjects static helper class.
+The snippets below show how common actions are performed on objects.
 
-#### Creating a new article.
-To create a new article, simply instantiate a new article object with the specific schema type.
+#### Creating a new object.
+To create a new object, simply instantiate a new object object with the specific schema type.
 Initialize its properties and invoke SaveAsync().
 
 ``` C#
-// Creating a new article
-var myScore = new Article("score");
+// Creating a new object
+var myScore = new APObject("score");
 myScore.Set<int>("points", 100);
 myScore.Set<bool>("level_completed", true);
 await myScore.SaveAsync();
 
-// Creating a new article using dynamic (.NET 4.5)
-dynamic myScore = new Article("score");
+// Creating a new object using dynamic (.NET 4.5)
+dynamic myScore = new APObject("score");
 myScore.Points = 100; // Points is case insensitive.
 myScore.Level_Completed = true;
 await myScore.SaveAsync();
 
 ```
 
-#### Get an existing article
+#### Get an existing object
 
 ``` C#
 // Get score with id 87321
-var score = await Articles.GetAsync("score", "87321");
+var score = await APObjects.GetAsync("score", "87321");
 
 // Get score with id 87321 with points field only
-var score = await Articles.GetAsync("score", "1234233434", new [] { "points" });
+var score = await APObjects.GetAsync("score", "1234233434", new [] { "points" });
 int points = score.Get<int>("points");
 
-// To multi get a list of articles using a list of ids
+// To multi get a list of objects using a list of ids
 var ids = new[] { "4543212", "79782374", "8734734" };
-IEnumerable<Article> articles = await Articles.MultiGetAsync("account", ids);
+IEnumerable<APObject> objects = await APObjects.MultiGetAsync("account", ids);
 
 ```
 
-#### Updating an existing article.
-The SaveAsync() method will update all changes made to an article. Incase you know the article id but do not have
-the article instance, simply create a new article object with the id, update the required fields and invoke SaveAsync().
-The article object supports partial updates and will only update the fields that have changed explicitly.
+#### Updating an existing object.
+The SaveAsync() method will update all changes made to an object. Incase you know the object id but do not have
+the object instance, simply create a new object object with the id, update the required fields and invoke SaveAsync().
+The object object supports partial updates and will only update the fields that have changed explicitly.
 
 ``` C#
 
-// Update an existing article
-// Incase the article object is not available, simply 
-// create a new instance with the id of the article to be updated.
-var account = new Article("account", "43234455");	
+// Update an existing object
+// Incase the object object is not available, simply 
+// create a new instance with the id of the object to be updated.
+var account = new APObject("account", "43234455");	
 account.Set<bool>("email_verified", true);			// Set the field value to be updated.
 await account.SaveAsync();							// Save async
 
 ```
 
 
-#### Deleting an article.
-To delete an article, use the DeleteAsync() method on the Articles helper class as shown in the snippet below.
+#### Deleting an object.
+To delete an object, use the DeleteAsync() method on the APObjects helper class as shown in the snippet below.
 
 ``` C#
-// To delete article of type account with id 53323454
-await Articles.DeleteAsync("account", "53323454");
+// To delete object of type account with id 53323454
+await APObjects.DeleteAsync("account", "53323454");
 
-// To delete article of type account with id 32423453 along with all connections
+// To delete object of type account with id 32423453 along with all connections
 bool deleteConnections = true;
-Articles.DeleteAsync("account", "32423453", deleteConnections);
+APObjects.DeleteAsync("account", "32423453", deleteConnections);
 
-// To delete multiple articles of type account.
+// To delete multiple objects of type account.
 var ids = new [] { "234234", "71231230", "97637282" };
-await Articles.MultiDeleteAsync("account", ids);
+await APObjects.MultiDeleteAsync("account", ids);
 ```
 ## Graph Query support
 
@@ -135,7 +166,7 @@ var matches = await Graph.Project( "query_name", ids,
 To add a new user account, create a new user object, set the relevant fields and call `SaveAsync()`
 To update an existing user, simple update the relevant fields and call `SaveAsync()`.
 ``` C#
-var user = new User
+var user = new APUser
 {
     Username = "john.doe",
     FirstName = "John",
@@ -151,24 +182,24 @@ await user.SaveAsync();
 To get an existing user by it's system generated id, call `GetUserByIdAsync()`.
 
 ``` C#
-var user = await User.GetByIdAsync("123456");
+var user = await APUsers.GetByIdAsync("123456");
 
 // To get only specific fields (username, firstname and lastname)
-var user = await User.GetByIdAsync("123456", new [] { "username", "firstname", "lastname" });
+var user = await APUsers.GetByIdAsync("123456", new [] { "username", "firstname", "lastname" });
 ```
 
 ### Get an existing user by username 
 To get an existing user by it's username, call `GetUserByUsernameAsync()`.
 
 ``` C#
-var user = await User.GetByUsernameAsync("john.doe");
+var user = await APUsers.GetByUsernameAsync("john.doe");
 ```
 
 ### Getting the logged in user
-To get the logged in user, call 'GetLoggedInUserAsync' on the User object as shown below.
+To get the logged in user, call 'GetLoggedInUserAsync' on the APUser object as shown below.
 
 ``` C#
-var loggedInUser = await User.GetLoggedInUserAsync();
+var loggedInUser = await APUsers.GetLoggedInUserAsync();
 ```
 
 
@@ -535,20 +566,20 @@ App.Initialize(host, apiKey, Environment.Live, new AppacitiveSettings { EnableRe
 
 Subscriptions allow the client app to subscribe to real time notifications on data changes on the server.
 The client can subscribe to all changes (create, update & delete) for a specific type of schema or relation 
-as well they can subscribe to all changes for a specific instance of an article or connection.
+as well they can subscribe to all changes for a specific instance of an object or connection.
 The sample below shows how this can be done.
 
 ``` C#
 
-		// Modification to articles of a specific schema (create,update, delete)
+		// Modification to objects of a specific schema (create,update, delete)
         Subscriptions.ForSchema("post").Created += m =>
         {
             var msg = m as ObjectUpdatedMessage;
             Console.WriteLine("Created new post with id {0}.", msg.ObjectId);
         };
 
-        // Modification to a specific article instance (update, delete)
-        Subscriptions.ForArticle("post", "100").Updated += m =>
+        // Modification to a specific object instance (update, delete)
+        Subscriptions.ForObject("post", "100").Updated += m =>
         {
             var msg = m as ObjectUpdatedMessage;
             Console.WriteLine("Post with id 100 was just updated.");
@@ -660,21 +691,21 @@ public class MyWebService : IMyWebService
 
 
 ### Pending items
-Articles and connections
+APObjects and connections
 
-- [x] Get connected articles.
-- [x] Get connected articles with connections - done 
-- [ ] Get articles in between
-- [x] Multi get articles - done
-- [x] Get connection between two articles of a specific type
-- [ ] Get connections between two articles of any type of relation.
+- [x] Get connected objects.
+- [x] Get connected objects with connections - done 
+- [ ] Get objects in between
+- [x] Multi get objects - done
+- [x] Get connection between two objects of a specific type
+- [ ] Get connections between two objects of any type of relation.
 - [ ] Interconnect
 - [ ] Multi get connections
-- [x] Multi delete article
+- [x] Multi delete object
 - [x] Multi delete connections
-- [x] Force delete single article.
+- [x] Force delete single object.
 - [x] Sorting support on listing calls.
-- [x] Update article with revision
+- [x] Update object with revision
 - [x] Find all connections
 
 Users

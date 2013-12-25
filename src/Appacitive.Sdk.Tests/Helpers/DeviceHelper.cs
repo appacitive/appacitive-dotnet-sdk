@@ -8,12 +8,12 @@ namespace Appacitive.Sdk.Tests
 {
     internal static class DeviceHelper
     {
-        public static async Task<Device> CreateNewAsync(Device device = null)
+        public static async Task<APDevice> CreateNewAsync(APDevice device = null)
         {
             Console.WriteLine("Creating new device");
             if (device == null)
             {
-                device = new Device(DeviceType.iOS)
+                device = new APDevice(DeviceType.iOS)
                 {
                     DeviceToken = Guid.NewGuid().ToString(),
                     Badge = 1,
@@ -26,9 +26,9 @@ namespace Appacitive.Sdk.Tests
             return device;
         }
 
-        public static Device NewDevice()
+        public static APDevice NewDevice()
         {
-            return new Device(DeviceType.iOS)
+            return new APDevice(DeviceType.iOS)
                 {
                     DeviceToken = Guid.NewGuid().ToString(),
                     Badge = 1,

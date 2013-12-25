@@ -14,7 +14,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void CannotGetMultiValuedViaIndexerTest()
         {
-            var obj = new Article("object");
+            var obj = new APObject("object");
             try
             {
                 obj.SetList<int>("multifield", new int[] { 1, 2, 4 });
@@ -34,7 +34,7 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public void GetListTest()
         {
-            var obj = new Article("object");
+            var obj = new APObject("object");
             obj.SetList<int>("multifield", new[] { 1, 2, 3, 4, 5 });
             var list = obj.GetList<decimal>("multifield");
             Assert.IsTrue(list.Intersect(new decimal[] { 1, 2, 3, 4, 5 }).Count() == 5);
@@ -45,11 +45,11 @@ namespace Appacitive.Sdk.Tests
         public async Task SaveMultivaluedAsyncTest()
         {
             var array = new[] { 1, 3, 4, 5, 6, 7 };
-            var obj = new Article("object");
+            var obj = new APObject("object");
             obj.SetList<int>("multifield", array);
             await obj.SaveAsync();
 
-            var saved = await Articles.GetAsync("object", obj.Id);
+            var saved = await APObjects.GetAsync("object", obj.Id);
             var array2 = saved.GetList<int>("multifield");
             Assert.IsTrue(array.Intersect(array2).Count() == array.Length);
         }

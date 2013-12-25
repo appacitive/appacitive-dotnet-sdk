@@ -20,7 +20,7 @@ namespace Appacitive.Sdk.Services
         {
         }
 
-        public User User { get; set; }
+        public APUser User { get; set; }
 
         public override byte[] ToBytes()
         {

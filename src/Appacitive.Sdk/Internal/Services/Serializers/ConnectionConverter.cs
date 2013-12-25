@@ -14,12 +14,12 @@ namespace Appacitive.Sdk.Services
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(Connection);
+            return objectType == typeof(APConnection);
         }
 
         protected override void WriteJson(Entity entity, JsonWriter writer, JsonSerializer serializer)
         {
-            var conn = entity as Connection;
+            var conn = entity as APConnection;
             if (conn == null)
                 return;
 
@@ -31,7 +31,7 @@ namespace Appacitive.Sdk.Services
                     .WriteProperty("__endpointa")
                     .StartObject()
                     .WriteProperty("label", conn.Endpoints.EndpointA.Label)
-                    .WriteProperty("articleid", conn.Endpoints.EndpointA.ArticleId)
+                    .WriteProperty("objectid", conn.Endpoints.EndpointA.ObjectId)
                     .EndObject();
             }
             else
@@ -40,8 +40,8 @@ namespace Appacitive.Sdk.Services
                     .WriteProperty("__endpointa")
                     .StartObject()
                     .WriteProperty("label", conn.Endpoints.EndpointA.Label)
-                    .WriteProperty("article")
-                    .WithWriter( w => WriteArticle(w, conn.Endpoints.EndpointA.Content) )
+                    .WriteProperty("object")
+                    .WithWriter( w => WriteObject(w, conn.Endpoints.EndpointA.Content) )
                     .EndObject();
             }
 
@@ -52,7 +52,7 @@ namespace Appacitive.Sdk.Services
                     .WriteProperty("__endpointb")
                     .StartObject()
                     .WriteProperty("label", conn.Endpoints.EndpointB.Label)
-                    .WriteProperty("articleid", conn.Endpoints.EndpointB.ArticleId)
+                    .WriteProperty("objectid", conn.Endpoints.EndpointB.ObjectId)
                     .EndObject();
             }
             else
@@ -61,8 +61,8 @@ namespace Appacitive.Sdk.Services
                     .WriteProperty("__endpointb")
                     .StartObject()
                     .WriteProperty("label", conn.Endpoints.EndpointB.Label)
-                    .WriteProperty("article")
-                    .WithWriter(w => WriteArticle(w, conn.Endpoints.EndpointB.Content))
+                    .WriteProperty("object")
+                    .WithWriter(w => WriteObject(w, conn.Endpoints.EndpointB.Content))
                     .EndObject();
             }
         }
@@ -73,12 +73,12 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("__relationtype", out value) == false || value.Type == JTokenType.Null)
                 throw new Exception("Relation type missing.");
             var type = value.ToString();
-            return new Connection(type);
+            return new APConnection(type);
         }
 
         protected override Entity ReadJson(Entity entity, Type objectType, Newtonsoft.Json.Linq.JObject json, JsonSerializer serializer)
         {
-            var conn = base.ReadJson(entity, objectType, json, serializer) as Connection;
+            var conn = base.ReadJson(entity, objectType, json, serializer) as APConnection;
             if (conn == null)
                 return null;
             // Parse the relation information
@@ -103,39 +103,39 @@ namespace Appacitive.Sdk.Services
         {
             if (json == null)
                 return null;
-            string label = null, articleId = null;
+            string label = null, objectId = null;
             string type = null;
             JToken value;
             // Parse the label
             if (json.TryGetValue("label", out value) == true && value.Type != JTokenType.Null)
                 label = value.ToString();
-            // Parse the article type
+            // Parse the object type
             if (json.TryGetValue("type", out value) == true && value.Type != JTokenType.Null)
                 type = value.ToString();
-            // Parse the article id
-            if (json.TryGetValue("articleid", out value) == true && value.Type != JTokenType.Null)
-                articleId = value.ToString();
-            // Parse the article
-            Article article = null;
-            if (json.TryGetValue("article", out value) == true && value.Type != JTokenType.Null && value.Type == JTokenType.Object)
+            // Parse the object id
+            if (json.TryGetValue("objectid", out value) == true && value.Type != JTokenType.Null)
+                objectId = value.ToString();
+            // Parse the object
+            APObject obj = null;
+            if (json.TryGetValue("object", out value) == true && value.Type != JTokenType.Null && value.Type == JTokenType.Object)
             {
                 using (var reader = value.CreateReader())
                 {
-                    article = serializer.Deserialize<Article>(value.CreateReader());
+                    obj = serializer.Deserialize<APObject>(value.CreateReader());
                 }
             }
             if( string.IsNullOrWhiteSpace(label) == true )
-                throw new Exception("Endpoint lable is missing.");
-            if (string.IsNullOrWhiteSpace(articleId) == true)
-                throw new Exception("Endpoint article id is missing.");
+                throw new Exception("Endpoint label is missing.");
+            if (string.IsNullOrWhiteSpace(objectId) == true)
+                throw new Exception("Endpoint object id is missing.");
 
-            return new Endpoint(label, articleId) { Content = article, Type = type };
+            return new Endpoint(label, objectId) { Content = obj, Type = type };
         }
 
-        private void WriteArticle(JsonWriter writer, Article article)
+        private void WriteObject(JsonWriter writer, APObject obj)
         {
             var serializer = ObjectFactory.Build<IJsonSerializer>();
-            var bytes = serializer.Serialize(article);
+            var bytes = serializer.Serialize(obj);
             using (var reader = new StreamReader(new MemoryStream(bytes), Encoding.UTF8))
             {
                 writer.WriteRawValue(reader.ReadToEnd());

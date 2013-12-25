@@ -8,7 +8,6 @@ using Appacitive.Sdk.Realtime;
 
 namespace Appacitive.Sdk.Services
 {
-    [JsonConverter(typeof(StatusResponseConverter<DeleteDeviceResponse>))]
     public class DeleteDeviceResponse : ApiResponse
     {   
     }

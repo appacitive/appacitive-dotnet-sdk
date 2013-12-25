@@ -16,11 +16,11 @@ namespace Appacitive.Sdk.Tests
     public class SerializationFixture
     {
         [TestMethod]
-        public void ArticleSerializerSelectionTest()
+        public void ObjectSerializerSelectionTest()
         {
-            ArticleConverter converter = new ArticleConverter();
-            Assert.IsTrue( converter.CanConvert(typeof(Article)));
-            Assert.IsTrue( converter.CanConvert(typeof(ObjectArticle)));
+            ObjectConverter converter = new ObjectConverter();
+            Assert.IsTrue( converter.CanConvert(typeof(APObject)));
+            Assert.IsTrue( converter.CanConvert(typeof(CustomObject2)));
         }
 
         [TestMethod]
@@ -31,13 +31,13 @@ namespace Appacitive.Sdk.Tests
             {
                 ObjectId = "123",
                 ObjectType = "type",
-                EventType = EventType.ArticleCreate
+                EventType = EventType.ObjectCreate
             };
             var msg2 = new TypeUpdatedMessage
             {
                 ObjectId = "123",
                 ObjectType = "type",
-                EventType = EventType.ArticleCreate
+                EventType = EventType.ObjectCreate
             };
             var msg3 = new NewNotificationMessage
             {
@@ -54,9 +54,9 @@ namespace Appacitive.Sdk.Tests
         }
     }
 
-    public class ObjectArticle : Article
+    public class CustomObject2 : APObject
     {
-        public ObjectArticle() : base("object")
+        public CustomObject2() : base("object")
         {
         }
     }

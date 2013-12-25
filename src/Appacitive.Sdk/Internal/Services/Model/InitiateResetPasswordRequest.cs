@@ -32,7 +32,6 @@ namespace Appacitive.Sdk.Services
         }
     }
 
-    [JsonConverter(typeof(StatusResponseConverter<InitiateResetPasswordResponse>))]
     public class InitiateResetPasswordResponse : ApiResponse
     {   
     }

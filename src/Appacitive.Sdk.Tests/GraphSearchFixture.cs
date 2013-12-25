@@ -17,7 +17,7 @@ namespace Appacitive.Sdk.Tests
             var unique = Unique.String;
             var child = ObjectHelper.NewInstance();
             child.Set<string>("stringfield", unique);
-            var conn = Connection.New("link").FromExistingArticle("parent", parent.Id).ToNewArticle("child", child);
+            var conn = APConnection.New("link").FromExistingObject("parent", parent.Id).ToNewObject("child", child);
             await conn.SaveAsync();
 
             // Run filter
@@ -33,7 +33,7 @@ namespace Appacitive.Sdk.Tests
             var unique = Unique.String;
             var child = ObjectHelper.NewInstance();
             child.Set<string>("stringfield", unique);
-            var conn = Connection.New("link").FromExistingArticle("parent", parent.Id).ToNewArticle("child", child);
+            var conn = APConnection.New("link").FromExistingObject("parent", parent.Id).ToNewObject("child", child);
             await conn.SaveAsync();
 
             // Run filter
@@ -50,12 +50,12 @@ namespace Appacitive.Sdk.Tests
             var root = await ObjectHelper.CreateNewAsync();
             var level1Child = ObjectHelper.NewInstance();
             level1Child.Set<string>("stringfield", val1);
-            var level1Edge = Connection.New("link").FromExistingArticle("parent", root.Id).ToNewArticle("child", level1Child);
+            var level1Edge = APConnection.New("link").FromExistingObject("parent", root.Id).ToNewObject("child", level1Child);
             await level1Edge.SaveAsync();
 
             var level2Child = ObjectHelper.NewInstance();
             level2Child.Set<string>("stringfield", val2);
-            var level2Edge = Connection.New("link").FromExistingArticle("parent", level1Child.Id).ToNewArticle("child", level2Child);
+            var level2Edge = APConnection.New("link").FromExistingObject("parent", level1Child.Id).ToNewObject("child", level2Child);
             await level2Edge.SaveAsync();
 
             // Run filter
@@ -64,26 +64,26 @@ namespace Appacitive.Sdk.Tests
                 new Dictionary<string, string> { { "level1_filter", val1 }, { "level2_filter", val2 } });
 
             Assert.IsTrue(results.Count == 1);
-            Assert.IsTrue(results[0].Article != null);
-            Assert.IsTrue(results[0].Article.Id  == root.Id);
+            Assert.IsTrue(results[0].Object != null);
+            Assert.IsTrue(results[0].Object.Id  == root.Id);
 
             var level1Children = results[0].GetChildren("level1_children");
             Assert.IsTrue(level1Children.Count == 1);
-            Assert.IsTrue(level1Children[0].Article != null);
-            Assert.IsTrue(level1Children[0].Article.Id == level1Child.Id);
+            Assert.IsTrue(level1Children[0].Object != null);
+            Assert.IsTrue(level1Children[0].Object.Id == level1Child.Id);
             Assert.IsTrue(level1Children[0].Connection != null);
             Assert.IsTrue(level1Children[0].Connection.Id == level1Edge.Id);
-            Assert.IsTrue(level1Children[0].Connection.Endpoints["parent"].ArticleId == root.Id);
-            Assert.IsTrue(level1Children[0].Connection.Endpoints["child"].ArticleId == level1Child.Id);
+            Assert.IsTrue(level1Children[0].Connection.Endpoints["parent"].ObjectId == root.Id);
+            Assert.IsTrue(level1Children[0].Connection.Endpoints["child"].ObjectId == level1Child.Id);
 
             var level2Children = level1Children[0].GetChildren("level2_children");
             Assert.IsTrue(level2Children.Count == 1);
-            Assert.IsTrue(level2Children[0].Article != null);
-            Assert.IsTrue(level2Children[0].Article.Id == level2Child.Id);
+            Assert.IsTrue(level2Children[0].Object != null);
+            Assert.IsTrue(level2Children[0].Object.Id == level2Child.Id);
             Assert.IsTrue(level2Children[0].Connection != null);
             Assert.IsTrue(level2Children[0].Connection.Id == level2Edge.Id);
-            Assert.IsTrue(level2Children[0].Connection.Endpoints["parent"].ArticleId == level1Child.Id);
-            Assert.IsTrue(level2Children[0].Connection.Endpoints["child"].ArticleId == level2Child.Id);
+            Assert.IsTrue(level2Children[0].Connection.Endpoints["parent"].ObjectId == level1Child.Id);
+            Assert.IsTrue(level2Children[0].Connection.Endpoints["child"].ObjectId == level2Child.Id);
         }
 
 
@@ -95,12 +95,12 @@ namespace Appacitive.Sdk.Tests
             var root = await ObjectHelper.CreateNewAsync();
             var level1Child = ObjectHelper.NewInstance();
             level1Child.Set<string>("stringfield", val1);
-            var level1Edge = Connection.New("link").FromExistingArticle("parent", root.Id).ToNewArticle("child", level1Child);
+            var level1Edge = APConnection.New("link").FromExistingObject("parent", root.Id).ToNewObject("child", level1Child);
             await level1Edge.SaveAsync();
 
             var level2Child = ObjectHelper.NewInstance();
             level2Child.Set<string>("stringfield", val2);
-            var level2Edge = Connection.New("link").FromExistingArticle("parent", level1Child.Id).ToNewArticle("child", level2Child);
+            var level2Edge = APConnection.New("link").FromExistingObject("parent", level1Child.Id).ToNewObject("child", level2Child);
             await level2Edge.SaveAsync();
 
             // Run filter
@@ -113,26 +113,26 @@ namespace Appacitive.Sdk.Tests
                 });
 
             Assert.IsTrue(results.Count == 1);
-            Assert.IsTrue(results[0].Article != null);
-            Assert.IsTrue(results[0].Article.Id == root.Id);
+            Assert.IsTrue(results[0].Object != null);
+            Assert.IsTrue(results[0].Object.Id == root.Id);
 
             var level1Children = results[0]["level1_children"];
             Assert.IsTrue(level1Children.Count == 1);
-            Assert.IsTrue(level1Children[0].Article != null);
-            Assert.IsTrue(level1Children[0].Article.Id == level1Child.Id);
+            Assert.IsTrue(level1Children[0].Object != null);
+            Assert.IsTrue(level1Children[0].Object.Id == level1Child.Id);
             Assert.IsTrue(level1Children[0].Connection != null);
             Assert.IsTrue(level1Children[0].Connection.Id == level1Edge.Id);
-            Assert.IsTrue(level1Children[0].Connection.Endpoints["parent"].ArticleId == root.Id);
-            Assert.IsTrue(level1Children[0].Connection.Endpoints["child"].ArticleId == level1Child.Id);
+            Assert.IsTrue(level1Children[0].Connection.Endpoints["parent"].ObjectId == root.Id);
+            Assert.IsTrue(level1Children[0].Connection.Endpoints["child"].ObjectId == level1Child.Id);
 
             var level2Children = level1Children[0].GetChildren("level2_children");
             Assert.IsTrue(level2Children.Count == 1);
-            Assert.IsTrue(level2Children[0].Article != null);
-            Assert.IsTrue(level2Children[0].Article.Id == level2Child.Id);
+            Assert.IsTrue(level2Children[0].Object != null);
+            Assert.IsTrue(level2Children[0].Object.Id == level2Child.Id);
             Assert.IsTrue(level2Children[0].Connection != null);
             Assert.IsTrue(level2Children[0].Connection.Id == level2Edge.Id);
-            Assert.IsTrue(level2Children[0].Connection.Endpoints["parent"].ArticleId == level1Child.Id);
-            Assert.IsTrue(level2Children[0].Connection.Endpoints["child"].ArticleId == level2Child.Id);
+            Assert.IsTrue(level2Children[0].Connection.Endpoints["parent"].ObjectId == level1Child.Id);
+            Assert.IsTrue(level2Children[0].Connection.Endpoints["child"].ObjectId == level2Child.Id);
         }
     }
 }
