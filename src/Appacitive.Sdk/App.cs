@@ -19,7 +19,7 @@ namespace Appacitive.Sdk
         private static object _syncRoot = new object();
         public static void Initialize(IApplicationHost host, string apiKey, Environment environment, AppacitiveSettings settings = null)
         {
-            Initialize(host, "apis.appacitive.com", apiKey, environment, settings);
+            Initialize(host, string.Empty, apiKey, environment, settings);
         }
 
         public static void Initialize(IApplicationHost host, string hostName, string apiKey, Environment environment, AppacitiveSettings settings = null)

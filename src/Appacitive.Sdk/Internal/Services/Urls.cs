@@ -16,7 +16,7 @@ namespace Appacitive.Sdk.Services
         {
             private static string ObjectServiceBase 
             {
-                get { return CreateUrl("data"); }
+                get { return CreateUrl("object"); }
             }
             private static string FileServiceBase
             {
@@ -60,7 +60,7 @@ namespace Appacitive.Sdk.Services
             {
                 var hostName = AppacitiveContext.HostName;
                 if (string.IsNullOrWhiteSpace(hostName) == true)
-                    hostName = "apis.appacitive.com";
+                    hostName = "apis.appacitive.com/v1.0";
                 if( AppacitiveContext.UseHttps == true )
                     return string.Format("https://{0}/{1}", hostName, suffix);
                 else
