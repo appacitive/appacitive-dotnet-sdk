@@ -20,7 +20,12 @@ namespace Appacitive.Sdk
             }).ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
-            else return response.Connections.SingleOrDefault();
+            else
+            {
+                if (response.Connections == null) return null;
+                
+                return response.Connections.SingleOrDefault();
+            }
         }
 
         public async static Task<APConnection> GetAsync(string relation, string id)
