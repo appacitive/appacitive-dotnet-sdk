@@ -345,7 +345,7 @@ namespace Appacitive.Sdk.Services
             public static string GetConnectionByEndpointAsync(string relation, string object1Id, string object2Id, Geocode geocode, bool enableDebugging, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ConnectionServiceBase);
-                url.Append("find").Append(object1Id).Append(object2Id);
+                url.Append(relation).Append("find").Append(object1Id).Append(object2Id);
                 HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
                 return url.ToString();
             }
