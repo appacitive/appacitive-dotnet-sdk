@@ -157,6 +157,54 @@ namespace Appacitive.Sdk.Tests
         }
 
         [TestMethod]
+        public async Task CreateDuplicateConnectionAsyncTest()
+        {
+
+            var o1 = new APObject("object");
+            var o2 = new APObject("object");
+            var conn = await APConnection
+                            .New("sibling")
+                            .FromNewObject("object", o1)
+                            .ToNewObject("object", o2)
+                            .SaveAsync();
+
+            var dupe = await APConnection
+                            .New("sibling")
+                            .FromExistingObject("object", o1.Id)
+                            .ToExistingObject("object", o2.Id)
+                            .SaveAsync();
+            Assert.AreEqual(conn.Id, dupe.Id);
+        }
+
+        [TestMethod]
+        public async Task CreateDuplicateConnectionWithFaultAsyncTest()
+        {
+
+            var o1 = new APObject("object");
+            var o2 = new APObject("object");
+            var conn = await APConnection
+                            .New("sibling")
+                            .FromNewObject("object", o1)
+                            .ToNewObject("object", o2)
+                            .SaveAsync();
+
+            try
+            {
+                var dupe = await APConnection
+                                .New("sibling")
+                                .FromExistingObject("object", o1.Id)
+                                .ToExistingObject("object", o2.Id)
+                                .SaveAsync(throwIfAlreadyExists: true);
+                Assert.Fail("Duplicate connection creation did not fault.");
+            }
+            catch (AppacitiveException ex)
+            {
+                Assert.AreEqual("21006", ex.Code);
+            }
+        }
+        
+
+        [TestMethod]
         public async Task CreateConnectionBetweenNewObjectsAsyncTest()
         {
             var obj1 = new APObject("object");

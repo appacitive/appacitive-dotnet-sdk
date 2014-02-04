@@ -10,10 +10,7 @@ namespace Appacitive.Sdk.Services
 {
     public class GetConnectionByEndpointResponse : ApiResponse
     {
-        [JsonProperty("connections")]
-        public List<APConnection> Connections { get; set; }
-
-        [JsonProperty("paginginfo")]
-        public PagingInfo PagingInfo { get; set; }
+        [JsonProperty("connection")]
+        public APConnection Connection { get; set; }
     }
 }

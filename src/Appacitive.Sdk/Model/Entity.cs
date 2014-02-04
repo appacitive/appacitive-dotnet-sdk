@@ -283,7 +283,7 @@ namespace Appacitive.Sdk
             }
         }
 
-        public async Task SaveAsync(int specificRevision = 0)
+        protected async Task SaveEntityAsync(int specificRevision = 0)
         {
             if (string.IsNullOrWhiteSpace(this.Id) == true)
                 await CreateNewEntityAsync();

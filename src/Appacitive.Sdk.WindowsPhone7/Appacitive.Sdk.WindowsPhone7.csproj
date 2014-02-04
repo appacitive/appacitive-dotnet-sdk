@@ -156,6 +156,9 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Debugger.cs">
       <Link>Internal\Debugger.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\ErrorCodes.cs">
+      <Link>Internal\ErrorCodes.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\EventProxy.cs">
       <Link>Internal\EventProxy.cs</Link>
     </Compile>

@@ -172,6 +172,27 @@ namespace Appacitive.Sdk
 
         public string RelationId { get; set; }
 
+        public async Task<APConnection> SaveAsync(int specificRevision = 0, bool throwIfAlreadyExists = false)
+        {
+            try
+            {
+                await this.SaveEntityAsync(specificRevision);
+                return this;
+            }
+            catch (AppacitiveException ex)
+            {
+                if (throwIfAlreadyExists == true)
+                    throw;
+                if (ex.Code != ErrorCodes.DuplicateConnection)
+                    throw;
+            }
+            // Get existing connection.
+            return await APConnections.GetAsync(this.Type, this.Endpoints.EndpointA.ObjectId, this.Endpoints.EndpointB.ObjectId);
+            
+        }
+
+        
+
         protected async override Task<Entity> CreateNewAsync()
         {
             // Handling for special case when endpoint contains a new object or device.

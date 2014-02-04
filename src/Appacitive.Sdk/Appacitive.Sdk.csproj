@@ -39,6 +39,7 @@
     <Compile Include="App.cs" />
     <Compile Include="APDevice.cs" />
     <Compile Include="Internal\AppacitiveContext.cs" />
+    <Compile Include="Internal\ErrorCodes.cs" />
     <Compile Include="Model\AppacitiveSettings.cs" />
     <Compile Include="CannedLists.cs" />
     <Compile Include="Model\EventArgs.cs" />

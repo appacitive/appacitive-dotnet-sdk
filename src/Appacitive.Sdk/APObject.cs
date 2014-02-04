@@ -37,6 +37,12 @@ namespace Appacitive.Sdk
 
         public static readonly IEnumerable<string> AllFields = new string[0];
 
+        public async Task<APObject> SaveAsync(int specificRevision = 0)
+        {
+            await this.SaveEntityAsync(specificRevision);
+            return this;
+        }
+
         protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var request = new UpdateObjectRequest {Id = this.Id, Type = this.Type};
