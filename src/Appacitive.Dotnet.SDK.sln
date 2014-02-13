@@ -46,6 +46,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BF9F74
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appacitive.Sdk.Net40", "Appacitive.Sdk.Net40\Appacitive.Sdk.Net40.csproj", "{326B81E1-F79B-48A9-BF20-ABAE0121D226}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appacitive.Sdk.Tests.Net40", "Appacitive.Sdk.Tests.Net40\Appacitive.Sdk.Tests.Net40.csproj", "{23F184D8-451F-467E-A429-F0C05B350433}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +104,22 @@ Global
 		{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}.Release|ARM.ActiveCfg = Release|Any CPU
 		{DF28E8E5-2601-4EE5-B02A-1A59E12FBFEC}.Release|x86.ActiveCfg = Release|Any CPU
+		{326B81E1-F79B-48A9-BF20-ABAE0121D226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{326B81E1-F79B-48A9-BF20-ABAE0121D226}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{326B81E1-F79B-48A9-BF20-ABAE0121D226}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{326B81E1-F79B-48A9-BF20-ABAE0121D226}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{326B81E1-F79B-48A9-BF20-ABAE0121D226}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{326B81E1-F79B-48A9-BF20-ABAE0121D226}.Release|Any CPU.Build.0 = Release|Any CPU
+		{326B81E1-F79B-48A9-BF20-ABAE0121D226}.Release|ARM.ActiveCfg = Release|Any CPU
+		{326B81E1-F79B-48A9-BF20-ABAE0121D226}.Release|x86.ActiveCfg = Release|Any CPU
+		{23F184D8-451F-467E-A429-F0C05B350433}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23F184D8-451F-467E-A429-F0C05B350433}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23F184D8-451F-467E-A429-F0C05B350433}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{23F184D8-451F-467E-A429-F0C05B350433}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{23F184D8-451F-467E-A429-F0C05B350433}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23F184D8-451F-467E-A429-F0C05B350433}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23F184D8-451F-467E-A429-F0C05B350433}.Release|ARM.ActiveCfg = Release|Any CPU
+		{23F184D8-451F-467E-A429-F0C05B350433}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

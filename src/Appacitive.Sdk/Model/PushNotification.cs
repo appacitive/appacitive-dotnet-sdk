@@ -102,11 +102,7 @@ namespace Appacitive.Sdk
         public PushNotification WithData(object data)
         {
             var map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            #if !WINDOWS_PHONE7
-            var properties = data.GetType().GetRuntimeProperties();
-            #else
-            var properties = data.GetType().GetProperties();
-            #endif
+            var properties = data.GetType().GetPropertyInfos();
 
             foreach (var property in properties)
             {

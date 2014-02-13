@@ -41,16 +41,7 @@ namespace Appacitive.Sdk
                 return null;
             var result = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             // Get list of properties and their values and convert to dictionary.
-            #if !WINDOWS_PHONE7
-            var type = obj.GetType().GetTypeInfo();
-            var properties = type.DeclaredProperties.Where(x => x.CanRead == true).ToList();
-            properties.For(x =>
-                {
-                    var value = x.GetValue(obj);
-                    if (value != null)
-                        result.Add(x.Name, value.ToString());
-                });
-            #else   
+            #if (WINDOWS_PHONE7 || NET40)
             var type = obj.GetType();
             var properties = type.GetProperties().Where(p => p.CanRead == true);
             properties.For(x =>
@@ -59,6 +50,15 @@ namespace Appacitive.Sdk
                 if (value != null)
                     result.Add(x.Name, value.ToString());
             });
+            #else   
+            var type = obj.GetType().GetTypeInfo();
+            var properties = type.DeclaredProperties.Where(x => x.CanRead == true).ToList();
+            properties.For(x =>
+                {
+                    var value = x.GetValue(obj);
+                    if (value != null)
+                        result.Add(x.Name, value.ToString());
+                });
             #endif
             return result;
         }
@@ -91,19 +91,14 @@ namespace Appacitive.Sdk
 
 
         internal static bool RemoveAllOccurences(this List<string> list, string value)
-        {
-            #if !WINDOWS_PHONE7
-            return list.RemoveAll( x => x == value ) > 0;
+        {   
+            #if WINDOWS_PHONE7
+            var initial = list.Count;
+            while (list.Contains(value) == true)
+                list.Remove(value);
+            return list.Count != initial;
             #else
-            {
-                var found = false;
-                while (list.Contains(value) == true)
-                {
-                    list.Remove(value);
-                    found = true;
-                }
-                return found;
-            }
+            return list.RemoveAll( x => x == value) > 0;
             #endif
         }
 
@@ -123,28 +118,28 @@ namespace Appacitive.Sdk
 
         public static bool Is<T>(this Type type)
         {
-            #if !WINDOWS_PHONE7
-            return typeof(T).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo());
-            #else
+            #if (WINDOWS_PHONE7 || NET40)
             return typeof(T).IsAssignableFrom(type);
+            #else
+            return typeof(T).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo());
             #endif
         }
 
         public static bool IsEnumeration(this Type type)
         {
-            #if !WINDOWS_PHONE7
-            return type.GetTypeInfo().IsEnum;
-            #else
+            #if (WINDOWS_PHONE7 || NET40)
             return type.IsEnum;
+            #else
+            return type.GetTypeInfo().IsEnum;
             #endif
         }
 
         public static bool IsGeneric(this Type type)
         {
-            #if !WINDOWS_PHONE7
-            return type.GetTypeInfo().IsGenericType;
-            #else
+            #if (WINDOWS_PHONE7 || NET40)
             return type.IsGenericType;
+            #else
+            return type.GetTypeInfo().IsGenericType;
             #endif
         }
 
@@ -152,11 +147,21 @@ namespace Appacitive.Sdk
         {
             if (type.Is<string>() || type.Is<DateTime>())
                 return true;
-            #if !WINDOWS_PHONE7
-            return type.GetTypeInfo().IsValueType || type.GetTypeInfo().IsPrimitive;
-            #else
+            #if (WINDOWS_PHONE7 || NET40)
             return type.IsValueType || type.IsPrimitive;
+            #else
+            return type.GetTypeInfo().IsValueType || type.GetTypeInfo().IsPrimitive;
             #endif
+        }
+
+        public static PropertyInfo[] GetPropertyInfos(this Type type)
+        {
+            #if (WINDOWS_PHONE7 || NET40)
+            var properties = type.GetProperties();
+            #else
+            var properties = type.GetRuntimeProperties().ToArray();
+            #endif
+            return properties;
         }
 
         public static Exception ToFault(this Status status)

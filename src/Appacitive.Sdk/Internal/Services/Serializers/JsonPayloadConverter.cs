@@ -12,12 +12,8 @@ namespace Appacitive.Sdk.Internal
     public class JsonObjectConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
-        {   
-            #if !WINDOWS_PHONE7
-            return typeof(IJsonObject).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo());
-            #else
-            return typeof(IJsonObject).IsAssignableFrom(objectType);
-            #endif
+        {
+            return objectType.Is<IJsonObject>();
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

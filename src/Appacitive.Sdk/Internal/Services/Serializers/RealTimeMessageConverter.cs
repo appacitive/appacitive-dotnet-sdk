@@ -14,12 +14,7 @@ namespace Appacitive.Sdk.Internal
     {
         public override bool CanConvert(Type objectType)
         {
-            #if !WINDOWS_PHONE7
-            return typeof(RealTimeMessage).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo());
-            #else
-            return typeof(RealTimeMessage).IsAssignableFrom(objectType);
-            #endif
-
+            return objectType.Is<RealTimeMessage>();
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)

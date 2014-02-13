@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{23F184D8-451F-467E-A429-F0C05B350433}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Appacitive.Sdk.Tests.Net40</RootNamespace>
+    <AssemblyName>Appacitive.Sdk.Tests.Net40</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Moq">
+      <HintPath>..\Library\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Library\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="..\Appacitive.Sdk.Tests\AuthenticationFixture.cs">
+      <Link>AuthenticationFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\ConnectionFixture.cs">
+      <Link>ConnectionFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\ConnectionServiceFixture.cs">
+      <Link>ConnectionServiceFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\CustomArticle.cs">
+      <Link>CustomArticle.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\DeviceFixture.cs">
+      <Link>DeviceFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\EmailFixture.cs">
+      <Link>EmailFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\EntityFixture.cs">
+      <Link>EntityFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\EntityPropertyFixture.cs">
+      <Link>EntityPropertyFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\FileFixture.cs">
+      <Link>FileFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\GeocodeFixture.cs">
+      <Link>GeocodeFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\GraphSearchFixture.cs">
+      <Link>GraphSearchFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\ApiHelper.cs">
+      <Link>Helpers\ApiHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\ConnectionHelper.cs">
+      <Link>Helpers\ConnectionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\DeviceHelper.cs">
+      <Link>Helpers\DeviceHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\FileHelper.cs">
+      <Link>Helpers\FileHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\ObjectHelper.cs">
+      <Link>Helpers\ObjectHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\Unique.cs">
+      <Link>Helpers\Unique.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\UserHelper.cs">
+      <Link>Helpers\UserHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\HttpFixture.cs">
+      <Link>HttpFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\InitializeAssembly.cs">
+      <Link>InitializeAssembly.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\ListFixture.cs">
+      <Link>ListFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\MultiValuedFixture.cs">
+      <Link>MultiValuedFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\ObjectFixture.cs">
+      <Link>ObjectFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\ObjectServiceFixture.cs">
+      <Link>ObjectServiceFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\PushFixture.cs">
+      <Link>PushFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\QueryDslFixture.cs">
+      <Link>QueryDslFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\RealTimeFixture.cs">
+      <Link>RealTimeFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\SerializationFixture.cs">
+      <Link>SerializationFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\SessionServiceFixture.cs">
+      <Link>SessionServiceFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\TestConfiguration.cs">
+      <Link>TestConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\UserFixture.cs">
+      <Link>UserFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\UserServiceFixture.cs">
+      <Link>UserServiceFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\ValueFixture.cs">
+      <Link>ValueFixture.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Appacitive.Sdk.Net40\Appacitive.Sdk.Net40.csproj">
+      <Project>{326b81e1-f79b-48a9-bf20-abae0121d226}</Project>
+      <Name>Appacitive.Sdk.Net40</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
