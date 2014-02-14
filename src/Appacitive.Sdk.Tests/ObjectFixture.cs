@@ -528,8 +528,11 @@ namespace Appacitive.Sdk.Tests
             var obj3 = new APObject("object");
             obj3.Set<string>("stringfield", optionalToken);
 
+            #if NET40
+            await TaskEx.WhenAll(obj1.SaveAsync(), obj2.SaveAsync(), obj3.SaveAsync());
+            #else
             await Task.WhenAll(obj1.SaveAsync(), obj2.SaveAsync(), obj3.SaveAsync());
-
+            #endif
             var results = await APObjects.FreeTextSearchAsync("object", mandatoryToken + " -" + optionalToken);
             Assert.IsTrue(results != null);
             Assert.IsTrue(results.Count == 1);
@@ -551,8 +554,11 @@ namespace Appacitive.Sdk.Tests
             var obj2 = new APObject("object");
             obj2.Set<string>("stringfield", prefix + "Y" + suffix);
 
+            #if NET40
+            await TaskEx.WhenAll(obj1.SaveAsync(), obj2.SaveAsync());
+            #else
             await Task.WhenAll(obj1.SaveAsync(), obj2.SaveAsync());
-
+            #endif
             var results = await APObjects.FreeTextSearchAsync("object", prefix + "?" + suffix);
             Assert.IsTrue(results != null);
             Assert.IsTrue(results.Count == 2);
@@ -575,7 +581,11 @@ namespace Appacitive.Sdk.Tests
             var obj2 = new APObject("object");
             obj2.Set<string>("stringfield", prefix + " word1" + " word2" + " word3" + " word4" + " word5 " + suffix);
 
+            #if NET40
+            await TaskEx.WhenAll(obj1.SaveAsync(), obj2.SaveAsync());
+            #else
             await Task.WhenAll(obj1.SaveAsync(), obj2.SaveAsync());
+            #endif
 
             var results = await APObjects.FreeTextSearchAsync("object", "\"" + prefix + " " + suffix + "\"~4");
             Assert.IsTrue(results != null);
@@ -599,7 +609,11 @@ namespace Appacitive.Sdk.Tests
 
             var tasks = children.ConvertAll(x =>
                 APConnection.New("sibling").FromExistingObject("object", root.Id).ToNewObject("object", x).SaveAsync());
+            #if NET40
+            await TaskEx.WhenAll(tasks);
+            #else
             await Task.WhenAll(tasks);
+            #endif
 
             children = children.OrderBy(x => x.Id).ToList();
             var results = await root.GetConnectedObjectsAsync("sibling", orderBy: "__id", sortOrder: SortOrder.Ascending,

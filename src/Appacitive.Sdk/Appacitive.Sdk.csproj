@@ -11,7 +11,7 @@
     <RootNamespace>Appacitive.Sdk</RootNamespace>
     <AssemblyName>Appacitive.Sdk</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
   </PropertyGroup>
@@ -38,8 +38,11 @@
     </Compile>
     <Compile Include="App.cs" />
     <Compile Include="APDevice.cs" />
+    <Compile Include="Interfaces\ILocalSettings.cs" />
     <Compile Include="Internal\AppacitiveContext.cs" />
+    <Compile Include="Internal\Enums.cs" />
     <Compile Include="Internal\ErrorCodes.cs" />
+    <Compile Include="Internal\LocalSettings.cs" />
     <Compile Include="Model\AppacitiveSettings.cs" />
     <Compile Include="CannedLists.cs" />
     <Compile Include="Model\EventArgs.cs" />
@@ -256,10 +259,8 @@
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if NOT '$(OS)' == 'OSX' (
- if NOT '$(OS)' == 'Unix' (
- xcopy "$(TargetDir)$(TargetName).*" "$(SolutionDir)..\bin" /Y
-))</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

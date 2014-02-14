@@ -48,6 +48,7 @@ namespace Appacitive.Sdk
                 if (settings.EnableRealTimeSupport == true)
                     StartRealTime().Wait();
                 
+                
             }
         }
 

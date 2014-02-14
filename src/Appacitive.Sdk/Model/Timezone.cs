@@ -32,7 +32,7 @@ namespace Appacitive.Sdk
         {
             this.Hours = hours;
             this.Minutes = mins;
-            this.StringValue = string.Format("{0}{1}:{2}", hours > 0 ? "+" : "-", hours.ToString("D2"), mins.ToString("D2"));
+            this.StringValue = string.Format("{0}{1}:{2}", hours > 0 ? "+" : "-", Math.Abs(hours).ToString("D2"), mins.ToString("D2"));
         }
 
         private static readonly Regex Pattern = new Regex("(?<hour>[+-][0,1][0-9]):(?<min>([0][0]|[3][0]|[4][5]))", RegexOptions.Singleline);

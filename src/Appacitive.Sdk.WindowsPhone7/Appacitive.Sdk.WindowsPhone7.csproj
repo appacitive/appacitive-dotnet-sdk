@@ -120,6 +120,9 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\IJsonSerializer.cs">
       <Link>Interfaces\IJsonSerializer.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\ILocalSettings.cs">
+      <Link>Interfaces\ILocalSettings.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IObjectFactory.cs">
       <Link>Interfaces\IObjectFactory.cs</Link>
     </Compile>
@@ -682,6 +685,7 @@
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
     <Compile Include="HttpConnector.cs" />
+    <Compile Include="IsolatedLocalStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalRTransport.cs" />
     <Compile Include="WebClientHttpFileHandler.cs" />
@@ -699,7 +703,7 @@
   <PropertyGroup>
     <PostBuildEvent>if NOT '$(OS)' == 'OSX' (
  if NOT '$(OS)' == 'Unix' (
- xcopy "$(TargetDir)$(TargetName).*" "$(SolutionDir)..\bin" /Y
+ xcopy "$(TargetDir)*.*" "$(SolutionDir)..\bin\wp7" /Y
 ))</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -81,7 +81,7 @@
   <PropertyGroup>
     <PostBuildEvent>if NOT '$(OS)' == 'OSX' (
  if NOT '$(OS)' == 'Unix' (
- xcopy "$(TargetDir)$(TargetName).*" "$(SolutionDir)..\bin" /Y
+ xcopy "$(TargetDir)*.*" "$(SolutionDir)..\bin\net45" /Y
 ))</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

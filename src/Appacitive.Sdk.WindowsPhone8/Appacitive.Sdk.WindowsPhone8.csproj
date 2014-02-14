@@ -83,7 +83,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="IsolatedLocalStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Appacitive.Sdk\Appacitive.Sdk.csproj">
+      <Project>{EF1615F3-FB52-4662-91A1-70ED08203D33}</Project>
+      <Name>Appacitive.Sdk</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
@@ -91,7 +98,7 @@
   <PropertyGroup>
     <PostBuildEvent>if NOT '$(OS)' == 'OSX' (
  if NOT '$(OS)' == 'Unix' (
- xcopy "$(TargetDir)$(TargetName).*" "$(SolutionDir)..\bin" /Y
+ xcopy "$(TargetDir)*.*" "$(SolutionDir)..\bin\wp8" /Y
 ))</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

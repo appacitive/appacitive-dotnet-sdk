@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.AspNet.SignalR.Client">
-      <HintPath>..\Library\Microsoft.AspNet.SignalR.Client45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.165\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -721,7 +718,7 @@
   <PropertyGroup>
     <PostBuildEvent>if NOT '$(OS)' == 'OSX' (
  if NOT '$(OS)' == 'Unix' (
- xcopy "$(TargetDir)$(TargetName).*" "$(SolutionDir)..\bin" /Y
+ xcopy "$(TargetDir)*.*" "$(SolutionDir)..\bin\net40" /Y
 ))</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.4\tools\Microsoft.Bcl.Build.targets" />
