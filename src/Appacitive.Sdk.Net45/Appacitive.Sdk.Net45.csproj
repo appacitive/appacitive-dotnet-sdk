@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.AspNet.SignalR.Client">
-      <HintPath>..\Library\Microsoft.AspNet.SignalR.Client45\Microsoft.AspNet.SignalR.Client.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
@@ -76,6 +73,9 @@
       <Project>{ef1615f3-fb52-4662-91a1-70ed08203d33}</Project>
       <Name>Appacitive.Sdk</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

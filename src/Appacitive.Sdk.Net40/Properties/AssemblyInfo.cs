@@ -5,8 +5,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Appacitive.Sdk.Net45")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Appacitive.Sdk")]
+[assembly: AssemblyDescription("Client SDK for Appacitive targetting .NET 4.0")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
