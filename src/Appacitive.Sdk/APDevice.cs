@@ -1,5 +1,4 @@
-﻿using Appacitive.Sdk.Interfaces;
-using Appacitive.Sdk.Internal;
+﻿using Appacitive.Sdk.Internal;
 using Appacitive.Sdk.Services;
 using System;
 using System.Collections.Generic;
@@ -141,13 +140,10 @@ namespace Appacitive.Sdk
         {
             var request = new UpdateDeviceRequest()
             {
-                SessionToken = AppacitiveContext.SessionToken,
-                Environment = AppacitiveContext.Environment,
-                UserToken = AppacitiveContext.UserToken,
-                Verbosity = AppacitiveContext.Verbosity,
                 Revision = specificRevision,
                 Id = this.Id
             };
+
 
             if (propertyUpdates != null && propertyUpdates.Count > 0)
                 propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);

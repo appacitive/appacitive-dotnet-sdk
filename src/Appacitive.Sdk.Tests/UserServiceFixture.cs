@@ -62,13 +62,13 @@ namespace Appacitive.Sdk.Tests
 
             // Create the user
             var created = await UserHelper.CreateNewUserAsync();
+            await App.LoginAsync(new UsernamePasswordCredentials(created.Username, created.Password));
             // Setup user token
             string token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
             
             // Get the created user
             GetUserResponse getUserResponse = null;
             
-            App.UserToken = token;
             var getUserRequest = new GetUserRequest() { UserId = created.Id };
             getUserResponse = await getUserRequest.ExecuteAsync();
             ApiHelper.EnsureValidResponse(getUserResponse);
@@ -97,9 +97,8 @@ namespace Appacitive.Sdk.Tests
             var created = await UserHelper.CreateNewUserAsync();
 
             // Setup user token
-            string token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
-            App.UserToken = token;
-
+            await App.LoginAsync(new UsernamePasswordCredentials(created.Username, created.Password));
+            
             // Get the created user
             // Get the created user
             var getUserRequest = new GetUserRequest() { UserId = created.Username, UserIdType = "username" };
@@ -129,11 +128,10 @@ namespace Appacitive.Sdk.Tests
             var created = await UserHelper.CreateNewUserAsync();
 
             // Setup user token
-            var token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
-            App.UserToken = token;
+            await App.LoginAsync(new UsernamePasswordCredentials(created.Username, created.Password));
 
             // Get the created user
-            var getUserRequest = new GetUserRequest() { UserId = token, UserIdType = "token" };
+            var getUserRequest = new GetUserRequest() { UserId = App.Current.CurrentUser.UserToken, UserIdType = "token" };
             var getUserResponse = await getUserRequest.ExecuteAsync();
             ApiHelper.EnsureValidResponse(getUserResponse);
             Assert.IsNotNull(getUserResponse.User);
@@ -161,8 +159,7 @@ namespace Appacitive.Sdk.Tests
             var created = await UserHelper.CreateNewUserAsync();
 
             // Get auth token
-            var token = await UserHelper.AuthenticateAsync(created.Username, created.Password);
-            App.UserToken = token;
+            await App.LoginAsync(new UsernamePasswordCredentials(created.Username, created.Password));
 
             // Update user
             created.Username = "john.doe_" + Unique.String;
@@ -204,8 +201,7 @@ namespace Appacitive.Sdk.Tests
             var newUser = await UserHelper.CreateNewUserAsync();
 
             // Authenticate with existing password
-            var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
-            App.UserToken = token;
+            await App.LoginAsync(new UsernamePasswordCredentials(newUser.Username, newUser.Password));
 
             // Change password
             var newPassword = "p@ssw0rd2";
@@ -214,8 +210,8 @@ namespace Appacitive.Sdk.Tests
             ApiHelper.EnsureValidResponse(response);
 
             // Authenticate with new password
-            token = await UserHelper.AuthenticateAsync(newUser.Username, newPassword);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(token) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
+            await App.LoginAsync(new UsernamePasswordCredentials(newUser.Username, newPassword));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(App.Current.CurrentUser.UserToken) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
         }
 
         [TestMethod]
@@ -225,8 +221,7 @@ namespace Appacitive.Sdk.Tests
             var newUser = await UserHelper.CreateNewUserAsync();
 
             // Authenticate with existing password
-            var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
-            App.UserToken = token;
+            await App.LoginAsync(new UsernamePasswordCredentials(newUser.Username, newUser.Password));
 
             // Change password
             var newPassword = "p@ssw0rd2";
@@ -235,8 +230,8 @@ namespace Appacitive.Sdk.Tests
             ApiHelper.EnsureValidResponse(response);
 
             // Authenticate with new password
-            token = await UserHelper.AuthenticateAsync(newUser.Username, newPassword);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(token) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
+            await App.LoginAsync(new UsernamePasswordCredentials(newUser.Username, newPassword));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(App.Current.CurrentUser.UserToken) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
         }
 
         [TestMethod]
@@ -246,18 +241,18 @@ namespace Appacitive.Sdk.Tests
             var newUser = await UserHelper.CreateNewUserAsync();
 
             // Authenticate with existing password
-            var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
-            App.UserToken = token;
+            await App.LoginAsync(new UsernamePasswordCredentials(newUser.Username, newUser.Password));
 
             // Change password
             var newPassword = "p@ssw0rd2";
+            var token = App.Current.CurrentUser.UserToken;
             var request = new ChangePasswordRequest() { UserId = token, IdType = "token", OldPassword = newUser.Password, NewPassword = newPassword };
             var response = await request.ExecuteAsync();
             ApiHelper.EnsureValidResponse(response);
 
             // Authenticate with new password
-            token = await UserHelper.AuthenticateAsync(newUser.Username, newPassword);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(token) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
+            await App.LoginAsync(new UsernamePasswordCredentials(newUser.Username, newPassword));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(App.Current.CurrentUser.UserToken) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
         }
 
         [TestMethod]
@@ -267,8 +262,7 @@ namespace Appacitive.Sdk.Tests
             var newUser = await UserHelper.CreateNewUserAsync();
 
             // Authenticate the user
-            var token = await UserHelper.AuthenticateAsync(newUser.Username, newUser.Password);
-            App.UserToken = token;
+            await App.LoginAsync(new UsernamePasswordCredentials(newUser.Username, newUser.Password));
 
             // Delete the user
             var request = new DeleteUserRequest() { UserId = newUser.Id };

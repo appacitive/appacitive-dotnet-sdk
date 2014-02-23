@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Appacitive.Sdk.Realtime;
+using Appacitive.Sdk.Internal;
+
 
 namespace Appacitive.Sdk.Services
 {
@@ -12,29 +13,20 @@ namespace Appacitive.Sdk.Services
     {
         protected ApiRequest()
         {
-        }
-
-        protected ApiRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info)
-        {
-            this.ApiKey = apiKey;
-            this.UseApiSession = string.IsNullOrWhiteSpace(sessionToken) ? false : true;
-            this.SessionToken = sessionToken;
-            this.CurrentLocation = location;
-            this.Verbosity = verbosity;
-            this.UserToken = userToken;
-            this.Environment = environment;
-            this.DebugEnabled = enableDebugging;
+            var appContext = App.Current;
+            this.ApiKey = appContext.ApiKey;
+            var user = appContext.CurrentUser.GetLoggedInUser();
+            if (user != null && user.Location != null)
+                this.CurrentLocation = user.Location;
+            this.UserToken = appContext.CurrentUser.UserToken;
+            this.Environment = appContext.Environment;
+            this.DebugEnabled = App.Debug.IsProfilingEnabled;
+            this.Verbosity = App.Debug.Verbosity;
             this.Fields = new List<string>();
         }
 
         [JsonIgnore]
         public string ApiKey { get; set; }
-
-        [JsonIgnore]
-        public bool UseApiSession { get; private set; }
-
-        [JsonIgnore]
-        public string SessionToken { get; set; }
 
         [JsonIgnore]
         public List<string> Fields { get; private set; }

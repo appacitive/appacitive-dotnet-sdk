@@ -41,6 +41,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Phone" />
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.16\lib\sl4-windowsphone71\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -69,6 +70,30 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\HttpConnector.cs">
+      <Link>HttpConnector.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\IPushChannel.cs">
+      <Link>IPushChannel.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\IsolatedLocalStorage.cs">
+      <Link>IsolatedLocalStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\NamingConvention.cs">
+      <Link>NamingConvention.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\SingletonPushChannel.cs">
+      <Link>SingletonPushChannel.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\TaskExtensions.cs">
+      <Link>TaskExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\WebClientHttpFileHandler.cs">
+      <Link>WebClientHttpFileHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\WPContextService.cs">
+      <Link>WPContextService.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\APConnection.cs">
       <Link>APConnection.cs</Link>
     </Compile>
@@ -105,8 +130,8 @@
     <Compile Include="..\Appacitive.Sdk\Graph.cs">
       <Link>Graph.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Interfaces\IApplicationHost.cs">
-      <Link>Interfaces\IApplicationHost.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IContextService.cs">
+      <Link>Interfaces\IContextService.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IHttpConnector.cs">
       <Link>Interfaces\IHttpConnector.cs</Link>
@@ -120,20 +145,11 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\ILocalSettings.cs">
       <Link>Interfaces\ILocalSettings.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\ILocalStorage.cs">
+      <Link>Interfaces\ILocalStorage.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IObjectFactory.cs">
       <Link>Interfaces\IObjectFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Interfaces\IRealTimeChannel.cs">
-      <Link>Interfaces\IRealTimeChannel.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Interfaces\IRealTimeChannelFactory.cs">
-      <Link>Interfaces\IRealTimeChannelFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Interfaces\IRealTimeTransport.cs">
-      <Link>Interfaces\IRealTimeTransport.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Interfaces\ISubscriptionManager.cs">
-      <Link>Interfaces\ISubscriptionManager.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\ITraceWriter.cs">
       <Link>Interfaces\ITraceWriter.cs</Link>
@@ -141,35 +157,32 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\IUploadHandler.cs">
       <Link>Interfaces\IUploadHandler.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Interfaces\IUserContext.cs">
-      <Link>Interfaces\IUserContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Interfaces\IUserFactory.cs">
-      <Link>Interfaces\IUserFactory.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IValueCollection.cs">
       <Link>Internal\IValueCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\ApiLogFlags.cs">
+      <Link>Internal\ApiLogFlags.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\AppacitiveContext.cs">
       <Link>Internal\AppacitiveContext.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\AppContext.cs">
+      <Link>Internal\AppContext.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Debugger.cs">
       <Link>Internal\Debugger.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\DefaultRegistrations.cs">
+      <Link>Internal\DefaultRegistrations.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\DeviceInfo.cs">
+      <Link>Internal\DeviceInfo.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\ErrorCodes.cs">
       <Link>Internal\ErrorCodes.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\EventProxy.cs">
-      <Link>Internal\EventProxy.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\HttpClient.cs">
       <Link>Internal\HttpClient.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\HubSubscriber.cs">
-      <Link>Internal\HubSubscriber.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\IDownstreamMessage.cs">
-      <Link>Internal\IDownstreamMessage.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\InProcContainer.cs">
       <Link>Internal\InProcContainer.cs</Link>
@@ -189,32 +202,11 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Measure.cs">
       <Link>Internal\Measure.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Messages.cs">
-      <Link>Internal\Messages.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\MessageSubscriber.cs">
-      <Link>Internal\MessageSubscriber.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\NamingConvention.cs">
-      <Link>Internal\NamingConvention.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\NullTraceWriter.cs">
       <Link>Internal\NullTraceWriter.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\ObjectSubscriber.cs">
-      <Link>Internal\ObjectSubscriber.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\RealTimeChannel.cs">
-      <Link>Internal\RealTimeChannel.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\RealTimeChannelFactory.cs">
-      <Link>Internal\RealTimeChannelFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\RealTimeEvents.cs">
-      <Link>Internal\RealTimeEvents.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\RealTimeMessage.cs">
-      <Link>Internal\RealTimeMessage.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Internal\Platform.cs">
+      <Link>Internal\Platform.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model.cs">
       <Link>Internal\Services\Model.cs</Link>
@@ -260,12 +252,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateObjectResponse.cs">
       <Link>Internal\Services\Model\CreateObjectResponse.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateSessionRequest.cs">
-      <Link>Internal\Services\Model\CreateSessionRequest.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateSessionResponse.cs">
-      <Link>Internal\Services\Model\CreateSessionResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\CreateUserRequest.cs">
       <Link>Internal\Services\Model\CreateUserRequest.cs</Link>
@@ -474,9 +460,6 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\EntityConverter.cs">
       <Link>Internal\Services\Serializers\EntityConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\EventTypeConverter.cs">
-      <Link>Internal\Services\Serializers\EventTypeConverter.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\FindConnectedObjectsResponseConverter.cs">
       <Link>Internal\Services\Serializers\FindConnectedObjectsResponseConverter.cs</Link>
     </Compile>
@@ -494,9 +477,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\PushNotificationConverter.cs">
       <Link>Internal\Services\Serializers\PushNotificationConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\RealTimeMessageConverter.cs">
-      <Link>Internal\Services\Serializers\RealTimeMessageConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\SerializerExtensions.cs">
       <Link>Internal\Services\Serializers\SerializerExtensions.cs</Link>
@@ -519,26 +499,17 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Urls.cs">
       <Link>Internal\Services\Urls.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\StaticContextService.cs">
+      <Link>Internal\StaticContextService.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\StringUtils.cs">
       <Link>Internal\StringUtils.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Subscription.cs">
-      <Link>Internal\Subscription.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\SubscriptionManager.cs">
-      <Link>Internal\SubscriptionManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Topics.cs">
-      <Link>Internal\Topics.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\TypeSubscriber.cs">
-      <Link>Internal\TypeSubscriber.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Internal\UserInfo.cs">
+      <Link>Internal\UserInfo.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\ValueConverter.cs">
       <Link>Internal\ValueConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Messaging.cs">
-      <Link>Messaging.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\AppacitiveException.cs">
       <Link>Model\AppacitiveException.cs</Link>
@@ -600,12 +571,6 @@
     <Compile Include="..\Appacitive.Sdk\Model\PagedList.cs">
       <Link>Model\PagedList.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\PushNotification.cs">
-      <Link>Model\PushNotification.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\StaticUserContext.cs">
-      <Link>Model\StaticUserContext.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\SupportedDevices.cs">
       <Link>Model\SupportedDevices.cs</Link>
     </Compile>
@@ -617,6 +582,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Value.cs">
       <Link>Model\Value.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\PushNotification.cs">
+      <Link>PushNotification.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\QueryDsl\AggregateExpression.cs">
       <Link>QueryDsl\AggregateExpression.cs</Link>
@@ -672,22 +640,15 @@
     <Compile Include="..\Appacitive.Sdk\QueryDsl\TimeFieldValue.cs">
       <Link>QueryDsl\TimeFieldValue.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Subscriptions.cs">
-      <Link>Subscriptions.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\UserSession.cs">
       <Link>UserSession.cs</Link>
     </Compile>
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
-    <Compile Include="HttpConnector.cs" />
-    <Compile Include="IsolatedLocalStorage.cs" />
+    <Compile Include="Platforms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SignalRTransport.cs" />
-    <Compile Include="WebClientHttpFileHandler.cs" />
-    <Compile Include="WP7ApplicationHost.cs" />
-    <Compile Include="WP7Extensions.cs" />
+    <Compile Include="WP7Platform.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

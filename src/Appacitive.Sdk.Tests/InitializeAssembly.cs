@@ -15,21 +15,13 @@ namespace Appacitive.Sdk.Tests
         [AssemblyInitialize]
         public static void Init(TestContext context)
         {
-            App.Initialize(WindowsRT.Host, TestConfiguration.ApiKey, TestConfiguration.Environment,
-                new AppacitiveSettings
-                {
-                    EnableRealTimeSupport = false
-                });
+            App.Initialize(Platforms.Net, "appid", TestConfiguration.ApiKey, TestConfiguration.Environment);
             App.Debug.ApiLogging.LogEverything();
             // App.Debug.ApiLogging.LogSlowCalls(100);
             // App.Debug.ApiLogging.LogFailures();
             // App.Debug.ApiLogging.LogIf(x => x.Status.Code == "400");
         }
 
-        [AssemblyCleanup]
-        public static void Cleanup()
-        {
-            App.Shutdown();
-        }
+        
     }
 }

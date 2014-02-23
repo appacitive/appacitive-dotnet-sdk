@@ -5,7 +5,7 @@ using System.Text;
 using System.Reflection;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
-using Appacitive.Sdk.Realtime;
+
 using System.Collections;
 using Appacitive.Sdk.Internal;
 
@@ -168,7 +168,7 @@ namespace Appacitive.Sdk
         {
             if (status == null || status.IsSuccessful == true)
                 return null;
-            return new AppacitiveException(status.Message)
+            return new AppacitiveApiException(status.Message)
             {
                 Code = status.Code,
                 ReferenceId = status.ReferenceId,
@@ -177,12 +177,9 @@ namespace Appacitive.Sdk
             };
         }
 
-        public static HttpOperation WithAppacitiveKeyOrSession(this HttpOperation client, string apiKey, string session, bool useApiSession)
+        public static HttpOperation WithApiKey(this HttpOperation client, string apiKey)
         {       
-            if( useApiSession == true )
-                return client.WithHeader("Appacitive-Session", session);
-            else
-                return client.WithHeader("Appacitive-Apikey", apiKey);
+            return client.WithHeader("Appacitive-Apikey", apiKey);
         }
 
         public static HttpOperation WithEnvironment(this HttpOperation client, Environment env)

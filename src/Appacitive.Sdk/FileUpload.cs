@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
-using Appacitive.Sdk.Realtime;
+using Appacitive.Sdk.Internal;
 
 
 namespace Appacitive.Sdk

@@ -1,5 +1,5 @@
 ﻿using Appacitive.Sdk;
-using Appacitive.Sdk.Realtime;
+using Appacitive.Sdk.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,10 +15,7 @@ namespace Appacitive.Sdk.Services
     public abstract class GetOperation<TRs> : ApiRequest
         where TRs : ApiResponse
     {
-        public GetOperation(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
-        {
-        }
+        protected GetOperation() : base() { }
 
         protected abstract string GetUrl();
 
@@ -31,10 +28,7 @@ namespace Appacitive.Sdk.Services
     public abstract class PostOperation<TRs> : ApiRequest
         where TRs : ApiResponse
     {
-        public PostOperation(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
-        {
-        }
+        public PostOperation() : base() { }
 
         protected abstract string GetUrl();
 
@@ -47,11 +41,8 @@ namespace Appacitive.Sdk.Services
     public abstract class PutOperation<TRs> : ApiRequest
         where TRs : ApiResponse
     {
-        
-        public PutOperation(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
-        {   
-        }
+
+        public PutOperation() : base() { }
 
         protected abstract string GetUrl();
 
@@ -64,10 +55,7 @@ namespace Appacitive.Sdk.Services
     public abstract class DeleteOperation<TRs> : ApiRequest
         where TRs : ApiResponse
     {
-        public DeleteOperation(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
-        {
-        }
+        public DeleteOperation() : base() { }
 
         protected abstract string GetUrl();
 
@@ -89,7 +77,7 @@ namespace Appacitive.Sdk.Services
             long elasedTimeInMs = 0;
             var op = HttpOperation
                     .WithUrl(url)
-                    .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
+                    .WithApiKey(request.ApiKey)
                     .WithEnvironment(request.Environment)
                     .WithUserToken(request.UserToken);
             try
@@ -116,7 +104,7 @@ namespace Appacitive.Sdk.Services
             }
             await TraceAsync(response == null ? string.Empty : response.Status.ReferenceId, 
                 "GET", url, op.Headers, null, responseBytes, elasedTimeInMs,
-                response,
+                request, response,
                 fault);
             if (fault != null)
                 throw fault;
@@ -132,7 +120,7 @@ namespace Appacitive.Sdk.Services
             long elasedTimeInMs = 0;
             var op = HttpOperation
                     .WithUrl(url)
-                    .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
+                    .WithApiKey(request.ApiKey)
                     .WithEnvironment(request.Environment)
                     .WithUserToken(request.UserToken);
             try
@@ -160,7 +148,7 @@ namespace Appacitive.Sdk.Services
             }
             await TraceAsync(response == null ? string.Empty : response.Status.ReferenceId,
                 "DELETE", url, op.Headers, null, responseBytes, elasedTimeInMs,
-                response,
+                request, response,
                 fault);
             if (fault != null)
                 throw fault;
@@ -176,7 +164,7 @@ namespace Appacitive.Sdk.Services
             long elasedTimeInMs = 0;
             var op = HttpOperation
                     .WithUrl(url)
-                    .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
+                    .WithApiKey(request.ApiKey)
                     .WithEnvironment(request.Environment)
                     .WithUserToken(request.UserToken);
             try
@@ -204,7 +192,7 @@ namespace Appacitive.Sdk.Services
             }
             await TraceAsync(response == null ? string.Empty : response.Status.ReferenceId,
                 "PUT", url, op.Headers, requestBytes, responseBytes, elasedTimeInMs,
-                response,
+                request, response,
                 fault);
             if (fault != null)
                 throw fault;
@@ -220,7 +208,7 @@ namespace Appacitive.Sdk.Services
             long elasedTimeInMs = 0;
             var op = HttpOperation
                     .WithUrl(url)
-                    .WithAppacitiveKeyOrSession(request.ApiKey, request.SessionToken, request.UseApiSession)
+                    .WithApiKey(request.ApiKey)
                     .WithEnvironment(request.Environment)
                     .WithUserToken(request.UserToken);
             try
@@ -248,7 +236,7 @@ namespace Appacitive.Sdk.Services
             }
             await TraceAsync(response == null ? string.Empty : response.Status.ReferenceId,
                 "POST", url, op.Headers, requestBytes, responseBytes, elasedTimeInMs,
-                response,
+                request, response,
                 fault);
             if (fault != null)
                 throw fault;
@@ -263,11 +251,11 @@ namespace Appacitive.Sdk.Services
             return serializer.Deserialize<T>(bytes);
         }
 
-        private static async Task TraceAsync(string trxId, string operation, string url, IDictionary<string, string> headers, byte[] request, byte[] response, long responseTime, ApiResponse responseObj, Exception fault = null)
+        private static async Task TraceAsync(string trxId, string operation, string url, IDictionary<string, string> headers, byte[] request, byte[] response, long responseTime, ApiRequest requestObj, ApiResponse responseObj, Exception fault = null)
         {
             try
             {
-                var logThisRequest = App.Debug.ApiLogging.ShouldLog(responseObj, responseTime);
+                var logThisRequest = App.Debug.ApiLogging.ShouldLog(requestObj, responseObj, responseTime);
                 if (logThisRequest)
                 {
                     var log = new JObject();

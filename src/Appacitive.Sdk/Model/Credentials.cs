@@ -9,7 +9,7 @@ namespace Appacitive.Sdk
 {
     public abstract class Credentials
     {
-        public Credentials()
+        protected Credentials()
         {
             this.MaxAttempts = int.MaxValue;
             this.TimeoutInSeconds = 15 * 60; // TODO: Remove hardcoding

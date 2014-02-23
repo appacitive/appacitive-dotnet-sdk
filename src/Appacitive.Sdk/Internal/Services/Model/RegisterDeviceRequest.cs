@@ -1,4 +1,4 @@
-﻿using Appacitive.Sdk.Realtime;
+﻿using Appacitive.Sdk.Internal;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,16 +10,6 @@ namespace Appacitive.Sdk.Services
 {
     public class RegisterDeviceRequest : PutOperation<RegisterDeviceResponse>
     {
-        public RegisterDeviceRequest() :
-            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
-        {
-        }
-
-        public RegisterDeviceRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
-        {
-        }
-
         public APDevice Device { get; set; }
 
         public override byte[] ToBytes()

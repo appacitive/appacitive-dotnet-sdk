@@ -1,4 +1,4 @@
-﻿using Appacitive.Sdk.Realtime;
+﻿using Appacitive.Sdk.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +9,6 @@ namespace Appacitive.Sdk.Services
 {
     public class CreateConnectionRequest : PutOperation<CreateConnectionResponse>
     {
-        public CreateConnectionRequest() :
-            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
-        {
-        }
-
-        public CreateConnectionRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
-        {
-        }
-
         public APConnection Connection { get; set; }
 
         public override byte[] ToBytes()

@@ -1,4 +1,4 @@
-﻿using Appacitive.Sdk.Realtime;
+﻿using Appacitive.Sdk.Internal;
 using System;
 using System.Collections.Generic;
 using System.IO;

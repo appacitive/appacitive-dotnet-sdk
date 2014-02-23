@@ -6,7 +6,7 @@ using System.Text;
 using System.Reflection;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using Appacitive.Sdk.Realtime;
+
 
 namespace Appacitive.Sdk.Internal
 {

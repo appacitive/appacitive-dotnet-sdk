@@ -9,16 +9,6 @@ namespace Appacitive.Sdk.Services
 {
     public class GraphProjectRequest : PostOperation<GraphProjectResponse>
     {
-        public GraphProjectRequest() :
-            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
-        {
-        }
-
-        public GraphProjectRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
-        {
-        }
-
         [JsonIgnore]
         public string Query { get; set; }
 

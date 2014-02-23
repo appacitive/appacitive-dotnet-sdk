@@ -8,16 +8,6 @@ namespace Appacitive.Sdk.Services
 {
     public class FindAllUsersRequest : GetOperation<FindAllUsersResponse>
     {
-        public FindAllUsersRequest() :
-            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
-        {
-        }
-
-        public FindAllUsersRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
-        {
-        }
-
         public string Type { get; set; }
 
         public string Query { get; set; }

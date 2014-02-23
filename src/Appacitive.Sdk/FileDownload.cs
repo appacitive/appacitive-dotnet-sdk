@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
-using Appacitive.Sdk.Realtime;
+using Appacitive.Sdk.Internal;
 
 
 namespace Appacitive.Sdk
@@ -57,7 +57,7 @@ namespace Appacitive.Sdk
             {
                 var response = wex.Response as HttpWebResponse;
                 if (response != null && response.StatusCode == HttpStatusCode.NotFound)
-                    throw new AppacitiveException("File not found.", wex);
+                    throw new AppacitiveApiException("File not found.", wex);
                 else throw;
             }
         }

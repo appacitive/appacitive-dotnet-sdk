@@ -9,19 +9,12 @@ namespace Appacitive.Sdk.Services
 {
     public class UpdateDeviceRequest : PostOperation<UpdateDeviceResponse>
     {
-        public UpdateDeviceRequest() :
-            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
+        public UpdateDeviceRequest()
         {
-        }
-
-        public UpdateDeviceRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
-        {
-            this.PropertyUpdates = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-            this.AttributeUpdates = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            this.PropertyUpdates = new Dictionary<string, object>();
+            this.AttributeUpdates = new Dictionary<string, string>();
             this.AddedTags = new List<string>();
             this.RemovedTags = new List<string>();
-            this.Revision = 0;
         }
 
         [JsonIgnore]

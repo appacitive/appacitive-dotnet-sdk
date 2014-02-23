@@ -1,4 +1,4 @@
-﻿using Appacitive.Sdk.Interfaces;
+﻿using Appacitive.Sdk.Internal;
 using Appacitive.Sdk.Services;
 using System;
 using System.Collections.Generic;
@@ -12,19 +12,28 @@ namespace Appacitive.Sdk
 {
     public class Debugger
     {
-        internal Debugger()
+        public Debugger()
         {
-            this.Out = null;
+            this.ApiLogging = new ApiLogging();
+            this.Verbosity = Sdk.Verbosity.Info;
         }
 
-        public void SetOutput(TextWriter output)
+        public ApiLogging ApiLogging { get; private set; }
+
+        internal bool IsProfilingEnabled { get; private set; }
+
+        internal Verbosity Verbosity { get; set; }
+
+        public void EnableProfiling(Verbosity verbosity = Sdk.Verbosity.Info)
         {
-            Out = output;
+            this.IsProfilingEnabled = true;
+            this.Verbosity = verbosity;
         }
 
-        public ApiLogging ApiLogging = new ApiLogging();
-
-        internal TextWriter Out { get; set; }
+        public void DisableProfiling()
+        {
+            this.IsProfilingEnabled = false;
+        }
 
         public async Task LogAsync(string data)
         {
@@ -49,12 +58,12 @@ namespace Appacitive.Sdk
     {
         internal ApiLogging()
         {
-            this.ApiLogFlags = Sdk.ApiLogFlags.None;
+            this.ApiLogFlags = ApiLogFlags.None;
         }
 
         internal ApiLogFlags ApiLogFlags { get; private set; }
         private int _slowLogThresholdInMilliSeconds = 500;
-        private Predicate<ApiResponse> _condition = null;
+        private Func<ApiRequest, ApiResponse, bool> _condition = null;
 
         internal bool IsSlowLog(long timeTaken)
         {
@@ -63,7 +72,7 @@ namespace Appacitive.Sdk
 
         public void DisableLogging()
         {
-            this.ApiLogFlags = Sdk.ApiLogFlags.None;
+            this.ApiLogFlags = ApiLogFlags.None;
         }
 
         public ApiLogging LogEverything()
@@ -72,7 +81,7 @@ namespace Appacitive.Sdk
             return this;
         }
 
-        public ApiLogging LogIf(Predicate<ApiResponse> condition)
+        public ApiLogging LogIf(Func<ApiRequest, ApiResponse, bool> condition)
         {
             this._condition = condition;
             SetDebugFlag(ApiLogFlags.Conditional, true);
@@ -97,7 +106,7 @@ namespace Appacitive.Sdk
             return (this.ApiLogFlags & level) == level;
         }
 
-        private void SetDebugFlag( Sdk.ApiLogFlags flag, bool replaceFlagValue = false )
+        private void SetDebugFlag( ApiLogFlags flag, bool replaceFlagValue = false )
         {
             if( this.ApiLogFlags == ApiLogFlags.None || replaceFlagValue == true || this.ApiLogFlags == ApiLogFlags.Everything )
                 this.ApiLogFlags = flag;
@@ -106,7 +115,7 @@ namespace Appacitive.Sdk
         }
 
 
-        internal bool ShouldLog(ApiResponse response, long responseTimeInMs)
+        internal bool ShouldLog(ApiRequest request, ApiResponse response, long responseTimeInMs)
         {
             if (App.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.None) == true)
                 return false;
@@ -114,7 +123,7 @@ namespace Appacitive.Sdk
                 return true;
             else if (App.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.Conditional) == true)
             {
-                if (_condition != null && _condition(response) == true)
+                if (_condition != null && _condition(request, response) == true)
                     return true;
             }
             else

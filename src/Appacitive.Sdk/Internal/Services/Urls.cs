@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Appacitive.Sdk.Services;
+using Appacitive.Sdk.Internal;
 
 namespace Appacitive.Sdk.Services
 {
@@ -58,10 +59,10 @@ namespace Appacitive.Sdk.Services
             
             private static string CreateUrl(string suffix)
             {
-                var hostName = AppacitiveContext.HostName;
+                var hostName = App.Current.Settings.HostName;
                 if (string.IsNullOrWhiteSpace(hostName) == true)
                     hostName = "apis.appacitive.com/v1.0";
-                if( AppacitiveContext.UseHttps == true )
+                if (App.Current.Settings.UseHttps == true)
                     return string.Format("https://{0}/{1}", hostName, suffix);
                 else
                     return string.Format("http://{0}/{1}", hostName, suffix);

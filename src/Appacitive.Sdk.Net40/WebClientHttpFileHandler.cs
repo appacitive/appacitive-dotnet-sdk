@@ -1,4 +1,4 @@
-﻿using Appacitive.Sdk.Realtime;
+﻿using Appacitive.Sdk.Internal;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk.Net45
+namespace Appacitive.Sdk
 {
     public class WebClientHttpFileHandler : IHttpFileHandler
     {

@@ -47,13 +47,13 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
-    <Compile Include="Aspnet\AspnetApplicationHost.cs" />
-    <Compile Include="Aspnet\AspnetUserContext.cs" />
-    <Compile Include="Aspnet\UserContextViaHttpContext.cs" />
+    <Compile Include="Aspnet\AspnetPlatform.cs" />
+    <Compile Include="Aspnet\AspnetContextService.cs" />
     <Compile Include="HttpConnector.cs" />
     <Compile Include="IAppacitiveUserPrincipal.cs" />
+    <Compile Include="Net45Platform.cs" />
+    <Compile Include="Platforms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SignalRTransport.cs" />
     <Compile Include="Wcf\AllowAsyncServiceBehavior.cs" />
     <Compile Include="Wcf\AllowAsyncServiceBehaviorExtension.cs" />
     <Compile Include="Wcf\ContextPropogatingInvoker.cs" />
@@ -61,12 +61,12 @@
     <Compile Include="Wcf\OperationContextPreservingSynchronizationContext.cs" />
     <Compile Include="Wcf\PropagateOperationContext.cs" />
     <Compile Include="TraceWriter.cs" />
+    <Compile Include="Wcf\UserExtension.cs" />
     <Compile Include="Wcf\UserTokenExtension.cs" />
-    <Compile Include="Wcf\WcfApplicationHost.cs" />
+    <Compile Include="Wcf\WcfContextService.cs" />
+    <Compile Include="Wcf\WcfPlatform.cs" />
     <Compile Include="Wcf\WcfUserContext.cs" />
     <Compile Include="WebClientHttpFileHandler.cs" />
-    <Compile Include="WindowsHost.cs" />
-    <Compile Include="WindowsRT.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Appacitive.Sdk\Appacitive.Sdk.csproj">

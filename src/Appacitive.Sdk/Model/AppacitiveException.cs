@@ -9,19 +9,57 @@ using Appacitive.Sdk.Services;
 namespace Appacitive.Sdk
 {
     [DataContract]
-    public class AppacitiveException : Exception
+    public abstract class BaseAppacitiveException : Exception
     {
-        public AppacitiveException()
+        protected BaseAppacitiveException()
             : base()
         {
         }
-        
-        public AppacitiveException(string message)
+
+        protected BaseAppacitiveException(string message)
             : base(message)
         {
         }
 
-        public AppacitiveException(string message, Exception innerEx)
+        protected BaseAppacitiveException(string message, Exception innerEx)
+            : base(message, innerEx)
+        {
+        }
+    }
+
+    [DataContract]
+    public class AppacitiveRuntimeException : BaseAppacitiveException
+    {
+        public AppacitiveRuntimeException()
+            : base()
+        {
+        }
+
+        public AppacitiveRuntimeException(string message)
+            : base(message)
+        {
+        }
+
+        public AppacitiveRuntimeException(string message, Exception innerEx)
+            : base(message, innerEx)
+        {
+        }
+    }
+
+    [DataContract]
+    public class AppacitiveApiException : BaseAppacitiveException
+    {
+        public AppacitiveApiException()
+            : base()
+        {
+        }
+        
+        public AppacitiveApiException(string message)
+            : base(message)
+        {
+        }
+
+        public AppacitiveApiException(string message, Exception innerEx)
             : base(message, innerEx)
         {
         }

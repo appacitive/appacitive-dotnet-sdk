@@ -56,7 +56,7 @@ namespace Appacitive.Sdk.Tests
                 var shouldNotExist = await APDevices.GetAsync(created.Id);
                 Assert.Fail("Able to retrieve deleted apObject.");
             }
-            catch (AppacitiveException)
+            catch (AppacitiveApiException)
             {   
             }
         }

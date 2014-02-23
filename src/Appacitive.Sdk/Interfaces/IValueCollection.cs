@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk.Interfaces
+namespace Appacitive.Sdk.Internal
 {
     public interface IValueCollection<T> : IEnumerable<T>
     {

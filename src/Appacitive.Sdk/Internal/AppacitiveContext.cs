@@ -1,4 +1,4 @@
-﻿using Appacitive.Sdk.Realtime;
+﻿using Appacitive.Sdk.Internal;
 using Appacitive.Sdk.Services;
 using System;
 using System.Collections.Generic;
@@ -8,73 +8,49 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
-    internal static class AppacitiveContext
-    {
-        public static string HostName { get; internal set; }
+    //internal static class AppacitiveContext2
+    //{
+    //    public static string HostName { get; internal set; }
 
-        public static string ApiKey { get; internal set; }
+    //    public static string ApiKey { get; internal set; }
 
-        public static Environment Environment { get; internal set; }
+    //    public static Environment Environment { get; internal set; }
 
-        public static bool UseApiSession { get; internal set; }
+        
 
-        private static object _syncRoot = new object();
-        private static string _sessionToken;
+    //    public static string UserToken
+    //    {
+    //        get
+    //        {
+    //            throw new NotImplementedException();
+    //        }
+    //    }
 
-        public static string SessionToken
-        {
-            get
-            {
-                if (UseApiSession == false)
-                    return null;
-                if (string.IsNullOrWhiteSpace(_sessionToken) == true)
-                {
-                    lock (_syncroot)
-                    {
-                        if (string.IsNullOrWhiteSpace(_sessionToken) == true)
-                        {
-                            CreateSessionAsync().Wait();
-                        }
-                    }
-                }
-                return _sessionToken;
-            }
-        }
+    //    internal static string GlobalUserToken { get; set; }
 
-        public static string UserToken
-        {
-            get
-            {
-                var userContext = ObjectFactory.Build<IUserContext>();
-                return userContext.GetUserToken();
-            }
-        }
+    //    public static Geocode UserLocation { get; internal set; }
 
-        internal static string GlobalUserToken { get; set; }
+    //    public static IDependencyContainer ObjectFactory { get; internal set; }
 
-        public static Geocode UserLocation { get; internal set; }
+    //    internal static void MarkSessionInvalid()
+    //    {
+    //        _sessionToken = null;
+    //    }
 
-        public static IDependencyContainer ObjectFactory { get; internal set; }
+    //    private static object _syncroot = new object();
 
-        internal static void MarkSessionInvalid()
-        {
-            _sessionToken = null;
-        }
+    //    private static async Task CreateSessionAsync()
+    //    {
+    //        //TODO: Add validation and failure handling
+    //        var request = new CreateSessionRequest() { ApiKey = AppacitiveContext.ApiKey };
+    //        var response = await request.ExecuteAsync();
+    //        _sessionToken = response.Session.SessionKey;
+    //    }
 
-        private static object _syncroot = new object();
+    //    public static Verbosity Verbosity { get; set; }
 
-        private static async Task CreateSessionAsync()
-        {
-            //TODO: Add validation and failure handling
-            var request = new CreateSessionRequest() { ApiKey = AppacitiveContext.ApiKey };
-            var response = await request.ExecuteAsync();
-            _sessionToken = response.Session.SessionKey;
-        }
+    //    public static bool EnableDebugging { get; set; }
 
-        public static Verbosity Verbosity { get; set; }
-
-        public static bool EnableDebugging { get; set; }
-
-        public static bool UseHttps { get; set; }
-    }
+    //    public static bool UseHttps { get; set; }
+    //}
 }

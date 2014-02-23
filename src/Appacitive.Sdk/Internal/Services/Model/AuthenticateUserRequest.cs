@@ -4,20 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Appacitive.Sdk.Realtime;
+
 
 
 namespace Appacitive.Sdk.Services
 {
     public class AuthenticateUserRequest : PostOperation<AuthenticateUserResponse>
     {
-        public AuthenticateUserRequest() :
-            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
-        {   
-        }
-
-        public AuthenticateUserRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
+        public AuthenticateUserRequest() : base()
         {
             this.Attributes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         }

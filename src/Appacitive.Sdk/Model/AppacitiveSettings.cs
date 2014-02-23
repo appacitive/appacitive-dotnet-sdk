@@ -1,6 +1,7 @@
-﻿using Appacitive.Sdk.Realtime;
+﻿using Appacitive.Sdk.Internal;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,22 +15,32 @@ namespace Appacitive.Sdk
         public AppacitiveSettings()
         {
             this.Factory = GetDefaultContainer();
-            this.UseApiSession = false;
-            this.EnableRealTimeSupport = false;
             this.UseHttps = true;
+            this.HostName = string.Empty;
+            this.PushSettings = new PushSettings();
         }
 
-        public bool UseHttps { get; set; } 
+        public string HostName { get; internal set; }
 
-        public IDependencyContainer Factory { get; set; }
+        public bool UseHttps { get; internal set; } 
 
-        public bool UseApiSession { get; set; }
+        public IDependencyContainer Factory { get; internal set; }
 
-        public bool EnableRealTimeSupport { get; set; }
+        public PushSettings PushSettings { get; private set; }
 
         private static IDependencyContainer GetDefaultContainer()
         {
             return InProcContainer.Instance;
         }
+    }
+
+    public class PushSettings
+    {
+        public PushSettings()
+        {
+            this.WhitelistedDomains = new List<Uri>();
+        }
+
+        public List<Uri> WhitelistedDomains { get; private set; }
     }
 }

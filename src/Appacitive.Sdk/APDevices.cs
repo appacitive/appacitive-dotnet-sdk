@@ -1,5 +1,4 @@
-﻿using Appacitive.Sdk.Interfaces;
-using Appacitive.Sdk.Internal;
+﻿using Appacitive.Sdk.Internal;
 using Appacitive.Sdk.Services;
 using System;
 using System.Collections.Generic;

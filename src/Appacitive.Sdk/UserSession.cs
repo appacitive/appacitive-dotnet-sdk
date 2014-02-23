@@ -21,19 +21,13 @@ namespace Appacitive.Sdk
 
         public static async Task<bool> IsValidAsync(string authToken)
         {
-            var response = await new ValidateUserSessionRequest(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, 
-                    AppacitiveContext.Environment, authToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, 
-                    AppacitiveContext.Verbosity)
-                    .ExecuteAsync();
+            var response = await new ValidateUserSessionRequest() { UserToken = authToken }.ExecuteAsync();
             return response.Result == true;
         }
 
         public static async Task InvalidateAsync(string authToken)
         {
-            var response = await
-                new InvalidateUserSessionRequest(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, authToken,
-                    AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
-                .ExecuteAsync();
+            var response = await new InvalidateUserSessionRequest() { UserToken = authToken }.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
         }

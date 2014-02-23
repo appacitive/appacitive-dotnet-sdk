@@ -158,7 +158,7 @@ namespace Appacitive.Sdk
                 return await this.Endpoints.EndpointA.GetObjectAsync();
             if (string.Compare(this.Endpoints.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
                 return await this.Endpoints.EndpointB.GetObjectAsync();
-            throw new AppacitiveException("Invalid label " + label);
+            throw new AppacitiveApiException("Invalid label " + label);
         }
 
         public string GetEndpointId(string label)
@@ -167,7 +167,7 @@ namespace Appacitive.Sdk
                 return this.Endpoints.EndpointA.ObjectId;
             if (string.Compare(this.Endpoints.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
                 return this.Endpoints.EndpointB.ObjectId;
-            throw new AppacitiveException("Invalid label " + label);
+            throw new AppacitiveApiException("Invalid label " + label);
         }
 
         public string RelationId { get; set; }
@@ -179,7 +179,7 @@ namespace Appacitive.Sdk
                 await this.SaveEntityAsync(specificRevision);
                 return this;
             }
-            catch (AppacitiveException ex)
+            catch (AppacitiveApiException ex)
             {
                 if (throwIfAlreadyExists == true)
                     throw;
@@ -232,7 +232,7 @@ namespace Appacitive.Sdk
 
         protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
-            var request = new UpdateConnectionRequest{ Id = this.Id, Type = this.Type };
+            var request = new UpdateConnectionRequest{ Id = this.Id, Type = this.Type, Revision = specificRevision };
             request.Revision = specificRevision;
             if (propertyUpdates != null && propertyUpdates.Count > 0)
                 propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);

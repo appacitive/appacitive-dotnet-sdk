@@ -9,16 +9,6 @@ namespace Appacitive.Sdk.Services
     public class FreeTextSearchObjectsRequest : GetOperation<FreeTextSearchObjectsResponse>
     {
         
-        public FreeTextSearchObjectsRequest() :
-            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
-        {
-        }
-
-        public FreeTextSearchObjectsRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
-        {
-        }
-
         public string Type { get; set; }
 
         public string FreeTextExpression { get; set; }

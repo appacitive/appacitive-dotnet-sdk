@@ -1,4 +1,4 @@
-﻿using Appacitive.Sdk.Interfaces;
+﻿using Appacitive.Sdk.Internal;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk.Net45
+namespace Appacitive.Sdk
 {
     public class DefaultTraceWriter : ITraceWriter
     {

@@ -139,7 +139,7 @@ namespace Appacitive.Sdk.Tests
 
 
         [TestMethod]
-        [ExpectedException( typeof(AppacitiveException))]
+        [ExpectedException( typeof(AppacitiveApiException))]
         public async Task DownloadNonExistingFileTest()
         {
             // Upload file

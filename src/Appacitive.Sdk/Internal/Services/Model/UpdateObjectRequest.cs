@@ -9,13 +9,7 @@ namespace Appacitive.Sdk.Services
 {
     public class UpdateObjectRequest : PostOperation<UpdateObjectResponse>
     {
-        public UpdateObjectRequest() :
-            this(AppacitiveContext.ApiKey, AppacitiveContext.SessionToken, AppacitiveContext.Environment, AppacitiveContext.UserToken, AppacitiveContext.UserLocation, AppacitiveContext.EnableDebugging, AppacitiveContext.Verbosity)
-        {
-        }
-
-        public UpdateObjectRequest(string apiKey, string sessionToken, Environment environment, string userToken = null, Geocode location = null, bool enableDebugging = false, Verbosity verbosity = Verbosity.Info) :
-            base(apiKey, sessionToken, environment, userToken, location, enableDebugging, verbosity)
+        public UpdateObjectRequest() : base()
         {
             this.PropertyUpdates = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             this.AttributeUpdates = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);

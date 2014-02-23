@@ -6,195 +6,62 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
-using Appacitive.Sdk.Realtime;
 using System.IO;
 using Appacitive.Sdk.Internal;
-using Appacitive.Sdk.Interfaces;
 
 namespace Appacitive.Sdk
 {
     public static class App
     {
-        private static int _initialized = 0;
-        private static object _syncRoot = new object();
-        public static void Initialize(IApplicationHost host, string apiKey, Environment environment, AppacitiveSettings settings = null)
+        private static readonly int NOT_INITIALIZED = 0;
+        private static readonly int INITIALIZED = 1;
+        private static int _isInitialized = NOT_INITIALIZED;
+        public static void Initialize(Platform platform, string appId, string apikey, Environment environment, AppacitiveSettings settings = null)
         {
-            Initialize(host, string.Empty, apiKey, environment, settings);
+            // Setup container.
+            // Setup current device.
+            // Setup debugging.
+            settings = settings ?? AppacitiveSettings.Default;
+            if (Interlocked.CompareExchange(ref _isInitialized, INITIALIZED, NOT_INITIALIZED) == NOT_INITIALIZED)
+                InitOnce(platform, appId, apikey, environment, settings);
         }
 
-        public static void Initialize(IApplicationHost host, string hostName, string apiKey, Environment environment, AppacitiveSettings settings = null)
+        private static void InitOnce(Platform platform, string appId, string apikey, Environment environment, AppacitiveSettings settings)
         {
-            if (Interlocked.CompareExchange(ref _initialized, 1, 0) == 0)
-            {
-                settings = settings ?? AppacitiveSettings.Default;
-                // Use https
-                AppacitiveContext.UseHttps = settings.UseHttps;
-                // Base url
-                AppacitiveContext.HostName = hostName;
-                // Set the api key
-                AppacitiveContext.ApiKey = App.Apikey = apiKey;
-                // Set the environment
-                AppacitiveContext.Environment = App.Environment = environment;
-                // Use api session
-                AppacitiveContext.UseApiSession = settings.UseApiSession;
-                // Set the factory
-                AppacitiveContext.ObjectFactory = settings.Factory ?? AppacitiveSettings.Default.Factory;
-                // Register defaults
-                RegisterDefaults(AppacitiveContext.ObjectFactory);
-                // Initialize host
-                host.InitializeContainer(AppacitiveContext.ObjectFactory);
-                // Setup real time connections
-                App.EnableRealtime = settings.EnableRealTimeSupport;
-                if (settings.EnableRealTimeSupport == true)
-                    StartRealTime().Wait();
-                
-                
-            }
+            _context = new AppContext(platform, apikey, environment, settings);
+            // Register defaults
+            DefaultRegistrations.ConfigureContainer(_context.Container);
+            // Setup platform specific registrations
+            platform.InitializeContainer(_context.Container);
         }
 
-        public static void EnableDebugMode()
-        {
-            AppacitiveContext.EnableDebugging = true;
-        }
-
-        public static void DisableDebugMode()
-        {
-            AppacitiveContext.EnableDebugging = false;
-        }
-
-        private static int _isShutdown = 0;
-        public static void Shutdown()
-        {
-            // Clean up app resources
-            // Shutdown any real time connections
-            if (Interlocked.CompareExchange(ref _isShutdown, 1, 0) == 0)
-            {
-                if (App.Channel != null)
-                {
-                    App.Channel.Stop();
-                    App.Channel = null;
-                }
-            }
-        }
-
-        private static IRealTimeChannel Channel { get; set; }
-
-        public static IDependencyContainer Factory
+        private static AppContext _context = null;
+        public static AppContext Current
         {
             get
             {
-                return AppacitiveContext.ObjectFactory;
+                if (_context == null)
+                    throw new AppacitiveRuntimeException("Appacitive runtime is not initialized.");
+                else return _context;
             }
         }
 
-        public static bool EnableRealtime {get; set;}
-
-        internal static async Task StartRealTime()
-        {
-            if (App.Channel != null)
-                return;
-            // Setup the real time channel
-            var factory = ObjectFactory.Build<IRealTimeChannelFactory>();
-            var channel = factory.CreateChannel();
-            // Setup downstream messages
-            channel.Receive += m =>
-                {
-                    var msg = m as IDownstreamMessage;
-                    if (msg == null) return;
-                    var topics = msg.GetTopics();
-                    var subManager = ObjectFactory.Build<ISubscriptionManager>();
-                    foreach (var topic in topics)
-                    {
-                        var sub = subManager.Get(topic);
-                        if (sub != null)
-                            sub.Notify(m);
-                    }
-                };
-            await channel.Start();
-            App.Channel = channel;
-        }
-
-        private static void RegisterDefaults(IDependencyContainer dependencyContainer)
-        {
-            dependencyContainer
-                    .Register<ISubscriptionManager, SingletonSubscriptionManager>( () => SingletonSubscriptionManager.Instance )
-                    .Register<IRealTimeChannelFactory, RealTimeChannelFactory>( () => new RealTimeChannelFactory() )
-                    .Register<IRealTimeChannel, RealTimeChannel>(  () => new RealTimeChannel() )
-                    .Register<IUserContext, StaticUserContext>(() => new StaticUserContext())
-                    .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer())
-                    .Register<ITraceWriter, NullTraceWriter>(() => NullTraceWriter.Instance)
-                    ;
-        }
+        public static readonly Debugger Debug = new Debugger();
 
         public static async Task<UserSession> LoginAsync(Credentials credentials)
         {
-            var session = await credentials.AuthenticateAsync();
-            App.UserToken = session.UserToken;
-            return session;
+            var userSession = await credentials.AuthenticateAsync();
+            _context.CurrentUser.SetCurrentUser(userSession.LoggedInUser, userSession.UserToken);
+            return userSession;
         }
 
-        public static async Task Logout()
+        public static async Task LogoutAsync()
         {
-            var token = App.UserToken;
-            if (string.IsNullOrWhiteSpace(App.UserToken) == true) return;
-            await UserSession.InvalidateAsync(token);
-            App.UserToken = null;
+            var userToken = _context.CurrentUser.UserToken;
+            if (string.IsNullOrWhiteSpace(userToken) == false)
+                await UserSession.InvalidateAsync(userToken);
+            _context.CurrentUser.Reset();
         }
-
-        public static bool IsAuthenticated
-        {
-            get
-            {
-                return string.IsNullOrWhiteSpace(App.UserToken) == false;
-            }
-        }
-
-        internal static async Task SendMessageAsync(RealTimeMessage msg)
-        {
-            if (App.EnableRealtime == false)
-                throw new Exception("Real time support has not been enabled on the SDK. Initialize the application with AppacitiveSettings.EnableRealTimeSupport as true.");
-            if (App.Channel == null)
-                throw new Exception("Real time infrastucture not initialized. Make sure that App has been initialized.");
-            await App.Channel.SendAsync(msg);
-
-        }
-
-        public static string UserToken
-        {
-            get
-            {
-                var userContext = ObjectFactory.Build<IUserContext>();
-                return userContext.GetUserToken();
-            }
-            set
-            {
-                var userContext = ObjectFactory.Build<IUserContext>();
-                userContext.SetUserToken(value);
-            }
-        }
-
-        public static string Apikey { get; private set; }
-
-        public static Environment Environment { get; private set; }
-
-        public static readonly Debugger Debug = new Debugger();
     }
-
-    [Flags]
-    public enum ApiLogFlags
-    {
-        None = 1,
-        SuccessfulCalls  = 2,
-        FailedCalls = 4,
-        SlowLogs = 8,
-        Conditional = 16,
-        Everything = SuccessfulCalls | FailedCalls | SlowLogs 
-    }
-
-    
-    
-    
-
-    
 
 }

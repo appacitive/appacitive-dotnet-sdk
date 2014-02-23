@@ -115,7 +115,7 @@ namespace Appacitive.Sdk
                     return null;
                 if (Geocode.TryParse(geocode, out geo) == true)
                     return geo;
-                else throw new AppacitiveException(string.Format("Location property ({0}) is not a valid geocode.", geocode));
+                else throw new AppacitiveApiException(string.Format("Location property ({0}) is not a valid geocode.", geocode));
             }
             set
             {
@@ -143,10 +143,6 @@ namespace Appacitive.Sdk
         {
             var request = new UpdateUserRequest()
             {
-                SessionToken = AppacitiveContext.SessionToken,
-                Environment = AppacitiveContext.Environment,
-                UserToken = AppacitiveContext.UserToken,
-                Verbosity = AppacitiveContext.Verbosity,
                 Revision = specificRevision,
                 UserId = this.Id
             };

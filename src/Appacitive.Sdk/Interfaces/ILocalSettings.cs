@@ -9,11 +9,4 @@ namespace Appacitive.Sdk.Internal
     public interface ILocalSettings
     {
     }
-
-    public interface ILocalStorage
-    {
-        void SetValue(string key, string value);
-
-        string GetValue(string key, string defaultValue = null);
-    }
 }

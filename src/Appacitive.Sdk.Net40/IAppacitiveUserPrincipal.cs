@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk.Net45
+namespace Appacitive.Sdk
 {
     public interface IAppacitiveUserPrincipal
     {
