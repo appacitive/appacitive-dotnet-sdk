@@ -15,7 +15,7 @@ namespace Appacitive.Sdk.Tests
         [AssemblyInitialize]
         public static void Init(TestContext context)
         {
-            App.Initialize(Platforms.Net, "appid", TestConfiguration.ApiKey, TestConfiguration.Environment);
+            App.Initialize(Platforms.NonWeb, "appid", TestConfiguration.ApiKey, TestConfiguration.Environment);
             App.Debug.ApiLogging.LogEverything();
             // App.Debug.ApiLogging.LogSlowCalls(100);
             // App.Debug.ApiLogging.LogFailures();

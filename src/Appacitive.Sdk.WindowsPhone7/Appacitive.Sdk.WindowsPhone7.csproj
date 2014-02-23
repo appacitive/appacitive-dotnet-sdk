@@ -70,6 +70,9 @@
     <Reference Include="mscorlib.extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\DeviceInfo.cs">
+      <Link>DeviceInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk.WindowsPhone8\HttpConnector.cs">
       <Link>HttpConnector.cs</Link>
     </Compile>
@@ -91,8 +94,11 @@
     <Compile Include="..\Appacitive.Sdk.WindowsPhone8\WebClientHttpFileHandler.cs">
       <Link>WebClientHttpFileHandler.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\WPContextService.cs">
-      <Link>WPContextService.cs</Link>
+    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\WPApplicationState.cs">
+      <Link>WPApplicationState.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.WindowsPhone8\WPDeviceState.cs">
+      <Link>WPDeviceState.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\APConnection.cs">
       <Link>APConnection.cs</Link>
@@ -174,9 +180,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\DefaultRegistrations.cs">
       <Link>Internal\DefaultRegistrations.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\DeviceInfo.cs">
-      <Link>Internal\DeviceInfo.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\ErrorCodes.cs">
       <Link>Internal\ErrorCodes.cs</Link>
@@ -498,9 +501,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Urls.cs">
       <Link>Internal\Services\Urls.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\StaticContextService.cs">
-      <Link>Internal\StaticContextService.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\StringUtils.cs">
       <Link>Internal\StringUtils.cs</Link>

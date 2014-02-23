@@ -8,44 +8,45 @@ namespace Appacitive.Sdk.Internal
 {
     public class UserInfo
     {
-        public UserInfo(Platform platform)
+        public UserInfo(IApplicationPlatform platform)
         {
             _platform = platform;
         }
 
-        private Platform _platform;
+        private IApplicationPlatform _platform;
 
-        public APUser GetLoggedInUser()
+        public APUser User
         {
-            return _platform.ContextService.GetUser();
+            get
+            {
+                return _platform.ApplicationState.GetUser();
+            }
+            set
+            {
+                _platform.ApplicationState.SetUser(value);
+            }
         }
-
-        internal void SetLoggedInUser(APUser user)
-        {
-            _platform.ContextService.SetUser(user);
-        }
-
 
         public string UserToken
         {
             get
             {
-                return _platform.ContextService.GetUserToken();
+                return _platform.ApplicationState.GetUserToken();
             }
             internal set
             {
-                _platform.ContextService.SetUserToken(value);
+                _platform.ApplicationState.SetUserToken(value);
             }
         }
 
         internal void Reset()
         {
-            this.SetCurrentUser(null, null);
+            this.SetUser(null, null);
         }
 
-        internal void SetCurrentUser(APUser user, string userToken)
+        internal void SetUser(APUser user, string userToken)
         {
-            this.SetLoggedInUser(user);
+            this.User = user;
             this.UserToken = userToken;
         }
     }

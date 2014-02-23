@@ -83,17 +83,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DeviceInfo.cs" />
+    <Compile Include="WPApplicationState.cs" />
     <Compile Include="HttpConnector.cs" />
     <Compile Include="IPushChannel.cs" />
     <Compile Include="IsolatedLocalStorage.cs" />
-    <Compile Include="LocalStorageContextService.cs" />
     <Compile Include="NamingConvention.cs" />
     <Compile Include="Platforms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingletonPushChannel.cs" />
     <Compile Include="TaskExtensions.cs" />
     <Compile Include="WebClientHttpFileHandler.cs" />
-    <Compile Include="WPContextService.cs" />
+    <Compile Include="WPDeviceState.cs" />
     <Compile Include="WP8Platform.cs" />
   </ItemGroup>
   <ItemGroup>

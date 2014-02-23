@@ -12,26 +12,28 @@ namespace Appacitive.Sdk.Internal
         {
             this.ApiKey = apiKey;
             this.Environment = environment;
-            this.CurrentDevice = new DeviceInfo(platform);
-            this.CurrentUser = new UserInfo(platform);
+            _user = new UserInfo(platform as IApplicationPlatform);
             this.Settings = settings ?? AppacitiveSettings.Default;
             this.Container = settings.Factory ?? AppacitiveSettings.Default.Factory;
         }
 
-        internal string ApiKey { get; set; }
+        public string ApiKey { get; private set; }
 
-        internal Environment Environment { get; set; }
+        public Environment Environment { get; private set; }
 
-        public DeviceInfo CurrentDevice { get; private set; }
+        private UserInfo _user;
 
-        public UserInfo CurrentUser { get; private set; }
+        public UserInfo GetCurrentUser()
+        {
+            return _user;
+        }
 
-        public Platform Platform { get; set; }
+        public Platform Platform { get; private set; }
 
         public AppacitiveSettings Settings { get; private set; }
 
         internal IDependencyContainer Container { get; private set; }
 
-        public string AppId { get; set; }
+        public string AppId { get; private set; }
     }
 }

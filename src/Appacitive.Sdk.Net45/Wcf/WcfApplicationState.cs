@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Wcf
 {
-    public class WcfContextService : IContextService
+    public class WcfApplicationState : IApplicationState
     {
-        public static readonly IContextService Instance = new WcfContextService();
+        public static readonly WcfApplicationState Instance = new WcfApplicationState();
 
         private OperationContext GetOperationContext()
         {
@@ -21,7 +21,7 @@ namespace Appacitive.Sdk.Wcf
                     throw new AppacitiveRuntimeException("WCF operation context is not available.");
                 return context;
             }
-            catch( Exception ex )
+            catch (Exception ex)
             {
                 throw new AppacitiveRuntimeException("Error aquiring wcf operation context.", ex);
             }
@@ -44,16 +44,6 @@ namespace Appacitive.Sdk.Wcf
             else return extension.UserToken;
         }
 
-        public APDevice GetDevice()
-        {
-            throw new AppacitiveRuntimeException("Device get is not supported for aspnet platform.");
-        }
-
-        public void SetDevice(APDevice device)
-        {
-            throw new AppacitiveRuntimeException("Device set is not supported for aspnet platform.");
-        }
-
         public void SetUser(APUser user)
         {
             var context = GetOperationContext();
@@ -62,9 +52,9 @@ namespace Appacitive.Sdk.Wcf
             if (existing != null)
                 context.Extensions.Remove(existing);
             // If user is not null, then update with latest content.
-            if( user != null )
+            if (user != null)
                 context.Extensions.Add(new UserExtension(user));
-            
+
 
         }
 
@@ -76,9 +66,9 @@ namespace Appacitive.Sdk.Wcf
             if (existing != null)
                 context.Extensions.Remove(existing);
             // If user is not null, then update with latest content.
-            if (string.IsNullOrWhiteSpace(value) == false) 
+            if (string.IsNullOrWhiteSpace(value) == false)
                 context.Extensions.Add(new UserTokenExtension(value));
-            
+
         }
     }
 }

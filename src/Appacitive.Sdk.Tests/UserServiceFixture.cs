@@ -131,7 +131,7 @@ namespace Appacitive.Sdk.Tests
             await App.LoginAsync(new UsernamePasswordCredentials(created.Username, created.Password));
 
             // Get the created user
-            var getUserRequest = new GetUserRequest() { UserId = App.Current.CurrentUser.UserToken, UserIdType = "token" };
+            var getUserRequest = new GetUserRequest() { UserId = App.Current.GetCurrentUser().UserToken, UserIdType = "token" };
             var getUserResponse = await getUserRequest.ExecuteAsync();
             ApiHelper.EnsureValidResponse(getUserResponse);
             Assert.IsNotNull(getUserResponse.User);
@@ -211,7 +211,7 @@ namespace Appacitive.Sdk.Tests
 
             // Authenticate with new password
             await App.LoginAsync(new UsernamePasswordCredentials(newUser.Username, newPassword));
-            Assert.IsTrue(string.IsNullOrWhiteSpace(App.Current.CurrentUser.UserToken) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(App.Current.GetCurrentUser().UserToken) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
         }
 
         [TestMethod]
@@ -231,7 +231,7 @@ namespace Appacitive.Sdk.Tests
 
             // Authenticate with new password
             await App.LoginAsync(new UsernamePasswordCredentials(newUser.Username, newPassword));
-            Assert.IsTrue(string.IsNullOrWhiteSpace(App.Current.CurrentUser.UserToken) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(App.Current.GetCurrentUser().UserToken) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
         }
 
         [TestMethod]
@@ -245,14 +245,14 @@ namespace Appacitive.Sdk.Tests
 
             // Change password
             var newPassword = "p@ssw0rd2";
-            var token = App.Current.CurrentUser.UserToken;
+            var token = App.Current.GetCurrentUser().UserToken;
             var request = new ChangePasswordRequest() { UserId = token, IdType = "token", OldPassword = newUser.Password, NewPassword = newPassword };
             var response = await request.ExecuteAsync();
             ApiHelper.EnsureValidResponse(response);
 
             // Authenticate with new password
             await App.LoginAsync(new UsernamePasswordCredentials(newUser.Username, newPassword));
-            Assert.IsTrue(string.IsNullOrWhiteSpace(App.Current.CurrentUser.UserToken) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(App.Current.GetCurrentUser().UserToken) == false, "Authentication failed for username {0} and password {1}.", newUser.Username, newPassword);
         }
 
         [TestMethod]

@@ -15,10 +15,10 @@ namespace Appacitive.Sdk.Services
         {
             var appContext = App.Current;
             this.ApiKey = appContext.ApiKey;
-            var user = appContext.CurrentUser.GetLoggedInUser();
+            var user = appContext.GetCurrentUser().User;
             if (user != null && user.Location != null)
                 this.CurrentLocation = user.Location;
-            this.UserToken = appContext.CurrentUser.UserToken;
+            this.UserToken = appContext.GetCurrentUser().UserToken;
             this.Environment = appContext.Environment;
             this.DebugEnabled = App.Debug.IsProfilingEnabled;
             this.Verbosity = App.Debug.Verbosity;

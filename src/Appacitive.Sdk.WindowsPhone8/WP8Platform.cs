@@ -9,24 +9,9 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.WindowsPhone8
 {
-    public class WP8Platform : Platform
+    public class WP8Platform : Platform, IDevicePlatform
     {
-        public WP8Platform()
-        {   
-        }
-
-        public void Initialize()
-        {
-            var channel = HttpNotificationChannel.Find("");
-            
-        }
-
-        void channel_ShellToastNotificationReceived(object sender, NotificationEventArgs e)
-        {
-            
-        }
-
-        public override void InitializeContainer(Internal.IDependencyContainer container)
+        protected override void InitializeContainer(Internal.IDependencyContainer container)
         {
 
             container
@@ -34,28 +19,30 @@ namespace Appacitive.Sdk.WindowsPhone8
                 .Register<IHttpFileHandler, WebClientHttpFileHandler>(() => new WebClientHttpFileHandler())
                 .RegisterInstance<ILocalStorage, IsolatedLocalStorage>("wp8", IsolatedLocalStorage.Instance)
                 ;
-            var contextService = new WPContextService(
+            var deviceState = new WPDeviceState(
                 container.Build<ILocalStorage>("wp8"),
                 container.Build<IJsonSerializer>());
-            container.RegisterInstance<IContextService, WPContextService>("wp8", contextService);
+            container.RegisterInstance<IDeviceState, WPDeviceState>("wp8", deviceState);
+            var appState = new WPApplicationState(
+                container.Build<ILocalStorage>("wp8"),
+                container.Build<IJsonSerializer>());
+            container.RegisterInstance<IApplicationState, WPApplicationState>("wp8", appState);
             
         }
 
-        public override bool IsNetworkAvailable()
-        {
-            return NetworkInterface.GetIsNetworkAvailable();
-        }
-
-        public override IContextService ContextService
-        {
-            get { return ObjectFactory.Build<IContextService>("wp8");}
-        }
-
-        public override ILocalStorage LocalStorage
-        {
-            get { return IsolatedLocalStorage.Instance; }
-        }
-
+        
         public static readonly Platform Instance = new WP8Platform();
+
+
+
+        public IDeviceState DeviceState
+        {
+            get { return ObjectFactory.Build<IDeviceState>("wp8"); }
+        }
+
+        public IApplicationState ApplicationState
+        {
+            get { return ObjectFactory.Build<IApplicationState>("wp8"); }
+        }
     }
 }

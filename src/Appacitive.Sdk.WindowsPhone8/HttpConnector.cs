@@ -37,7 +37,7 @@ namespace Appacitive.Sdk.WindowsPhone7
         private static readonly byte[] Empty = new byte[0];
         private async Task<byte[]> ExecuteAsync(string httpMethod, string url, IDictionary<string, string> headers, byte[] data)
         {
-            if (App.Current.Platform.IsNetworkAvailable() == false)
+            if( IsNetworkAvailable() == false)
                 throw new AppacitiveRuntimeException("Network is not available.");
 
             var request = HttpWebRequest.Create(url) as HttpWebRequest;
@@ -72,6 +72,14 @@ namespace Appacitive.Sdk.WindowsPhone7
             }
             return responseData;
 
+        }
+
+        private bool IsNetworkAvailable()
+        {
+            var devicePlatform = App.Current.Platform as IDevicePlatform;
+            if (devicePlatform == null)
+                return true;
+            else return devicePlatform.DeviceState.IsNetworkAvailable();
         }
     }
 }

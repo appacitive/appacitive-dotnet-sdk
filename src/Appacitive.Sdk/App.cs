@@ -28,12 +28,15 @@ namespace Appacitive.Sdk
 
         private static void InitOnce(Platform platform, string appId, string apikey, Environment environment, AppacitiveSettings settings)
         {
-            _context = new AppContext(platform, apikey, environment, settings);
+            var context = new AppContext(platform, apikey, environment, settings);
             // Register defaults
-            DefaultRegistrations.ConfigureContainer(_context.Container);
+            DefaultRegistrations.ConfigureContainer(context.Container);
             // Setup platform specific registrations
-            platform.InitializeContainer(_context.Container);
+            platform.Initialize(context);
+            _context = context;
         }
+
+        
 
         private static AppContext _context = null;
         public static AppContext Current
@@ -51,16 +54,17 @@ namespace Appacitive.Sdk
         public static async Task<UserSession> LoginAsync(Credentials credentials)
         {
             var userSession = await credentials.AuthenticateAsync();
-            _context.CurrentUser.SetCurrentUser(userSession.LoggedInUser, userSession.UserToken);
+            _context.GetCurrentUser().SetUser(userSession.LoggedInUser, userSession.UserToken);
             return userSession;
         }
 
         public static async Task LogoutAsync()
         {
-            var userToken = _context.CurrentUser.UserToken;
+            
+            var userToken = _context.GetCurrentUser().UserToken;
             if (string.IsNullOrWhiteSpace(userToken) == false)
                 await UserSession.InvalidateAsync(userToken);
-            _context.CurrentUser.Reset();
+            _context.GetCurrentUser().Reset();
         }
     }
 

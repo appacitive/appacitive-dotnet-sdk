@@ -9,9 +9,9 @@ using System.Web.SessionState;
 
 namespace Appacitive.Sdk.Aspnet
 {
-    public class AspnetContextService : IContextService
+    public class AspnetApplicationState : IApplicationState
     {
-        public static IContextService Instance = new AspnetContextService();
+        public static AspnetApplicationState Instance = new AspnetApplicationState();
 
         private HttpSessionState GetSession()
         {
@@ -22,7 +22,7 @@ namespace Appacitive.Sdk.Aspnet
                     throw new AppacitiveRuntimeException("Http session not available.");
                 return session;
             }
-            catch( Exception ex )
+            catch (Exception ex)
             {
                 throw new AppacitiveRuntimeException("Error acquiring asp.net session.", ex);
             }
@@ -46,16 +46,6 @@ namespace Appacitive.Sdk.Aspnet
             else return token;
         }
 
-        public APDevice GetDevice()
-        {
-            throw new AppacitiveRuntimeException("Device get is not supported for aspnet platform.");
-        }
-
-        public void SetDevice(APDevice device)
-        {
-            throw new AppacitiveRuntimeException("Device set is not supported for aspnet platform.");
-        }
-
         public void SetUser(APUser user)
         {
             if (user == null)
@@ -72,10 +62,10 @@ namespace Appacitive.Sdk.Aspnet
 
         public void SetUserToken(string value)
         {
-            if (string.IsNullOrWhiteSpace(value) == true )
+            if (string.IsNullOrWhiteSpace(value) == true)
                 value = null;
             this.GetSession()[SessionKeys.ForUserToken()] = value;
-            
+
         }
     }
 

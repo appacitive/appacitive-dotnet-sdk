@@ -14,12 +14,4 @@ namespace Appacitive.Sdk
         event EventHandler<HttpNotificationEventArgs> HttpNotificationReceived;
         event EventHandler<NotificationEventArgs> ShellToastNotificationReceived;
     }
-
-    public static class DeviceInfoExtensions
-    {
-        public static IPushChannel GetChannel(this DeviceInfo device)
-        {   
-            return SingletonPushChannel.GetInstance();
-        }
-    }
 }

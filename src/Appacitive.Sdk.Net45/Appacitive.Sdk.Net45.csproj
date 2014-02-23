@@ -48,12 +48,13 @@
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
     <Compile Include="Aspnet\AspnetPlatform.cs" />
-    <Compile Include="Aspnet\AspnetContextService.cs" />
+    <Compile Include="Aspnet\AspnetApplicationState.cs" />
     <Compile Include="HttpConnector.cs" />
-    <Compile Include="IAppacitiveUserPrincipal.cs" />
-    <Compile Include="Net45Platform.cs" />
+    <Compile Include="NetPlatform.cs" />
+    <Compile Include="NonWebPlatform.cs" />
     <Compile Include="Platforms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StaticApplicationState.cs" />
     <Compile Include="Wcf\AllowAsyncServiceBehavior.cs" />
     <Compile Include="Wcf\AllowAsyncServiceBehaviorExtension.cs" />
     <Compile Include="Wcf\ContextPropogatingInvoker.cs" />
@@ -63,9 +64,8 @@
     <Compile Include="TraceWriter.cs" />
     <Compile Include="Wcf\UserExtension.cs" />
     <Compile Include="Wcf\UserTokenExtension.cs" />
-    <Compile Include="Wcf\WcfContextService.cs" />
     <Compile Include="Wcf\WcfPlatform.cs" />
-    <Compile Include="Wcf\WcfUserContext.cs" />
+    <Compile Include="Wcf\WcfApplicationState.cs" />
     <Compile Include="WebClientHttpFileHandler.cs" />
   </ItemGroup>
   <ItemGroup>

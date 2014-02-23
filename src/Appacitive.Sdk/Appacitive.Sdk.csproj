@@ -44,12 +44,10 @@
     <Compile Include="Internal\AppacitiveContext.cs" />
     <Compile Include="Internal\AppContext.cs" />
     <Compile Include="Internal\DefaultRegistrations.cs" />
-    <Compile Include="Internal\DeviceInfo.cs" />
     <Compile Include="Internal\Enums.cs" />
     <Compile Include="Internal\ErrorCodes.cs" />
     <Compile Include="Internal\LocalSettings.cs" />
     <Compile Include="Internal\Platform.cs" />
-    <Compile Include="Internal\StaticContextService.cs" />
     <Compile Include="Internal\UserInfo.cs" />
     <Compile Include="Model\AppacitiveSettings.cs" />
     <Compile Include="CannedLists.cs" />
@@ -65,7 +63,6 @@
     <Compile Include="Interfaces\IContextService.cs" />
     <Compile Include="Interfaces\ITraceWriter.cs" />
     <Compile Include="Interfaces\IUploadHandler.cs" />
-    <Compile Include="Interfaces\IUserContext.cs" />
     <Compile Include="Interfaces\IValueCollection.cs" />
     <Compile Include="Internal\Debugger.cs" />
     <Compile Include="Internal\MapDiff.cs" />

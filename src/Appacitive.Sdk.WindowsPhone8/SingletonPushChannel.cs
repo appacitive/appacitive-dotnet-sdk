@@ -153,12 +153,13 @@ namespace Appacitive.Sdk.WindowsPhone7
 
         private void UpdateChannelUri(Uri uri)
         {
-            var existing = App.Current.CurrentDevice.Device.DeviceToken;
+            var existing = App.Current.GetCurrentDevice().Device.DeviceToken;
             var newToken = uri.ToString();
             if (string.Equals(newToken, existing) == false)
             {
-                App.Current.CurrentDevice.Device.DeviceToken = newToken;
-                App.Current.CurrentDevice.Device.SaveAsync();
+                var current = App.Current.GetCurrentDevice();
+                current.Device.DeviceToken = newToken;
+                current.Device.SaveAsync();
             }
         }
 

@@ -67,6 +67,24 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Appacitive.Sdk.Net45\Aspnet\AspnetApplicationState.cs">
+      <Link>Aspnet\AspnetApplicationState.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\Aspnet\AspnetPlatform.cs">
+      <Link>Aspnet\AspnetPlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\NetPlatform.cs">
+      <Link>NetPlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\NonWebPlatform.cs">
+      <Link>NonWebPlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\Platforms.cs">
+      <Link>Platforms.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\StaticApplicationState.cs">
+      <Link>StaticApplicationState.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk.Net45\Wcf\AllowAsyncServiceBehavior.cs">
       <Link>Wcf\AllowAsyncServiceBehavior.cs</Link>
     </Compile>
@@ -90,6 +108,12 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk.Net45\Wcf\UserTokenExtension.cs">
       <Link>Wcf\UserTokenExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\Wcf\WcfApplicationState.cs">
+      <Link>Wcf\WcfApplicationState.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\Wcf\WcfPlatform.cs">
+      <Link>Wcf\WcfPlatform.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\APConnection.cs">
       <Link>APConnection.cs</Link>
@@ -157,9 +181,6 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\IUploadHandler.cs">
       <Link>Interfaces\IUploadHandler.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Interfaces\IUserContext.cs">
-      <Link>Interfaces\IUserContext.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IValueCollection.cs">
       <Link>Internal\IValueCollection.cs</Link>
     </Compile>
@@ -177,9 +198,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\DefaultRegistrations.cs">
       <Link>Internal\DefaultRegistrations.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\DeviceInfo.cs">
-      <Link>Internal\DeviceInfo.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\ErrorCodes.cs">
       <Link>Internal\ErrorCodes.cs</Link>
@@ -505,9 +523,6 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Urls.cs">
       <Link>Internal\Services\Urls.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\StaticContextService.cs">
-      <Link>Internal\StaticContextService.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\StringUtils.cs">
       <Link>Internal\StringUtils.cs</Link>
     </Compile>
@@ -658,16 +673,9 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
-    <Compile Include="Aspnet\AspnetContextService.cs" />
-    <Compile Include="Aspnet\AspnetPlatform.cs" />
     <Compile Include="HttpConnector.cs" />
-    <Compile Include="IAppacitiveUserPrincipal.cs" />
-    <Compile Include="Net40Platform.cs" />
-    <Compile Include="Platforms.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TraceWriter.cs" />
-    <Compile Include="Wcf\WcfContextService.cs" />
-    <Compile Include="Wcf\WcfPlatform.cs" />
     <Compile Include="WebClientHttpFileHandler.cs" />
   </ItemGroup>
   <ItemGroup>

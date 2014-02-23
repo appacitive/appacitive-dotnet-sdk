@@ -9,12 +9,18 @@ namespace Appacitive.Sdk
 {
     public abstract class Platform
     {
-        public abstract void InitializeContainer(IDependencyContainer container);
+        public void Initialize(AppContext context)
+        {
+            InitializeContainer(context.Container);
+            Init(context);
+        }
 
-        public abstract bool IsNetworkAvailable();
 
-        public abstract IContextService ContextService { get; }
 
-        public abstract ILocalStorage LocalStorage { get; }
+        protected abstract void InitializeContainer(IDependencyContainer container);
+
+        protected virtual void Init(AppContext context)
+        {
+        }
     }
 }

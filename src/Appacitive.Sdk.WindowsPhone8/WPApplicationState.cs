@@ -11,9 +11,9 @@ namespace Appacitive.Sdk.WindowsPhone8
 namespace Appacitive.Sdk.WindowsPhone7
 #endif
 {
-    public class WPContextService : IContextService
+    public class WPApplicationState : IApplicationState
     {
-        public WPContextService(ILocalStorage storage, IJsonSerializer serializer)
+        public WPApplicationState(ILocalStorage storage, IJsonSerializer serializer)
         {
             this.LocalStorage = storage;
             this.Serializer = serializer;
@@ -59,39 +59,7 @@ namespace Appacitive.Sdk.WindowsPhone7
             return this.LocalStorage.GetValue(NamingConvention.LocalUserTokenKey());
         }
 
-        private APDevice _localDevice = null;
-        public APDevice GetDevice()
-        {
-            if (_localDevice != null)
-                _localDevice = GetLocalDevice();
-            return _localDevice;
-        }
-
-        private APDevice GetLocalDevice()
-        {
-            var json = this.LocalStorage.GetValue(NamingConvention.LocalDeviceKey());
-            if (string.IsNullOrWhiteSpace(json) == true)
-                return null;
-            APDevice device = null;
-            if (this.Serializer.TryDeserialize(json, out device) == true)
-                return device;
-            else return null;
-        }
-
-        public void SetDevice(APDevice device)
-        {
-            if (device == null)
-            {
-                this.LocalStorage.Remove(NamingConvention.LocalDeviceKey());
-            }
-            else
-            {
-                var bytes = this.Serializer.Serialize(device);
-                var json = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
-                this.LocalStorage.SetValue(NamingConvention.LocalDeviceKey(), json);
-            }
-        }
-
+        
         public void SetUser(APUser user)
         {
             if (user == null)

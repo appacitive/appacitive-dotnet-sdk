@@ -4,30 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if NET40
+using Appacitive.Sdk.Net40;
+#else
+using Appacitive.Sdk.Net45;
+#endif
 
 namespace Appacitive.Sdk.Wcf
 {
-    public class WcfPlatform : Net45Platform
+    public class WcfPlatform : NetPlatform, IApplicationPlatform
     {
-        public static new readonly Platform Instance = new WcfPlatform();
+        public static new readonly WcfPlatform Instance = new WcfPlatform();
 
-        public override void InitializeContainer(IDependencyContainer container)
+        public override IApplicationState ApplicationState
         {
-            base.InitializeContainer(container);
-            container.Register<Platform, WcfPlatform>("wcf", () => WcfPlatform.Instance);
-        }
-
-        public override IContextService ContextService
-        {
-            get 
-            {
-                return WcfContextService.Instance;
-            }
-        }
-
-        public override ILocalStorage LocalStorage
-        {
-            get { throw new NotSupportedException("Local storage is supported on WCF platform."); }
+            get { return WcfApplicationState.Instance; }
         }
     }
 }
