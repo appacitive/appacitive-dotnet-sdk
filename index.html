@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Appacitive-dotnet-sdk : Appacitive .NET SDK" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Appacitive-dotnet-sdk</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/appacitive/appacitive-dotnet-sdk">View on GitHub</a>
+
+          <h1 id="project_title">Appacitive-dotnet-sdk</h1>
+          <h2 id="project_tagline">Appacitive .NET SDK</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/appacitive/appacitive-dotnet-sdk/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/appacitive/appacitive-dotnet-sdk/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="net-sdk-for-appacitive" class="anchor" href="#net-sdk-for-appacitive"><span class="octicon octicon-link"></span></a>.NET SDK for appacitive</h1>
+
+<p>This open source library allows you to integrate applications built using Microsoft .NET or Mono with the Appacitive platform.
+To learn more about the Appacitive platform, please visit <a href="https://www.appacitive.com">www.appacitive.com</a>.</p>
+
+<p>LICENSE</p>
+
+<p>Except as otherwise noted, the .NET SDK for Appacitive is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License, Version 2.0</a>.</p>
+
+<h1>
+<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h1>
+
+<h2>
+<a name="setup" class="anchor" href="#setup"><span class="octicon octicon-link"></span></a>Setup</h2>
+
+<p>The appacitive .NET SDK can be added to your project via <a href="https://www.nuget.org/packages/Appacitive">nuget</a>.
+Simply run the following command</p>
+
+<blockquote>
+<h2>
+<a name="pm-install-package-appacitive" class="anchor" href="#pm-install-package-appacitive"><span class="octicon octicon-link"></span></a>PM&gt; <strong>Install-Package Appacitive</strong>
+</h2>
+</blockquote>
+
+<p>on the nuget package manager console to include the appacitive .NET SDK in your project. </p>
+
+<h2>
+<a name="initialize" class="anchor" href="#initialize"><span class="octicon octicon-link"></span></a>Initialize</h2>
+
+<p>Before we dive into using the SDK, we need to understand a couple of things about using the Appacitive api.</p>
+
+<p>All calls to the appacitive platform are secured using an app specific api key.
+To access the api key for your app, go to app listing via the <a href="https://portal.appacitive.com">portal</a> and click on the key icon on right side. </p>
+
+<p><img src="http://appacitive.github.io/images/portal-apikey-small.png" alt='"Getting your apikey"'></p>
+
+<h4>
+<a name="initialize-your-sdk" class="anchor" href="#initialize-your-sdk"><span class="octicon octicon-link"></span></a>Initialize your SDK,</h4>
+
+<div class="highlight highlight-c#"><pre><span class="n">App</span><span class="p">.</span><span class="n">Initialize</span><span class="p">(</span>
+    <span class="n">platform</span><span class="p">,</span>       <span class="c1">// Use the Platforms helper class for options. </span>
+    <span class="n">appid</span><span class="p">,</span>          <span class="c1">// Set your application id here.</span>
+    <span class="n">apiKey</span><span class="p">,</span>         <span class="c1">// Set your api key here.</span>
+    <span class="n">env</span><span class="p">,</span>            <span class="c1">// Set your environment here. Use Environment enum. </span>
+    <span class="n">settings</span><span class="p">);</span>      <span class="c1">// App settings (optional). </span>
+
+</pre></div>
+
+<h4>
+<a name="what-is-this-platform-variable" class="anchor" href="#what-is-this-platform-variable"><span class="octicon octicon-link"></span></a>What is this platform variable?</h4>
+
+<p>You can use the .NET sdk as part of your mobile app as well as any server side application like ASP.net or WCF. These enviroments vary quite significantly 
+in terms of how certain operations are performed e.g., network calls.</p>
+
+<p>The <code>platform</code> input parameter is provided to hint the SDK into the runtime environment in which it is hosted. For example, using <code>Platforms.Aspnet</code> essentially tells the sdk that it is being hosted inside a web application. Based on this, the SDK can pick the right mechanism for features like user auth and session management.</p>
+
+<p>Depending upon the type of project that you are using, the Platforms helper class may present one or more of the following options - <code>Platforms.WindowsPhone7</code>, <code>Platforms.WindowsPhone8</code>, <code>Platforms.Aspnet</code>, <code>Platforms.Wcf</code> or <code>Platforms.Nonweb</code></p>
+
+<p>Now you are ready to use the SDK</p>
+
+<h2>
+<a name="conventions" class="anchor" href="#conventions"><span class="octicon octicon-link"></span></a>Conventions</h2>
+
+<ol>
+<li><p>The .NET SDK makes extensive use of .NET Tasks along with async \ await feature recently introduced with c# 5.0. As a result, most methods exposed via the SDK are async methods.</p></li>
+<li>
+<p>The SDK follows a certain naming convention for the various appacitive data types.</p>
+
+<ul>
+<li>The SDK defines the following primary data types - <code>APObject</code>, <code>APConnection</code>, <code>APUser</code> and <code>APDevice</code>.</li>
+<li>For each primary data type, there is a corresponding helper type with a plural name - <code>APObjects</code>, <code>APConnections</code>, <code>APUsers</code> and <code>APDevices</code>.</li>
+<li>Write operations are performed on instances of a specific type.</li>
+<li>
+<p>Read, Delete and Find operations are performed via static operations on the corresponding helper type.</p>
+
+<div class="highlight highlight-c#"><pre><span class="c1">// To read an object</span>
+<span class="c1">// Notice the plural APObject(s) below.</span>
+<span class="kt">var</span> <span class="n">obj</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="s">"object"</span><span class="p">,</span> <span class="s">"123"</span><span class="p">);</span>
+
+<span class="c1">// To create or update</span>
+<span class="k">await</span> <span class="n">obj</span><span class="p">.</span><span class="n">SaveAsync</span><span class="p">();</span>
+</pre></div>
+</li>
+</ul>
+</li>
+<li>Incase an api call fails, an exception extending from <code>BaseAppacitiveException</code> would be raised.</li>
+</ol><h2>
+<a name="debugging-the-sdk" class="anchor" href="#debugging-the-sdk"><span class="octicon octicon-link"></span></a>Debugging the SDK</h2>
+
+<p>Debugging in the sdk uses standard .NET trace infrastructure via the App.Debug class. To setup debugging for your app</p>
+
+<h4>
+<a name="setup-net-tracing" class="anchor" href="#setup-net-tracing"><span class="octicon octicon-link"></span></a>Setup .NET tracing</h4>
+
+<p>Add the following configuration to your app.config or web.config. Add a trace listener of your choice. The given configuration will log everything to the console.</p>
+
+<div class="highlight highlight-xml"><pre>    <span class="nt">&lt;system.diagnostics&gt;</span>
+        <span class="nt">&lt;trace</span> <span class="na">autoflush=</span><span class="s">"true"</span> <span class="na">indentsize=</span><span class="s">"4"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;listeners&gt;</span>
+                <span class="nt">&lt;clear</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;add</span> <span class="na">name=</span><span class="s">"configConsoleListener"</span> <span class="na">type=</span><span class="s">"System.Diagnostics.ConsoleTraceListener"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/listeners&gt;</span>
+            <span class="nt">&lt;/trace&gt;</span>
+    <span class="nt">&lt;/system.diagnostics&gt;</span>
+</pre></div>
+
+<h4>
+<a name="setup-sdk-debugging" class="anchor" href="#setup-sdk-debugging"><span class="octicon octicon-link"></span></a>Setup SDK debugging</h4>
+
+<p>The code below shows how to enable debugging for standard scenarios.</p>
+
+<div class="highlight highlight-C#"><pre>    <span class="c1">// To enable logging of all transactions.</span>
+    <span class="n">App</span><span class="p">.</span><span class="n">Debug</span><span class="p">.</span><span class="n">ApiLogging</span><span class="p">.</span><span class="n">LogEverything</span><span class="p">();</span>
+
+    <span class="c1">// To log only failed calls.</span>
+    <span class="n">App</span><span class="p">.</span><span class="n">Debug</span><span class="p">.</span><span class="n">ApiLogging</span><span class="p">.</span><span class="n">LogFailures</span><span class="p">();</span>
+
+    <span class="c1">// To log calls taking more than 600ms.</span>
+    <span class="n">App</span><span class="p">.</span><span class="n">Debug</span><span class="p">.</span><span class="n">ApiLogging</span><span class="p">.</span><span class="n">LogSlowCalls</span><span class="p">(</span><span class="m">600</span><span class="p">);</span>
+
+    <span class="c1">// To log calls based on runtime condition.</span>
+    <span class="n">App</span><span class="p">.</span><span class="n">Debug</span><span class="p">.</span><span class="n">ApiLogging</span><span class="p">.</span><span class="n">LogIf</span><span class="p">((</span><span class="n">rq</span><span class="p">,</span> <span class="n">rs</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">rs</span><span class="p">.</span><span class="n">Status</span><span class="p">.</span><span class="n">Code</span> <span class="p">==</span> <span class="s">"400"</span><span class="p">);</span>
+
+    <span class="c1">// To log failed and slow calls.</span>
+    <span class="n">App</span><span class="p">.</span><span class="n">Debug</span><span class="p">.</span><span class="n">ApiLogging</span>
+             <span class="p">.</span><span class="n">LogFailures</span><span class="p">()</span>
+             <span class="p">.</span><span class="n">LogSlowCalls</span><span class="p">(</span><span class="m">600</span><span class="p">);</span>
+
+</pre></div>
+
+<hr><h2>
+<a name="data-storage-and-retrieval" class="anchor" href="#data-storage-and-retrieval"><span class="octicon octicon-link"></span></a>Data storage and retrieval</h2>
+
+<p>All data is represented as objects. This will become clearer as you read on. Let's assume that we are building a game and we need to store player data on the server.</p>
+
+<h3>
+<a name="creating" class="anchor" href="#creating"><span class="octicon octicon-link"></span></a>Creating</h3>
+
+<p>To create a player via the sdk, do the following</p>
+
+<div class="highlight highlight-c#"><pre><span class="kt">var</span> <span class="n">player</span> <span class="p">=</span> <span class="k">new</span> <span class="n">APObject</span><span class="p">(</span><span class="s">"player"</span><span class="p">);</span>
+</pre></div>
+
+<p>Huh?</p>
+
+<p>An <code>APObject</code> comprises of an entity (referred to as <code>object</code> in Appacitive jargon). To initialize an object, we need to provide it some options. The mandatory argument is the <code>__type</code> argument.</p>
+
+<p>What is a type? In short, think of types as tables in a contemporary relational database. A type has properties which hold values just like columns in a table. A property has a data type and additional constraints are configured according to your application's need. Thus we are specifying that the player is supposed to contain an entity of the type 'player' (which should already be defined in your application).</p>
+
+<p>The player object is an instance of <code>APObject</code>. An <code>APObject</code> is a class which encapsulates the data (the actual entity or the object) and methods that provide ways to update it, delete it etc. To see the raw entity that is stored within the <code>APObject</code>, fire <code>player.ToJSON()</code>.</p>
+
+<h4>
+<a name="setting-values" class="anchor" href="#setting-values"><span class="octicon octicon-link"></span></a>Setting Values</h4>
+
+<p>Now we need to name our player 'John Doe'. This can be done as follows</p>
+
+<div class="highlight highlight-csharp"><pre> <span class="c1">// Using setters</span>
+ <span class="kt">var</span> <span class="n">player</span> <span class="p">=</span> <span class="k">new</span> <span class="n">APObject</span><span class="p">(</span><span class="s">"player"</span><span class="p">);</span>
+ <span class="n">player</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="s">"name"</span><span class="p">,</span> <span class="s">"John Doe"</span><span class="p">);</span>
+
+ <span class="c1">// dynamically assigning properties (via the use of the dynamic keyword)</span>
+ <span class="kt">dynamic</span> <span class="n">player</span> <span class="p">=</span> <span class="k">new</span> <span class="n">APObject</span><span class="p">(</span><span class="s">"player"</span><span class="p">);</span>
+ <span class="n">player</span><span class="p">.</span><span class="n">name</span> <span class="p">=</span> <span class="s">"John Doe"</span><span class="p">;</span>
+</pre></div>
+
+<h4>
+<a name="getting-values" class="anchor" href="#getting-values"><span class="octicon octicon-link"></span></a>Getting values</h4>
+
+<p>Lets verify that our player is indeed called 'John Doe'</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// using the getters</span>
+<span class="kt">var</span> <span class="n">name</span> <span class="p">=</span> <span class="n">player</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">"name"</span><span class="p">);</span>
+
+<span class="c1">// Using the getter with a default value</span>
+<span class="c1">// This will return N.A. incase the name property is not available.</span>
+<span class="kt">var</span> <span class="n">name</span> <span class="p">=</span> <span class="n">playet</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">"name"</span><span class="p">,</span> <span class="s">"N.A."</span><span class="p">);</span>
+
+<span class="c1">// dynamic usage</span>
+<span class="c1">// Assuming that player is declared via the dynamic keyword.</span>
+<span class="c1">// player.Name, player.NAme etc would also work here.</span>
+<span class="kt">var</span> <span class="n">name</span> <span class="p">=</span> <span class="n">player</span><span class="p">.</span><span class="n">name</span><span class="p">;</span>
+</pre></div>
+
+<h4>
+<a name="saving" class="anchor" href="#saving"><span class="octicon octicon-link"></span></a>Saving</h4>
+
+<p>Saving a player to the server is easy.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">player</span> <span class="p">=</span> <span class="k">new</span> <span class="n">APObject</span><span class="p">(</span><span class="s">"player"</span><span class="p">);</span>
+<span class="n">player</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="s">"name"</span><span class="p">,</span> <span class="s">"John Doe"</span><span class="p">);</span>
+<span class="n">player</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="s">"age"</span><span class="p">,</span> <span class="m">22</span><span class="p">);</span>
+<span class="k">await</span> <span class="n">player</span><span class="p">.</span><span class="n">SaveAsync</span><span class="p">();</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"New player created with id {0}."</span><span class="p">,</span> <span class="n">player</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+</pre></div>
+
+<p>When you call save, the object is taken and stored on Appacitive's servers. A unique object id is generated and is stored along with the player object. This identifier is also returned to the object on the client-side. You can access it directly using <code>Id</code> property. This is available in the <code>player</code> object after a successful save.</p>
+
+<h3>
+<a name="retrieving" class="anchor" href="#retrieving"><span class="octicon octicon-link"></span></a>Retrieving</h3>
+
+<p>You can retrieving an existing object instance from the backend via its type and unique id.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// retrieve the player</span>
+<span class="kt">var</span> <span class="n">id</span> <span class="p">=</span> <span class="s">"12345"</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">player</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="s">"player"</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
+</pre></div>
+
+<p>If you want to update an object and need a reference to it without making a call to the server, you can create a new instance by passing the type and id in the constructor. This instance is a loose reference to the object on the server side without actually making a call to the backend.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// Retrieve the player</span>
+<span class="c1">// The existingPlayer object represents the player object with id 12345.</span>
+<span class="kt">var</span> <span class="n">existingPlayerId</span> <span class="p">=</span> <span class="s">"12345"</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">existingPlayer</span> <span class="p">=</span> <span class="k">new</span> <span class="n">APObject</span><span class="p">(</span><span class="s">"player"</span><span class="p">,</span> <span class="n">existingPlayerId</span><span class="p">);</span>
+
+</pre></div>
+
+<p><strong>Note</strong>:  You can mention exactly which all fields you want returned so as to reduce the overall payload size. By default all fields are returned. Fields <code>Id</code> and <code>Type</code> are the fields which will always be returned. </p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// You can choose to get specific fields only by passing the fields needed.</span>
+<span class="c1">// The following sample will get only the name and age fields.</span>
+<span class="kt">var</span> <span class="n">player</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="s">"player"</span><span class="p">,</span> <span class="s">"12345"</span><span class="p">,</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"name"</span><span class="p">,</span> <span class="s">"age"</span> <span class="p">});</span>
+</pre></div>
+
+<p>You can also retrieve multiple objects at a time, which will return an array of <code>APObject</code> instances. Here's an example</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">ids</span> <span class="p">=</span> <span class="k">new</span> <span class="p">[]</span> <span class="p">{</span><span class="s">"14696753262625025"</span><span class="p">,</span> <span class="s">"14696753262625026"</span><span class="p">,</span> <span class="s">"14696753262625027"</span><span class="p">};</span>
+<span class="kt">var</span> <span class="n">fields</span> <span class="p">=</span> <span class="k">new</span><span class="p">[]</span> <span class="p">{</span> <span class="s">"name"</span><span class="p">,</span> <span class="s">"age"</span> <span class="p">};</span>       <span class="c1">// optional fields to get</span>
+<span class="kt">var</span> <span class="n">players</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">MultiGetAsync</span><span class="p">(</span><span class="s">"player"</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">fields</span><span class="p">);</span>
+
+
+</pre></div>
+
+<h3>
+<a name="updating" class="anchor" href="#updating"><span class="octicon octicon-link"></span></a>Updating</h3>
+
+<p>You can update an existing object via the SaveAsync() instance method on <code>APObject</code>.
+Saving an object will update the instance with the latest values from the server.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// Get existing player</span>
+<span class="kt">var</span> <span class="n">player</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="s">"player"</span><span class="p">,</span> <span class="s">"12345"</span><span class="p">);</span>
+<span class="c1">// Update name and age</span>
+<span class="n">player</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="s">"name"</span><span class="p">,</span> <span class="s">"Jack"</span><span class="p">);</span>
+<span class="n">player</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="s">"age"</span><span class="p">,</span> <span class="m">24</span><span class="p">);</span>
+<span class="c1">// Save</span>
+<span class="k">await</span> <span class="n">player</span><span class="p">.</span><span class="n">SaveAsync</span><span class="p">();</span>
+
+</pre></div>
+
+<p>As you might notice, updates and creates are both done via the <code>SaveAsync</code> method. The SDK combines the create operation and the update operation under the hood and provides a unified interface. This is done be detecting the presence of a non-zero <code>Id</code> property. 
+This also means that the <code>Id</code> property on all APObjects or derived types are immutable.</p>
+
+<h4>
+<a name="handling-concurrent-updates" class="anchor" href="#handling-concurrent-updates"><span class="octicon octicon-link"></span></a>Handling concurrent updates</h4>
+
+<p>It is possible that multiple clients may be updating the same object instance on the backend. To prevent any accidental bad writes, Appacitive provides a revision number based <a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control">Multi Version Concurrency Control (MVCC)</a> mechanism.</p>
+
+<p>Each object instance has a integer based Revision property which is internally incremented on each update. If you want to ensure that you are always updating the correct object, you can pass the current revision number of the object during the update. If this revision number matches the revision on the server, the update will be allowed. In case the revision number does not match, it implies that the object has changed since you last read it. Accordingly the update operation will be cancelled.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// Get existing player (say at revision # 3 on the server)</span>
+<span class="kt">var</span> <span class="n">player</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="s">"player"</span><span class="p">,</span> <span class="s">"12345"</span><span class="p">);</span>
+<span class="c1">// Update name and age</span>
+<span class="n">player</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="s">"name"</span><span class="p">,</span> <span class="s">"Jack"</span><span class="p">);</span>
+<span class="n">player</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="s">"age"</span><span class="p">,</span> <span class="m">24</span><span class="p">);</span>
+
+<span class="c1">// Save (this call will succeed)</span>
+<span class="kt">var</span> <span class="n">revision</span> <span class="p">=</span> <span class="n">player</span><span class="p">.</span><span class="n">Revision</span><span class="p">;</span>     <span class="c1">// revision = 3     </span>
+<span class="k">await</span> <span class="n">player</span><span class="p">.</span><span class="n">SaveAsync</span><span class="p">(</span><span class="n">revision</span><span class="p">);</span>
+
+<span class="c1">// Save again with old revision (this call will fail as revision number is now 4)</span>
+<span class="k">await</span> <span class="n">player</span><span class="p">.</span><span class="n">SaveAsync</span><span class="p">(</span><span class="n">revision</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="deleting" class="anchor" href="#deleting"><span class="octicon octicon-link"></span></a>Deleting</h3>
+
+<p>You can delete an APObject via the <code>DeleteAsync</code> method on the <code>APObjects</code> helper class. Let's say we've had enough of John Doe and delete his player account from the server. Here's how you can do that -</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// This will delete player with id 12345.</span>
+<span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">DeleteAsync</span><span class="p">(</span><span class="s">"player"</span><span class="p">,</span> <span class="s">"12345"</span><span class="p">);</span>
+</pre></div>
+
+<p>You can also delete object along with all its first degree <a href="#connections">connections</a>.
+Note that this will only delete the connections and not the connected objects.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">deleteConnections</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+<span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">DeleteAsync</span><span class="p">(</span><span class="s">"player"</span><span class="p">,</span> <span class="s">"12345"</span><span class="p">,</span> <span class="n">deleteConnections</span><span class="p">);</span>
+</pre></div>
+
+<p>Multiple objects can also be deleted at a time. The delete connections options is not available for multi deletes. Here's an example</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">ids</span> <span class="p">=</span> <span class="kt">var</span> <span class="n">ids</span> <span class="p">=</span> <span class="k">new</span> <span class="p">[]</span> <span class="p">{</span><span class="s">"14696753262625025"</span><span class="p">,</span> <span class="s">"14696753262625026"</span><span class="p">};</span>
+<span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">MultiDeleteAsync</span><span class="p">(</span><span class="s">"player"</span><span class="p">,</span> <span class="n">ids</span><span class="p">);</span>
+</pre></div>
+
+<hr><h2>
+<a name="connections" class="anchor" href="#connections"><span class="octicon octicon-link"></span></a>Connections</h2>
+
+<p>All data that resides in the Appacitive platform is relational, like in the real world. This means you can do operations like fetching all games that any particular player has played, adding a new player to a team or disbanding a team whilst still keeping the other teams and their <code>players</code> data perfectly intact.</p>
+
+<p>Two entities can be connected via a relation, for example two entites of type <code>person</code> might be connected via a relation <code>friend</code> or <code>enemy</code> and so on. An entity of type <code>person</code> might be connected to an entity of type <code>house</code> via a relation <code>owns</code>. </p>
+
+<p>One more thing to understand is the concept of labels. Consider an entity of type <code>person</code>. This entity is connected to another <code>person</code> via relation <code>marriage</code>. Within the context of the relation <code>marriage</code>, one person is the <code>husband</code> and the other is the <code>wife</code>. Similarly the same entity can be connected to an entity of type <code>house</code> via the relation <code>house_owner</code>. In context of this relation, the entity of type <code>person</code> can be referred to as the <code>owner</code>. </p>
+
+<p><code>Wife</code>, <code>husband</code> and <code>owner</code> from the previous example are <code>labels</code>. Labels are used within the scope of a relation to give contextual meaning to the entities involved in that relation. They have no meaning or impact outside of the relation.</p>
+
+<p>Let's jump in!</p>
+
+<h3>
+<a name="creating--saving" class="anchor" href="#creating--saving"><span class="octicon octicon-link"></span></a>Creating &amp; Saving</h3>
+
+<p>The SDK provides a very fluent interface for creating connections.
+You can mix and match various options, to create a connection for your specific application scenario. </p>
+
+<h4>
+<a name="new-connection-between-two-existing-objects" class="anchor" href="#new-connection-between-two-existing-objects"><span class="octicon octicon-link"></span></a>New Connection between two existing Objects</h4>
+
+<p>Before we go about creating connections, we need two entities. Consider the following</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">idForJohn</span> <span class="p">=</span> <span class="s">"12345"</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">idForJane</span> <span class="p">=</span>  <span class="s">"39209"</span><span class="p">;</span>
+<span class="c1">// initialize and set up a connection</span>
+<span class="c1">// This will setup a connection of type sibling between the objects</span>
+<span class="c1">// with the given ids.</span>
+<span class="kt">var</span> <span class="n">conn</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APConnection</span>
+                <span class="p">.</span><span class="n">New</span><span class="p">(</span><span class="s">"marriage"</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">FromExistingObject</span><span class="p">(</span><span class="s">"husband"</span><span class="p">,</span> <span class="n">idForJohn</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">ToExistingObject</span><span class="p">(</span><span class="s">"wife"</span><span class="p">,</span> <span class="n">idForJane</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">SaveAsync</span><span class="p">();</span>
+
+</pre></div>
+
+<p>If you've read the previous guide, most of this should be familiar. What happens in the <code>APConnection</code> class is that the relation is configured to actually connect the two entities. We provide the ids of the two entities to be connected and specify which is which. For example here, John is the husband and Jane is the wife. </p>
+
+<p>In case you are wondering why this is necessary then here is the answer, it allows you to structure queries like 'who is John's wife?' and much more. Queries are covered in later guides.</p>
+
+<p><code>conn</code> is an instance of <code>APConnection</code> of type <code>marriage</code>. Similar to an entity, you may call <code>ToJSON</code> on a connection to get a json representation of the connection.</p>
+
+<h4>
+<a name="new-connection-between-two-new-objects" class="anchor" href="#new-connection-between-two-new-objects"><span class="octicon octicon-link"></span></a>New Connection between two new Objects</h4>
+
+<p>Apart from connecting existing objects, you can also create and connect new objects in one go. For example, say I want to create an order and its invoice in one go.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// Create new objects for order and invoice</span>
+<span class="kt">var</span> <span class="n">order</span> <span class="p">=</span> <span class="k">new</span> <span class="n">APObject</span><span class="p">(</span><span class="s">"order"</span><span class="p">);</span>
+<span class="n">order</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="s">"order_number"</span><span class="p">,</span> <span class="m">747383</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">invoice</span> <span class="p">=</span> <span class="k">new</span> <span class="n">APObject</span><span class="p">(</span><span class="s">"invoice"</span><span class="p">);</span>
+<span class="n">invoice</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="s">"invoice_date"</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">);</span>
+
+<span class="c1">// Create both objects and connect them with a connection of type invoices</span>
+<span class="k">await</span> <span class="n">APConnection</span><span class="p">.</span><span class="n">New</span><span class="p">(</span><span class="s">"invoices"</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">FromNewObject</span><span class="p">(</span><span class="s">"order"</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">ToNewObject</span><span class="p">(</span><span class="s">"invoice"</span><span class="p">,</span> <span class="n">invoice</span><span class="p">)</span>
+            <span class="p">.</span><span class="n">SaveAsync</span><span class="p">();</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Order id: {0}"</span><span class="p">,</span> <span class="n">order</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Invoice id: {0}"</span><span class="p">,</span> <span class="n">invoice</span><span class="p">.</span><span class="n">Id</span><span class="p">);</span>
+</pre></div>
+
+<p>This is the recommended way to do it. In this case, the invoices relation will create the objects order and invoice first and then connect them using the relation <code>invoices</code>.</p>
+
+<p>As you can probably guess from the examples above, you can change <code>FromNewObject</code> to <code>FromExistingObject</code> and <code>ToNewObject</code> to <code>ToExistingObject</code>, depending on whether you are connecting an new object or an existing one.</p>
+
+<h4>
+<a name="connection-properties" class="anchor" href="#connection-properties"><span class="octicon octicon-link"></span></a>Connection properties</h4>
+
+<p>Like in the case of objects, connections can have user defined properties and attributes as well. For example, a relation of type <code>employed</code> between a <code>user</code> and a <code>company</code> can contain a property called <code>joining_date</code>. This makes sense since the joining date is not a property of the user or the company in isolation. </p>
+
+<p>Properties in connections work exactly in the same way as they work in objects.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// This works exactly the same as in case of your standard objects.</span>
+<span class="c1">// Setting property values</span>
+<span class="n">APConnection</span> <span class="n">employed</span><span class="p">;</span>
+<span class="n">employed</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="s">"joining_date"</span><span class="p">,</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">);</span>
+
+<span class="c1">// Reading property values</span>
+<span class="kt">var</span> <span class="n">joiningDate</span> <span class="p">=</span> <span class="n">employed</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="n">DateTime</span><span class="p">&gt;(</span><span class="s">"joining_date"</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="retrieving-1" class="anchor" href="#retrieving-1"><span class="octicon octicon-link"></span></a>Retrieving</h3>
+
+<h4>
+<a name="get-connection-by-id" class="anchor" href="#get-connection-by-id"><span class="octicon octicon-link"></span></a>Get Connection by Id</h4>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">conn</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APConnections</span><span class="p">.</span><span class="n">GetAsync</span><span class="p">(</span><span class="s">"employed"</span><span class="p">,</span> <span class="s">"123456"</span><span class="p">);</span>
+</pre></div>
+
+<p>The <code>APConnection</code> object is similar to the <code>APObject</code>, except you get one new field viz. <code>Endpoints</code>. Endpoints represent the two objects that the connection links.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">idForJohn</span> <span class="p">=</span> <span class="s">"12345"</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">idForJane</span> <span class="p">=</span>  <span class="s">"39209"</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">conn</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APConnection</span>
+                <span class="p">.</span><span class="n">New</span><span class="p">(</span><span class="s">"marriage"</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">FromExistingObject</span><span class="p">(</span><span class="s">"husband"</span><span class="p">,</span> <span class="n">idForJohn</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">ToExistingObject</span><span class="p">(</span><span class="s">"wife"</span><span class="p">,</span> <span class="n">idForJane</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">SaveAsync</span><span class="p">();</span>
+
+<span class="kt">var</span> <span class="n">john</span> <span class="p">=</span> <span class="k">await</span> <span class="n">conn</span><span class="p">.</span><span class="n">Endpoints</span><span class="p">[</span><span class="s">"husband"</span><span class="p">].</span><span class="n">GetObjectAsync</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">jane</span> <span class="p">=</span> <span class="k">await</span> <span class="n">conn</span><span class="p">.</span><span class="n">Endpoints</span><span class="p">[</span><span class="s">"wife"</span><span class="p">].</span><span class="n">GetObjectAsync</span><span class="p">();</span>
+</pre></div>
+
+<h4>
+<a name="get-connected-objects" class="anchor" href="#get-connected-objects"><span class="octicon octicon-link"></span></a>Get Connected Objects</h4>
+
+<p>Consider you want to get a list of all people who are friends of John. Essentially what you want is all objects of type <code>person</code> who are connected to John via the relation 'friend'. </p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">john</span> <span class="p">=</span> <span class="k">new</span> <span class="n">APObject</span><span class="p">(</span><span class="s">"person"</span><span class="p">,</span> <span class="s">"12345"</span><span class="p">);</span>
+<span class="c1">// Returns a paged list of friends. </span>
+<span class="c1">// We are assuming that the labels for the friend relationship is the same for both endpoints as a friend relationship is not directed.</span>
+<span class="kt">var</span> <span class="n">friends</span> <span class="p">=</span> <span class="k">await</span> <span class="n">john</span><span class="p">.</span><span class="n">GetConnectedObjectsAsync</span><span class="p">(</span><span class="s">"friend"</span><span class="p">,</span> <span class="n">pageSize</span><span class="p">:</span><span class="m">200</span><span class="p">);</span>
+<span class="c1">// Write all names to console.</span>
+<span class="n">friends</span><span class="p">.</span><span class="n">ForEach</span><span class="p">(</span> <span class="n">f</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span> <span class="n">f</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;(</span><span class="s">"name"</span><span class="p">));</span>
+<span class="c1">// Get next page.</span>
+<span class="kt">var</span> <span class="n">nextPage</span> <span class="p">=</span> <span class="k">await</span> <span class="n">friends</span><span class="p">.</span><span class="n">NextPageAsync</span><span class="p">();</span>
+</pre></div>
+
+<p>NOTE: Incase the relation you are querying is between the same type with different labels, then you must provide the label of the object that you are querying. Example, consider the relationship <code>father</code> between <code>person</code> objects. In this relationship, the same object can participate as the <code>father</code> as well as the <code>child</code> with different objects. When querying the <code>father</code> connection for John, you will need to specify the label as <code>father</code> to get a list of all John's children.</p>
+
+<p>In all other scenarios, passing a label is optional.</p>
+
+<h4>
+<a name="get-all-connections-for-an-endpoint-object-id" class="anchor" href="#get-all-connections-for-an-endpoint-object-id"><span class="octicon octicon-link"></span></a>Get all Connections for an Endpoint Object Id</h4>
+
+<p>Scenarios where you may need to just get all connections of a particular relation for an objectId, this query comes to rescue.</p>
+
+<p>Consider <code>Jane</code> is connected to some objects of type <code>person</code> via <code>invite</code> relationship, that also contains a <code>bool</code> property viz. <code>attending</code>,  which is false by default and will be set to true if that person is attending marriage.</p>
+
+<p>Now she wants to know who all are attending her marriage without actually fetching their connected <code>person</code> object, this can be done as</p>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">//set an instance of person Object for Jane </span>
+<span class="kd">var</span> <span class="nx">jane</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Appacitive</span><span class="p">.</span><span class="nb">Object</span><span class="p">({</span> <span class="nx">__id</span> <span class="o">:</span> <span class="s1">'123345456'</span><span class="p">,</span> <span class="nx">__type</span> <span class="o">:</span> <span class="s1">'person'</span><span class="p">);</span>
+
+<span class="c1">//call fetchConnectedObjects with all options that're supported by queries syntax</span>
+<span class="c1">// we'll cover queries in dept in next section</span>
+<span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">jane</span><span class="p">.</span><span class="nx">getConnections</span><span class="p">({</span>
+  <span class="nx">relation</span><span class="o">:</span> <span class="s1">'invite'</span><span class="p">,</span> <span class="c1">//mandatory</span>
+  <span class="nx">label</span><span class="o">:</span> <span class="s1">'invitee'</span><span class="p">,</span> <span class="c1">//mandatory</span>
+  <span class="nx">filter</span><span class="o">:</span> <span class="nx">Appacitive</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">Property</span><span class="p">(</span><span class="s1">'attending'</span><span class="p">).</span><span class="nx">equalTo</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+<span class="p">});</span>
+
+<span class="nx">query</span><span class="p">.</span><span class="nx">fetch</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">invites</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">//invites is an array of connections</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">invites</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>In this query, you provide a relation type (name) and a label of opposite side whose conenction you want to fetch and what is returned is a list of all the connections for above object. </p>
+
+<h4>
+<a name="get-connection-by-endpoint-object-ids" class="anchor" href="#get-connection-by-endpoint-object-ids"><span class="octicon octicon-link"></span></a>Get Connection by Endpoint Object Ids</h4>
+
+<p>Appacitive also provides a reverse way to fetch a connection  between two objects.
+If you provide two object ids of same or different type types, all connections between those two objects are returned.</p>
+
+<p>Consider you want to check whether <code>Tarzan</code> and <code>Jane</code> are married, you can do it as</p>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">//'marriage' is the relation between person type</span>
+<span class="c1">//and 'husband' and 'wife' are the endpoint labels</span>
+<span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">Appacitive</span><span class="p">.</span><span class="nx">Connection</span><span class="p">.</span><span class="nx">getBetweenObjectsForRelation</span><span class="p">({</span> 
+    <span class="nx">relation</span><span class="o">:</span> <span class="s2">"marriage"</span><span class="p">,</span> <span class="c1">//mandatory</span>
+    <span class="nx">objectAId</span> <span class="o">:</span> <span class="s2">"22322"</span><span class="p">,</span> <span class="c1">//mandatory </span>
+    <span class="nx">objectBId</span> <span class="o">:</span> <span class="s2">"33422"</span><span class="p">,</span> <span class="c1">//mandatory</span>
+    <span class="nx">label</span> <span class="o">:</span> <span class="s2">"wife"</span> <span class="c1">//madatory for a relation between same type and differenct labels</span>
+<span class="p">});</span>
+
+<span class="nx">query</span><span class="p">.</span><span class="nx">fetch</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">marriage</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">marriage</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// connection obj is returned as argument to onsuccess</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="s1">'Tarzan and jane are married at location '</span><span class="p">,</span> <span class="nx">marriage</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'location'</span><span class="p">));</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="s1">'Tarzan and jane are not married'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="c1">//For a relation between same type type and differenct endpoint labels</span>
+<span class="c1">//'label' parameter becomes mandatory for the get call</span>
+
+</pre></div>
+
+<p>Conside you want to check that a particular <code>house</code> is owned by <code>Jane</code>, you can do it by fetching connection for relation <code>owns_house</code> between <code>person</code> and <code>house</code>.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">Appacitive</span><span class="p">.</span><span class="nx">Connection</span><span class="p">.</span><span class="nx">getBetweenObjectsForRelation</span><span class="p">({</span> 
+    <span class="nx">relation</span><span class="o">:</span> <span class="s2">"owns_house"</span><span class="p">,</span> 
+    <span class="nx">objectAId</span> <span class="o">:</span> <span class="s2">"22322"</span><span class="p">,</span> <span class="c1">// person type entity id</span>
+    <span class="nx">objectBId</span> <span class="o">:</span> <span class="s2">"33422"</span> <span class="c1">//house type entity id</span>
+<span class="p">});</span>
+
+<span class="nx">query</span><span class="p">.</span><span class="nx">fetch</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">obj</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="s1">'Jane owns this house'</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="s2">"Jane doesn't owns this house"</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="get-all-connections-between-two-object-ids" class="anchor" href="#get-all-connections-between-two-object-ids"><span class="octicon octicon-link"></span></a>Get all connections between two Object Ids</h4>
+
+<p>Consider <code>jane</code> is connected to <code>tarzan</code> via a <code>marriage</code> and a <code>freind</code> relationship. If we want to fetch al connections between them we could do this as</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">Appacitive</span><span class="p">.</span><span class="nx">Connection</span><span class="p">.</span><span class="nx">getBetweenObjects</span><span class="p">({</span>
+  <span class="nx">objectAId</span> <span class="o">:</span> <span class="s2">"22322"</span><span class="p">,</span> <span class="c1">// id of jane</span>
+    <span class="nx">objectBId</span> <span class="o">:</span> <span class="s2">"33422"</span> <span class="c1">// id of tarzan</span>
+<span class="p">});</span>
+
+<span class="nx">query</span><span class="p">.</span><span class="nx">fetch</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">connections</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">connections</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>On success, we get a list of all connections that connects <code>jane</code> and <code>tarzan</code>.</p>
+
+<h4>
+<a name="get-interconnections-between-one-and-multiple-object-ids" class="anchor" href="#get-interconnections-between-one-and-multiple-object-ids"><span class="octicon octicon-link"></span></a>Get Interconnections between one and multiple Object Ids</h4>
+
+<p>Consider, <code>jane</code> wants to what type of connections exists between her and a group of persons and houses , she could do this as</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">Appacitive</span><span class="p">.</span><span class="nx">Connection</span><span class="p">.</span><span class="nx">getInterconnects</span><span class="p">({</span>
+  <span class="nx">objectAId</span><span class="o">:</span> <span class="s1">'13432'</span><span class="p">,</span>
+    <span class="nx">objectBIds</span><span class="o">:</span> <span class="p">[</span><span class="s1">'32423423'</span><span class="p">,</span> <span class="s1">'2342342'</span><span class="p">,</span> <span class="s1">'63453425'</span><span class="p">,</span> <span class="s1">'345345342'</span><span class="p">]</span>
+<span class="p">});</span>
+
+<span class="nx">query</span><span class="p">.</span><span class="nx">fetch</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">connections</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">connections</span><span class="p">);</span>
+<span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="s2">"code:"</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nx">code</span> <span class="o">+</span> <span class="s2">"\nmessage:"</span> <span class="o">+</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>This would return all connections with object id 13432 on one side and '32423423', '2342342', '63453425' or '345345342' on the other side, if they exist.</p>
+
+<h3>
+<a name="updating-1" class="anchor" href="#updating-1"><span class="octicon octicon-link"></span></a>Updating</h3>
+
+<p>Updating is done exactly in the same way as entities, i.e. via the <code>save()</code> method. </p>
+
+<p><em>Important</em>: Updating the endpoints (the <code>__endpointa</code> and the <code>__endpointb</code> property) will not have any effect and will fail the call. In case you need to change the connected entities, you need to delete the connection and create a new one. </p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">marriage</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'location'</span><span class="p">,</span> <span class="s1">'Las Vegas'</span><span class="p">);</span>
+
+<span class="nx">marriage</span><span class="p">.</span><span class="nx">save</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s1">'saved successfully!'</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>As before, do not modify the <code>__id</code> property.</p>
+
+<h3>
+<a name="deleting-1" class="anchor" href="#deleting-1"><span class="octicon octicon-link"></span></a>Deleting</h3>
+
+<p>Deleting is provided via the <code>del</code> method.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">marriage</span><span class="p">.</span><span class="nx">destroy</span><span class="p">().</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="s1">'Tarzan and Jane are no longer married.'</span><span class="p">);</span>
+<span class="p">});</span>
+
+
+<span class="c1">// Multiple coonection can also be deleted at a time. Here's an example</span>
+<span class="nx">Appacitive</span><span class="p">.</span><span class="nb">Object</span><span class="p">.</span><span class="nx">multiDelete</span><span class="p">({</span>   
+  <span class="nx">relation</span><span class="o">:</span> <span class="s1">'freinds'</span><span class="p">,</span> <span class="c1">//name of relation</span>
+  <span class="nx">ids</span><span class="o">:</span> <span class="p">[</span><span class="s2">"14696753262625025"</span><span class="p">,</span> <span class="s2">"14696753262625026"</span><span class="p">,</span> <span class="s2">"14696753262625027"</span><span class="p">],</span> <span class="c1">//array of connection ids to delete</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
+  <span class="c1">//successfully deleted all connections</span>
+<span class="p">});</span>
+</pre></div>
+
+<hr><h2>
+<a name="queries" class="anchor" href="#queries"><span class="octicon octicon-link"></span></a>Queries</h2>
+
+<p>Queries provide a mechanism to search your application data.
+All searching in SDK is done via <code>Appacitive.Sdk.Query</code> object. You can retrieve many objects at once, put conditions on the objects you wish to retrieve, and much more.</p>
+
+<p>The following basic uqery apis are available inside the SDK. Queries apart from these can be made using the Graph api feature discussed later.</p>
+
+<h4>
+<a name="query-api" class="anchor" href="#query-api"><span class="octicon octicon-link"></span></a>Query api</h4>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">/// Find all objects of a given type with the given filters.</span>
+<span class="n">Task</span><span class="p">&lt;</span><span class="n">PagedList</span><span class="p">&lt;</span><span class="n">APObject</span><span class="p">&gt;&gt;</span> <span class="n">FindAllAsync</span><span class="p">(</span>
+    <span class="kt">string</span> <span class="n">type</span><span class="p">,</span>                                <span class="c1">// type to query</span>
+    <span class="n">IQuery</span> <span class="n">query</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>                        <span class="c1">// query filter</span>
+    <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">fields</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>          <span class="c1">// fields to retrieve</span>
+    <span class="kt">int</span> <span class="n">page</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span>                               <span class="c1">// page number</span>
+    <span class="kt">int</span> <span class="n">pageSize</span> <span class="p">=</span> <span class="m">20</span><span class="p">,</span>                          <span class="c1">// page size</span>
+    <span class="kt">string</span> <span class="n">orderBy</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>                      <span class="c1">// sort field</span>
+    <span class="n">SortOrder</span> <span class="n">sortOrder</span> <span class="p">=</span> <span class="n">SortOrder</span><span class="p">.</span><span class="n">Descending</span>  <span class="c1">// sort order</span>
+    <span class="p">)</span>
+
+<span class="c1">/// Find all objects connected to the given object with the given filters.</span>
+<span class="n">Task</span><span class="p">&lt;</span><span class="n">PagedList</span><span class="p">&lt;</span><span class="n">APObject</span><span class="p">&gt;&gt;</span> <span class="n">GetConnectedObjectsAsync</span><span class="p">(</span>
+<span class="kt">string</span> <span class="n">relation</span><span class="p">,</span>                                <span class="c1">// relation to query</span>
+    <span class="kt">string</span> <span class="n">query</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>                        <span class="c1">// query filter</span>
+    <span class="kt">string</span> <span class="n">label</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>                        <span class="c1">// label of the object </span>
+    <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">fields</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>          <span class="c1">// fields to retrieve</span>
+    <span class="kt">int</span> <span class="n">pageNumber</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span>                         <span class="c1">// page number</span>
+    <span class="kt">int</span> <span class="n">pageSize</span> <span class="p">=</span> <span class="m">20</span><span class="p">,</span>                          <span class="c1">// page size</span>
+    <span class="kt">string</span> <span class="n">orderBy</span> <span class="p">=</span> <span class="k">null</span><span class="p">,</span>                      <span class="c1">// sort field</span>
+    <span class="n">SortOrder</span> <span class="n">sortOrder</span> <span class="p">=</span> <span class="n">SortOrder</span><span class="p">.</span><span class="n">Descending</span><span class="p">)</span> <span class="c1">// sort order</span>
+</pre></div>
+
+<p>As an example, to find all people with first name as John, we would do the following.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="n">List</span><span class="p">&lt;</span><span class="n">APObject</span><span class="p">&gt;</span> <span class="n">allMatches</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">APObject</span><span class="p">&gt;();</span>
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">Query</span><span class="p">.</span><span class="n">Property</span><span class="p">(</span><span class="s">"firstname"</span><span class="p">).</span><span class="n">IsEqualTo</span><span class="p">(</span><span class="s">"john"</span><span class="p">);</span>
+<span class="c1">// Run query. Returns a paged response with pagesize 200.</span>
+<span class="kt">var</span> <span class="n">matches</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">FindAllAsync</span><span class="p">(</span><span class="s">"person"</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">pageSize</span><span class="p">:</span> <span class="m">200</span><span class="p">);</span>
+<span class="n">allMatches</span><span class="p">.</span><span class="n">AddRange</span><span class="p">(</span><span class="n">matches</span><span class="p">);</span>
+<span class="c1">// Incase more records are present, paginate</span>
+<span class="k">while</span><span class="p">(</span> <span class="p">!</span><span class="n">matches</span><span class="p">.</span><span class="n">IsLastPage</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">matches</span> <span class="p">=</span> <span class="k">await</span> <span class="n">matches</span><span class="p">.</span><span class="n">GetNextPageAsync</span><span class="p">();</span>
+    <span class="n">allMatches</span><span class="p">.</span><span class="n">AddRange</span><span class="p">(</span><span class="n">matches</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h3>
+<a name="modifiers" class="anchor" href="#modifiers"><span class="octicon octicon-link"></span></a>Modifiers</h3>
+
+<p>Notice the <code>page</code>, <code>pageNumber</code>, <code>orderBy</code>, <code>sortOrder</code>, <code>query</code>, and <code>fields</code>? These're the optional parameters that you can specify in a query. Lets get to them one by one.</p>
+
+<h4>
+<a name="pagination" class="anchor" href="#pagination"><span class="octicon octicon-link"></span></a>Pagination</h4>
+
+<p>All queries on the Appacitive platform support pagination and sorting. To specify pagination and sorting on your queries, simply pass the <code>page</code>, <code>pagesize</code>. The resulting object also contains custom properties like <code>IsLastPage</code> as well as methods like <code>GetNextPageAsync()</code> to help you get to the next page without having to pass all your parameters again.</p>
+
+<h4>
+<a name="sorting" class="anchor" href="#sorting"><span class="octicon octicon-link"></span></a>Sorting</h4>
+
+<p>Query results can be sorted using the <code>orderBy</code> and <code>sortOrder</code> parameters.
+The <code>orderBy</code> parameter takes the name of the property on which to sort and the <code>sortOrder</code> parameter lets you select the order of sorting (ascending or descending).</p>
+
+<h4>
+<a name="fields" class="anchor" href="#fields"><span class="octicon octicon-link"></span></a>Fields</h4>
+
+<p>As in the case of single and multi get apis, you can choose the exact set of fields that you want the api to return. Pass in an array of the properties to be returned in the <code>fields</code> parameter to apply this modifier to the query results.</p>
+
+<h4>
+<a name="filters" class="anchor" href="#filters"><span class="octicon octicon-link"></span></a>Filters</h4>
+
+<p>Filters are useful for fine tuning the results of your search. Objects and connections inside Appacitive have 4 different types of data, namely - properties, attributes, aggregates and tags. Filters can be applied on each and every one of these. Combinations of these filters is also possible.</p>
+
+<p>The <code>Query</code> object provides a factory for creating filters for appacitive without having to learn the specialized query format used by the underlying REST api.
+The typical format for the Query helper class is </p>
+
+<div class="highlight highlight-csharp"><pre><span class="n">Query</span><span class="p">.{</span><span class="n">Property</span><span class="p">|</span><span class="n">Attribute</span><span class="p">|</span><span class="n">Aggregate</span><span class="p">}(</span><span class="s">"name"</span><span class="p">).&lt;</span><span class="n">Condition</span><span class="p">&gt;(</span><span class="n">condition</span> <span class="n">args</span><span class="p">);</span>
+</pre></div>
+
+<p>Some sample examples of how it can be used are </p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// To query on a property called firstname</span>
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">Query</span><span class="p">.</span><span class="n">Property</span><span class="p">(</span><span class="s">"firstname"</span><span class="p">).</span><span class="n">IsEqualTo</span><span class="p">(</span><span class="s">"John"</span><span class="p">);</span>
+
+<span class="c1">// To query on an attribute called nickname</span>
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">Query</span><span class="p">.</span><span class="n">Attribute</span><span class="p">(</span><span class="s">"nickname"</span><span class="p">).</span><span class="n">IsEqualTo</span><span class="p">(</span><span class="s">"John"</span><span class="p">);</span>
+
+<span class="c1">// To query on an aggregate called avg_rating</span>
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">Query</span><span class="p">.</span><span class="n">Aggregate</span><span class="p">(</span><span class="s">"avg_rating"</span><span class="p">).</span><span class="n">IsGreaterThan</span><span class="p">(</span><span class="m">4.5</span><span class="p">);</span>
+</pre></div>
+
+<p>In response it returns you an <code>IQuery</code> object, which encapsulates the specified filter in object form. </p>
+
+<h4>
+<a name="list-of-supported-conditions" class="anchor" href="#list-of-supported-conditions"><span class="octicon octicon-link"></span></a>List of supported conditions</h4>
+
+<table>
+<thead><tr>
+<th>Condition</th>
+<th align="left">Sample usage</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><strong>Geography properties</strong></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>WithinPolygon()</td>
+<td align="left"><code>Query.Property("location").WithinPolygon(geocodes);</code></td>
+</tr>
+<tr>
+<td>WithinCircle()</td>
+<td align="left"><code>Query.Property("location").WithinCircle(geocode, radius);</code></td>
+</tr>
+<tr>
+<td><strong>String properties</strong></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>StartsWith()</td>
+<td align="left"><code>Query.Property("name").StartsWith("Ja");</code></td>
+</tr>
+<tr>
+<td>Like()</td>
+<td align="left"><code>Query.Property("name").Like("an");</code></td>
+</tr>
+<tr>
+<td>FreeTextMatches()**</td>
+<td align="left"><code>Query.Property("description").FreeTextMatches("roam~0.8");</code></td>
+</tr>
+<tr>
+<td>EndsWith()</td>
+<td align="left"><code>Query.Property("name").EndsWith("ne");</code></td>
+</tr>
+<tr>
+<td>IsEqualTo()</td>
+<td align="left"><code>Query.Property("name").IsEqualTo("Jane");</code></td>
+</tr>
+<tr>
+<td><strong>Text properties</strong></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>FreeTextMatches()**</td>
+<td align="left"><code>Query.Property("description").FreeTextMatches("roam~0.8");</code></td>
+</tr>
+<tr>
+<td>**Time properties **</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>BetweenTime()</td>
+<td align="left"><code>Query.Property("start_time").BetweenTime(startDate, endDate);</code></td>
+</tr>
+<tr>
+<td>IsEqualToTime()</td>
+<td align="left"><code>Query.Property("start_time").IsEqualToTime(DateTime.Now);</code></td>
+</tr>
+<tr>
+<td>IsLessThanTime()</td>
+<td align="left"><code>Query.Property("start_time").IsLessThanTime(DateTime.Now);</code></td>
+</tr>
+<tr>
+<td>IsLessThanEqualToTime()</td>
+<td align="left"><code>Query.Property("start_time").IsLessThanEqualToTime(DateTime.Now);</code></td>
+</tr>
+<tr>
+<td>IsGreaterThanTime()</td>
+<td align="left"><code>Query.Property("start_time").IsGreaterThanTime(DateTime.Now);</code></td>
+</tr>
+<tr>
+<td>IsGreaterThanEqualToTime()</td>
+<td align="left"><code>Query.Property("start_time").IsGreaterThanEqualToTime(DateTime.Now);</code></td>
+</tr>
+<tr>
+<td>**Date properties **</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>BetweenDate()</td>
+<td align="left"><code>Query.Property("start_at").BetweenDate(startDateTime, endDateTime);</code></td>
+</tr>
+<tr>
+<td>IsEqualToDate()</td>
+<td align="left"><code>Query.Property("start_at").IsEqualToDate(DateTime.Now);</code></td>
+</tr>
+<tr>
+<td>IsLessThanDate()</td>
+<td align="left"><code>Query.Property("start_at").IsLessThanDate(DateTime.Now);</code></td>
+</tr>
+<tr>
+<td>IsLessThanEqualToDate()</td>
+<td align="left"><code>Query.Property("start_at").IsLessThanEqualToDate(DateTime.Now);</code></td>
+</tr>
+<tr>
+<td>IsGreaterThanDate()</td>
+<td align="left"><code>Query.Property("start_at").IsGreaterThanDate(DateTime.Now);</code></td>
+</tr>
+<tr>
+<td>IsGreaterThanEqualToDate()</td>
+<td align="left"><code>Query.Property("start_at").IsGreaterThanEqualToDate(DateTime.Now);</code></td>
+</tr>
+<tr>
+<td><strong>Datetime, int and decimal properties</strong></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td>IsLessThan()</td>
+<td align="left"><code>Query.Property("field").IsLessThan(value);</code></td>
+</tr>
+<tr>
+<td>IsLessThanEqualTo()</td>
+<td align="left"><code>Query.Property("field").IsLessThanEqualTo(value);</code></td>
+</tr>
+<tr>
+<td>Between()</td>
+<td align="left"><code>Query.Property("field").Between(start, end);</code></td>
+</tr>
+<tr>
+<td>IsGreaterThanEqualTo()</td>
+<td align="left"><code>Query.Property("field").IsGreaterThanEqualTo(value);</code></td>
+</tr>
+<tr>
+<td>IsGreaterThan()</td>
+<td align="left"><code>Query.Property("field").IsGreaterThan(value);</code></td>
+</tr>
+<tr>
+<td>IsEqualTo()</td>
+<td align="left"><code>Query.Property("field").IsEqualTo(value);</code></td>
+</tr>
+</tbody>
+</table><p>** Supports <a href="http://lucene.apache.org/core/3_0_3/queryparsersyntax.html">Lucene query parser syntax</a> </p>
+
+<h4>
+<a name="geolocation" class="anchor" href="#geolocation"><span class="octicon octicon-link"></span></a>Geolocation</h4>
+
+<p>You can specify a property type as a geography type for a given type or relation. These properties are essential latitude-longitude pairs. Such properties support geo queries based on a user defined radial or polygonal region on the map. These are extremely useful for making map based or location based searches. E.g., searching for a list of all restaurants within 20 miles of a given users locations.</p>
+
+<h5>
+<a name="radial-search" class="anchor" href="#radial-search"><span class="octicon octicon-link"></span></a>Radial Search</h5>
+
+<p>A radial search allows you to search for all records of a specific type which contain a geocode which lies within a predefined distance from a point on the map. A radial search requires the following parameters.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">//create a new Geocode object</span>
+<span class="kt">var</span> <span class="n">center</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Geocode</span><span class="p">(</span><span class="m">36.1749687195</span><span class="n">m</span><span class="p">,</span> <span class="p">-</span><span class="m">115.1372222900</span><span class="n">m</span><span class="p">);</span>
+<span class="c1">//create filter</span>
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">Query</span><span class="p">.</span><span class="n">Property</span><span class="p">(</span><span class="s">"location"</span><span class="p">).</span><span class="n">WithinCircle</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="m">20.0</span><span class="n">m</span><span class="p">,</span> <span class="n">DistanceUnit</span><span class="p">.</span><span class="n">Miles</span><span class="p">);</span>
+<span class="c1">//create query object</span>
+<span class="kt">var</span> <span class="n">restaurants</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">FindAllAsync</span><span class="p">(</span><span class="s">"restaurant"</span><span class="p">,</span> <span class="n">query</span><span class="p">);</span>
+</pre></div>
+
+<h5>
+<a name="polygon-search" class="anchor" href="#polygon-search"><span class="octicon octicon-link"></span></a>Polygon Search</h5>
+
+<p>A polygon search is a more generic form of geographcal search. It allows you to specify a polygonal region on the map via a set of geocodes indicating the vertices of the polygon. The search will allow you to query for all data of a specific type that lies within the given polygon. This is typically useful when you want finer grained control on the shape of the region to search.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">//create geocode objects</span>
+<span class="kt">var</span> <span class="n">pt1</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Geocode</span><span class="p">(</span><span class="m">36.1749687195</span><span class="n">m</span><span class="p">,</span> <span class="p">-</span><span class="m">115.1372222900</span><span class="n">m</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">pt2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Geocode</span><span class="p">(</span><span class="m">34.1749687195</span><span class="n">m</span><span class="p">,</span> <span class="p">-</span><span class="m">116.1372222900</span><span class="n">m</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">pt3</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Geocode</span><span class="p">(</span><span class="m">35.1749687195</span><span class="n">m</span><span class="p">,</span> <span class="p">-</span><span class="m">114.1372222900</span><span class="n">m</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">pt4</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Geocode</span><span class="p">(</span><span class="m">36.1749687195</span><span class="n">m</span><span class="p">,</span> <span class="p">-</span><span class="m">114.1372222900</span><span class="n">m</span><span class="p">);</span>
+
+<span class="c1">//create polygon filter</span>
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">Query</span><span class="p">.</span><span class="n">Property</span><span class="p">(</span><span class="s">"location"</span><span class="p">).</span><span class="n">WithinPolygon</span><span class="p">(</span><span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">,</span> <span class="n">pt3</span><span class="p">,</span> <span class="n">pt4</span><span class="p">);</span>
+
+<span class="c1">//create query object</span>
+<span class="kt">var</span> <span class="n">restaurants</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">FindAllAsync</span><span class="p">(</span><span class="s">"restaurant"</span><span class="p">,</span> <span class="n">query</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="tag-based-searches" class="anchor" href="#tag-based-searches"><span class="octicon octicon-link"></span></a>Tag Based Searches</h4>
+
+<p>The Appacitive platform provides inbuilt support for tagging on all data (objects, connections, users and devices). You can use this tag information to query for a specific data set. The different options available for searching based on tags is detailed in the sections below.</p>
+
+<h5>
+<a name="query-data-tagged-with-one-or-more-of-the-given-tags" class="anchor" href="#query-data-tagged-with-one-or-more-of-the-given-tags"><span class="octicon octicon-link"></span></a>Query data tagged with one or more of the given tags</h5>
+
+<p>For data of a given type, you can query for all records that are tagged with one or more tags from a given list. For example - querying for all objects of type message that are tagged as personal or private.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// Create the query</span>
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">Query</span><span class="p">.</span><span class="n">Tags</span><span class="p">.</span><span class="n">MatchOneOrMore</span><span class="p">(</span><span class="s">"personal"</span><span class="p">,</span> <span class="s">"private"</span><span class="p">);</span>
+<span class="c1">// Will return messages tagged with either personal or private or both.</span>
+<span class="kt">var</span> <span class="n">messages</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">FindAllAsync</span><span class="p">(</span><span class="s">"message"</span><span class="p">,</span> <span class="n">query</span><span class="p">);</span>
+</pre></div>
+
+<h5>
+<a name="query-data-tagged-with-all-of-the-given-tags" class="anchor" href="#query-data-tagged-with-all-of-the-given-tags"><span class="octicon octicon-link"></span></a>Query data tagged with all of the given tags</h5>
+
+<p>An alternative variation of the above tag based search allows you to query for all records that are tagged with all the tags from a given list. For example, querying for all objects of type message that are tagged as personal AND private.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// Create the query </span>
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">Query</span><span class="p">.</span><span class="n">Tags</span><span class="p">.</span><span class="n">MatchAll</span><span class="p">(</span><span class="s">"personal"</span><span class="p">,</span> <span class="s">"private"</span><span class="p">);</span>
+<span class="c1">// Will return messages tagged with both personal and private.</span>
+<span class="kt">var</span> <span class="n">messages</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">FindAllAsync</span><span class="p">(</span><span class="s">"message"</span><span class="p">,</span> <span class="n">query</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="compound-queries" class="anchor" href="#compound-queries"><span class="octicon octicon-link"></span></a>Compound Queries</h4>
+
+<p>Compound queries allow you to combine multiple queries into one single query. The multiple queries can be combined using <code>Query.And</code> and <code>Query.Or</code> operators. 
+<code>NOTE</code>: All types of queries with the exception of free text queries can be combined into a compound query.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="cm">/* </span>
+<span class="cm">Find all users</span>
+<span class="cm">- whose first name is John or Jane and </span>
+<span class="cm">- who stay within 20 mile radius of the empire state building.</span>
+<span class="cm">*/</span>
+<span class="kt">var</span> <span class="n">locationOfEmpireState</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Geocode</span><span class="p">(</span><span class="m">40.7484</span><span class="n">m</span><span class="p">,</span> <span class="m">73.9857</span><span class="n">m</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">Query</span><span class="p">.</span><span class="n">And</span><span class="p">(</span>
+                <span class="n">Query</span><span class="p">.</span><span class="n">Or</span><span class="p">(</span>
+                    <span class="n">Query</span><span class="p">.</span><span class="n">Property</span><span class="p">(</span><span class="s">"firstname"</span><span class="p">).</span><span class="n">IsEqualTo</span><span class="p">(</span><span class="s">"john"</span><span class="p">),</span>
+                    <span class="n">Query</span><span class="p">.</span><span class="n">Property</span><span class="p">(</span><span class="s">"firstname"</span><span class="p">).</span><span class="n">IsEqualTo</span><span class="p">(</span><span class="s">"jane"</span><span class="p">)</span>
+                    <span class="p">),</span>
+                <span class="n">Query</span><span class="p">.</span><span class="n">Property</span><span class="p">(</span><span class="s">"location"</span><span class="p">).</span><span class="n">WithinCircle</span><span class="p">(</span><span class="n">locationOfEmpireState</span><span class="p">,</span> <span class="m">20.0</span><span class="n">m</span><span class="p">,</span> <span class="n">DistanceUnit</span><span class="p">.</span><span class="n">Miles</span><span class="p">)</span>
+                <span class="p">);</span>
+
+<span class="kt">var</span> <span class="n">matches</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">FindAllAsync</span><span class="p">(</span><span class="s">"person"</span><span class="p">,</span> <span class="n">query</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="freetext" class="anchor" href="#freetext"><span class="octicon octicon-link"></span></a>FreeText</h4>
+
+<p>There are situations when you would want the ability to search across all text content inside your data. Free text queries are ideal for implementing this kind of functionality. As an example, consider a free text lookup for users which searches across the username, firstname, lastname, profile description etc. </p>
+
+<p><code>NOTE</code>: Free text queries support the <a href="http://lucene.apache.org/core/3_0_3/queryparsersyntax.html">Lucene query parser syntax</a>  for free text search. </p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">places</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APObjects</span><span class="p">.</span><span class="n">FreeTextSearchAsync</span><span class="p">(</span><span class="s">"places"</span><span class="p">,</span> <span class="s">"+champs +palais"</span><span class="p">,</span> <span class="n">pageSize</span><span class="p">:</span><span class="m">200</span><span class="p">);</span>
+</pre></div>
+
+<hr><h2>
+<a name="graph-search" class="anchor" href="#graph-search"><span class="octicon octicon-link"></span></a>Graph Search</h2>
+
+<p>Appacitive graph queries offer immense potential when it comes to filtering and retreiving connected data. There are two kinds of graph operations, graph queries and graph apis.</p>
+
+<h3>
+<a name="creating-graph-queries" class="anchor" href="#creating-graph-queries"><span class="octicon octicon-link"></span></a>Creating graph queries</h3>
+
+<p>You can create graph queries and graph apis from the management portal. When you create such queries from the portal, you are required to assign a unique name with every saved search query. You can then use this name to execute the query from your app by making the appropriate api call to Appacitive.</p>
+
+<h3>
+<a name="executing-saved-graph-queries" class="anchor" href="#executing-saved-graph-queries"><span class="octicon octicon-link"></span></a>Executing saved graph queries</h3>
+
+<p>You can execute a saved graph api (query or api) by using its name that you assigned to it while creating it from the management portal. You will need to send any placeholders you might have set up while creating the query as a list of key-value pairs in the body of the request. </p>
+
+<div class="highlight highlight-csharp"><pre>
+<span class="c1">// Name of graph query</span>
+<span class="kt">var</span> <span class="n">graphQueryName</span> <span class="p">=</span> <span class="s">"find_connected_users"</span><span class="p">;</span>  
+<span class="c1">// any placeholders if provided : optional</span>
+<span class="kt">var</span> <span class="n">placeHolders</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span>
+                    <span class="p">{</span>
+                        <span class="p">{</span><span class="s">"key1"</span><span class="p">,</span> <span class="s">"value1"</span><span class="p">},</span>
+                        <span class="p">{</span><span class="s">"key2"</span><span class="p">,</span> <span class="s">"value2"</span><span class="p">}</span>
+                    <span class="p">};</span>
+<span class="kt">var</span> <span class="n">matchingIDs</span> <span class="p">=</span> <span class="k">await</span> <span class="n">Graph</span><span class="p">.</span><span class="n">Query</span><span class="p">(</span><span class="n">graphQueryName</span><span class="p">,</span> <span class="n">placeHolders</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="executing-saved-graph-api" class="anchor" href="#executing-saved-graph-api"><span class="octicon octicon-link"></span></a>Executing saved graph api</h3>
+
+<p>Executing saved graph apis works the same way as executing saved graph queries. The only difference is that you also need to pass the initial ids as an array of strings to feed the api. The response to a graph api will depend on how you design your graph api. Do test them out using the query builder from the query tab on the management portal and from the test harness.</p>
+
+<div class="highlight highlight-csharp"><pre>
+<span class="c1">// Name of graph projection query</span>
+<span class="kt">var</span> <span class="n">graphApiName</span> <span class="p">=</span> <span class="s">"get_my_profile"</span><span class="p">;</span>
+<span class="c1">// List of ids for which to run the graph api</span>
+<span class="kt">var</span> <span class="n">userIds</span> <span class="p">=</span> <span class="p">[</span><span class="s">"34912447775245454"</span><span class="p">,</span> <span class="s">"34322447235528474"</span><span class="p">,</span> <span class="s">"34943243891025029"</span><span class="p">];</span>
+<span class="c1">// any placeholders if provided : optional</span>
+<span class="kt">var</span> <span class="n">placeHolders</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span>
+                    <span class="p">{</span>
+                        <span class="p">{</span><span class="s">"key1"</span><span class="p">,</span> <span class="s">"value1"</span><span class="p">},</span>
+                        <span class="p">{</span><span class="s">"key2"</span><span class="p">,</span> <span class="s">"value2"</span><span class="p">}</span>
+                    <span class="p">};</span>
+<span class="n">GraphNode</span><span class="p">[]</span> <span class="n">results</span> <span class="p">=</span> <span class="k">await</span> <span class="n">Graph</span><span class="p">.</span><span class="n">Select</span><span class="p">(</span><span class="n">graphApiName</span><span class="p">,</span> <span class="n">userIds</span><span class="p">,</span> <span class="n">placeHolders</span><span class="p">);</span>
+</pre></div>
+
+<hr><h2>
+<a name="user-management" class="anchor" href="#user-management"><span class="octicon octicon-link"></span></a>User Management</h2>
+
+<p>Users represent your app's users. There is a host of different functions/features available in the SDK to make managing users easier. The <code>APUser</code> and <code>APUsers</code> types deals with user management.</p>
+
+<h3>
+<a name="create" class="anchor" href="#create"><span class="octicon octicon-link"></span></a>Create</h3>
+
+<p>There are multiple ways to create users.</p>
+
+<h4>
+<a name="basic" class="anchor" href="#basic"><span class="octicon octicon-link"></span></a>Basic</h4>
+
+<p>You create users the same way you create any other data.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// set the fields</span>
+<span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="k">new</span> <span class="n">APUser</span><span class="p">();</span>
+<span class="n">user</span><span class="p">.</span><span class="n">Username</span> <span class="p">=</span> <span class="s">"john.doe"</span><span class="p">;</span>
+<span class="n">user</span><span class="p">.</span><span class="n">Password</span> <span class="p">=</span> <span class="s">"p@ssw0rd"</span><span class="p">;</span>
+<span class="n">user</span><span class="p">.</span><span class="n">Email</span> <span class="p">=</span> <span class="s">"john.doe@appacitive.com"</span><span class="p">;</span>
+<span class="n">user</span><span class="p">.</span><span class="n">FirstName</span> <span class="p">=</span> <span class="s">"John"</span><span class="p">;</span>
+<span class="n">user</span><span class="p">.</span><span class="n">LastName</span> <span class="p">=</span> <span class="s">"Doe"</span><span class="p">;</span>
+<span class="c1">// Save the user.</span>
+<span class="k">await</span> <span class="n">user</span><span class="p">.</span><span class="n">SaveAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="retrieve" class="anchor" href="#retrieve"><span class="octicon octicon-link"></span></a>Retrieve</h3>
+
+<p>There are three ways you could retreive the user</p>
+
+<h4>
+<a name="by-id" class="anchor" href="#by-id"><span class="octicon octicon-link"></span></a>By id.</h4>
+
+<p>Fetching users by <code>Id</code> is exactly like fetching objects and connections. Let's say you want to fetch user with <code>Id</code> 12345.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APUsers</span><span class="p">.</span><span class="n">GetByIdAsync</span><span class="p">(</span><span class="s">"12345"</span><span class="p">);</span>
+</pre></div>
+
+<p><strong>Note</strong>: The APUser class is a subclass of APObject. As a result, all operations supported by <code>APObject</code>, can be performed on <code>APUser</code> object. So, above data documenation is valid for users too.</p>
+
+<h4>
+<a name="by-username" class="anchor" href="#by-username"><span class="octicon octicon-link"></span></a>By username</h4>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">//fetch user by username</span>
+<span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APUsers</span><span class="p">.</span><span class="n">GetByUsernameAsync</span><span class="p">(</span><span class="s">"john.doe"</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="update" class="anchor" href="#update"><span class="octicon octicon-link"></span></a>Update</h3>
+
+<p>There's no difference between updating a user and updating an APObject. Updates can be applied to the backend via the <code>SaveAsync</code> method.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="k">await</span> <span class="n">APUsers</span><span class="p">.</span><span class="n">GetByIdAsync</span><span class="p">(</span><span class="s">"12345"</span><span class="p">);</span>
+<span class="n">user</span><span class="p">.</span><span class="n">Set</span><span class="p">(</span><span class="s">"email"</span><span class="p">,</span> <span class="s">"john.doe2@appacitive.com"</span><span class="p">);</span>
+<span class="k">await</span> <span class="n">user</span><span class="p">.</span><span class="n">SaveAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="delete" class="anchor" href="#delete"><span class="octicon octicon-link"></span></a>Delete</h3>
+
+<p>You can delete an existing user via the <code>DeleteUserAsync</code> method on the APUsers helper class.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">userId</span> <span class="p">=</span> <span class="s">"12345"</span><span class="p">;</span>
+<span class="k">await</span> <span class="n">APUsers</span><span class="p">.</span><span class="n">DeleteUserAsync</span><span class="p">(</span><span class="n">userId</span><span class="p">);</span>
+</pre></div>
+
+<h3>
+<a name="authentication" class="anchor" href="#authentication"><span class="octicon octicon-link"></span></a>Authentication</h3>
+
+<p>Authentication is the core of user management. You can authenticate (log in) users in multiple ways. Once the user has authenticated successfully, you will be provided the user's details and an access token. This access token identifies the currently logged in user session. 
+You can also initialize the app with this token. This will send this token with every api call. This way the api can infer that the given call is made in the context of the logged in user. Access control rules may also dictate the need to send this token.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// To initialize the app with an existing token.</span>
+<span class="kt">var</span> <span class="n">token</span> <span class="p">=</span> <span class="s">"1lqsljkasldjalsu1...."</span><span class="p">;</span>
+<span class="k">await</span> <span class="n">App</span><span class="p">.</span><span class="n">LoginAsync</span><span class="p">(</span><span class="k">new</span> <span class="n">UserTokenCredentials</span><span class="p">(</span><span class="n">token</span><span class="p">));</span>
+
+<span class="c1">// To authenticate and initialize the app with the logged in user.</span>
+<span class="kt">var</span> <span class="n">usernamePassword</span> <span class="p">=</span> <span class="k">new</span> <span class="n">UsernamePasswordCredentials</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">);</span>
+<span class="k">await</span> <span class="n">App</span><span class="p">.</span><span class="n">LoginAsync</span><span class="p">(</span><span class="n">usernamePassword</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="login-via-username--password" class="anchor" href="#login-via-username--password"><span class="octicon octicon-link"></span></a>Login via username + password</h4>
+
+<p>You can ask your users to authenticate via their username and password.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="c1">// To simply authenticate the username and password</span>
+<span class="kt">var</span> <span class="n">credentials</span> <span class="p">=</span> <span class="k">new</span> <span class="n">UsernamePasswordCredentials</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">);</span>
+<span class="kt">var</span> <span class="n">userSession</span> <span class="p">=</span> <span class="k">await</span> <span class="n">credentials</span><span class="p">.</span><span class="n">AuthenticateAsync</span><span class="p">();</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Logged in user: {0}"</span><span class="p">,</span> <span class="n">userSession</span><span class="p">.</span><span class="n">LoggedInUser</span><span class="p">.</span><span class="n">Username</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"User token: {0}"</span><span class="p">,</span> <span class="n">userSession</span><span class="p">.</span><span class="n">UserToken</span><span class="p">);</span>
+</pre></div>
+
+<p>You can also authenticate the user and set the user as the logged in user for the app in one go.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">usernamePassword</span> <span class="p">=</span> <span class="k">new</span> <span class="n">UsernamePasswordCredentials</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">);</span>
+<span class="k">await</span> <span class="n">App</span><span class="p">.</span><span class="n">LoginAsync</span><span class="p">(</span><span class="n">usernamePassword</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="login-with-facebook" class="anchor" href="#login-with-facebook"><span class="octicon octicon-link"></span></a>Login with Facebook</h4>
+
+<p>You can ask your users to log in via facebook. To do this, you will need to implement the facebook oauth handshake in your app to get the user access token.
+You can use the facebook sdk specific to your platform for this purpose.
+Once you have the access token, simply create a new instance of an <code>OAuth2Credentials</code> object to authenticate.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">authType</span> <span class="p">=</span> <span class="s">"facebook"</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">facebookAccessToken</span> <span class="p">=</span> <span class="s">"laksjalsjd... "</span><span class="p">;</span> <span class="c1">// Facebook access token from oauth handshake</span>
+<span class="kt">var</span> <span class="n">facebookCredentials</span> <span class="p">=</span> <span class="k">new</span> <span class="n">OAuth2Credentials</span><span class="p">(</span>
+    <span class="n">facebookAccessToken</span><span class="p">,</span> 
+    <span class="n">authType</span><span class="p">);</span>
+<span class="n">facebookCredentials</span><span class="p">.</span><span class="n">CreateUserIfNotExists</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>  <span class="c1">// This will also create a user if it does not existing in the system.</span>
+<span class="kt">var</span> <span class="n">session</span> <span class="p">=</span> <span class="k">await</span> <span class="n">facebookCredentials</span><span class="p">.</span><span class="n">AuthenticateAsync</span><span class="p">();</span>
+
+<span class="c1">// Alternatively, you could have used the following as well.</span>
+<span class="k">await</span> <span class="n">App</span><span class="p">.</span><span class="n">LoginAsync</span><span class="p">(</span><span class="n">facebookCredentials</span><span class="p">);</span>
+
+</pre></div>
+
+<h4>
+<a name="login-with-twitter" class="anchor" href="#login-with-twitter"><span class="octicon octicon-link"></span></a>Login with Twitter</h4>
+
+<p>You can ask your users to log in via Twitter. This'll require you to implement twitter login and provide the SDK with consumerkey, consumersecret, oauthtoken and oauthtokensecret</p>
+
+<div class="highlight highlight-csharp"><pre>
+<span class="c1">//For login with twitter, pass twitter credentials to SDK</span>
+<span class="kt">var</span> <span class="n">twitterCredentials</span> <span class="p">=</span> <span class="k">new</span> <span class="n">OAuth1Credentials</span><span class="p">(</span>
+    <span class="n">consumerKey</span><span class="p">,</span> 
+    <span class="n">consumerSecret</span><span class="p">,</span> 
+    <span class="n">accessToken</span><span class="p">,</span> 
+    <span class="n">accessSecret</span><span class="p">,</span> 
+    <span class="s">"twitter"</span><span class="p">);</span>
+<span class="n">twitterCredentials</span><span class="p">.</span><span class="n">CreateUserIfNotExists</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">session</span> <span class="p">=</span> <span class="k">await</span> <span class="n">twitterCredentials</span><span class="p">.</span><span class="n">AuthenticateAsync</span><span class="p">();</span>
+</pre></div>
+
+<h4>
+<a name="current-user" class="anchor" href="#current-user"><span class="octicon octicon-link"></span></a>Current User</h4>
+
+<p>Whenever you authenticate a user using the <code>App.LoginAsync()</code> method, the user is stored in the platform specific local environment and can be retrieved using <code>App.Current.GetCurrentUser()</code>.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">userInfo</span> <span class="p">=</span> <span class="n">App</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">GetCurrentUser</span><span class="p">();</span>
+<span class="c1">// If user is not logged in, userInfo would be null.</span>
+<span class="k">if</span><span class="p">(</span> <span class="n">userInfo</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">userToken</span> <span class="p">=</span> <span class="n">userInfo</span><span class="p">.</span><span class="n">UserToken</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">loggedInUser</span> <span class="p">=</span> <span class="n">userInfo</span><span class="p">.</span><span class="n">User</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>You can clear the current logged in user by calling <code>App.LogoutAsync()</code> method.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="k">await</span> <span class="n">App</span><span class="p">.</span><span class="n">LogoutAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="password-management" class="anchor" href="#password-management"><span class="octicon octicon-link"></span></a>Password Management</h3>
+
+<h4>
+<a name="reset-password" class="anchor" href="#reset-password"><span class="octicon octicon-link"></span></a>Reset Password</h4>
+
+<p>Users often forget their passwords for your app. So you are provided with an API to reset their passwords. This api emails a single use url for resetting the password to the user's email address. </p>
+
+<div class="highlight highlight-csharp"><pre><span class="k">await</span> <span class="n">APUsers</span><span class="p">.</span><span class="n">InitiateResetPasswordAsync</span><span class="p">(</span>
+    <span class="n">username</span><span class="p">,</span>           <span class="c1">// username of the user</span>
+    <span class="n">emailSubject</span>        <span class="c1">// subject of the password reset email (optional)</span>
+    <span class="p">);</span>      
+</pre></div>
+
+<hr><h2>
+<a name="emails" class="anchor" href="#emails"><span class="octicon octicon-link"></span></a>Emails</h2>
+
+<h3>
+<a name="configuring" class="anchor" href="#configuring"><span class="octicon octicon-link"></span></a>Configuring</h3>
+
+<p>Sending emails from the sdk is quite easy. There are primarily two types of emails that can be sent</p>
+
+<ul>
+<li>Raw Emails</li>
+<li>Templated Emails</li>
+</ul><p>Before you get to sending emails, you need to configure smtp settings. You can either configure it from the portal or in the api call with your mail provider's settings. To send emails via the SDK use the Email class. Alternatively, you can use the NewEmail fluent interface for sending emails as well, as shown below.</p>
+
+<h3>
+<a name="sending-raw-emails" class="anchor" href="#sending-raw-emails"><span class="octicon octicon-link"></span></a>Sending Raw Emails</h3>
+
+<p>A raw email is one where you can specify the entire body of the email. An email has the structure</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">to</span> <span class="p">=</span> <span class="k">new</span> <span class="p">[]</span> <span class="p">{</span><span class="s">"email1"</span><span class="p">,</span> <span class="s">"email2"</span><span class="p">..}</span>
+<span class="kt">var</span> <span class="n">cc</span> <span class="p">=</span> <span class="k">new</span> <span class="p">[]</span> <span class="p">{</span><span class="s">"email1"</span><span class="p">,</span> <span class="s">"email2"</span><span class="p">..}</span>
+<span class="kt">var</span> <span class="n">bcc</span> <span class="p">=</span> <span class="k">new</span> <span class="p">[]</span> <span class="p">{</span><span class="s">"email1"</span><span class="p">,</span> <span class="s">"email2"</span><span class="p">..}</span>
+
+<span class="k">await</span> <span class="n">NewEmail</span>
+    <span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="s">"This is a raw email test from the .NET SDK."</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">To</span><span class="p">(</span><span class="n">to</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">bcc</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">From</span><span class="p">(</span><span class="s">"from@email.com"</span><span class="p">,</span> <span class="s">"replyto@email.com)</span>
+    <span class="p">.</span><span class="n">WithBody</span><span class="p">(</span><span class="s">"This is a raw body email."</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="sending-templated-emails" class="anchor" href="#sending-templated-emails"><span class="octicon octicon-link"></span></a>Sending Templated Emails</h3>
+
+<p>You can also save email templates in Appacitive and use these templates for sending mails. The template can contain placeholders that can be substituted before sending the mail. </p>
+
+<p>For example, if you want to send an email to every new registration, it is useful to have an email template with placeholders for username and confirmation link.</p>
+
+<p>Consider we have created an email template called <code>welcome_email</code> with the following content.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="s">"Welcome [#username] ! Thank you for downloading [#appname]."</span>
+</pre></div>
+
+<p>Here, [#username] and [#appname] denote the placeholders that we would want to substitute while sending an email. To send an email using this tempate, you would use something like this.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">to</span> <span class="p">=</span> <span class="k">new</span> <span class="p">[]</span> <span class="p">{</span><span class="s">"email1"</span><span class="p">,</span> <span class="s">"email2"</span><span class="p">..}</span>
+<span class="kt">var</span> <span class="n">cc</span> <span class="p">=</span> <span class="k">new</span> <span class="p">[]</span> <span class="p">{</span><span class="s">"email1"</span><span class="p">,</span> <span class="s">"email2"</span><span class="p">..}</span>
+<span class="kt">var</span> <span class="n">bcc</span> <span class="p">=</span> <span class="k">new</span> <span class="p">[]</span> <span class="p">{</span><span class="s">"email1"</span><span class="p">,</span> <span class="s">"email2"</span><span class="p">..}</span>
+
+<span class="c1">// Sending out a templated email</span>
+<span class="k">await</span> <span class="n">NewEmail</span>
+    <span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="s">"Thank you for downloading our app"</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">To</span><span class="p">(</span><span class="n">to</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">bcc</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">From</span><span class="p">(</span><span class="s">"from@email.com"</span><span class="p">,</span> <span class="s">"replyto@email.com"</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">WithTemplateBody</span><span class="p">(</span> <span class="s">"welcome_email"</span><span class="p">,</span> 
+        <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> 
+        <span class="p">{</span>
+            <span class="p">{</span><span class="s">"username"</span><span class="p">,</span> <span class="s">"john.doe"</span><span class="p">},</span>
+            <span class="p">{</span><span class="s">"appname"</span><span class="p">,</span> <span class="s">"appacitive"</span><span class="p">}</span>
+        <span class="p">})</span>
+    <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+</pre></div>
+
+<p><code>Note</code>: Emails are not transactional. This implies that a successful send operation would mean that your email provider was able to dispatch the email. It DOES NOT mean that the intended recipient(s) actually received that email.</p>
+
+<hr><h2>
+<a name="push-notifications" class="anchor" href="#push-notifications"><span class="octicon octicon-link"></span></a>Push Notifications</h2>
+
+<p>Using Appacitive platform you can send push notification to iOS devices, Android base devices and Windows phone.</p>
+
+<p>You will need to provide some basic one time configurations like certificates, using which we will setup push notification channels for different platforms for you. Also we provide a Push Console using which you can send push notification to the users.</p>
+
+<p>In the .NET SDK, the static object <code>PushNotification</code> provides methods to send push notification.</p>
+
+<p>Appacitive provides five ways to select the recipients</p>
+
+<ul>
+<li>Broadcast</li>
+<li>Platform specific Devices</li>
+<li>Specific List of Devices</li>
+<li>To List of Channels</li>
+<li>Query</li>
+</ul><p>First we'll see how to send a push notification and then we will discuss the above methods with their options one by one.</p>
+
+<h3>
+<a name="broadcast" class="anchor" href="#broadcast"><span class="octicon octicon-link"></span></a>Broadcast</h3>
+
+<p>If you want to send a push notification to all active devices, you can use the following options</p>
+
+<div class="highlight highlight-csharp"><pre><span class="k">await</span> <span class="n">PushNotification</span>
+        <span class="c1">// Send broadcast</span>
+        <span class="p">.</span><span class="n">Broadcast</span><span class="p">(</span><span class="s">"Push from .NET SDK"</span><span class="p">)</span>
+        <span class="c1">// Increment existing badge by 1</span>
+        <span class="p">.</span><span class="n">WithBadge</span><span class="p">(</span><span class="s">"+1"</span><span class="p">)</span>
+        <span class="c1">// Custom data field1 and field2</span>
+        <span class="p">.</span><span class="n">WithData</span><span class="p">(</span><span class="k">new</span> <span class="p">{</span> <span class="n">field1</span> <span class="p">=</span> <span class="s">"value1"</span><span class="p">,</span> <span class="n">field2</span> <span class="p">=</span> <span class="s">"value2"</span> <span class="p">})</span>
+        <span class="c1">// Expiry in seconds</span>
+        <span class="p">.</span><span class="n">WithExpiry</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
+        <span class="c1">// Device platform specific options</span>
+        <span class="p">.</span><span class="n">WithPlatformOptions</span><span class="p">(</span>
+            <span class="k">new</span> <span class="n">IOsOptions</span>
+            <span class="p">{</span>
+                <span class="n">SoundFile</span> <span class="p">=</span> <span class="n">soundFile</span>
+            <span class="p">})</span>
+        <span class="p">.</span><span class="n">WithPlatformOptions</span><span class="p">(</span>
+            <span class="k">new</span> <span class="n">AndroidOptions</span>
+            <span class="p">{</span>
+                <span class="n">NotificationTitle</span> <span class="p">=</span> <span class="n">title</span>
+            <span class="p">})</span>
+        <span class="p">.</span><span class="n">WithPlatformOptions</span><span class="p">(</span>
+            <span class="k">new</span> <span class="n">WindowsPhoneOptions</span>
+            <span class="p">{</span>
+                <span class="n">Notification</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ToastNotification</span>
+                <span class="p">{</span>
+                    <span class="n">Text1</span> <span class="p">=</span> <span class="n">wp_text1</span><span class="p">,</span>
+                    <span class="n">Text2</span> <span class="p">=</span> <span class="n">wp_text2</span><span class="p">,</span>
+                    <span class="n">Path</span> <span class="p">=</span> <span class="n">wp_path</span>
+                <span class="p">}</span>
+            <span class="p">})</span>
+        <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="platform-specific-devices" class="anchor" href="#platform-specific-devices"><span class="octicon octicon-link"></span></a>Platform specific Devices</h3>
+
+<p>If you want to send push notifications to specific platforms, you can use this option. To do so you will need to provide the devicetype in the query.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="k">await</span> <span class="n">PushNotification</span>
+    <span class="c1">// Send to specific device types</span>
+    <span class="p">.</span><span class="n">ToQueryResult</span><span class="p">(</span> <span class="n">Query</span><span class="p">.</span><span class="n">Property</span><span class="p">(</span><span class="s">"devicetype"</span><span class="p">).</span><span class="n">IsEqualTo</span><span class="p">(</span><span class="s">"ios"</span><span class="p">))</span>
+    <span class="c1">// Increment existing badge by 1</span>
+    <span class="p">.</span><span class="n">WithBadge</span><span class="p">(</span><span class="s">"+1"</span><span class="p">)</span>
+    <span class="c1">// Custom data field1 and field2</span>
+    <span class="p">.</span><span class="n">WithData</span><span class="p">(</span><span class="k">new</span> <span class="p">{</span> <span class="n">field1</span> <span class="p">=</span> <span class="s">"value1"</span><span class="p">,</span> <span class="n">field2</span> <span class="p">=</span> <span class="s">"value2"</span> <span class="p">})</span>
+    <span class="c1">// Expiry in seconds</span>
+    <span class="p">.</span><span class="n">WithExpiry</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="specific-list-of-devices" class="anchor" href="#specific-list-of-devices"><span class="octicon octicon-link"></span></a>Specific List of Devices</h3>
+
+<p>If you want to send push notifications to specific devices, you can use this option. To do so you will need to provide the device ids.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">deviceIDs</span> <span class="p">=</span> <span class="k">new</span> <span class="p">[]</span> <span class="p">{</span><span class="s">"id1"</span><span class="p">,</span> <span class="s">"id2"</span><span class="p">,..};</span> 
+<span class="k">await</span> <span class="n">PushNotification</span>
+    <span class="c1">// Send specific device ids</span>
+    <span class="p">.</span><span class="n">ToDeviceIds</span><span class="p">(</span><span class="s">"Push from .NET SDK"</span><span class="p">,</span> <span class="n">deviceIDs</span><span class="p">);</span>
+    <span class="c1">// Increment existing badge by 1</span>
+    <span class="p">.</span><span class="n">WithBadge</span><span class="p">(</span><span class="s">"+1"</span><span class="p">)</span>
+    <span class="c1">// Custom data field1 and field2</span>
+    <span class="p">.</span><span class="n">WithData</span><span class="p">(</span><span class="k">new</span> <span class="p">{</span> <span class="n">field1</span> <span class="p">=</span> <span class="s">"value1"</span><span class="p">,</span> <span class="n">field2</span> <span class="p">=</span> <span class="s">"value2"</span> <span class="p">})</span>
+    <span class="c1">// Expiry in seconds</span>
+    <span class="p">.</span><span class="n">WithExpiry</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="to-list-of-channels" class="anchor" href="#to-list-of-channels"><span class="octicon octicon-link"></span></a>To List of Channels</h3>
+
+<p>Device object has a Channel property, using which you can club multiple devices. This is helpful if you want to send push notification using channel.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="kt">var</span> <span class="n">channels</span> <span class="p">=</span> <span class="k">new</span> <span class="p">[]</span> <span class="p">{</span><span class="s">"channel1"</span><span class="p">,</span> <span class="s">"channel2"</span><span class="p">,..};</span> 
+<span class="k">await</span> <span class="n">PushNotification</span>
+    <span class="c1">// Send specific channels</span>
+    <span class="p">.</span><span class="n">ToChannels</span><span class="p">(</span><span class="s">"Push from .NET SDK"</span><span class="p">,</span> <span class="n">channels</span><span class="p">);</span>
+    <span class="c1">// Increment existing badge by 1</span>
+    <span class="p">.</span><span class="n">WithBadge</span><span class="p">(</span><span class="s">"+1"</span><span class="p">)</span>
+    <span class="c1">// Custom data field1 and field2</span>
+    <span class="p">.</span><span class="n">WithData</span><span class="p">(</span><span class="k">new</span> <span class="p">{</span> <span class="n">field1</span> <span class="p">=</span> <span class="s">"value1"</span><span class="p">,</span> <span class="n">field2</span> <span class="p">=</span> <span class="s">"value2"</span> <span class="p">})</span>
+    <span class="c1">// Expiry in seconds</span>
+    <span class="p">.</span><span class="n">WithExpiry</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="query" class="anchor" href="#query"><span class="octicon octicon-link"></span></a>Query</h3>
+
+<p>You can send push notifications to devices using a Query. All the devices which comes out as result of the query will receive the push notification.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="n">IQuery</span> <span class="n">query</span> <span class="p">=</span>  <span class="n">Query</span><span class="p">.</span><span class="n">Property</span><span class="p">(..;</span>       <span class="c1">// create query</span>
+<span class="k">await</span> <span class="n">PushNotification</span>
+    <span class="c1">// Send to results from a query</span>
+    <span class="p">.</span><span class="n">ToQueryResult</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="c1">// Increment existing badge by 1</span>
+    <span class="p">.</span><span class="n">WithBadge</span><span class="p">(</span><span class="s">"+1"</span><span class="p">)</span>
+    <span class="c1">// Custom data field1 and field2</span>
+    <span class="p">.</span><span class="n">WithData</span><span class="p">(</span><span class="k">new</span> <span class="p">{</span> <span class="n">field1</span> <span class="p">=</span> <span class="s">"value1"</span><span class="p">,</span> <span class="n">field2</span> <span class="p">=</span> <span class="s">"value2"</span> <span class="p">})</span>
+    <span class="c1">// Expiry in seconds</span>
+    <span class="p">.</span><span class="n">WithExpiry</span><span class="p">(</span><span class="m">1000</span><span class="p">)</span>
+    <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="platform-specific-options" class="anchor" href="#platform-specific-options"><span class="octicon octicon-link"></span></a>Platform specific options</h3>
+
+<p>The <code>PushNotification</code> fluent interface provides a <code>WithPlatformOptions</code> method to pass different phone platform specific options as shown in the example below.</p>
+
+<div class="highlight highlight-csharp"><pre><span class="k">await</span> <span class="n">PushNotification</span>
+        <span class="c1">// Send specific device ids</span>
+        <span class="p">.</span><span class="n">Broadcast</span><span class="p">(</span><span class="s">"Hello from the .NET SDK"</span><span class="p">)</span>
+        <span class="c1">// Device platform specific options</span>
+        <span class="p">.</span><span class="n">WithPlatformOptions</span><span class="p">(</span>
+            <span class="k">new</span> <span class="n">IOsOptions</span>
+            <span class="p">{</span>
+                <span class="n">SoundFile</span> <span class="p">=</span> <span class="n">soundFile</span>
+            <span class="p">})</span>
+        <span class="p">.</span><span class="n">WithPlatformOptions</span><span class="p">(</span>
+            <span class="k">new</span> <span class="n">AndroidOptions</span>
+            <span class="p">{</span>
+                <span class="n">NotificationTitle</span> <span class="p">=</span> <span class="n">title</span>
+            <span class="p">})</span>
+        <span class="p">.</span><span class="n">WithPlatformOptions</span><span class="p">(</span>
+            <span class="k">new</span> <span class="n">WindowsPhoneOptions</span>
+            <span class="p">{</span>
+                <span class="n">Notification</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ToastNotification</span>
+                <span class="p">{</span>
+                    <span class="n">Text1</span> <span class="p">=</span> <span class="n">wp_text1</span><span class="p">,</span>
+                    <span class="n">Text2</span> <span class="p">=</span> <span class="n">wp_text2</span><span class="p">,</span>
+                    <span class="n">Path</span> <span class="p">=</span> <span class="n">wp_path</span>
+                <span class="p">}</span>
+            <span class="p">})</span>
+        <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="different-options-for-windows-phone" class="anchor" href="#different-options-for-windows-phone"><span class="octicon octicon-link"></span></a>Different options for windows phone.</h3>
+
+<p>For windows phone 3 types of notifications are supported.
+1. Toast notifications.
+2. Tile notifications (flip, cyclic and iconic)
+3. Raw notifications (string based raw data)</p>
+
+<p>The windows phone platform options allows you to choose the specific kind of notification to be 
+send to each windows phone device type (WP7, WP75 and WP8).
+The sample below shows how this can be done.</p>
+
+<div class="highlight highlight-C#"><pre><span class="c1">// Toast</span>
+<span class="k">await</span> <span class="n">PushNotification</span>
+        <span class="p">.</span><span class="n">Broadcast</span><span class="p">(</span><span class="s">"message"</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">WithPlatformOptions</span><span class="p">(</span>
+            <span class="k">new</span> <span class="n">WindowsPhoneOptions</span>
+            <span class="p">{</span>
+                <span class="n">Notification</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ToastNotification</span>
+                <span class="p">{</span>
+                    <span class="n">Text1</span> <span class="p">=</span> <span class="n">wp_text1</span><span class="p">,</span>
+                    <span class="n">Text2</span> <span class="p">=</span> <span class="n">wp_text2</span><span class="p">,</span>
+                    <span class="n">Path</span> <span class="p">=</span> <span class="n">wp_path</span>
+                <span class="p">}</span>
+            <span class="p">})</span>
+        <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+
+<span class="c1">// Raw notification</span>
+<span class="k">await</span> <span class="n">PushNotification</span>
+        <span class="p">.</span><span class="n">Broadcast</span><span class="p">(</span><span class="s">"message"</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">WithPlatformOptions</span><span class="p">(</span>
+            <span class="k">new</span> <span class="n">WindowsPhoneOptions</span>
+                <span class="p">{</span>
+                    <span class="n">Notification</span> <span class="p">=</span> <span class="k">new</span> <span class="n">RawNotification</span><span class="p">()</span> <span class="p">{</span> <span class="n">RawData</span> <span class="p">=</span> <span class="s">"string data.."</span> <span class="p">}</span>
+                <span class="p">})</span>
+        <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+
+<span class="c1">// Tile notification (Flip tile for all)</span>
+<span class="k">await</span> <span class="n">PushNotification</span>
+        <span class="p">.</span><span class="n">Broadcast</span><span class="p">(</span><span class="s">"message"</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">WithPlatformOptions</span><span class="p">(</span>
+                    <span class="k">new</span> <span class="n">WindowsPhoneOptions</span>
+                    <span class="p">{</span>
+                        <span class="n">Notification</span> <span class="p">=</span> <span class="n">TileNotification</span><span class="p">.</span><span class="n">CreateNewFlipTile</span><span class="p">(</span> 
+                            <span class="k">new</span> <span class="nf">FlipTile</span><span class="p">()</span> <span class="p">{</span> <span class="n">FrontTitle</span> <span class="p">=</span> <span class="n">title</span><span class="p">,</span> <span class="p">..</span> <span class="p">}</span> <span class="p">)</span>
+                    <span class="p">})</span>
+        <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+
+
+<span class="c1">// Tile notification (cyclic tile for wp8, flip tile for others)</span>
+<span class="k">await</span> <span class="n">PushNotification</span>
+        <span class="p">.</span><span class="n">Broadcast</span><span class="p">(</span><span class="s">"message"</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">WithPlatformOptions</span><span class="p">(</span>
+                    <span class="k">new</span> <span class="n">WindowsPhoneOptions</span>
+                    <span class="p">{</span>
+                        <span class="n">Notification</span> <span class="p">=</span> <span class="n">TileNotification</span><span class="p">.</span><span class="n">CreateNewCyclicTile</span><span class="p">(</span> 
+                            <span class="k">new</span> <span class="nf">CyclicTile</span><span class="p">(),</span> <span class="k">new</span> <span class="n">FlipTile</span><span class="p">()</span> <span class="p">)</span>
+                    <span class="p">})</span>
+        <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+
+<span class="c1">// Tile notification (iconic tile for wp8, flip tile for others)</span>
+<span class="k">await</span> <span class="n">PushNotification</span>
+        <span class="p">.</span><span class="n">Broadcast</span><span class="p">(</span><span class="s">"message"</span><span class="p">)</span>
+        <span class="p">.</span><span class="n">WithPlatformOptions</span><span class="p">(</span>
+                    <span class="k">new</span> <span class="n">WindowsPhoneOptions</span>
+                    <span class="p">{</span>
+                        <span class="n">Notification</span> <span class="p">=</span> <span class="n">TileNotification</span><span class="p">.</span><span class="n">CreateNewIconicTile</span><span class="p">(</span> 
+                            <span class="k">new</span> <span class="nf">IconicTile</span><span class="p">(),</span> <span class="k">new</span> <span class="n">FlipTile</span><span class="p">()</span> <span class="p">)</span>
+                    <span class="p">})</span>
+        <span class="p">.</span><span class="n">SendAsync</span><span class="p">();</span>
+
+</pre></div>
+
+<hr><h2>
+<a name="files" class="anchor" href="#files"><span class="octicon octicon-link"></span></a>Files</h2>
+
+<p>Appacitive supports file storage and provides api's for you to easily upload and download file. In the background we use amazon's S3 services for persistance. 
+All file upload and download operations in the SDK are handled by the <code>FileUpload</code> and <code>FileDownload</code> classes respectively. </p>
+
+<p><code>NOTE</code>: All file operations need a file name. This name can be supplied on upload by the user or can be auto generated to be unique by the api. Some important things to note about the file name are -</p>
+
+<ul>
+<li>It is not mandatory.</li>
+<li>It does not have to be the same is the name of the file being uploaded.</li>
+<li>Incase it is not supplied, it will be auto generated and returned in the response.</li>
+<li>It is the only handle to download the file, so do not lose it.</li>
+</ul><h3>
+<a name="uploading-a-new-file" class="anchor" href="#uploading-a-new-file"><span class="octicon octicon-link"></span></a>Uploading a new file</h3>
+
+<p>To upload a new file, create a new instance of the <code>FileUpload</code> class with the mime type and optional filename. If you do not supply a file name, an auto generated name will be returned in the response.</p>
+
+<div class="highlight highlight-C#"><pre><span class="c1">// To upload an png image with filename testimage.png</span>
+<span class="kt">var</span> <span class="n">mimeType</span> <span class="p">=</span> <span class="s">"image/png"</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">filePath</span> <span class="p">=</span> <span class="p">...</span>              <span class="c1">// Path to the file</span>
+<span class="kt">var</span> <span class="n">userSpecifiedFileName</span> <span class="p">=</span> <span class="s">"testimage.png"</span><span class="p">;</span>
+<span class="c1">// filenameOnServer will be testimage.png.</span>
+<span class="kt">var</span> <span class="n">fileNameOnServer</span> <span class="p">=</span> <span class="k">await</span> <span class="k">new</span> <span class="n">FileUpload</span><span class="p">(</span><span class="n">mimeType</span><span class="p">,</span> <span class="n">userSpecifiedFileName</span><span class="p">).</span><span class="n">UploadFileAsync</span><span class="p">(</span><span class="n">filePath</span><span class="p">);</span>
+
+
+
+<span class="c1">// To upload an png image without specifying a filename</span>
+<span class="kt">var</span> <span class="n">mimeType</span> <span class="p">=</span> <span class="s">"image/png"</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">filePath</span> <span class="p">=</span> <span class="p">...</span>              <span class="c1">// Path to the file</span>
+<span class="c1">// filenameOnServer will be auto generated</span>
+<span class="kt">var</span> <span class="n">fileNameOnServer</span> <span class="p">=</span> <span class="k">await</span> <span class="k">new</span> <span class="n">FileUpload</span><span class="p">(</span><span class="n">mimeType</span><span class="p">).</span><span class="n">UploadFileAsync</span><span class="p">(</span><span class="n">filePath</span><span class="p">);</span>
+
+
+<span class="c1">// To upload an png image as a byte array</span>
+<span class="kt">var</span> <span class="n">mimeType</span> <span class="p">=</span> <span class="s">"image/png"</span><span class="p">;</span>
+<span class="kt">byte</span><span class="p">[]</span> <span class="n">data</span> <span class="p">=</span> <span class="p">...</span>                               <span class="c1">// PNG file data</span>
+<span class="kt">var</span> <span class="n">filePath</span> <span class="p">=</span> <span class="p">...</span>                              <span class="c1">// Path to the file</span>
+<span class="c1">// filenameOnServer will be auto generated</span>
+<span class="kt">var</span> <span class="n">fileNameOnServer</span> <span class="p">=</span> <span class="k">await</span> <span class="k">new</span> <span class="n">FileUpload</span><span class="p">(</span><span class="n">mimeType</span><span class="p">).</span><span class="n">UploadAsync</span><span class="p">(</span><span class="n">data</span><span class="p">);</span>
+
+</pre></div>
+
+<h3>
+<a name="generate-url-to-upload-file-to" class="anchor" href="#generate-url-to-upload-file-to"><span class="octicon octicon-link"></span></a>Generate url to upload file to</h3>
+
+<p>Incase you want to handle the file upload yourself via some custom control or code, you can generate an upload url which will be available for a limited time period to which you can upload the file. The life time of the upload url can be specified in the api call.</p>
+
+<p>The following code snippet shows how this can be done.</p>
+
+<div class="highlight highlight-C#"><pre><span class="c1">// Say you want the upload url to upload a PNG image.</span>
+<span class="kt">var</span> <span class="n">mimeType</span> <span class="p">=</span> <span class="s">"image/png"</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">expiryInMinutes</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>               <span class="c1">// Upload url will remain active for next 10 mins</span>
+<span class="kt">var</span> <span class="n">fileUrl</span> <span class="p">=</span> <span class="k">await</span> <span class="k">new</span> <span class="n">FileUpload</span><span class="p">(</span><span class="n">mimeType</span><span class="p">).</span><span class="n">GetUploadUrlAsync</span><span class="p">(</span><span class="n">expiryInMinutes</span><span class="p">);</span>
+
+<span class="kt">var</span> <span class="n">nameOnServer</span> <span class="p">=</span> <span class="n">fileUrl</span><span class="p">.</span><span class="n">FileName</span><span class="p">;</span>    <span class="c1">// This will be the filename on the server (auto generated in this case)</span>
+<span class="kt">var</span> <span class="n">urlToUpload</span> <span class="p">=</span> <span class="n">fileUrl</span><span class="p">.</span><span class="n">Url</span><span class="p">;</span>          <span class="c1">// This will be the url to upload to.</span>
+</pre></div>
+
+<h3>
+<a name="download-an-existing-file" class="anchor" href="#download-an-existing-file"><span class="octicon octicon-link"></span></a>Download an existing file</h3>
+
+<p>To download an existing file from the platform, you need the filename of the file returned from the Upload api. With this filename you can download the file using the <code>FileDownload</code> class.</p>
+
+<div class="highlight highlight-C#"><pre><span class="c1">// To download a file and save to disk</span>
+<span class="kt">var</span> <span class="n">filename</span> <span class="p">=</span> <span class="p">...;</span>         <span class="c1">// File name of the file to download.</span>
+<span class="kt">var</span> <span class="n">saveAsFilePath</span> <span class="p">=</span> <span class="p">...;</span>   <span class="c1">// Path to save the downloaded file.</span>
+<span class="c1">// The file will be downloaded and saved to the saveAs path specified.</span>
+<span class="k">await</span> <span class="k">new</span> <span class="nf">FileDownload</span><span class="p">(</span><span class="n">filename</span><span class="p">).</span><span class="n">DownloadFileAsync</span><span class="p">(</span><span class="n">saveAsFilePath</span><span class="p">);</span>
+
+
+<span class="c1">// To download file contents as byte array</span>
+<span class="kt">var</span> <span class="n">filename</span> <span class="p">=</span> <span class="p">...;</span>         <span class="c1">// File name of the file to download.</span>
+<span class="kt">var</span> <span class="n">saveAsFilePath</span> <span class="p">=</span> <span class="p">...;</span>   <span class="c1">// Path to save the downloaded file.</span>
+<span class="c1">// The file will be downloaded and saved to the saveAs path specified.</span>
+<span class="kt">byte</span><span class="p">[]</span> <span class="n">contents</span> <span class="p">=</span> <span class="k">await</span> <span class="k">new</span> <span class="n">FileDownload</span><span class="p">(</span><span class="n">filename</span><span class="p">).</span><span class="n">DownloadAsync</span><span class="p">();</span>
+</pre></div>
+
+<h3>
+<a name="generate-a-public-url-for-an-existing-file" class="anchor" href="#generate-a-public-url-for-an-existing-file"><span class="octicon octicon-link"></span></a>Generate a public url for an existing file.</h3>
+
+<p>All files uploaded to the Appacitive platform are private by default and cannot be accessed via a http GET to a url alone. You can generate a permanent public url for your file or a limited time public url for your file.
+To generate a permanently public url for a file, use the <code>FileDownload.GetPublicUrlAsync()</code> api. To generate a limited time public url for your file, use the <code>FileDownload.GetDownloadUrlAsync</code> method.</p>
+
+<p><code>NOTE</code>:  One important thing to note is that generating a permanently public url for a file marks the file as public. Such files cannot be used to generate limited time public urls any more.</p>
+
+<div class="highlight highlight-C#"><pre>
+<span class="c1">// To generate a limited time (10 mins) public url for a file</span>
+<span class="kt">var</span> <span class="n">filename</span> <span class="p">=</span> <span class="p">...;</span>                         <span class="c1">// File name of the file to download.</span>
+<span class="kt">var</span> <span class="n">expiryInMinutes</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>                   <span class="c1">// Public url that will be active for next 10 mins</span>
+
+<span class="c1">// Get limited time public url</span>
+<span class="kt">string</span> <span class="n">limitedTimePublicUrl</span> <span class="p">=</span> <span class="k">await</span> <span class="k">new</span> <span class="n">FileDownload</span><span class="p">(</span><span class="n">filename</span><span class="p">).</span><span class="n">GetDownloadUrlAsync</span><span class="p">(</span><span class="n">expiryInMinutes</span><span class="p">);</span>
+
+<span class="c1">// Get permanently public url</span>
+<span class="kt">string</span> <span class="n">permanentPublicUrl</span> <span class="p">=</span> <span class="k">await</span> <span class="k">new</span> <span class="n">FileDownload</span><span class="p">(</span><span class="n">filename</span><span class="p">).</span><span class="n">GetPublicUrlAsync</span><span class="p">();</span>
+
+</pre></div>
+
+<hr><h2>
+<a name="wcf-gotchas" class="anchor" href="#wcf-gotchas"><span class="octicon octicon-link"></span></a>WCF gotchas</h2>
+
+<p>When using the SDK on the server side inside a web application or web service, we need to make sure that the ambient user context and sdk state is available on a per request basis instead of being statically stored for the entire application. The SDK uses the WCF OperationContext to store and manage this information on a per request basis.
+However given the fact that the SDK methods are async, special provisions need to be made to ensure that the OperationContext is available across threads. To do this, service implementations using the SDK must apply the <code>AllowAsyncService</code> service
+behavior to their service implementations. This can be done in two ways.</p>
+
+<h4>
+<a name="1-via-attribution" class="anchor" href="#1-via-attribution"><span class="octicon octicon-link"></span></a>1. Via attribution</h4>
+
+<div class="highlight highlight-C#"><pre><span class="cm">/*</span>
+<span class="cm">Add the AllowAsyncService to ensure that OperationContext </span>
+<span class="cm">is propogated across async calls.</span>
+<span class="cm">*/</span>
+<span class="na">[AllowAsyncService]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">MyWebService</span> <span class="p">:</span> <span class="n">IMyWebService</span>
+<span class="p">{</span>
+    <span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>
+<a name="2-via-webconfig" class="anchor" href="#2-via-webconfig"><span class="octicon octicon-link"></span></a>2. Via web.config</h4>
+
+<div class="highlight highlight-xml"><pre><span class="c">&lt;!-- Define a behavior extension inside the wcf service model configuration --&gt;</span>
+<span class="nt">&lt;behaviorExtensions&gt;</span>
+    <span class="c">&lt;!-- incase of using .NET 4.0 version of sdk --&gt;</span>
+    <span class="nt">&lt;add</span> <span class="na">name=</span><span class="s">"allowAsyncCalls"</span> <span class="na">type=</span><span class="s">"Appacitive.Sdk.Wcf.AllowAsyncServiceBehaviorExtension, Appacitive.Sdk.Net40"</span> <span class="nt">/&gt;</span>
+    <span class="c">&lt;!-- incase of using .NET 4.5 version of sdk --&gt;</span>
+    <span class="nt">&lt;add</span> <span class="na">name=</span><span class="s">"allowAsyncCalls"</span> <span class="na">type=</span><span class="s">"Appacitive.Sdk.Wcf.AllowAsyncServiceBehaviorExtension, Appacitive.Sdk.Net45"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/behaviorExtensions&gt;</span>
+
+<span class="c">&lt;!-- Use the extension inside your service / endpoint / operation behavior configuration. --&gt;</span>
+</pre></div>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Appacitive-dotnet-sdk maintained by <a href="https://github.com/appacitive">appacitive</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
