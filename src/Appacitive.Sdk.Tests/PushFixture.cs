@@ -28,7 +28,7 @@ namespace Appacitive.Sdk.Tests
         public async Task QueryBasedPushAsyncTest()
         {
             string id = await PushNotification
-                .ToQueryResult("Push to query",Query.Property("devicetype").IsEqualTo("ios").AsString() ) 
+                .ToQueryResult("Push to query",Query.Property("devicetype").IsEqualTo("ios")) 
                 .WithBadge("+1")
                 .WithData(new { field1 = "value1", field2 = "value2" })
                 .SendAsync();

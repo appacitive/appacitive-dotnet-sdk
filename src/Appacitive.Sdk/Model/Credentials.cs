@@ -39,7 +39,7 @@ namespace Appacitive.Sdk
             }
         }
 
-        public async Task<UserSession> AuthenticateAsync()
+        public virtual async Task<UserSession> AuthenticateAsync()
         {
             var request = BuildAuthenticateRequest();
             var response = await request.ExecuteAsync();
@@ -59,6 +59,22 @@ namespace Appacitive.Sdk
         }
 
         
+    }
+
+    public class UserTokenCredentials : Credentials
+    {
+        public UserTokenCredentials(string userToken)
+        {
+            this.Token = userToken;
+        }
+
+        public string Token { get; private set; }
+
+        public override async Task<UserSession> AuthenticateAsync()
+        {
+            var user = await APUsers.GetUserByTokenAsync(this.Token);
+            return new UserSession(user, this.Token);
+        }
     }
 
     public class UsernamePasswordCredentials : Credentials

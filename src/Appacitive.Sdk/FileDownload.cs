@@ -35,7 +35,12 @@ namespace Appacitive.Sdk
 
         public IHttpFileHandler FileHandler { get; set; }
 
-        public async Task<string> GetDownloadUrl(int expiryTimeInMinutes = 5)
+        public async Task<string> GetPublicUrlAsync()
+        {
+            return await this.GetDownloadUrlAsync(-1);
+        }
+
+        public async Task<string> GetDownloadUrlAsync(int expiryTimeInMinutes = 5)
         {
             var request = new GetDownloadUrlRequest
             {
@@ -50,7 +55,7 @@ namespace Appacitive.Sdk
         {
             try
             {
-                var url = await this.GetDownloadUrl();
+                var url = await this.GetDownloadUrlAsync();
                 return await this.FileHandler.DownloadAsync(url, null, "GET");
             }
             catch (WebException wex)
@@ -64,7 +69,7 @@ namespace Appacitive.Sdk
 
         public async Task DownloadFileAsync(string file)
         {
-            var url = await this.GetDownloadUrl();
+            var url = await this.GetDownloadUrlAsync();
             await this.FileHandler.DownloadAsync(url, null, "GET", file);
         }
     }

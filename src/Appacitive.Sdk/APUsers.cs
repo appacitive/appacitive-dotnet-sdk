@@ -10,8 +10,7 @@ namespace Appacitive.Sdk
 {
     public static class APUsers
     {
-
-        public static async Task InitiateResetPassword(string username, string emailSubject = null)
+        public static async Task InitiateResetPasswordAsync(string username, string emailSubject = null)
         {
             var request = new InitiateResetPasswordRequest
             {
@@ -32,6 +31,19 @@ namespace Appacitive.Sdk
         public static async Task<APUser> GetLoggedInUserAsync(IEnumerable<string> fields = null)
         {
             var request = new GetUserRequest { UserIdType = "token" };
+            if (fields != null)
+                request.Fields.AddRange(fields);
+
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            Debug.Assert(response.User != null, "For a successful get call, object should always be returned.");
+            return response.User;
+        }
+
+        public static async Task<APUser> GetUserByTokenAsync(string token, IEnumerable<string> fields = null)
+        {
+            var request = new GetUserRequest { UserIdType = "token", UserToken = token };
             if (fields != null)
                 request.Fields.AddRange(fields);
 

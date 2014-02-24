@@ -91,7 +91,7 @@ namespace Appacitive.Sdk.Tests
                 };
             // Get download url
             var download = new FileDownload(filename);
-            var url = await download.GetDownloadUrl();
+            var url = await download.GetDownloadUrlAsync();
             Assert.IsFalse(string.IsNullOrWhiteSpace(url));
             Console.WriteLine("Download url: {0}", url);
             

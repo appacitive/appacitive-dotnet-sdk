@@ -49,20 +49,5 @@ namespace Appacitive.Sdk
         {
             return BetweenQuery.Between(FieldType.Aggregate, this.Field, before, after);
         }
-
-        public IQuery Between(DateTime before, DateTime after)
-        {
-            return BetweenQuery.Between(FieldType.Aggregate, this.Field, before, after);
-        }
-
-        public IQuery BetweenDate(DateTime before, DateTime after)
-        {
-            return BetweenQuery.BetweenDate(FieldType.Aggregate, this.Field, before, after);
-        }
-
-        public IQuery BetweenTime(DateTime before, DateTime after)
-        {
-            return BetweenQuery.BetweenTime(FieldType.Aggregate, this.Field, before, after);
-        }
     }
 }

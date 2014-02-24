@@ -86,7 +86,7 @@ namespace Appacitive.Sdk.Tests
             user.Email = "nikhil@appacitive.com";
             var created = await UserHelper.CreateNewUserAsync(user);
 
-            await APUsers.InitiateResetPassword(user.Username);
+            await APUsers.InitiateResetPasswordAsync(user.Username);
         }
 
         [TestMethod]

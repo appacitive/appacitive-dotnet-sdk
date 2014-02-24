@@ -473,5 +473,12 @@ namespace Appacitive.Sdk
                 _currentFields[property] = new List<string>();
             }
         }
+
+
+        public string ToJson()
+        {
+            var serializer = ObjectFactory.Build<IJsonSerializer>();
+            return serializer.SerializeAsString(this);
+        }
     }
 }

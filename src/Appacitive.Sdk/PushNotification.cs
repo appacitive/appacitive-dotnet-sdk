@@ -20,7 +20,7 @@ namespace Appacitive.Sdk
             return new PushNotification(message, false, channels, null, null);
         }
 
-        public static PushNotification ToQueryResult(string message, string query)
+        public static PushNotification ToQueryResult(string message, IQuery query)
         {
             return new PushNotification(message, false, null, null, query);
         }
@@ -30,7 +30,7 @@ namespace Appacitive.Sdk
             return new PushNotification(message, false, null, deviceIds, null);
         }
         
-        private PushNotification(string alert, bool isBroadcast, IEnumerable<string> channels, IEnumerable<string> deviceIds, string query)
+        private PushNotification(string alert, bool isBroadcast, IEnumerable<string> channels, IEnumerable<string> deviceIds, IQuery query)
         {
             this.Alert = alert;
             this.IsBroadcast = isBroadcast;
@@ -49,7 +49,7 @@ namespace Appacitive.Sdk
 
         public bool IsBroadcast { get; private set; }
 
-        public string Query { get; private set; }
+        public IQuery Query { get; private set; }
 
         public int ExpiryInSeconds { get; set; }
 
