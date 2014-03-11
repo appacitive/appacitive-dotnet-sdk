@@ -157,7 +157,7 @@ namespace Appacitive.Sdk.Tests
             Assert.IsNotNull(updatedResponse.Object, "Updated apObject is null.");
             var updated = updatedResponse.Object;
             Assert.IsTrue(updated.Get<string>("intfield") == "2");
-            Assert.IsTrue(updated.Get<string>("decimalfield") == "20.0");
+            Assert.IsTrue(updated.Get<decimal>("decimalfield") == 20.0m);
             Assert.IsTrue(updated.Get<string>("stringfield") == null);
             Assert.IsTrue(updated.Get<string>("datefield") == "2013-11-20");
             Assert.IsTrue(updated.Tags.Count() == 2);

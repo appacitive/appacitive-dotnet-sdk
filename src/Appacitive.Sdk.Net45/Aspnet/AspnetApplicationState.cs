@@ -83,9 +83,9 @@ namespace Appacitive.Sdk.Aspnet
             return GetName("currentUser");
         }
 
-        internal static int ForUserToken()
+        internal static string ForUserToken()
         {
-            throw new NotImplementedException();
+            return GetName("currentUserToken");
         }
     }
 
