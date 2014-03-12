@@ -83,6 +83,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\CommonAssembly.cs">
+      <Link>Properties\CommonAssembly.cs</Link>
+    </Compile>
     <Compile Include="DeviceInfo.cs" />
     <Compile Include="WPApplicationState.cs" />
     <Compile Include="HttpConnector.cs" />

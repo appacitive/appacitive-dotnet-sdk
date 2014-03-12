@@ -32,9 +32,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Binaries", "Binaries", "{5B
 		..\bin\Appacitive.Sdk.pdb = ..\bin\Appacitive.Sdk.pdb
 		..\bin\Appacitive.Sdk.WinRT.dll = ..\bin\Appacitive.Sdk.WinRT.dll
 		..\bin\Appacitive.Sdk.WinRT.pdb = ..\bin\Appacitive.Sdk.WinRT.pdb
-		..\bin\Newtonsoft.Json.dll = ..\bin\Newtonsoft.Json.dll
-		..\bin\Newtonsoft.Json.pdb = ..\bin\Newtonsoft.Json.pdb
-		..\bin\Newtonsoft.Json.xml = ..\bin\Newtonsoft.Json.xml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appacitive.Sdk.WindowsPhone7", "Appacitive.Sdk.WindowsPhone7\Appacitive.Sdk.WindowsPhone7.csproj", "{BB42585D-CF1F-426B-BEED-113E487D684D}"
