@@ -40,14 +40,7 @@ namespace Appacitive.Sdk.Services
 
         protected override void WriteJson(Entity entity, JsonWriter writer, JsonSerializer serializer)
         {
-            if (entity == null)
-                return;
-            var user = entity as APUser;
-            //if (user != null)
-            //{
-            //    writer
-            //        .WriteProperty("__schemaid", user.SchemaId);
-            //}
+			// do nothing
         }
 
         private static readonly Dictionary<string, bool> _internal = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase)

@@ -5,14 +5,36 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+#if MONO
+using NUnit.Framework;
+using MonoTouch.Foundation;
+#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
-    [TestClass]
+	#if MONO
+	[TestFixture]
+	#else
+	[TestClass]
+	#endif
     public class FileFixture
     {
-        [TestMethod]
+		#if MONO
+		[TestFixtureSetUp]
+		public void Setup()
+		{
+			OneTimeSetup.Run ();
+		}
+		#endif
+
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task GetUploadUrlWithFilenameTest()
         {
             var filename = Unique.String + ".png";
@@ -26,7 +48,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Upload url: {0}", fileUrl.Url);
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task GetUploadUrlWithoutFilenameTest()
         {
             var upload = new FileUpload("image/png");
@@ -38,7 +65,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Upload url: {0}", fileUrl.Url);
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task DataUploadAsyncTest()
         {
             var bytes = File.ReadAllBytes(FileHelper.TestFilePath);
@@ -58,7 +90,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Uploaded to file {0}", uploadedFilename);
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task FileUploadAsyncTest()
         {
             var file = FileHelper.TestFilePath;
@@ -78,7 +115,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Uploaded to file {0}", uploadedFilename);
         }
 
-        [TestMethod] 
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif 
         public async Task GetDownloadUrlAsyncTest()
         {
             // Upload file
@@ -97,7 +139,12 @@ namespace Appacitive.Sdk.Tests
             
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task DownloadAsyncTest()
         {
             // Upload a new file
@@ -117,7 +164,12 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(FileHelper.Md5ChecksumMatch(bytes));
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task DownloadFileAsyncTest()
         {
             // Upload a new file
@@ -138,7 +190,12 @@ namespace Appacitive.Sdk.Tests
         }
 
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         [ExpectedException( typeof(AppacitiveApiException))]
         public async Task DownloadNonExistingFileTest()
         {
@@ -147,12 +204,7 @@ namespace Appacitive.Sdk.Tests
             
             // Get download url
             var download = new FileDownload(filename);
-            var content = await download.DownloadAsync();
+            await download.DownloadAsync();
         }
-
-
-        
-
-        
     }
 }

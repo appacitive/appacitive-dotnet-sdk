@@ -17,7 +17,7 @@ namespace Appacitive.Sdk
 {
     public static class Platforms
     {
-        public static readonly Platform Aspnet = new AspnetPlatform();
+		public static readonly Platform Aspnet = new AspnetPlatform();
         public static readonly Platform Wcf = new WcfPlatform();
         public static readonly Platform NonWeb = new NonWebPlatform();
     }

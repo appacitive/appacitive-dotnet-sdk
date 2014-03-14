@@ -4,20 +4,43 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+#if MONO
+using NUnit.Framework;
+#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
+	#if MONO
+	[TestFixture]
+	#else
     [TestClass]
+	#endif
     public class ObjectFixture
     {
-        [TestMethod]
+
+		#if MONO
+		[TestFixtureSetUp]
+		public void Setup()
+		{
+			OneTimeSetup.Run ();
+		}
+		#endif
+
+
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task CreateObjectAsyncTest()
         {
-            dynamic obj = new APObject("object");
-            obj.intfield = 1;
-            obj.decimalfield = 22m / 7m;
+			var obj = new APObject("object");
+			obj.Set("intfield",1);
+			obj.Set("decimalfield", 22m / 7m);
             await obj.SaveAsync();
             var saved = obj as APObject;
             Assert.IsNotNull(saved);
@@ -29,37 +52,52 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Created apObject with id {0}.", saved.Id);
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task GetDevicesShouldReturnDeviceObjectsTest()
         {
-            var created = await DeviceHelper.CreateNewAsync();
+            await DeviceHelper.CreateNewAsync();
             var devices = await APObjects.FindAllAsync("device");
             Assert.IsFalse(devices.Exists(d => d is APDevice == false));
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task GetUsersShouldReturnUserObjectsTest()
         {
-            var created = await UserHelper.CreateNewUserAsync();
+            await UserHelper.CreateNewUserAsync();
             var users = await APObjects.FindAllAsync("user");
             Assert.IsFalse(users.Exists(d => d is APUser == false));
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task GetObjectAsyncTest()
         {
             // Create new object
-            dynamic obj = new APObject("object");
+			var obj = new APObject("object");
             decimal pi = 22.0m / 7.0m;
-            obj.intfield = 1;
-            obj.decimalfield = pi;
+			obj.Set("intfield",1);
+			obj.Set("decimalfield",pi);
             var saved = await ObjectHelper.CreateNewAsync(obj as APObject);
 
             // Get the created object
-            dynamic copy = await APObjects.GetAsync("object", saved.Id);
+			var copy = await APObjects.GetAsync("object", saved.Id);
             Assert.IsNotNull(copy);
-            int intfield = copy.intfield;
-            decimal decimalField = copy.decimalfield;
+			int intfield = copy.Get<int> ("intfield");
+			decimal decimalField = copy.Get<decimal>("decimalfield");
             Assert.IsTrue(intfield == 1);
             Assert.IsTrue(decimalField == pi);
             Assert.IsTrue(copy.Type == "object");
@@ -69,7 +107,12 @@ namespace Appacitive.Sdk.Tests
 
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task MultiValueObjectTest()
         {
             var obj = new APObject("object");
@@ -77,12 +120,17 @@ namespace Appacitive.Sdk.Tests
             await obj.SaveAsync();
 
             var read = await APObjects.GetAsync("object", obj.Id);
-            var value = read.GetList<string>("multifield");
-            var strList = read.GetList<string>("multifield");
-            var intList = read.GetList<int>("multifield");
+            read.GetList<string>("multifield");
+            read.GetList<string>("multifield");
+            read.GetList<int>("multifield");
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task MultiGetObjectAsyncTest()
         {
             // Create new object
@@ -99,7 +147,12 @@ namespace Appacitive.Sdk.Tests
 
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task BulkDeleteObjectAsyncTest()
         {
             var a1 = await ObjectHelper.CreateNewAsync();
@@ -113,7 +166,7 @@ namespace Appacitive.Sdk.Tests
             {
                 try
                 {
-                    var copy = await APObjects.GetAsync("object", ids[i]);
+                    await APObjects.GetAsync("object", ids[i]);
                     Assert.Fail("Operation should have faulted since the object has been deleted.");
                 }
                 catch (AppacitiveApiException)
@@ -123,7 +176,12 @@ namespace Appacitive.Sdk.Tests
 
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task DeleteObjectAsyncTest()
         {
 
@@ -136,7 +194,7 @@ namespace Appacitive.Sdk.Tests
             // Try and get and confirm that the object is deleted.
             try
             {
-                var copy = await APObjects.GetAsync("object", saved.Id);
+                await APObjects.GetAsync("object", saved.Id);
                 Assert.Fail("Operation should have faulted since the object has been deleted.");
             }
             catch (AppacitiveApiException)
@@ -145,16 +203,21 @@ namespace Appacitive.Sdk.Tests
 
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task UpdateObjectWithNoUpdateAsyncTest()
         {
             var stopWatch = new System.Diagnostics.Stopwatch();
 
             // Create the object
-            dynamic obj = new APObject("object");
+			var obj = new APObject("object");
             decimal pi = 22.0m / 7.0m;
-            obj.intfield = 1;
-            obj.decimalfield = pi;
+			obj.Set("intfield",1);
+			obj.Set("decimalfield",pi);
 
             var saved = await ObjectHelper.CreateNewAsync(obj as APObject);
             var firstUpdateTime = saved.LastUpdatedAt;
@@ -173,37 +236,42 @@ namespace Appacitive.Sdk.Tests
             await APObjects.DeleteAsync(saved.Type, saved.Id);
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task UpdateObjectPropertyAsyncTest()
         {
             // Create the object
-            dynamic obj = new APObject("object");
+			var obj = new APObject("object");
             decimal pi = 22.0m / 7.0m;
-            obj.intfield = 1;
-            obj.decimalfield = pi;
+			obj.Set("intfield",1);
+			obj.Set("decimalfield",pi);
             var saved = await ObjectHelper.CreateNewAsync(obj as APObject);
 
 
             // Get the newly created object
-            dynamic copy = await APObjects.GetAsync("object", saved.Id);
+			var copy = await APObjects.GetAsync("object", saved.Id);
             Assert.IsNotNull(copy);
-            int intfield = copy.intfield;
-            decimal decimalField = copy.decimalfield;
+			int intfield = copy.Get<int>("intfield");
+			decimal decimalField = copy.Get<decimal>("decimalfield");
             Assert.IsTrue(intfield == 1);
             Assert.IsTrue(decimalField == pi);
 
             // Update the object
-            copy.intfield = 2;
-            copy.decimalfield = 30m;
-            copy.stringfield = "Test";
+			copy.Set("intfield", 2);
+			copy.Set("decimalfield",30m);
+			copy.Set("stringfield","Test");
             await copy.SaveAsync();
 
             // Get updated copy and verify
-            dynamic updated = await APObjects.GetAsync("object", saved.Id);
+			var updated = await APObjects.GetAsync("object", saved.Id);
             Assert.IsNotNull(updated);
-            intfield = updated.intfield;
-            decimalField = updated.decimalfield;
-            string stringField = updated.stringfield;
+			intfield = updated.Get<int>("intfield");
+			decimalField = updated.Get<decimal>("decimalfield");
+			string stringField = updated.Get<string>("stringfield");
 
             Assert.IsTrue(intfield == 2, "intfield not updated.");
             Assert.IsTrue(decimalField == 30, "decimal field not updated.");
@@ -211,7 +279,12 @@ namespace Appacitive.Sdk.Tests
 
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task UpdateObjectTagAsyncTest()
         {
             string tagToRemove = "one";
@@ -219,10 +292,10 @@ namespace Appacitive.Sdk.Tests
             string tagToAdd = "three";
 
             // Create the object
-            dynamic obj = new APObject("object");
+			var obj = new APObject("object");
             decimal pi = 22.0m / 7.0m;
-            obj.intfield = 1;
-            obj.decimalfield = pi;
+			obj.Set("intfield",1);
+			obj.Set("decimalfield",pi);
 
             //Add tag
             obj.AddTag(tagToRemove);
@@ -252,7 +325,12 @@ namespace Appacitive.Sdk.Tests
             await APObjects.DeleteAsync(afterSecondUpdate.Type, afterSecondUpdate.Id);
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task UpdateObjectAttributeAsyncTest()
         {
             string attrToRemove = "one";
@@ -260,10 +338,10 @@ namespace Appacitive.Sdk.Tests
             string attrToAdd = "three";
 
             // Create the object
-            dynamic obj = new APObject("object");
+			var obj = new APObject("object");
             decimal pi = 22.0m / 7.0m;
-            obj.intfield = 1;
-            obj.decimalfield = pi;
+			obj.Set("intfield",1);
+			obj.Set("decimalfield",pi);
 
             //Add Attributes
             obj.SetAttribute(attrToRemove, attrToRemove);
@@ -293,11 +371,16 @@ namespace Appacitive.Sdk.Tests
             await APObjects.DeleteAsync(afterSecondUpdate.Type, afterSecondUpdate.Id);
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task FindAllObjectsAsyncTest()
         {
             // Create the object
-            var saved = await ObjectHelper.CreateNewAsync();
+            await ObjectHelper.CreateNewAsync();
 
             // Search
             var objects = await APObjects.FindAllAsync("object");
@@ -306,16 +389,21 @@ namespace Appacitive.Sdk.Tests
 
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task FindAllObjectsAsyncWithQueryTest()
         {
             // Create the object
-            dynamic apObject = new APObject("object");
-            apObject.stringfield = Unique.String;
-            dynamic obj = await ObjectHelper.CreateNewAsync(apObject as APObject);
+			var apObject = new APObject("object");
+			apObject.Set("stringfield", Unique.String);
+			var obj = await ObjectHelper.CreateNewAsync(apObject as APObject);
 
             // Search
-            string stringToSearch = obj.stringfield;
+			string stringToSearch = obj.Get<string>("stringfield");
             var objects = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch));
             Assert.IsNotNull(objects);
             Assert.IsTrue(objects.Count == 1);
@@ -323,17 +411,22 @@ namespace Appacitive.Sdk.Tests
 
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task FindAllObjectsAsyncWithSpecialCharacterInQueryTest()
         {
             // Create the object
-            dynamic apObject = new APObject("object");
-            apObject.stringfield = Unique.String + " 129764_TouricoTGS_Museum (tunnels in the city’s cliffs)";
-                //Unique.String + "&" + "12las@";
-            dynamic obj = await ObjectHelper.CreateNewAsync(apObject as APObject);
+			var apObject = new APObject("object");
+			apObject.Set("stringfield", Unique.String + " 129764_TouricoTGS_Museum (tunnels in the city’s cliffs)");
+            //Unique.String + "&" + "12las@";
+			var obj = await ObjectHelper.CreateNewAsync(apObject);
 
             // Search
-            string stringToSearch = obj.stringfield;
+			string stringToSearch = obj.Get<string>("stringfield");
             var objects = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringToSearch));
             Assert.IsNotNull(objects);
             Assert.IsTrue(objects.Count == 1);
@@ -341,18 +434,23 @@ namespace Appacitive.Sdk.Tests
 
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task FindAllObjectsAsyncWithNestedQueryTest()
         {
 
             // Create the object
-            dynamic apObject = new APObject("object");
-            apObject.stringfield = Unique.String;
-            apObject.intfield = 10;
-            dynamic obj = await ObjectHelper.CreateNewAsync(apObject as APObject);
+			var apObject = new APObject("object");
+			apObject.Set("stringfield",Unique.String);
+			apObject.Set("intfield",10);
+			var obj = await ObjectHelper.CreateNewAsync(apObject);
 
             // Search
-            string stringToSearch = obj.stringfield;
+			string stringToSearch = obj.Get<string>("stringfield");
             var query = Query.And(new[] 
                         {
                             Query.Property("stringfield").IsEqualTo(stringToSearch),
@@ -366,7 +464,12 @@ namespace Appacitive.Sdk.Tests
 
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task FindNonExistantPageTest()
         {
             // Search
@@ -375,14 +478,17 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task FindAndDisplayAllObjectsTest()
         {
-            var waitHandle = new ManualResetEvent(false);
-
             // Create the object
-            dynamic obj = new APObject("object");
-            obj.stringfield = Unique.String;
+			var obj = new APObject("object");
+			obj.Set("stringfield",Unique.String);
             await obj.SaveAsync();
             var saved = obj as APObject;
             Console.WriteLine("Created apObj with id {0}", saved.Id);
@@ -401,7 +507,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Finished.");
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task GetConnectedObjectsWithZeroConnectionsAsyncTest()
         {
 
@@ -413,7 +524,12 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(connectedObjects.TotalRecords == 0);
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task GetConnectedObjectsAsyncTest()
         {
 
@@ -436,20 +552,30 @@ namespace Appacitive.Sdk.Tests
         }
 
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task QueryObjectWithSingleQuotedValueTest()
         {
-            dynamic obj = new APObject("object");
+			var obj = new APObject("object");
             var stringValue = "Pan's Labyrinth" + Unique.String;
-            obj.stringfield = stringValue;
+			obj.Set("stringfield",stringValue);
             await obj.SaveAsync();
 
             PagedList<APObject> result = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsEqualTo(stringValue));
             Assert.IsTrue(result.TotalRecords == 1, "Expected single record but multiple records were returned.");
-            Assert.IsTrue(result.Single().Id == obj.Id);
+			Assert.IsTrue(result.Single().Id == obj.Id);
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task QueryWithTagsMatchAllTest()
         {
             // Create the test object.
@@ -468,7 +594,12 @@ namespace Appacitive.Sdk.Tests
         }
 
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task QueryWithTagsMatchOneOrMoreTest()
         {
             var tag1 = Unique.String;
@@ -493,7 +624,12 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(matches[0].Id == obj2.Id || matches[1].Id == obj2.Id);
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task FreeTextSearchTest()
         {
             var value = Unique.String + " " + Unique.String;
@@ -508,7 +644,12 @@ namespace Appacitive.Sdk.Tests
         }
 
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task FreeTextSearchWithMinusOperatorTest()
         {
             var mandatoryToken = Unique.String;
@@ -539,7 +680,12 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(results[0].Id == obj1.Id );
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task FreeTextSearchWithQuestionMarkOperatorTest()
         {
             var prefix = Unique.String;
@@ -566,7 +712,12 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(results[1].Id == obj1.Id || results[1].Id == obj2.Id);
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task FreeTextSearchWithProximityOperatorTest()
         {
             var prefix = Unique.String;
@@ -593,7 +744,12 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(results[0].Id == obj1.Id);
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task GetConnectedObjectsWithSortingSupportTest()
         {
             // Create 5 connected objects and request page 2 with page size of 2.
@@ -623,7 +779,12 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(results[1].Id == children[3].Id);
         }
 
-        [TestMethod]
+		#if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task ObjectUpdateWithVersioningMvccTest()
         {
             var obj = await ObjectHelper.CreateNewAsync();

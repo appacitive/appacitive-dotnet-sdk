@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk.Internal
+namespace Appacitive.Sdk
 {
     public interface IApplicationPlatform
     {

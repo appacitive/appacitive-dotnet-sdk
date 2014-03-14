@@ -14,6 +14,8 @@
     <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -133,7 +135,6 @@
     <Compile Include="Model\Constants.cs" />
     <Compile Include="Model\Credentials.cs" />
     <Compile Include="Model\Entity.cs" />
-    <Compile Include="Model\Entity.Dynamic.cs" />
     <Compile Include="Model\Entity.Extensions.cs" />
     <Compile Include="Model\Enums.cs" />
     <Compile Include="Model\ErrorSpace.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Model\Urls.cs" />
     <Compile Include="UserSession.cs" />
     <Compile Include="Model\Value.cs" />
+    <Compile Include="Model\Entity.Dynamic.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

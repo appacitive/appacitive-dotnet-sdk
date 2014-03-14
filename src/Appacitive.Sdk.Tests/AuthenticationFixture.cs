@@ -3,14 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if MONO
+using NUnit.Framework;
+#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
-    [TestClass]
+	#if MONO
+	[TestFixture]
+	#else
+	[TestClass]
+	#endif
     public class AuthenticationFixture
     {
-        [TestMethod]
+		#if MONO
+		[TestFixtureSetUp]
+		public void Setup()
+		{
+			OneTimeSetup.Run ();
+		}
+		#endif
+
+
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task AuthenticateWithUsernamePasswordAsyncTest()
         {
             // Create a new user

@@ -6,6 +6,9 @@ using MD5CryptoServiceProvider = System.Security.Cryptography.MD5CryptoServicePr
 using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
+#if MONO
+using MonoTouch.Foundation;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
@@ -19,6 +22,15 @@ namespace Appacitive.Sdk.Tests
             return await upload.UploadFileAsync(filePath);
         }
 
+		#if MONO
+		public static string TestFilePath
+		{
+			get
+			{
+				return Path.Combine (NSBundle.MainBundle.BundlePath, "logo.png");
+			}
+		}
+		#else
         private static string _filePath = string.Empty;
         public static string TestFilePath
         {
@@ -33,6 +45,8 @@ namespace Appacitive.Sdk.Tests
                 return _filePath;
             }
         }
+		#endif
+
         private static readonly string ReferenceMd5Hash = Md5.CalculateHash(FileHelper.TestFilePath);
         
         public static string GenerateNewDownloadFilePath()

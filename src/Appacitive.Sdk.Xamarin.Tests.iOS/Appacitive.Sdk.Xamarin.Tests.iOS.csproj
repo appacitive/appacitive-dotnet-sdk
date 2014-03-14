@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+    <ProductVersion>12.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{852B5EC5-05FB-4C42-8865-566EBD7310EE}</ProjectGuid>
+    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Appacitive.Sdk.Xamarin.Tests.iOS</RootNamespace>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <AssemblyName>AppacitiveSdkXamarinTestsiOS</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
+    <DefineConstants>DEBUG;__MOBILE__;__IOS__;MONO;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <MtouchLink>None</MtouchLink>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchDebug>true</MtouchDebug>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchArch>ARMv7</MtouchArch>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
+    <DefineConstants>__MOBILE__;__IOS__;MONO;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchLink>None</MtouchLink>
+    <ConsolePause>false</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Debug</OutputPath>
+    <DefineConstants>DEBUG;__MOBILE__;__IOS__;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer</CodesignKey>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Release</OutputPath>
+    <DefineConstants>__MOBILE__;__IOS__;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer</CodesignKey>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Ad-Hoc</OutputPath>
+    <DefineConstants>__MOBILE__;__IOS__;MONO;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <BuildIpa>true</BuildIpa>
+    <CodesignProvision>Automatic:AdHoc</CodesignProvision>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\AppStore</OutputPath>
+    <DefineConstants>__MOBILE__;__IOS__;MONO;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignProvision>Automatic:AppStore</CodesignProvision>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="monotouch" />
+    <Reference Include="MonoTouch.NUnitLite" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Fixtures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Info.plist" />
+    <None Include="Entitlements.plist" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="UnitTestAppDelegate.cs" />
+    <Compile Include="..\Appacitive.Sdk.Tests\InitializeAssembly.cs">
+      <Link>InitializeAssembly.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\ObjectFixture.cs">
+      <Link>Fixtures\ObjectFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\ObjectHelper.cs">
+      <Link>Helpers\ObjectHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\Unique.cs">
+      <Link>Helpers\Unique.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\ApiHelper.cs">
+      <Link>Helpers\ApiHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\TestConfiguration.cs">
+      <Link>Fixtures\TestConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\DeviceHelper.cs">
+      <Link>Helpers\DeviceHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\UserHelper.cs">
+      <Link>Helpers\UserHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\AuthenticationFixture.cs">
+      <Link>Fixtures\AuthenticationFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\ConnectionFixture.cs">
+      <Link>Fixtures\ConnectionFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\CustomArticle.cs">
+      <Link>Fixtures\CustomArticle.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\DeviceFixture.cs">
+      <Link>Fixtures\DeviceFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\EmailFixture.cs">
+      <Link>Fixtures\EmailFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\EntityFixture.cs">
+      <Link>Fixtures\EntityFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\FileFixture.cs">
+      <Link>Fixtures\FileFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\GeocodeFixture.cs">
+      <Link>Fixtures\GeocodeFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\GraphSearchFixture.cs">
+      <Link>Fixtures\GraphSearchFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\HttpFixture.cs">
+      <Link>Fixtures\HttpFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\ListFixture.cs">
+      <Link>Fixtures\ListFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\MultiValuedFixture.cs">
+      <Link>Fixtures\MultiValuedFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\PushFixture.cs">
+      <Link>Fixtures\PushFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\QueryDslFixture.cs">
+      <Link>Fixtures\QueryDslFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\ConnectionHelper.cs">
+      <Link>Helpers\ConnectionHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\Helpers\FileHelper.cs">
+      <Link>Helpers\FileHelper.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Appacitive.Sdk.iOS\Appacitive.Sdk.iOS.csproj">
+      <Project>{0BB207B9-404F-4E2C-A8A6-2B6C6EE45C52}</Project>
+      <Name>Appacitive.Sdk.iOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Appacitive.Sdk.Xamarin\Appacitive.Sdk.Xamarin.csproj">
+      <Project>{3C115626-2D87-4C7C-9E11-F2270E29A193}</Project>
+      <Name>Appacitive.Sdk.Xamarin</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Appacitive.Sdk.Tests\logo.png">
+      <Link>logo.png</Link>
+    </Content>
+  </ItemGroup>
+</Project>

@@ -1,17 +1,38 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if MONO
+using NUnit.Framework;
+#else
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
-    [TestClass]
+	#if MONO
+	[TestFixture]
+	#else
+	[TestClass]
+	#endif
     public class EntityFixture
     {
 
-        [TestMethod]
+		#if MONO
+		[TestFixtureSetUp]
+		public void Setup()
+		{
+			OneTimeSetup.Run ();
+		}
+		#endif
+
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task EntityCreateAndUpdatedDateTimeTest()
         {
             var obj = new APObject("object");
@@ -24,7 +45,12 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(updateDuration.Minutes < 2);
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task EntityDateTimePropertyTest()
         {
             var dateTime = DateTime.Now;

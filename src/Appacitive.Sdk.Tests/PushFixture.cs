@@ -1,18 +1,39 @@
 ﻿using Appacitive.Sdk.Internal;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if MONO
+using NUnit.Framework;
+#else
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
-    [TestClass]
+	#if MONO
+	[TestFixture]
+	#else
+	[TestClass]
+	#endif
     public class PushFixture
     {
+		#if MONO
+		[TestFixtureSetUp]
+		public void Setup()
+		{
+			OneTimeSetup.Run ();
+		}
+		#endif
+
         [Ignore]
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task BroadcastPushAsyncTest()
         {
             string id = await PushNotification
@@ -24,7 +45,12 @@ namespace Appacitive.Sdk.Tests
         }
 
         [Ignore]
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task QueryBasedPushAsyncTest()
         {
             string id = await PushNotification
@@ -36,7 +62,12 @@ namespace Appacitive.Sdk.Tests
         }
 
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void SerializerToastMessageTest()
         {
             var msg = PushNotification
@@ -59,7 +90,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine(Encoding.UTF8.GetString(serializer.Serialize(msg))); 
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void SerializerRawPushNotificationTest()
         {
             var msg = PushNotification
@@ -80,7 +116,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine(Encoding.UTF8.GetString(serializer.Serialize(msg)));
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void SerializerFlipTilePushNotificationTest()
         {
             var msg = PushNotification
@@ -112,7 +153,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine(Encoding.UTF8.GetString(serializer.Serialize(msg)));
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void SerializerIconicTilePushNotificationTest()
         {
             var msg = PushNotification
@@ -153,7 +199,12 @@ namespace Appacitive.Sdk.Tests
 
 
         [Ignore]
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task PushToDevicesAsyncTest()
         {
             string id = await PushNotification

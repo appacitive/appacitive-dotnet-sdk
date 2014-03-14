@@ -3,14 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if MONO
+using NUnit.Framework;
+#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
-    [TestClass]
+	#if MONO
+	[TestFixture]
+	#else
+	[TestClass]
+	#endif
     public class ListFixture
     {
-        [TestMethod]
+		#if MONO
+		[TestFixtureSetUp]
+		public void Setup()
+		{
+			OneTimeSetup.Run ();
+		}
+		#endif
+
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task GetListContentsTest()
         {
             var contents = await CannedLists.GetListItemsAsync("list");
@@ -20,7 +41,12 @@ namespace Appacitive.Sdk.Tests
             contents.ForEach( item => Console.WriteLine("{0}) {1} : {2}", item.Position, item.Name, item.Value));
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task GetListContentsWithPagingTest()
         {
             var contents = await CannedLists.GetListItemsAsync("list");

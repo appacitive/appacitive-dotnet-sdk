@@ -63,9 +63,9 @@ namespace Appacitive.Sdk
             return this.Hours.GetHashCode() ^ this.Minutes.GetHashCode();
         }
 
-        #if !WINDOWS_PHONE7
+		#if (!WINDOWS_PHONE7 && !MONO)
         private static readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
-        private static bool TryGetFromCache(int key, out Timezone timezone)
+		private static bool TryGetFromCache(int key, out Timezone timezone)
         {
             timezone = null;
             _lock.EnterReadLock();

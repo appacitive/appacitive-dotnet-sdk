@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
+#if MONO
+using NUnit.Framework;
+#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
@@ -12,7 +16,7 @@ namespace Appacitive.Sdk.Tests
     {
         public static void EnsureValidResponse(ApiResponse response, bool checkForSuccesss = true)
         {
-            Assert.IsNotNull(response, "Api response is null.");
+			Assert.IsNotNull(response, "Api response is null.");
             Assert.IsNotNull(response.Status, "Response.Status is null.");
             if (checkForSuccesss == true)
             {

@@ -15,7 +15,7 @@ namespace Appacitive.Sdk
     {
         public APDevice(DeviceType type) : base("device")
         {
-            this.DeviceType = type;
+			this.DeviceType = type;
             this.Channels = new MultiValueCollection<string>(this, "channels");
         }
 

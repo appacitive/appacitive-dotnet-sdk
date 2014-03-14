@@ -3,15 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if MONO
+using NUnit.Framework;
+#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
-    [TestClass]
+	#if MONO
+	[TestFixture]
+	#else
+	[TestClass]
+	#endif
     public class QueryDslFixture
     {
+		#if MONO
+		[TestFixtureSetUp]
+		public void Setup()
+		{
+			OneTimeSetup.Run ();
+		}
+		#endif
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void SimpleQueryTest()
         {
             var query = Query.Property("name").IsEqualTo("nikhil");
@@ -20,7 +40,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine(query2.ToString());
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void AggregatedQueryTest()
         {
             var query =
@@ -31,14 +56,24 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine(query.ToString());
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void RadialQueryTest()
         {
             var query = Query.Property("location").WithinCircle(new Geocode(10, 10), 15);
             Console.WriteLine(query);
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void DatetimeQueryTest()
         {
             Console.WriteLine("Date time query");
@@ -52,7 +87,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine(query);
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void QueryWithSingleQuoteShouldBeEscapedTest()
         {
             var query = Query.Property("string_field").IsEqualTo("steve's house").ToString();
@@ -61,7 +101,12 @@ namespace Appacitive.Sdk.Tests
         }
 
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void NonLiteralsInStringQueryShouldBeEscapedTest()
         {
             var query = Query.Property("string_field").IsEqualTo("hello world").ToString();
@@ -70,7 +115,12 @@ namespace Appacitive.Sdk.Tests
         }
 
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void PolygonQueryTest()
         {
             var query = Query.Property("location").WithinPolygon( 
@@ -83,7 +133,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine(query);
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void NestedQueryTest()
         {
             var query =
@@ -104,7 +159,12 @@ namespace Appacitive.Sdk.Tests
         }
 
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task RawQueryTest()
         {
             var propertyValue = Unique.String;
@@ -120,7 +180,12 @@ namespace Appacitive.Sdk.Tests
         }
 
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task MatchQueryTest()
         {
             var propertyValue = Unique.String;

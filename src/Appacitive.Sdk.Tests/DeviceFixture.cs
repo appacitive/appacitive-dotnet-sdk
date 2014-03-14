@@ -1,16 +1,37 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if MONO
+using NUnit.Framework;
+#else
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
-    [TestClass]
+	#if MONO
+	[TestFixture]
+	#else
+	[TestClass]
+	#endif
     public class DeviceFixture
     {
-        [TestMethod]
+		#if MONO
+		[TestFixtureSetUp]
+		public void Setup()
+		{
+			OneTimeSetup.Run ();
+		}
+		#endif
+
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task RegisterDeviceAsyncTest()
         {
             APDevice device = new APDevice(DeviceType.iOS)
@@ -26,7 +47,12 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Created new device with id {0}.", device.Id);
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task GetDeviceAsyncTest()
         {
             // Create a new device
@@ -45,7 +71,12 @@ namespace Appacitive.Sdk.Tests
             
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task DeleteDeviceAsyncTest()
         {
             var created = await DeviceHelper.CreateNewAsync();
@@ -53,7 +84,7 @@ namespace Appacitive.Sdk.Tests
             // Try to get it.
             try
             {
-                var shouldNotExist = await APDevices.GetAsync(created.Id);
+                await APDevices.GetAsync(created.Id);
                 Assert.Fail("Able to retrieve deleted apObject.");
             }
             catch (AppacitiveApiException)
@@ -61,7 +92,12 @@ namespace Appacitive.Sdk.Tests
             }
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task UpdateDeviceAsyncTest()
         {
             var created = await DeviceHelper.CreateNewAsync();

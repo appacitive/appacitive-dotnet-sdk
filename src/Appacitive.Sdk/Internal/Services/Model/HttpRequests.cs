@@ -253,33 +253,45 @@ namespace Appacitive.Sdk.Services
 
         private static async Task TraceAsync(string trxId, string operation, string url, IDictionary<string, string> headers, byte[] request, byte[] response, long responseTime, ApiRequest requestObj, ApiResponse responseObj, Exception fault = null)
         {
-            try
+			try
             {
-                var logThisRequest = App.Debug.ApiLogging.ShouldLog(requestObj, responseObj, responseTime);
-                if (logThisRequest)
-                {
-                    var log = new JObject();
-                    log["referenceId"] = new JValue(trxId);
-                    log["method"] = new JValue(operation);
-                    log["url"] = new JValue(url);
-                    log["responseTime"] = new JValue(responseTime);
-                    var headerJson = new JObject();
-                    foreach (var key in headers.Keys)
-                        headerJson[key] = new JValue(headers[key]);
-                    log["headers"] = headerJson;
+				var logThisRequest = App.Debug.ApiLogging.ShouldLog(requestObj, responseObj, responseTime);
+				if( logThisRequest == false ) return;
+				var buffer = new StringBuilder();
+				using( var txtWriter = new StringWriter(buffer))
+				{
+					using( var jWriter = new JsonTextWriter(txtWriter))
+					{
+						jWriter.Formatting = Formatting.Indented;
+						jWriter.WriteStartObject();
+						// Write the properties
+						jWriter.WriteProperty("referenceId", trxId, true);
+						jWriter.WriteProperty("method", operation, true);
+						jWriter.WriteProperty("url", url, true);
+						jWriter.WriteProperty("responseTime");
+						jWriter.WriteValue(responseTime);
+						// Write headers
+						jWriter.WritePropertyName("headers");
+						jWriter.WriteStartObject();
+						headers.For( h => jWriter.WriteProperty(h.Key, h.Value, true));
+						jWriter.WriteEndObject();
 
-                    log["request"] = request == null ?
-                            null :
-                            new JRaw(Encoding.UTF8.GetString(request, 0, request.Length));
-
-                    log["response"] = response == null ?
-                            null :
-                            new JRaw(Encoding.UTF8.GetString(response, 0, response.Length));
-                    if (fault != null)
-                        log["fault"] = fault.ToString();
-
-                    await App.Debug.LogAsync(log.ToString(Formatting.Indented));
-                }
+						// Write the request and response
+						jWriter.WriteProperty("request");
+						if( request != null )
+							jWriter.WriteRaw(Encoding.UTF8.GetString(request, 0, request.Length));
+						else 
+							jWriter.WriteNull();
+						jWriter.WriteProperty("response");
+						if( response != null )
+							jWriter.WriteRaw(Encoding.UTF8.GetString(request, 0, response.Length));
+						else 
+							jWriter.WriteNull();
+						jWriter.WriteEndObject();
+					}
+				}
+				// Log the request.
+				await App.Debug.LogAsync(buffer.ToString());
             }
             catch { /* Suppress fault */ }
         }

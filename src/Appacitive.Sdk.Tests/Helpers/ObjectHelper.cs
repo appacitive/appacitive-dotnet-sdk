@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if MONO
+using NUnit.Framework;
+#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk.Tests
@@ -14,18 +18,18 @@ namespace Appacitive.Sdk.Tests
         {
             Console.WriteLine("Creating new apObject");
             var now = DateTime.Now;
-            dynamic obj = apObject ?? new APObject("object");
+			var obj = apObject ?? new APObject("object");
             if (apObject == null)
             {
-                obj.intfield = 1;
-                obj.decimalfield = 10.0m;
-                obj.datefield = "2012-12-20";
-                obj.datetimefield = now.ToString("o");
-                obj.stringfield = "string value";
-                obj.textfield = "text value";
-                obj.boolfield = false;
-                obj.geofield = "11.5,12.5";
-                obj.listfield = "a";
+				obj.Set("intfield",1);
+				obj.Set("decimalfield",10.0m);
+				obj.Set("datefield","2012-12-20");
+				obj.Set("datetimefield",now.ToString("o"));
+				obj.Set("stringfield", "string value");
+				obj.Set("textfield", "text value");
+				obj.Set("boolfield", false);
+				obj.Set("geofield", "11.5,12.5");
+				obj.Set("listfield","a");
                 obj.SetAttribute("attr1", "value1");
                 obj.SetAttribute("attr2", "value2");
             }
@@ -47,16 +51,16 @@ namespace Appacitive.Sdk.Tests
         {
             Console.WriteLine("Creating new apObject instance without saving");
             var now = DateTime.Now;
-            dynamic obj = new APObject("object");
-            obj.intfield = 1;
-            obj.decimalfield = 10.0m;
-            obj.datefield = "2012-12-20";
-            obj.datetimefield = now.ToString("o");
-            obj.stringfield = "string value";
-            obj.textfield = "text value";
-            obj.boolfield = false;
-            obj.geofield = "11.5,12.5";
-            obj.listfield = "a";
+			var obj = new APObject("object");
+			obj.Set("intfield",1);
+			obj.Set("decimalfield",10.0m);
+			obj.Set("datefield","2012-12-20");
+			obj.Set("datetimefield",now.ToString("o"));
+			obj.Set("stringfield","string value");
+			obj.Set("textfield","text value");
+			obj.Set("boolfield",false);
+			obj.Set("geofield","11.5,12.5");
+			obj.Set("listfield","a");
             obj.SetAttribute("attr1", "value1");
             obj.SetAttribute("attr2", "value2");
             return obj as APObject;

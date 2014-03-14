@@ -3,14 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if MONO
+using NUnit.Framework;
+#else
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
-    [TestClass]
+	#if MONO
+	[TestFixture]
+	#else
+	[TestClass]
+	#endif
     public class GeocodeFixture
     {
-        [TestMethod]
+		#if MONO
+		[TestFixtureSetUp]
+		public void Setup()
+		{
+			OneTimeSetup.Run ();
+		}
+		#endif
+
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void GeocodeParsingTest()
         {
             var geo = new Geocode(10.0m, 10.0m);
@@ -32,7 +53,12 @@ namespace Appacitive.Sdk.Tests
                 });
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void InvalidGeocodeTest()
         {
             var invalid = new[] 
@@ -53,7 +79,12 @@ namespace Appacitive.Sdk.Tests
             });
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void GeocodeEqualityTest()
         {
             var geo1 = new Geocode(10m, 10.5m);
@@ -61,12 +92,19 @@ namespace Appacitive.Sdk.Tests
             var geo3 = new Geocode(10m, 11m);       // different latitude
             var geo4 = new Geocode(12m, 10.5m);     // different longitude
 
-            Assert.AreEqual<Geocode>(geo1, geo2);
-            Assert.AreNotEqual<Geocode>(geo1, geo3);
-            Assert.AreNotEqual<Geocode>(geo1, geo4);
+			Assert.AreEqual(geo1, geo2);
+			Assert.AreNotEqual(geo1, geo3);
+			Assert.AreNotEqual(geo1, geo4);
+
+
         }
 
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public void GetHashCodeTest()
         {
             var map = new Dictionary<Geocode, int>();
@@ -75,7 +113,7 @@ namespace Appacitive.Sdk.Tests
             var geoKey2 = new Geocode(10.5m, 10.6m);
             int result;
             Assert.IsTrue(map.TryGetValue(geoKey2, out result));
-            Assert.AreEqual<int>(10, result);
+            Assert.AreEqual(10, result);
             
         }
     }

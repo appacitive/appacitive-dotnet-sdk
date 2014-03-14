@@ -1,23 +1,44 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if MONO
+using NUnit.Framework;
+#else
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
 namespace Appacitive.Sdk.Tests
 {
-    [TestClass]
+	#if MONO
+	[TestFixture]
+	#else
+	[TestClass]
+	#endif
     public class EmailFixture
     {
+		#if MONO
+		[TestFixtureSetUp]
+		public void Setup()
+		{
+			OneTimeSetup.Run ();
+		}
+		#endif
+
         private string[] To = new string[] { /* Test email address go here*/ };
         private string[] Cc = new string[] { /* Test email address go here*/ };
         private string[] Bcc = new string[] { /* Test email address go here*/ };
         private string Username = "username";
         private string Password = "password";
 
-        [Ignore]
-        [TestMethod]
+		[Ignore]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task SendRawEmailTest()
         {
             await NewEmail
@@ -29,7 +50,12 @@ namespace Appacitive.Sdk.Tests
         }
 
         [Ignore]
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task SendTemplatedEmailTest()
         {
             await NewEmail
@@ -48,7 +74,12 @@ namespace Appacitive.Sdk.Tests
         }
 
         [Ignore]
-        [TestMethod]
+        #if MONO
+		[Test]
+		[Timeout(int.MaxValue)]
+		#else
+		[TestMethod]
+		#endif
         public async Task SendEmailWithSmtpTest()
         {
             await NewEmail
