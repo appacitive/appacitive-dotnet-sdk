@@ -55,6 +55,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\net40\System.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -91,17 +92,32 @@
     <Compile Include="..\Appacitive.Sdk.Net45\Wcf\AllowAsyncServiceBehaviorExtension.cs">
       <Link>Wcf\AllowAsyncServiceBehaviorExtension.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\Wcf\AppSession.cs">
+      <Link>Wcf\AppSession.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk.Net45\Wcf\ContextPropogatingInvoker.cs">
       <Link>Wcf\ContextPropogatingInvoker.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk.Net45\Wcf\ContextScope.cs">
       <Link>Wcf\ContextScope.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\Wcf\InProcSession.cs">
+      <Link>Wcf\InProcSession.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\Wcf\InvokeWithUserContext.cs">
+      <Link>Wcf\InvokeWithUserContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\Wcf\ISession.cs">
+      <Link>Wcf\ISession.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk.Net45\Wcf\OperationContextPreservingSynchronizationContext.cs">
       <Link>Wcf\OperationContextPreservingSynchronizationContext.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk.Net45\Wcf\PropagateOperationContext.cs">
       <Link>Wcf\PropagateOperationContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\Wcf\SessionIdExtension.cs">
+      <Link>Wcf\SessionIdExtension.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk.Net45\Wcf\UserExtension.cs">
       <Link>Wcf\UserExtension.cs</Link>

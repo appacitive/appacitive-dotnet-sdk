@@ -60,7 +60,7 @@ namespace Appacitive.Sdk.Wcf
 
         public void ApplyDispatchBehavior(OperationDescription operationDescription, DispatchOperation dispatchOperation)
         {
-            dispatchOperation.Invoker = new ContextPropogatingInvoker(dispatchOperation.Invoker);
+            dispatchOperation.Invoker = new ContextPropogatingInvoker(new InvokeWithUserContext(dispatchOperation.Invoker));
         }
 
         public void Validate(OperationDescription operationDescription)

@@ -36,6 +36,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -59,10 +60,15 @@
     <Compile Include="Wcf\AllowAsyncServiceBehaviorExtension.cs" />
     <Compile Include="Wcf\ContextPropogatingInvoker.cs" />
     <Compile Include="Wcf\ContextScope.cs" />
+    <Compile Include="Wcf\SessionIdExtension.cs" />
+    <Compile Include="Wcf\InProcSession.cs" />
+    <Compile Include="Wcf\InvokeWithUserContext.cs" />
+    <Compile Include="Wcf\ISession.cs" />
     <Compile Include="Wcf\OperationContextPreservingSynchronizationContext.cs" />
     <Compile Include="Wcf\PropagateOperationContext.cs" />
     <Compile Include="TraceWriter.cs" />
     <Compile Include="Wcf\UserExtension.cs" />
+    <Compile Include="Wcf\AppSession.cs" />
     <Compile Include="Wcf\UserTokenExtension.cs" />
     <Compile Include="Wcf\WcfPlatform.cs" />
     <Compile Include="Wcf\WcfApplicationState.cs" />
@@ -76,6 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
