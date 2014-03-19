@@ -151,7 +151,7 @@ namespace Appacitive.Sdk.Wcf
             var context = WebOperationContext.Current;
             if (context == null || context.IncomingRequest == null)
                 return;
-            context.OutgoingResponse.Headers[HttpResponseHeader.SetCookie] = new Cookie(sessionCookieName, sessionId, DateTime.Now.AddMinutes(60)).ToString();
+            context.OutgoingResponse.Headers[HttpResponseHeader.SetCookie] = new Cookie(sessionCookieName, sessionId).ToString();
         }
     }
 
