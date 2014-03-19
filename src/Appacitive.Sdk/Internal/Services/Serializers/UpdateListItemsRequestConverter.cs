@@ -10,11 +10,11 @@ using System.Collections;
 
 namespace Appacitive.Sdk.Services
 {
-    public class AtomicCountersRequestConverter : JsonConverter
+    public class UpdateListItemsRequestConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(AtomicCountersRequest) == objectType;
+            return typeof(UpdateListItemsRequest) == objectType;
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -24,20 +24,30 @@ namespace Appacitive.Sdk.Services
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var request = value as AtomicCountersRequest;
+            var request = value as UpdateListItemsRequest;
             if (request == null)
             {
                 writer.WriteNull();
                 return;
             }
-
+            /*
+             "additems" : ["3","4","5"],
+            "adduniqueitems" : ["1","6"],
+            "removeitems": ["2","5"]
+             */
             writer.WriteStartObject();
             writer.WritePropertyName(request.Property );
             writer.WriteStartObject();
-            if( request.IncrementBy > 0 )
-                writer.WriteProperty("incrementby", request.IncrementBy.ToString());
-            if( request.DecrementBy > 0 )
-                writer.WriteProperty("decrementby", request.DecrementBy.ToString());
+            if (request.ItemsToAdd.Count > 0)
+            {
+                if (request.AddUniquely == true)
+                    writer.WriteArray("adduniqueitems", request.ItemsToAdd);
+                else
+                    writer.WriteArray("additems", request.ItemsToAdd);
+            }
+            if (request.ItemsToRemove.Count > 0)
+                writer.WriteArray("removeitems", request.ItemsToRemove);
+
             writer.WriteEndObject();
             writer.WriteEndObject();
         }

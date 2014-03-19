@@ -129,6 +129,33 @@ namespace Appacitive.Sdk
             }
         }
 
+        public async Task AddItemsAsync<T>(string property, params T[] values)
+        {
+            await AddItemsAsync(property, false, values);
+        }
+
+        public async Task AddItemsAsync<T>(string property, bool addUniquely, params T[] values)
+        {
+            var request = new UpdateListItemsRequest { Type = this.Type, Id = this.Id, Property = property, AddUniquely = addUniquely };
+            request.ItemsToAdd.AddRange(values.Where(x => x != null).Select(x => x.ToString()));
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            var updated = response.Object.GetList<T>(property);
+            this.SetList(property, updated, true);
+        }
+
+        public async Task RemoveItemsAsync<T>(string property, params T[] values)
+        {
+            var request = new UpdateListItemsRequest { Type = this.Type, Id = this.Id, Property = property };
+            request.ItemsToRemove.AddRange(values.Where(x => x != null).Select(x => x.ToString()));
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            var updated = response.Object.GetList<T>(property);
+            this.SetList(property, updated, true);
+        }
+
 
         /// <summary>
         /// Allows for atomically adding items without duplication to a multi valued property.
@@ -481,7 +508,7 @@ namespace Appacitive.Sdk
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             var newValue = response.Object.Get<string>(property);
-            this.Set(property, newValue);
+            this.Set<string>(property, newValue, true);
         }
 
         public async Task DecrementAsync(string property, uint decrement)
@@ -491,7 +518,7 @@ namespace Appacitive.Sdk
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             var newValue = response.Object.Get<string>(property);
-            this.Set(property, newValue);
+            this.Set<string>(property, newValue, true);
         }
 
         public string ToJson()

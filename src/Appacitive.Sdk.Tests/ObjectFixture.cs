@@ -13,6 +13,43 @@ namespace Appacitive.Sdk.Tests
     public class ObjectFixture
     {
         [TestMethod]
+        public async Task AddItemsToMultiValuedFieldAsyncTest()
+        {
+            var obj = new APObject("object");
+            await obj.SaveAsync();
+            await obj.AddItemsAsync("multifield", "1", "2", "3");
+            var list = obj.GetList<string>("multifield");
+            Assert.IsTrue(list.Except(new[] { "1", "2", "3" }).Count() == 0);
+        }
+
+
+
+        [TestMethod]
+        public async Task AddUniqueItemsToMultiValuedFieldAsyncTest()
+        {
+            var obj = new APObject("object");
+            obj.SetList("multifield", new int[] { 1, 2, 3 });
+            await obj.SaveAsync();
+            await obj.AddItemsAsync("multifield", true, "1", "2", "3", "4", "5");
+            var list = obj.GetList<string>("multifield");
+            Assert.IsTrue(list.Count() == 5);
+            Assert.IsTrue(list.Except(new[] { "1", "2", "3", "4", "5" }).Count() == 0);
+        }
+
+        [TestMethod]
+        public async Task RemoveItemsFromMultiValuedFieldAsyncTest()
+        {
+            var obj = new APObject("object");
+            obj.SetList("multifield", new int[] { 1, 2, 3 });
+            await obj.SaveAsync();
+            await obj.RemoveItemsAsync("multifield", "1", "2");
+            var list = obj.GetList<string>("multifield");
+            Assert.IsTrue(list.Count() == 1);
+            Assert.IsTrue(list.Except(new[] { "3" }).Count() == 0);
+        }
+
+
+        [TestMethod]
         public async Task AtomicCountersTest()
         {
             var obj = new APObject("object");

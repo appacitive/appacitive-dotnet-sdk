@@ -21,6 +21,7 @@ namespace Appacitive.Sdk
             // TODO: Move this to objectfactory
             serializer.Converters.Add(new ObjectConverter());
             serializer.Converters.Add(new EmailConverter());
+            serializer.Converters.Add(new UpdateListItemsRequestConverter());
             serializer.Converters.Add(new UpdateObjectRequestConverter());
             serializer.Converters.Add(new AtomicCountersRequestConverter());
             serializer.Converters.Add(new UserConverter());

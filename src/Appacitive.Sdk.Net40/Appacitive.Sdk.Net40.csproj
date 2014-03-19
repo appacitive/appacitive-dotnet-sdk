@@ -476,6 +476,12 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateDeviceResponse.cs">
       <Link>Internal\Services\Model\UpdateDeviceResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateListItemsRequest.cs">
+      <Link>Internal\Services\Model\UpdateListItemsRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateListItemsResponse.cs">
+      <Link>Internal\Services\Model\UpdateListItemsResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateObjectRequest.cs">
       <Link>Internal\Services\Model\UpdateObjectRequest.cs</Link>
     </Compile>
@@ -538,6 +544,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateDeviceRequestConverter.cs">
       <Link>Internal\Services\Serializers\UpdateDeviceRequestConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateListItemsRequestConverter.cs">
+      <Link>Internal\Services\Serializers\UpdateListItemsRequestConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateObjectRequestConverter.cs">
       <Link>Internal\Services\Serializers\UpdateObjectRequestConverter.cs</Link>

@@ -50,7 +50,10 @@
     <Compile Include="Internal\Platform.cs" />
     <Compile Include="Internal\Services\Model\AtomicCountersRequest.cs" />
     <Compile Include="Internal\Services\Model\AtomicCountersResponse.cs" />
+    <Compile Include="Internal\Services\Model\UpdateListItemsRequest.cs" />
+    <Compile Include="Internal\Services\Model\UpdateListItemsResponse.cs" />
     <Compile Include="Internal\Services\Serializers\AtomicCountersRequestConverter.cs" />
+    <Compile Include="Internal\Services\Serializers\UpdateListItemsRequestConverter.cs" />
     <Compile Include="Internal\UserInfo.cs" />
     <Compile Include="Model\AppacitiveSettings.cs" />
     <Compile Include="CannedLists.cs" />
