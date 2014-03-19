@@ -20,7 +20,7 @@ namespace Appacitive.Sdk.Wcf
         protected override void InitializeContainer(IDependencyContainer container)
         {
             base.InitializeContainer(container);
-            container.RegisterInstance<ISession, InProcSession>(new InProcSession());
+            container.RegisterInstance<ISession, SessionCleanupProxy>(new SessionCleanupProxy(new InProcSession(), new TimeSpan(0,5,0), new TimeSpan(0,30,0)));
         }
 
         public override IApplicationState ApplicationState

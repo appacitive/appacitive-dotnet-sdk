@@ -116,6 +116,9 @@
     <Compile Include="..\Appacitive.Sdk.Net45\Wcf\PropagateOperationContext.cs">
       <Link>Wcf\PropagateOperationContext.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk.Net45\Wcf\SessionCleanupProxy.cs">
+      <Link>Wcf\SessionCleanupProxy.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk.Net45\Wcf\SessionIdExtension.cs">
       <Link>Wcf\SessionIdExtension.cs</Link>
     </Compile>

@@ -60,6 +60,7 @@
     <Compile Include="Wcf\AllowAsyncServiceBehaviorExtension.cs" />
     <Compile Include="Wcf\ContextPropogatingInvoker.cs" />
     <Compile Include="Wcf\ContextScope.cs" />
+    <Compile Include="Wcf\SessionCleanupProxy.cs" />
     <Compile Include="Wcf\SessionIdExtension.cs" />
     <Compile Include="Wcf\InProcSession.cs" />
     <Compile Include="Wcf\InvokeWithUserContext.cs" />
