@@ -474,6 +474,25 @@ namespace Appacitive.Sdk
             }
         }
 
+        public async Task IncrementAsync(string property, uint increment)
+        {
+            var request = new AtomicCountersRequest { Type = this.Type, Id = this.Id, IncrementBy = increment, Property = property };
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            var newValue = response.Object.Get<string>(property);
+            this.Set(property, newValue);
+        }
+
+        public async Task DecrementAsync(string property, uint decrement)
+        {
+            var request = new AtomicCountersRequest { Type = this.Type, Id = this.Id, DecrementBy = decrement, Property = property };
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            var newValue = response.Object.Get<string>(property);
+            this.Set(property, newValue);
+        }
 
         public string ToJson()
         {

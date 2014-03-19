@@ -48,6 +48,9 @@
     <Compile Include="Internal\ErrorCodes.cs" />
     <Compile Include="Internal\LocalSettings.cs" />
     <Compile Include="Internal\Platform.cs" />
+    <Compile Include="Internal\Services\Model\AtomicCountersRequest.cs" />
+    <Compile Include="Internal\Services\Model\AtomicCountersResponse.cs" />
+    <Compile Include="Internal\Services\Serializers\AtomicCountersRequestConverter.cs" />
     <Compile Include="Internal\UserInfo.cs" />
     <Compile Include="Model\AppacitiveSettings.cs" />
     <Compile Include="CannedLists.cs" />

@@ -13,6 +13,27 @@ namespace Appacitive.Sdk.Tests
     public class ObjectFixture
     {
         [TestMethod]
+        public async Task AtomicCountersTest()
+        {
+            var obj = new APObject("object");
+            obj.Set<int>("intfield", 0);
+            await obj.SaveAsync();
+            await obj.IncrementAsync("intfield", 10);
+            await obj.DecrementAsync("intfield", 5);
+            Assert.AreEqual(5, obj.Get<int>("intfield"));
+        }
+
+        [TestMethod]
+        public async Task AtomicCountersWithoutPreInitializationTest()
+        {
+            var obj = new APObject("object");
+            await obj.SaveAsync();
+            await obj.IncrementAsync("intfield", 10);
+            await obj.DecrementAsync("intfield", 5);
+            Assert.AreEqual(5, obj.Get<int>("intfield"));
+        }
+
+        [TestMethod]
         public async Task CreateObjectAsyncTest()
         {
             dynamic obj = new APObject("object");

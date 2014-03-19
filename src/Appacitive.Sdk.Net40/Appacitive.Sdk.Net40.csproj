@@ -254,6 +254,12 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\ApiResponse.cs">
       <Link>Internal\Services\Model\ApiResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\AtomicCountersRequest.cs">
+      <Link>Internal\Services\Model\AtomicCountersRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\AtomicCountersResponse.cs">
+      <Link>Internal\Services\Model\AtomicCountersResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\AuthenticateUserRequest.cs">
       <Link>Internal\Services\Model\AuthenticateUserRequest.cs</Link>
     </Compile>
@@ -487,6 +493,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\ValidateUserSessionResponse.cs">
       <Link>Internal\Services\Model\ValidateUserSessionResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\AtomicCountersRequestConverter.cs">
+      <Link>Internal\Services\Serializers\AtomicCountersRequestConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\AuthenticateUserRequestConverter.cs">
       <Link>Internal\Services\Serializers\AuthenticateUserRequestConverter.cs</Link>

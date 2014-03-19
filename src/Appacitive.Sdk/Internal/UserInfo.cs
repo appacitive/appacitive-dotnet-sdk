@@ -49,5 +49,13 @@ namespace Appacitive.Sdk.Internal
             this.User = user;
             this.UserToken = userToken;
         }
+
+        public bool IsLoggedIn
+        {
+            get
+            {
+                return this.User != null;
+            }
+        }
     }
 }

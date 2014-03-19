@@ -143,5 +143,45 @@ namespace Appacitive.Sdk
             return users;
         }
 
+
+        public static async Task ChangePasswordByUsernameAsync(string username, string oldPassword, string newPassword)
+        {
+            var response = await new ChangePasswordRequest
+                    {
+                        UserId = username,
+                        OldPassword = oldPassword,
+                        NewPassword = newPassword,
+                        IdType = "username"
+                    }.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+        }
+
+        public static async Task ChangePasswordByIdAsync(string userId, string oldPassword, string newPassword)
+        {
+            var response = await new ChangePasswordRequest
+                    {
+                        UserId = userId,
+                        OldPassword = oldPassword,
+                        NewPassword = newPassword,
+                    }.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+        }
+
+        public static async Task ChangePasswordAsync(string oldPassword, string newPassword)
+        {
+            if (App.Current.GetCurrentUser().IsLoggedIn == false)
+                throw new AppacitiveRuntimeException("Cannot change password for current user as no user is logged in.");
+            var response = await new ChangePasswordRequest
+                    {
+                        UserId = "me",
+                        OldPassword = oldPassword,
+                        NewPassword = newPassword,
+                        IdType = "token"
+                    }.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+        }
     }
 }

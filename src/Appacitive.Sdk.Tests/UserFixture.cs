@@ -89,6 +89,62 @@ namespace Appacitive.Sdk.Tests
             await APUsers.InitiateResetPasswordAsync(user.Username);
         }
 
+
+        [TestMethod]
+        public async Task ChangeUserPasswordByUsernameWithValidPasswordTest()
+        {
+            var user = await UserHelper.CreateNewUserAsync();
+            var newPassword = Unique.String;
+            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            await APUsers.ChangePasswordByUsernameAsync(user.Username, user.Password, newPassword);
+            var session = await new UsernamePasswordCredentials(user.Username, newPassword).AuthenticateAsync();
+            Assert.IsNotNull(session);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(session.UserToken) == false);
+        }
+
+        [TestMethod]
+        public async Task ChangeUserPasswordWithInvalidPasswordTest()
+        {
+            var user = await UserHelper.CreateNewUserAsync();
+            var wrongPassword = Unique.String;
+            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            try
+            {
+                await APUsers.ChangePasswordAsync(wrongPassword, Unique.String);
+            }
+            catch( AppacitiveApiException ex )
+            {
+                Assert.AreEqual("25001", ex.Code);
+            }
+            var session = await new UsernamePasswordCredentials(user.Username, user.Password).AuthenticateAsync();
+            Assert.IsNotNull(session);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(session.UserToken) == false);
+        }
+
+        [TestMethod]
+        public async Task ChangeUserPasswordByIdWithValidPasswordTest()
+        {
+            var user = await UserHelper.CreateNewUserAsync();
+            var newPassword = Unique.String;
+            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            await APUsers.ChangePasswordByIdAsync(user.Id, user.Password, newPassword);
+            var session = await new UsernamePasswordCredentials(user.Username, newPassword).AuthenticateAsync();
+            Assert.IsNotNull(session);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(session.UserToken) == false);
+        }
+
+        [TestMethod]
+        public async Task ChangeCurrentUserPasswordWithValidPasswordTest()
+        {
+            var user = await UserHelper.CreateNewUserAsync();
+            var newPassword = Unique.String;
+            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            await APUsers.ChangePasswordAsync(user.Password, newPassword);
+            var session = await new UsernamePasswordCredentials(user.Username, newPassword).AuthenticateAsync();
+            Assert.IsNotNull(session);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(session.UserToken) == false);
+        }
+
         [TestMethod]
         public async Task ValidateSessionTest()
         {
