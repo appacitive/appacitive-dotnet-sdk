@@ -103,12 +103,6 @@ namespace Appacitive.Sdk.Wcf
             // Remove the sessionid from session.
             var session = ObjectFactory.Build<ISession>();
             session.Remove(GetUserTokenKey(sessionId));
-            // Remove the cookie
-            var context = WebOperationContext.Current;
-            if (context == null || context.IncomingRequest == null)
-                return;
-            var expiry = DateTime.UtcNow.AddDays(-2);
-            context.OutgoingResponse.Headers[HttpResponseHeader.SetCookie] = new Cookie(SessionCookieName, sessionId, expiry).ToString();
         }
     }
 
