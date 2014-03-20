@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
 using System.IO;
 using Appacitive.Sdk.Internal;
+using Appacitive.Sdk.Interfaces;
 
 namespace Appacitive.Sdk
 {
@@ -49,6 +50,7 @@ namespace Appacitive.Sdk
             }
         }
 
+        public static readonly ITypeMapping Types = new TypeMapping();
         public static readonly Debugger Debug = new Debugger();
 
         public static async Task<UserSession> LoginAsync(Credentials credentials)
@@ -59,13 +61,11 @@ namespace Appacitive.Sdk
         }
 
         public static async Task LogoutAsync()
-        {
-            
+        {   
             var userToken = _context.GetCurrentUser().UserToken;
             if (string.IsNullOrWhiteSpace(userToken) == false)
                 await UserSession.InvalidateAsync(userToken);
             _context.GetCurrentUser().Reset();
         }
     }
-
 }

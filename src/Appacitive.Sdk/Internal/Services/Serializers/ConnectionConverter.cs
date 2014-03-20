@@ -74,7 +74,10 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("__relationtype", out value) == false || value.Type == JTokenType.Null)
                 throw new Exception("Relation type missing.");
             var type = value.ToString();
-            return new APConnection(type);
+            var mappedType = App.Types.GetMappedConnectionType(type);
+            if (mappedType == null)
+                return new APConnection(type);
+            else return Activator.CreateInstance(mappedType) as Entity;
         }
 
         protected override Entity ReadJson(Entity entity, Type objectType, Newtonsoft.Json.Linq.JObject json, JsonSerializer serializer)

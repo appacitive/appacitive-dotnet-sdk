@@ -13,6 +13,29 @@ namespace Appacitive.Sdk.Tests
     public class ObjectFixture
     {
         [TestMethod]
+        public async Task TypeMappingTest()
+        {
+            Score s1 = new Score { Points = 100 };
+            s1.Badges.Add("novice");
+            s1.Badges.Add("alcolyte");
+            await s1.SaveAsync();
+            Score s2 = new Score { Points = 100 };
+            await s2.SaveAsync();
+            App.Types.MapObjectType<Score>("score");
+            var saved = await APObjects.GetAsync("score", s1.Id);
+            Assert.IsNotNull(saved);
+            Assert.IsTrue(saved is Score);
+            Assert.IsTrue(((Score)saved).Badges.SequenceEqual(new [] { "novice", "alcolyte" }));
+            var scores = await APObjects.FindAllAsync("score");
+            foreach (var score in scores)
+            {
+                Assert.IsNotNull(score);
+                Assert.IsTrue(score is Score);
+            }
+        }
+
+
+        [TestMethod]
         public async Task AddItemsToMultiValuedFieldAsyncTest()
         {
             var obj = new APObject("object");
@@ -705,5 +728,28 @@ namespace Appacitive.Sdk.Tests
                 Assert.Fail("No fault was raised on a bad revision update.");
         }
 
+    }
+
+    public class Score : APObject
+    {
+        public Score() : base("score")
+        {
+        }
+
+        public Score(APObject obj)
+            : base(obj)
+        {
+        }
+
+        public int Points
+        {
+            get { return this.Get<int>("points", 0); }
+            set { this.Set("points", value); }
+        }
+
+        public MultiValueCollection<string> Badges
+        {
+            get { return new MultiValueCollection<string>(this, "badges"); }
+        }
     }
 }

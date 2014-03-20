@@ -35,6 +35,17 @@ namespace Appacitive.Sdk
             removed = oldList.Except(common);
         }
 
+        public static IEnumerable<ConstructorInfo> GetConstructors(this Type type)
+        {
+            #if (WINDOWS_PHONE7 || NET40)
+            return type.GetConstructors() ?? new ConstructorInfo[]{};
+            #else
+            var typeInfo = type.GetTypeInfo();
+            return typeInfo.DeclaredConstructors;
+            #endif
+            
+        }
+
         public static IDictionary<string, string> FromQueryObject(this object obj)
         {
             if (obj == null)

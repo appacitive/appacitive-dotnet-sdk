@@ -40,6 +40,7 @@
     <Compile Include="APDevice.cs" />
     <Compile Include="Interfaces\ILocalSettings.cs" />
     <Compile Include="Interfaces\ILocalStorage.cs" />
+    <Compile Include="Interfaces\ITypeMapping.cs" />
     <Compile Include="Internal\ApiLogFlags.cs" />
     <Compile Include="Internal\AppacitiveContext.cs" />
     <Compile Include="Internal\AppContext.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="Internal\Services\Model\UpdateListItemsResponse.cs" />
     <Compile Include="Internal\Services\Serializers\AtomicCountersRequestConverter.cs" />
     <Compile Include="Internal\Services\Serializers\UpdateListItemsRequestConverter.cs" />
+    <Compile Include="Internal\TypeMapping.cs" />
     <Compile Include="Internal\UserInfo.cs" />
     <Compile Include="Model\AppacitiveSettings.cs" />
     <Compile Include="CannedLists.cs" />

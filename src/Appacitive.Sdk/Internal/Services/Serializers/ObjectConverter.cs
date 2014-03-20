@@ -28,7 +28,11 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("__type", out value) == false || value.Type == JTokenType.Null)
                 throw new Exception("Schema type missing.");
             var type = value.ToString();
-            return new APObject(type);
+            var mappedType = App.Types.GetMappedObjectType(type);
+            if (mappedType == null)
+                return new APObject(type);
+            else 
+                return Activator.CreateInstance(mappedType) as Entity;
         }
 
         protected override Entity ReadJson(Entity entity, Type objectType, JObject json, JsonSerializer serializer)

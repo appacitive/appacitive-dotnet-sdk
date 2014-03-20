@@ -161,6 +161,9 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\ITraceWriter.cs">
       <Link>Interfaces\ITraceWriter.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\ITypeMapping.cs">
+      <Link>Interfaces\ITypeMapping.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IUploadHandler.cs">
       <Link>Interfaces\IUploadHandler.cs</Link>
     </Compile>
@@ -523,6 +526,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\StringUtils.cs">
       <Link>Internal\StringUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\TypeMapping.cs">
+      <Link>Internal\TypeMapping.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\UserInfo.cs">
       <Link>Internal\UserInfo.cs</Link>
