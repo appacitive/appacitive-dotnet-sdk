@@ -26,9 +26,22 @@ namespace Appacitive.Sdk.Wcf
 
             var userToken = GetUserTokenForSession(sessionId);
             if (string.IsNullOrWhiteSpace(userToken) == false)
-                App.LoginAsync(new UserTokenCredentials(userToken)).Wait();
+                SetupUserSession(sessionId, userToken);
             return sessionId;
         }
+
+        private static void SetupUserSession(string sessionId, string token)
+        {
+            App
+                .LoginAsync(new UserTokenCredentials(token))
+                .ContinueWith( t =>
+                    {
+                        // On invalid key, discard the user session value.
+                        TearDownSession(sessionId);
+                    }, TaskContinuationOptions.OnlyOnFaulted)
+                .Wait();
+        }
+
 
         private static string GenerateSessionId()
         {
