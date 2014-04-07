@@ -11,6 +11,7 @@ using Appacitive.Sdk.Services;
 using System.Collections;
 using Appacitive.Sdk.Internal;
 
+
 namespace Appacitive.Sdk
 {
     public abstract partial class Entity : INotifyPropertyChanged
@@ -127,15 +128,25 @@ namespace Appacitive.Sdk
                 }
             }
         }
-
         public async Task AddItemsAsync<T>(string property, params T[] values)
         {
-            await AddItemsAsync(property, false, values);
+            ApiOptions options = null;
+            await AddItemsAsync(property, false, options, values);
         }
 
+        public async Task AddItemsAsync<T>(string property, ApiOptions options, params T[] values)
+        {
+            await AddItemsAsync(property, false, options, values);
+        }
         public async Task AddItemsAsync<T>(string property, bool addUniquely, params T[] values)
         {
+            ApiOptions options = null;
+            await AddItemsAsync(property, addUniquely, options, values);
+        }
+        public async Task AddItemsAsync<T>(string property, bool addUniquely, ApiOptions options, params T[] values)
+        {
             var request = new UpdateListItemsRequest { Type = this.Type, Id = this.Id, Property = property, AddUniquely = addUniquely };
+            ApiOptions.Apply(request, options);
             request.ItemsToAdd.AddRange(values.Where(x => x != null).Select(x => x.ToString()));
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
@@ -146,7 +157,14 @@ namespace Appacitive.Sdk
 
         public async Task RemoveItemsAsync<T>(string property, params T[] values)
         {
+            ApiOptions options = null;
+            await RemoveItemsAsync(property, options, values);
+        }
+
+        public async Task RemoveItemsAsync<T>(string property, ApiOptions options, params T[] values)
+        {
             var request = new UpdateListItemsRequest { Type = this.Type, Id = this.Id, Property = property };
+            ApiOptions.Apply(request, options);
             request.ItemsToRemove.AddRange(values.Where(x => x != null).Select(x => x.ToString()));
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
@@ -291,17 +309,21 @@ namespace Appacitive.Sdk
                 FirePropertyChanged(name);
         }
 
-        public async Task RefreshAsync()
+        /// <summary>
+        /// Updates this object with its latest state on the server.
+        /// </summary>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        public async Task RefreshAsync(ApiOptions options = null)
         {
             if (string.IsNullOrWhiteSpace(this.Id) == true || this.Id == "0") 
                 throw new AppacitiveRuntimeException("Cannot refresh object from server as it has not been saved on the server yet.");
             // Fetch the object
-            var stateFromServer = await this.FetchAsync();
+            var stateFromServer = await this.FetchAsync(options);
             // Update the last known state.
-            UpdateLastKnown(stateFromServer);
+            UpdateLastKnown(stateFromServer, options);
         }
 
-        protected abstract Task<Entity> FetchAsync();
+        protected abstract Task<Entity> FetchAsync(ApiOptions options = null);
 
         public Value this[string name]
         {
@@ -321,22 +343,24 @@ namespace Appacitive.Sdk
             }
         }
 
-        protected async Task SaveEntityAsync(int specificRevision = 0, bool forceUpdate = false)
+
+        protected async Task SaveEntityAsync(int specificRevision = 0, bool forceUpdate = false, ApiOptions options = null)
         {
             if (string.IsNullOrWhiteSpace(this.Id) == true)
-                await CreateNewEntityAsync();
+                await CreateNewEntityAsync(options);
             else
-                await UpdateEntityAsync(specificRevision, forceUpdate);
+                await UpdateEntityAsync(specificRevision, forceUpdate, options);
         }
 
-        private async Task CreateNewEntityAsync()
+        private async Task CreateNewEntityAsync(ApiOptions options )
         {
             // create new
-            var entity = await CreateNewAsync();
-            UpdateLastKnown(entity);
+            var entity = await CreateNewAsync(options);
+            UpdateLastKnown(entity, options);
         }
 
-        private async Task UpdateEntityAsync(int specificRevision, bool forceUpdate)
+
+        private async Task UpdateEntityAsync(int specificRevision, bool forceUpdate, ApiOptions options)
         {
             // 1. Get property differences
             var propertyDifferences = _currentFields.GetModifications(_lastKnownFields, (x, y) =>
@@ -353,21 +377,12 @@ namespace Appacitive.Sdk
             IEnumerable<string> addedTags, removedTags;
             _lastKnownTags.GetDifferences(_currentTags, out addedTags, out removedTags);
 
-            // Check if an update is needed.
-            bool changesExist =
-                ( propertyDifferences != null && propertyDifferences.Count > 0  )  ||
-                (attributeDifferences != null && attributeDifferences.Count > 0  )   ||
-                (addedTags != null && addedTags.Count() > 0  )                                ||
-                (removedTags != null && removedTags.Count() > 0 );
-            if (changesExist == false && forceUpdate == false)
-                return;
-
             // 3. update the object
-            var updated = await UpdateAsync(propertyDifferences, attributeDifferences, addedTags, removedTags, specificRevision);
+            var updated = await UpdateAsync(propertyDifferences, attributeDifferences, addedTags, removedTags, specificRevision,  forceUpdate, options);
             if (updated != null)
             {
                 // 4. Update the last known state based on the differences
-                UpdateLastKnown(updated);
+                UpdateLastKnown(updated, options);
             }
         }
 
@@ -382,7 +397,7 @@ namespace Appacitive.Sdk
             else throw new ArgumentException(value.GetType().Name + " is not a supported value type.");
         }
 
-        protected virtual void UpdateLastKnown(Entity entity)
+        protected virtual void UpdateLastKnown(Entity entity, ApiOptions options )
         {
             var newLastKnownFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             var newCurrentFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -500,9 +515,9 @@ namespace Appacitive.Sdk
             AddTag(tag, false);
         }
 
-        protected abstract Task<Entity> CreateNewAsync();
+        protected abstract Task<Entity> CreateNewAsync(ApiOptions options);
 
-        protected abstract Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision);
+        protected abstract Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, bool forceUpdate, ApiOptions options);
 
         public void ClearList(string property)
         {
@@ -518,9 +533,10 @@ namespace Appacitive.Sdk
             }
         }
 
-        public async Task IncrementAsync(string property, uint increment)
+        public async Task IncrementAsync(string property, uint increment, ApiOptions options = null)
         {
-            var request = new AtomicCountersRequest { Type = this.Type, Id = this.Id, IncrementBy = increment, Property = property };
+            var request = new AtomicCountersRequest { Type = this.Type, Id = this.Id, IncrementBy = increment, Property = property, };
+            ApiOptions.Apply(request, options);
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
@@ -528,9 +544,10 @@ namespace Appacitive.Sdk
             this.Set<string>(property, newValue, true);
         }
 
-        public async Task DecrementAsync(string property, uint decrement)
+        public async Task DecrementAsync(string property, uint decrement, ApiOptions options = null)
         {
             var request = new AtomicCountersRequest { Type = this.Type, Id = this.Id, DecrementBy = decrement, Property = property };
+            ApiOptions.Apply(request, options);
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
@@ -542,6 +559,11 @@ namespace Appacitive.Sdk
         {
             var serializer = ObjectFactory.Build<IJsonSerializer>();
             return serializer.SerializeAsString(this);
+        }
+
+        internal static Entity CreateInstance(Type objectType)
+        {
+            throw new NotImplementedException();
         }
     }
 }

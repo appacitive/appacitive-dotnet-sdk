@@ -27,7 +27,7 @@ namespace Appacitive.Sdk.Services
         protected override string GetUrl()
         {
             this.Fields.Add(this.Property);
-            return Urls.For.UpdateObject(this.Type, this.Id, 0, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+            return Urls.For.UpdateObject(this.Type, this.Id, 0, false, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }

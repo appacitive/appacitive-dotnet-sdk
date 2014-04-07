@@ -13,26 +13,29 @@ namespace Appacitive.Sdk
     /// </summary>
     public static partial class APConnections
     {   
+
         /// <summary>
         /// Gets an existing APConnection by its endpoints and type.
         /// </summary>
         /// <param name="type">Type of the connection.</param>
         /// <param name="endpointObjectId1">Id of the object for endpoint 1.</param>
         /// <param name="endpointObjectId2">Id of the object for endpoint 2.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
         /// <returns>The matching APConnection object.</returns>
-        public async static Task<APConnection> GetAsync(string type, string endpointObjectId1, string endpointObjectId2)
-        {   
-            var response = await (new GetConnectionByEndpointRequest
+        public async static Task<APConnection> GetAsync(string type, string endpointObjectId1, string endpointObjectId2, ApiOptions options = null)
+        {
+            var request = new GetConnectionByEndpointRequest
             {
                 Relation = type,
                 ObjectId1 = endpointObjectId1,
                 ObjectId2 = endpointObjectId2
-            }).ExecuteAsync();
+            };
+            ApiOptions.Apply(request, options);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             else
                 return response.Connection;
-            
         }
 
         /// <summary>
@@ -40,14 +43,13 @@ namespace Appacitive.Sdk
         /// </summary>
         /// <param name="type">The type (relation name) of the connection.</param>
         /// <param name="id">The id of the connection.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
         /// <returns>The matching APConnection object.</returns>
-        public async static Task<APConnection> GetAsync(string type, string id)
+        public async static Task<APConnection> GetAsync(string relation, string id, ApiOptions options = null)
         {
-            var response = await (new GetConnectionRequest
-                                                        {
-                                                            Relation = type,
-                                                            Id = id
-                                                        }).ExecuteAsync();
+            var request = new GetConnectionRequest { Relation = relation, Id = id };
+            ApiOptions.Apply(request, options);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             else return response.Connection;
@@ -58,13 +60,16 @@ namespace Appacitive.Sdk
         /// </summary>
         /// <param name="type">The type (relation name) of the connection.</param>
         /// <param name="id">The id of the connection.</param>
-        public async static Task DeleteAsync(string type, string id)
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        public async static Task DeleteAsync(string type, string id, ApiOptions options = null)
         {
-            var response = await (new DeleteConnectionRequest
+            var request = new DeleteConnectionRequest
             {
                 Relation = type,
                 Id = id
-            }).ExecuteAsync();
+            };
+            ApiOptions.Apply(request, options);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
         }
@@ -79,8 +84,9 @@ namespace Appacitive.Sdk
         /// <param name="pageSize">The page size.</param>
         /// <param name="orderBy">The field on which to sort.</param>
         /// <param name="sortOrder">Sort order - Ascending or Descending.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
         /// <returns>A paginated list of APConnections for the given search criteria.</returns>
-        public async static Task<PagedList<APConnection>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async static Task<PagedList<APConnection>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
         {
             query = query ?? Query.None;
             var request = new FindAllConnectionsRequest()
@@ -92,7 +98,7 @@ namespace Appacitive.Sdk
                 OrderBy = orderBy,
                 SortOrder = sortOrder
             };
-
+            ApiOptions.Apply(request, options);
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
@@ -101,7 +107,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await FindAllAsync(type, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder)
+                GetNextPage = async skip => await FindAllAsync(type, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
             };
             connections.AddRange(response.Connections);
             return connections;
@@ -115,7 +121,20 @@ namespace Appacitive.Sdk
         /// <param name="connectionIds">Array of ids corresponding to the APConnection objects to be deleted.</param>
         public async static Task MultiDeleteAsync(string type, params string[] connectionIds)
         {
-            var response = await (new BulkDeleteConnectionRequest { Type = type, ConnectionIds = new List<string>(connectionIds) }).ExecuteAsync();
+            await MultiDeleteAsync(type, null, connectionIds);
+        }
+
+        /// <summary>
+        /// Deletes multiple APConnection objects by id list.
+        /// </summary>
+        /// <param name="type">The type (relation name) of the connection.</param>
+        /// <param name="connectionIds">Array of ids corresponding to the APConnection objects to be deleted.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        public async static Task MultiDeleteAsync(string type, ApiOptions options, params string[] connectionIds)
+        {
+            var request = new BulkDeleteConnectionRequest { Type = type, ConnectionIds = new List<string>(connectionIds) };
+            ApiOptions.Apply(request, options);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
         }

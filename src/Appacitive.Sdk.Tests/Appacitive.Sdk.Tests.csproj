@@ -57,6 +57,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AclFixture.cs" />
     <Compile Include="EntityFixture.cs" />
     <Compile Include="Helpers\Utilities.cs" />
     <Compile Include="ObjectFixture.cs" />

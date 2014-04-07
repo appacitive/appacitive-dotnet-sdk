@@ -14,14 +14,16 @@ namespace Appacitive.Sdk
         /// </summary>
         /// <param name="query">The name of the graph query</param>
         /// <param name="args">The parameters to be passed to the graph query</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
         /// <returns>The matching list of object ids returned by the graph query.</returns>
-        public static async Task<List<string>> Query(string query, IDictionary<string, string> args = null)
+        public static async Task<List<string>> Query(string query, IDictionary<string, string> args = null, ApiOptions options = null)
         {
             var request = new GraphFilterRequest()
             {
                 Query = query,
                 Placeholders = args
             };
+            ApiOptions.Apply(request, options);
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
@@ -35,8 +37,9 @@ namespace Appacitive.Sdk
         /// <param name="apiName">The name of the graph api.</param>
         /// <param name="ids">The list of ids to be passed to the graph api.</param>
         /// <param name="args">List of arguments to be passed to the graph api.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
         /// <returns>The graph response object.</returns>
-        public static async Task<List<GraphNode>> Select(string apiName, IEnumerable<string> ids, IDictionary<string, string> args = null)
+        public static async Task<List<GraphNode>> Select(string apiName, IEnumerable<string> ids, IDictionary<string, string> args = null, ApiOptions options = null)
         {
             var request = new GraphProjectRequest
             {
@@ -44,6 +47,7 @@ namespace Appacitive.Sdk
                 Ids = ids.ToList(),
                 Placeholders = args
             };
+            ApiOptions.Apply(request, options);
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();

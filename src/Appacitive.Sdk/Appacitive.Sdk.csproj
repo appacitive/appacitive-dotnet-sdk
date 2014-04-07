@@ -54,12 +54,15 @@
     <Compile Include="Internal\LocalSettings.cs" />
     <Compile Include="Internal\Services\Model\AtomicCountersRequest.cs" />
     <Compile Include="Internal\Services\Model\AtomicCountersResponse.cs" />
+    <Compile Include="Internal\Services\Model\IObjectUpdateRequest.cs" />
     <Compile Include="Internal\Services\Model\UpdateListItemsRequest.cs" />
     <Compile Include="Internal\Services\Model\UpdateListItemsResponse.cs" />
     <Compile Include="Internal\Services\Serializers\AtomicCountersRequestConverter.cs" />
     <Compile Include="Internal\Services\Serializers\UpdateListItemsRequestConverter.cs" />
     <Compile Include="Internal\TypeMapping.cs" />
     <Compile Include="Internal\UserInfo.cs" />
+    <Compile Include="Model\Acl.cs" />
+    <Compile Include="Model\ApiOptions.cs" />
     <Compile Include="Model\AppacitiveSettings.cs" />
     <Compile Include="CannedLists.cs" />
     <Compile Include="Model\EventArgs.cs" />
@@ -94,6 +97,7 @@
     <Compile Include="Internal\Services\Model\HttpRequests.cs" />
     <Compile Include="Internal\Services\Serializers\GraphNodeConverter.cs" />
     <Compile Include="Model\GraphNode.cs" />
+    <Compile Include="Model\IEquatable.cs" />
     <Compile Include="Model\ListItem.cs" />
     <Compile Include="Model\MultiValueCollection.cs" />
     <Compile Include="Internal\Services\Serializers\JsonPayloadConverter.cs" />

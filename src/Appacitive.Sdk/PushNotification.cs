@@ -132,9 +132,11 @@ namespace Appacitive.Sdk
             return this;
         }
 
-        public async Task<string> SendAsync()
+        public async Task<string> SendAsync(ApiOptions options = null)
         {
-            var response = await new SendPushNotificationRequest { Push = this }.ExecuteAsync();
+            var request = new SendPushNotificationRequest { Push = this };
+            ApiOptions.Apply(request, options);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             return response.Id;

@@ -172,9 +172,8 @@ namespace Appacitive.Sdk.Tests
             {
                 await APUsers.ChangePasswordAsync(wrongPassword, Unique.String);
             }
-            catch( AppacitiveApiException ex )
-            {
-                Assert.AreEqual("25001", ex.Code);
+            catch( UserAuthenticationFailureException ex )
+            {   
             }
             var session = await new UsernamePasswordCredentials(user.Username, user.Password).AuthenticateAsync();
             Assert.IsNotNull(session);

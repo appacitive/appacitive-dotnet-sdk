@@ -13,6 +13,7 @@ namespace Appacitive.Sdk.Tests
     public class ObjectFixture
     {
 
+
         [TestMethod]
         public async Task ForceUpdateTest()
         {
@@ -777,15 +778,11 @@ namespace Appacitive.Sdk.Tests
             try
             {
                 await obj.SaveAsync(obj.Revision - 1);
-            }
-            catch (AppacitiveApiException ex)
-            {
-                if (ex.Code == "14008")
-                    isFault = true;
-                else Assert.Fail(ex.Message);
-            }
-            if (isFault == false) 
                 Assert.Fail("No fault was raised on a bad revision update.");
+            }
+            catch (UpdateConflictException)
+            {
+            }   
         }
 
     }

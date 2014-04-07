@@ -40,6 +40,8 @@ namespace Appacitive.Sdk
 
         public static implicit operator Value(string value)
         {
+            if (value == null)
+                return null;
             return new SingleValue(value);
         }
 

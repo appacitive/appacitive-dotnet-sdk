@@ -10,7 +10,7 @@ namespace Appacitive.Sdk
     {
         public static Exception PropertyTypeIsNotSupported(Type type)
         {
-            return new AppacitiveApiException(string.Format("Values of type {0} cannot be assigned to object properties.", type.Name));
+            return new AppacitiveRuntimeException(string.Format("Values of type {0} cannot be assigned to object properties.", type.Name));
         }
     }
 }

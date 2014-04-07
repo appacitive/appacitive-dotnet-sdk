@@ -7,16 +7,22 @@ using Newtonsoft.Json;
 
 namespace Appacitive.Sdk.Services
 {
-    public class UpdateObjectRequest : PostOperation<UpdateObjectResponse>
+    public class UpdateObjectRequest : PostOperation<UpdateObjectResponse>, IObjectUpdateRequest
     {
         public UpdateObjectRequest() : base()
         {
             this.PropertyUpdates = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             this.AttributeUpdates = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            this.AllowClaims = new List<Claim>();
+            this.DenyClaims = new List<Claim>();
+            this.ResetClaims = new List<ResetRequest>();
             this.AddedTags = new List<string>();
             this.RemovedTags = new List<string>();
             this.Revision = 0;
         }
+
+        [JsonIgnore]
+        public bool ReturnAcls { get; set; }
 
         [JsonIgnore]
         public int Revision { get; set; }
@@ -39,9 +45,21 @@ namespace Appacitive.Sdk.Services
         [JsonIgnore]
         public List<string> RemovedTags { get; private set; }
 
+        [JsonIgnore]
+        public List<Claim> AllowClaims { get; private set; }
+
+        [JsonIgnore]
+        public List<Claim> DenyClaims { get; private set; }
+
+        [JsonIgnore]
+        public List<ResetRequest> ResetClaims { get; private set; }
+
         protected override string GetUrl()
         {
-            return Urls.For.UpdateObject(this.Type, this.Id, this.Revision, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+            bool returnAcls = false;
+            if (this.AllowClaims.Count > 0 || this.DenyClaims.Count > 0 || this.ResetClaims.Count > 0)
+                returnAcls = true;
+            return Urls.For.UpdateObject(this.Type, this.Id, this.Revision, returnAcls, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }

@@ -64,7 +64,7 @@ namespace Appacitive.Sdk.Tests
             
         }
 
-        public static async Task<APUser> CreateNewUserAsync(APUser user = null)
+        public static async Task<APUser> CreateNewUserAsync(APUser user = null, bool returnPassword = true)
         {
             // Create user
             user = user ?? new APUser()
@@ -87,7 +87,8 @@ namespace Appacitive.Sdk.Tests
             Assert.IsNotNull(created, "Initial user creation failed.");
             Console.WriteLine("Created new user with username {0} and id {1}.", created.Username, created.Id);
             // Setup the password
-            created.Password = user.Password;
+            if( returnPassword == true )
+                created.Password = user.Password;
             return created;
         }
     }

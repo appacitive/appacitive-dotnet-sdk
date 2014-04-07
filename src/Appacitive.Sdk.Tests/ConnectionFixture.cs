@@ -197,9 +197,8 @@ namespace Appacitive.Sdk.Tests
                                 .SaveAsync(throwIfAlreadyExists: true);
                 Assert.Fail("Duplicate connection creation did not fault.");
             }
-            catch (AppacitiveApiException ex)
-            {
-                Assert.AreEqual("21006", ex.Code);
+            catch (DuplicateObjectException ex)
+            {   
             }
         }
         
@@ -375,9 +374,9 @@ namespace Appacitive.Sdk.Tests
                 var read = await APConnections.GetAsync(conn.Type, conn.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (AppacitiveApiException aex)
+            catch (ObjectNotFoundException)
             {
-                Assert.IsTrue(aex.Code == "404");
+                
             }
         }
 
@@ -395,9 +394,8 @@ namespace Appacitive.Sdk.Tests
                 var read = await APConnections.GetAsync(conn1.Type, conn1.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (AppacitiveApiException aex)
-            {
-                Assert.IsTrue(aex.Code == "404");
+            catch (ObjectNotFoundException)
+            {   
             }
 
             try
@@ -405,9 +403,8 @@ namespace Appacitive.Sdk.Tests
                 var read = await APConnections.GetAsync(conn2.Type, conn2.Id);
                 Assert.Fail("No exception was raised on reading deleted connection.");
             }
-            catch (AppacitiveApiException aex)
-            {
-                Assert.IsTrue(aex.Code == "404");
+            catch (ObjectNotFoundException)
+            {   
             }
         }
     }

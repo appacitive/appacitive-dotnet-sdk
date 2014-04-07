@@ -108,6 +108,7 @@ namespace Appacitive.Sdk.Services
             {
                 var url = new Url(ObjectServiceBase);
                 url.Append(type);
+                url.QueryString["returnacls"] = "true";
                 HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
@@ -121,11 +122,13 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string UpdateObject(string type, string id, int revision, Geocode geocode, bool enableDebug, Verbosity verbosity, List<string> fields)
+            public static string UpdateObject(string type, string id, int revision, bool returnAcls, Geocode geocode, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ObjectServiceBase).Append(type).Append(id);
                 if (revision > 0)
                     url.QueryString["revision"] = revision.ToString();
+                if (returnAcls == true)
+                    url.QueryString["returnacls"] = "true";
                 HandleDefaults(url, geocode, enableDebug, verbosity, fields);
                 return url.ToString();
             }
@@ -134,6 +137,7 @@ namespace Appacitive.Sdk.Services
             {
                 var url = new Url(UserServiceBase);
                 url.Append("create");
+                url.QueryString["returnacls"] = "true";
                 HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
@@ -183,7 +187,7 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string UpdateUser(string userId, string idType, int revision, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
+            public static string UpdateUser(string userId, string idType, int revision, bool returnAcls, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(UserServiceBase);
                 if (string.IsNullOrWhiteSpace(idType))
@@ -203,6 +207,8 @@ namespace Appacitive.Sdk.Services
 
                 if (revision > 0)
                     url.QueryString["revision"] = revision.ToString();
+                if (returnAcls == true)
+                    url.QueryString["returnacls"] = "true";
                 HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
@@ -393,6 +399,7 @@ namespace Appacitive.Sdk.Services
                 //https://apis.appacitive.com/connection/userlist/bulkdelete
                 var url = new Url(DeviceServiceBase);
                 url.Append("register");
+                url.QueryString["returnacls"] = "true";
                 HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
                 return url.ToString();
             }

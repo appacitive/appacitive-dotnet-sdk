@@ -16,6 +16,27 @@ namespace Appacitive.Sdk
         WindowsPhone8 = 4
     }
 
+    public enum Permission
+    {
+        Allow,
+        Deny
+    }
+
+    public enum ClaimType
+    {
+        User,
+        UserGroup
+    }
+
+    public enum Access
+    {
+        Read,
+        Update,
+        Delete,
+        ManageAccess
+    }
+
+
 
 
     public enum DynamicValueType

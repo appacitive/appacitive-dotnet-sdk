@@ -176,7 +176,7 @@ namespace Appacitive.Sdk.Tests
             created.Phone = "999-888-1234";
             created.Location = new Geocode(20, 21);
 
-            var updateRequest = new UpdateUserRequest() { UserId = created.Id };
+            var updateRequest = new UpdateUserRequest() { Id = created.Id };
             updateRequest.PropertyUpdates["username"] = created.Username;
             updateRequest.PropertyUpdates["email"] = created.Email;
             updateRequest.PropertyUpdates["firstname"] = created.FirstName;

@@ -134,18 +134,19 @@ namespace Appacitive.Sdk
         /// </summary>
         public EndpointPair Endpoints { get; set; }
 
+
         /// <summary>
         /// Gets the APObject associated with the endpoint with the given label.
         /// </summary>
         /// <param name="label">Label of the endpoint</param>
         /// <returns>The APObject instance associated with the specified endpoint.</returns>
-        public async Task<APObject> GetEndpointObjectAsync(string label)
+        public async Task<APObject> GetEndpointObjectAsync(string label, ApiOptions options = null)
         {
             if (string.Compare(this.Endpoints.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
-                return await this.Endpoints.EndpointA.GetObjectAsync();
+                return await this.Endpoints.EndpointA.GetObjectAsync(options);
             if (string.Compare(this.Endpoints.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
-                return await this.Endpoints.EndpointB.GetObjectAsync();
-            throw new AppacitiveApiException("Invalid label " + label);
+                return await this.Endpoints.EndpointB.GetObjectAsync(options);
+            throw new AppacitiveRuntimeException("Invalid label " + label);
         }
 
         /// <summary>
@@ -159,7 +160,7 @@ namespace Appacitive.Sdk
                 return this.Endpoints.EndpointA.ObjectId;
             if (string.Compare(this.Endpoints.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
                 return this.Endpoints.EndpointB.ObjectId;
-            throw new AppacitiveApiException("Invalid label " + label);
+            throw new AppacitiveRuntimeException("Invalid label " + label);
         }
 
         /// <summary>
@@ -174,30 +175,28 @@ namespace Appacitive.Sdk
         /// <param name="throwIfAlreadyExists">Flag indicating that the operation should throw incase a connection is being created when it already exists on the server side. Passing false will return the existing instance of the connection.</param>
         /// <param name="forceUpdate">Setting this flag as True will force an update request even when the state of the object may not have changed locally.</param>
         /// <returns>Returns the saved connection object.</returns>
-        public async Task<APConnection> SaveAsync(int specificRevision = 0, bool throwIfAlreadyExists = false, bool forceUpdate = false)
+        public async Task<APConnection> SaveAsync(int specificRevision = 0, bool throwIfAlreadyExists = false, bool forceUpdate = false, ApiOptions options = null)
         {
             try
             {
-                await this.SaveEntityAsync(specificRevision, forceUpdate);
+                await this.SaveEntityAsync(specificRevision, forceUpdate, options);
                 return this;
             }
-            catch (AppacitiveApiException ex)
+            catch (DuplicateObjectException ex)
             {
                 if (throwIfAlreadyExists == true)
-                    throw;
-                if (ex.Code != ErrorCodes.DuplicateConnection)
                     throw;
             }
             // Get existing connection.
             return await APConnections.GetAsync(this.Type, this.Endpoints.EndpointA.ObjectId, this.Endpoints.EndpointB.ObjectId);
         }
 
-        protected override async Task<Entity> FetchAsync()
+        protected override async Task<Entity> FetchAsync(ApiOptions options = null)
         {
-            return await APConnections.GetAsync(this.Type, this.Id);
+            return await APConnections.GetAsync(this.Type, this.Id, options);
         }
 
-        protected async override Task<Entity> CreateNewAsync()
+        protected async override Task<Entity> CreateNewAsync(ApiOptions options)
         {
             // Handling for special case when endpoint contains a new object or device.
             // Since these cannot be created on the fly when creating a new connection.
@@ -209,35 +208,37 @@ namespace Appacitive.Sdk
                     endpoints[i].Content.Type.Equals("device", StringComparison.OrdinalIgnoreCase) == true)
                 {
                     // Create the object
-                    await endpoints[i].Content.SaveAsync();
+                    await endpoints[i].Content.SaveAsync(options: options);
                     // Update endpoint object ids
                     endpoints[i].ObjectId = endpoints[i].Content.Id;
                 }
             }
 
             // Create a new object
-            var response = await (new CreateConnectionRequest()
-            {
-                Connection = this
-            }).ExecuteAsync();
+            var request = new CreateConnectionRequest() { Connection = this };
+            ApiOptions.Apply(request, options);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
             Debug.Assert(response.Connection != null, "If status is successful, then created connection should not be null.");
             return response.Connection;
         }
 
-        protected override void UpdateLastKnown(Entity entity)
+        protected override void UpdateLastKnown(Entity entity, ApiOptions options)
         {
-            base.UpdateLastKnown(entity);
+            base.UpdateLastKnown(entity, options);
+            
             var other = entity as APConnection;
             if (other == null) return;
             this.Endpoints.EndpointA = other.Endpoints.EndpointA;
             this.Endpoints.EndpointB = other.Endpoints.EndpointB;
-        }
+        } 
         
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
+
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, bool forceUpdate, ApiOptions options)
         {
             var request = new UpdateConnectionRequest{ Id = this.Id, Type = this.Type, Revision = specificRevision };
+            ApiOptions.Apply(request, options);
             request.Revision = specificRevision;
             if (propertyUpdates != null && propertyUpdates.Count > 0)
                 propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
@@ -251,8 +252,9 @@ namespace Appacitive.Sdk
             // Check if an update is needed.
             if (request.PropertyUpdates.Count == 0 &&
                 request.AttributeUpdates.Count == 0 &&
-                request.AddedTags.Count == 0 &&
-                request.RemovedTags.Count == 0)
+                request.AddedTags.Count == 0         &&
+                request.RemovedTags.Count == 0    && 
+                forceUpdate == false )
                 return null;
 
             var response = await request.ExecuteAsync();
@@ -314,16 +316,18 @@ namespace Appacitive.Sdk
 
         internal string Type { get; set; }
 
+
         /// <summary>
         /// Gets the APObject instance associated with this endpoint.
         /// </summary>
         /// <returns>The APObject associated with this endpoint.</returns>
-        public async Task<APObject> GetObjectAsync()
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        public async Task<APObject> GetObjectAsync(ApiOptions options = null)
         {
             if (this.Content != null)
                 return this.Content;
             else 
-                return await APObjects.GetAsync(this.Type, this.ObjectId);
+                return await APObjects.GetAsync(this.Type, this.ObjectId, options: options);
         }
     }
 

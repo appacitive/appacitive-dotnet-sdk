@@ -413,6 +413,9 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\InvalidateUserSessionResponse.cs">
       <Link>Internal\Services\Model\InvalidateUserSessionResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\IObjectUpdateRequest.cs">
+      <Link>Internal\Services\Model\IObjectUpdateRequest.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\MultiGetObjectsRequest.cs">
       <Link>Internal\Services\Model\MultiGetObjectsRequest.cs</Link>
     </Compile>
@@ -553,6 +556,12 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\ValueConverter.cs">
       <Link>Internal\ValueConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Acl.cs">
+      <Link>Model\Acl.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\ApiOptions.cs">
+      <Link>Model\ApiOptions.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\AppacitiveException.cs">
       <Link>Model\AppacitiveException.cs</Link>
