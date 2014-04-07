@@ -47,6 +47,7 @@ namespace Appacitive.Sdk
             this.Acl = new Acl();
         }
 
+
         /// <summary>
         /// The access control list for this object.
         /// </summary>
@@ -116,7 +117,6 @@ namespace Appacitive.Sdk
             return response.Object;
         }
 
-
         protected override async Task<Entity> FetchAsync(ApiOptions options = null)
         {
             return await APObjects.GetAsync(this.Type, this.Id, options:options);
@@ -130,7 +130,7 @@ namespace Appacitive.Sdk
             if (updated == null) return;
             this.Acl.SetInternal(updated.Acl.Claims);
         }
-        
+
         protected override async Task<Entity> CreateNewAsync(ApiOptions options)
         {
             // Create a new object
@@ -144,7 +144,6 @@ namespace Appacitive.Sdk
             Debug.Assert(response.Object != null, "If status is successful, then created object should not be null.");
             return response.Object;
         }
-
 
         /// <summary>
         /// Gets a paginated list of APObjects connected to this object via connections of the given type.
@@ -193,7 +192,6 @@ namespace Appacitive.Sdk
             list.AddRange(objects);
             return list;
         }
-
 
         /// <summary>
         /// Gets a paginated list of APConnections for the current object of the given connection type.

@@ -14,7 +14,6 @@ namespace Appacitive.Sdk
     /// </summary>
     public static class APUsers
     {
-
         /// <summary>
         /// Sends the given user an email to reset their account password.
         /// </summary>
@@ -53,7 +52,6 @@ namespace Appacitive.Sdk
             Debug.Assert(response.User != null, "For a successful get call, object should always be returned.");
             return response.User;
         }
-
 
         /// <summary>
         /// Gets an existing user by user session token.
@@ -171,6 +169,7 @@ namespace Appacitive.Sdk
         }
 
 
+
         /// <summary>
         /// Changes the password for the given user with the new password.
         /// </summary>
@@ -193,7 +192,6 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
         }
 
-
         /// <summary>
         /// Changes the password for the given user with the new password.
         /// </summary>
@@ -214,7 +212,6 @@ namespace Appacitive.Sdk
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
         }
-
 
         /// <summary>
         /// Changes the password for the logged in user with the new password.

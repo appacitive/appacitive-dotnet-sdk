@@ -170,6 +170,7 @@ namespace Appacitive.Sdk
             await MultiDeleteAsync(type, options, ids);
         }
 
+
         /// <summary>
         /// Delete multiple objects by id list. This method will only work for objects without any connections.
         /// </summary>

@@ -13,7 +13,6 @@ namespace Appacitive.Sdk
     /// </summary>
     public static partial class APConnections
     {   
-
         /// <summary>
         /// Gets an existing APConnection by its endpoints and type.
         /// </summary>

@@ -13,7 +13,6 @@ namespace Appacitive.Sdk.Tests
     public class ObjectFixture
     {
 
-
         [TestMethod]
         public async Task ForceUpdateTest()
         {

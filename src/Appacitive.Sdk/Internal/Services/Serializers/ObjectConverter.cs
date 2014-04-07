@@ -59,6 +59,7 @@ namespace Appacitive.Sdk.Services
             }
         }
 
+
         private string GetType(JObject json)
         {
             JToken value;

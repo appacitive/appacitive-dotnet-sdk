@@ -186,8 +186,6 @@
 //            bool value;
 //            return _internal.TryGetValue(property, out value);
 //        }
-
-
 //    }
 
 //}

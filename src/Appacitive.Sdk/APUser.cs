@@ -144,6 +144,7 @@ namespace Appacitive.Sdk
             return response.User;
         }
 
+
         protected override async Task<Entity> FetchAsync(ApiOptions options)
         {
             return await APUsers.GetByIdAsync(this.Id, options:options);

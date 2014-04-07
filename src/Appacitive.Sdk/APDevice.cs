@@ -186,7 +186,6 @@ namespace Appacitive.Sdk
             // As the updated device is the same as the current device, then update the current device.
             platform.DeviceState.SetDevice(updatedDevice);
         }
-        
 
         protected override async Task<Entity> CreateNewAsync(ApiOptions options)
         {
@@ -201,7 +200,6 @@ namespace Appacitive.Sdk
             Debug.Assert(response.Device != null, "If status is successful, then created device should not be null.");
             return response.Device;
         }
-
 
         protected override async Task<Entity> FetchAsync(ApiOptions options)
         {

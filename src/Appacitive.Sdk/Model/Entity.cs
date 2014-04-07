@@ -343,7 +343,6 @@ namespace Appacitive.Sdk
             }
         }
 
-
         protected async Task SaveEntityAsync(int specificRevision = 0, bool forceUpdate = false, ApiOptions options = null)
         {
             if (string.IsNullOrWhiteSpace(this.Id) == true)

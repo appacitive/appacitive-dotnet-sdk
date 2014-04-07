@@ -16,6 +16,7 @@ namespace Appacitive.Sdk
     /// </summary>
     public static class APDevices
     {
+
         /// <summary>
         /// Finds a paginated list of APDevices for the given type and search criteria.
         /// </summary>
@@ -55,6 +56,7 @@ namespace Appacitive.Sdk
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
         }
+
 
         /// <summary>
         /// Gets an existing APDevice object by its id.

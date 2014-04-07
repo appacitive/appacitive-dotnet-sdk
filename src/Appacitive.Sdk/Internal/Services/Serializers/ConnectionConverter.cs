@@ -32,7 +32,6 @@ namespace Appacitive.Sdk.Services
             // The only field only available in connection ie, endpoints
             ParseEndpoints(conn, json, serializer);
             return conn;
-
         }
 
         private void ParseEndpoints(APConnection conn, JObject json, JsonSerializer serializer)

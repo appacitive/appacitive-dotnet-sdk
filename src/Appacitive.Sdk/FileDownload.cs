@@ -16,7 +16,6 @@ namespace Appacitive.Sdk
     /// </summary>
     public class FileDownload
     {
-
         /// <summary>
         /// Creates a new instance of the file download helper class with the given file name.
         /// </summary>
