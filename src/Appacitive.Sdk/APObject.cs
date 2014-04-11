@@ -115,7 +115,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await this.GetConnectedObjectsAsync(relation, query, label, fields, pageNumber + skip + 1, pageSize)
+                GetNextPage = async skip => await this.GetConnectedObjectsAsync(relation, query, label, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder)
             };
             list.AddRange(objects);
             return list;
@@ -148,7 +148,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await GetConnectionsAsync(relation, query, null, fields, pageNumber + skip + 1, pageSize)
+                GetNextPage = async skip => await GetConnectionsAsync(relation, query, null, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder)
             };
             list.AddRange(response.Nodes.Select(n => n.Connection));
             return list;
