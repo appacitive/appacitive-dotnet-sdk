@@ -18,7 +18,7 @@ namespace Appacitive.Sdk.Wcf
         {
             string sessionId = null;
             var isSessionAvailable = TryGetSessionId(out sessionId);
-            if( isSessionAvailable == false )
+            if (isSessionAvailable == false)
             {
                 sessionId = GenerateSessionId();
                 return sessionId;
@@ -26,20 +26,20 @@ namespace Appacitive.Sdk.Wcf
 
             var userToken = GetUserTokenForSession(sessionId);
             if (string.IsNullOrWhiteSpace(userToken) == false)
-                SetupUserSession(sessionId, userToken);
+                SetupUserSession(sessionId, userToken).Wait();
             return sessionId;
         }
 
-        private static void SetupUserSession(string sessionId, string token)
+        private static async Task SetupUserSession(string sessionId, string token)
         {
-            App
-                .LoginAsync(new UserTokenCredentials(token))
-                .ContinueWith( t =>
-                    {
-                        // On invalid key, discard the user session value.
-                        TearDownSession(sessionId);
-                    }, TaskContinuationOptions.OnlyOnFaulted)
-                .Wait();
+            try
+            {
+                await App.LoginAsync(new UserTokenCredentials(token));
+            }
+            catch (BaseAppacitiveException)
+            {
+                TearDownSession(sessionId);
+            }
         }
 
 
@@ -146,9 +146,10 @@ namespace Appacitive.Sdk.Wcf
             
             for (int i = 0; i < tokens.Length; i++)
             {
-                var index = tokens[i].IndexOf("=");
+                var token = tokens[i].Trim();
+                var index = token.IndexOf("=");
                 if (index == -1) continue;
-                cookies[tokens[i].Substring(0, index)] = tokens[i].Substring(index + 1);
+                cookies[token.Substring(0, index)] = token.Substring(index + 1);
             }
             return cookies;
         }
