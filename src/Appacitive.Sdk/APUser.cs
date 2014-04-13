@@ -14,16 +14,20 @@ namespace Appacitive.Sdk
     {
         public APUser() : base("user")
         {
+            this.Groups = new List<GroupInfo>();
         }
 
         public APUser(string id)
             : base("user", id)
         {
+            this.Groups = new List<GroupInfo>();
         }
 
         protected APUser(APUser user)
             : base(user)
         {   
+
+            this.Groups = new List<GroupInfo>();
         }
 
         protected APUser(APObject obj)
@@ -127,6 +131,16 @@ namespace Appacitive.Sdk
             {
                 if (value != null)
                     base["location"] = value.ToString();
+            }
+        }
+
+        internal List<GroupInfo> Groups { get; private set; }
+
+        public IEnumerable<GroupInfo> UserGroups
+        {
+            get
+            {
+                return this.Groups;
             }
         }
 

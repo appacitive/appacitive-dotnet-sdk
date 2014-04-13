@@ -32,6 +32,12 @@ namespace Appacitive.Sdk.Services
                 get { return CreateUrl("user"); }
             }
 
+            private static string UserGroupServiceBase
+            {
+                //{{hostname}}/v1.0/usergroup/
+                get { return CreateUrl("usergroup"); }
+            }
+
             private static string SessionServiceBase
             {
                 get { return CreateUrl("application/session"); }
@@ -479,6 +485,14 @@ namespace Appacitive.Sdk.Services
                         url.QueryString["isAsc"] = "true";
                 }
                 HandleDefaults(url, location, enableDebug, verbosity, fields);
+                return url.ToString();
+            }
+
+            public static string UpdateGroupMembersRequest(string group, Geocode geocode, bool enableDebugging, Verbosity verbosity, List<string> fields)
+            {
+                //{{hostname}}/v1.0/usergroup/g10/members
+                var url = new Url(UserGroupServiceBase).Append(group).Append("members");
+                HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
                 return url.ToString();
             }
         }

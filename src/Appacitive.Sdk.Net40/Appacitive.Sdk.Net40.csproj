@@ -195,6 +195,9 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\IDeviceState.cs">
       <Link>Interfaces\IDeviceState.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\GroupInfo.cs">
+      <Link>GroupInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IHttpConnector.cs">
       <Link>Interfaces\IHttpConnector.cs</Link>
     </Compile>
@@ -501,6 +504,12 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateDeviceResponse.cs">
       <Link>Internal\Services\Model\UpdateDeviceResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateGroupMembersRequest.cs">
+      <Link>Internal\Services\Model\UpdateGroupMembersRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateGroupMembersResponse.cs">
+      <Link>Internal\Services\Model\UpdateGroupMembersResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateListItemsRequest.cs">
       <Link>Internal\Services\Model\UpdateListItemsRequest.cs</Link>
     </Compile>
@@ -534,14 +543,8 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\ConnectionConverter.cs">
       <Link>Internal\Services\Serializers\ConnectionConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\DeviceConverter.cs">
-      <Link>Internal\Services\Serializers\DeviceConverter.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\EmailConverter.cs">
       <Link>Internal\Services\Serializers\EmailConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\EntityConverter.cs">
-      <Link>Internal\Services\Serializers\EntityConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\FindConnectedObjectsResponseConverter.cs">
       <Link>Internal\Services\Serializers\FindConnectedObjectsResponseConverter.cs</Link>
@@ -578,9 +581,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateUserRequestConverter.cs">
       <Link>Internal\Services\Serializers\UpdateUserRequestConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UserConverter.cs">
-      <Link>Internal\Services\Serializers\UserConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Urls.cs">
       <Link>Internal\Services\Urls.cs</Link>

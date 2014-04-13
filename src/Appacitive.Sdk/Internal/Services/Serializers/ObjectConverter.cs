@@ -30,6 +30,9 @@ namespace Appacitive.Sdk.Services
             EntityParser.ReadJson(instance, json, serializer);
             // The only field only available in ap object is acl.
             AclParser.ReadAcl(instance, json, serializer);
+            // Read any type specific fields
+            if (instance is APUser)
+                UserParser.ReadJson(instance as APUser, json);
             return instance;
         }
 
@@ -85,6 +88,40 @@ namespace Appacitive.Sdk.Services
             EntityParser.WriteJson(writer, obj, serializer);
             AclParser.WriteAcl(writer, obj, serializer);
             writer.WriteEndObject();
+        }
+    }
+
+    internal class UserParser
+    {
+        internal static void ReadJson(APUser user, JObject json)
+        {
+            /*
+            "__groups": [
+			{
+				"groupid": "12345",
+				"name": "group name"
+			}
+            */
+            JToken value;
+            if (json.TryGetValue("__groups", out value) == false) return;
+            if (value.Type != JTokenType.Array) return;
+            foreach (JObject groupJson in value.Values<JObject>()) 
+            {
+                var groupInfo = ParseGroupInfo(groupJson);
+                if (groupInfo != null)
+                    user.Groups.Add(groupInfo);
+            }
+
+        }
+
+        private static GroupInfo ParseGroupInfo(JObject json)
+        {
+            JToken id, name;
+            if (json.TryGetValue("groupid", out id) == false)
+                return null;
+            if (json.TryGetValue("name", out name) == false)
+                return null;
+            return new GroupInfo(id.ToString(), name.ToString());
         }
     }
 

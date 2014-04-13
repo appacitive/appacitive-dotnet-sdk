@@ -13,8 +13,5 @@ namespace Appacitive.Sdk.Tests
         public static readonly string ClientApiKey = "NTExY2Q3NzMzYjc0OWU5OWRiMjIwNzZiZGZhMWU1NDdmMjYyMmVhZjAxMzk1ZTZkNzE1NzcwMmI2↵ZGMzNDRiYg==";
         public static readonly string ApiKey = "up8+oWrzVTVIxl9ZiKtyamVKgBnV5xvmV95u1mEVRrM=";
         public static readonly Environment Environment = Environment.Sandbox;
-
-        
-
     }
 }

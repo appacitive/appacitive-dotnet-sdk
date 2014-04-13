@@ -37,7 +37,16 @@ namespace Appacitive.Sdk.Services
         [JsonIgnore]
         public bool IsSuccessful
         {
-            get { return this.Code == "200"; }
+            get 
+            {
+                int code = 0;
+                if (this.Code == null) return false;
+                if (int.TryParse(this.Code, out code) == false)
+                    return false;
+                if (code >= 200 && code < 300)
+                    return true;
+                else return false;
+            }
         }
     }
 }
