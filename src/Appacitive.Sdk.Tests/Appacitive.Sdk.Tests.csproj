@@ -86,6 +86,7 @@
     <Compile Include="QueryDslFixture.cs" />
     <Compile Include="RealTimeFixture.cs" />
     <Compile Include="SerializationFixture.cs" />
+    <Compile Include="SubClasses.cs" />
     <Compile Include="TestConfiguration.cs" />
     <Compile Include="UserFixture.cs" />
     <Compile Include="UserServiceFixture.cs" />

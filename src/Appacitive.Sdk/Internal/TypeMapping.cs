@@ -15,7 +15,6 @@ namespace Appacitive.Sdk.Internal
         public ITypeMapping MapObjectType<T>(string name)
             where T : APObject
         {
-            ValidateObjectTypeMapping<T>();
             _objectTypeMapping[name] = typeof(T);
             return this;
         }
@@ -23,41 +22,8 @@ namespace Appacitive.Sdk.Internal
         public ITypeMapping MapConnectionType<T>(string name)
             where T : APConnection
         {
-            ValidateConnectionTypeMapping<T>();
             _connectionTypeMapping[name] = typeof(T);
             return this;
-        }
-
-        private void ValidateObjectTypeMapping<T>()
-        {
-            // Check that type has required constructor.
-            var constructors = typeof(T).GetConstructors();
-            var match = constructors.Where(c =>
-                {
-                    if (c.IsPublic == false) return false;
-                    var parameters = c.GetParameters();
-                    if (parameters.Length == 1 && parameters[0].ParameterType == typeof(APObject))
-                        return true;
-                    else return false;
-                }).SingleOrDefault();
-            if (match == null)
-                throw new AppacitiveRuntimeException("Subclassed type must have a public constructor with a parameter of type APObject.");
-        }
-
-        private void ValidateConnectionTypeMapping<T>()
-        {
-            // Check that type has required constructor.
-            var constructors = typeof(T).GetConstructors();
-            var match = constructors.Where(c =>
-            {
-                if (c.IsPublic == false) return false;
-                var parameters = c.GetParameters();
-                if (parameters.Length == 1 && parameters[0].ParameterType == typeof(APConnection))
-                    return true;
-                else return false;
-            }).SingleOrDefault();
-            if (match == null)
-                throw new AppacitiveRuntimeException("Subclassed type must have a public constructor with a parameter of type APConnection.");
         }
 
         public Type GetMappedConnectionType(string name)
@@ -75,6 +41,31 @@ namespace Appacitive.Sdk.Internal
             if (_objectTypeMapping.TryGetValue(name, out match) == true)
                 return match;
             else return null;
+        }
+    }
+
+
+    public class TypeMapper
+    {
+        public TypeMapper()
+        {
+            this.Mapping = new TypeMapping();
+        }
+
+        internal ITypeMapping Mapping { get; private set; }
+
+        public TypeMapper MapObjectType<T>(string name)
+            where T : APObject
+        {
+            this.Mapping.MapObjectType<T>(name);
+            return this;
+        }
+
+        public TypeMapper MapConnectionType<T>(string name)
+            where T : APConnection
+        {
+            this.Mapping.MapConnectionType<T>(name);
+            return this;
         }
     }
 }

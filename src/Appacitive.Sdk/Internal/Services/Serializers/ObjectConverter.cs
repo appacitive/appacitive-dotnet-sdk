@@ -16,10 +16,9 @@ namespace Appacitive.Sdk.Services
         {
             // Type should not be a User or Device since these have their specific serializers.
             // This serializer should be used for any other type that inherits from object.
-            if (objectType != typeof(APUser) && objectType != typeof(APDevice))
-                return objectType.Is<APObject>();
-            else 
+            if (objectType.Is<APUser>() == true || objectType.Is<APDevice>() == true)
                 return false;
+            return objectType.Is<APObject>();
         }
 
         protected override Entity CreateEntity(JObject json)
@@ -28,7 +27,7 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("__type", out value) == false || value.Type == JTokenType.Null)
                 throw new Exception("Schema type missing.");
             var type = value.ToString();
-            var mappedType = App.Types.GetMappedObjectType(type);
+            var mappedType = App.Types.Mapping.GetMappedObjectType(type);
             if (mappedType == null)
                 return new APObject(type);
             else 
@@ -41,19 +40,7 @@ namespace Appacitive.Sdk.Services
                 return null;
             // JToken value;
             var obj = base.ReadJson(entity, objectType, json, serializer) as APObject;
-            if (obj != null)
-            {
-                //// Schema Id
-                //if (json.TryGetValue("__schemaid", out value) == true && value.Type != JTokenType.Null)
-                //    obj.SchemaId = value.ToString();
-            }
-
-            // Check for inheritance.
-            if (obj.Type.Equals("user", StringComparison.OrdinalIgnoreCase) == true)
-                return new APUser(obj);
-            else if (obj.Type.Equals("device", StringComparison.OrdinalIgnoreCase) == true)
-                return new APDevice(obj);
-            else return obj;
+            return obj;
         }
 
         protected override void WriteJson(Entity entity, JsonWriter writer, JsonSerializer serializer)

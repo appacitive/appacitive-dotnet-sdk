@@ -183,8 +183,11 @@ namespace Appacitive.Sdk.Services
 
         protected virtual bool IsSytemProperty(string property)
         {
-            bool value;
-            return _internal.TryGetValue(property, out value);
+            // All system properties are prefixed with an __.
+            bool startsWithUnderscore = property.StartsWith("__");
+            if (startsWithUnderscore == true)
+                return true;
+            else return false;
         }
 
     }

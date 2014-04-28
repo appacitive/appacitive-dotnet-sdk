@@ -50,7 +50,7 @@ namespace Appacitive.Sdk
             }
         }
 
-        public static readonly ITypeMapping Types = new TypeMapping();
+        public static readonly TypeMapper Types = new TypeMapper();
         public static readonly Debugger Debug = new Debugger();
 
         public static async Task<UserSession> LoginAsync(Credentials credentials)

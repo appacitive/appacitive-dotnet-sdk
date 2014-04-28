@@ -158,6 +158,9 @@
     <Compile Include="..\Appacitive.Sdk.Tests\SerializationFixture.cs">
       <Link>SerializationFixture.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk.Tests\SubClasses.cs">
+      <Link>SubClasses.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk.Tests\TestConfiguration.cs">
       <Link>TestConfiguration.cs</Link>
     </Compile>

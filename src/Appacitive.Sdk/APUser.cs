@@ -20,9 +20,14 @@ namespace Appacitive.Sdk
         {
         }
 
-        public APUser(APObject device)
-            : base(device)
+        protected APUser(APUser user)
+            : base(user)
         {   
+        }
+
+        protected APUser(APObject obj)
+            : base(obj)
+        {
         }
 
         

@@ -17,7 +17,7 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("devicetype", out value) == true && value.Type != JTokenType.Null)
                 type = value.ToString();
             else throw new Exception("DeviceType not present in response.");
-            return new APDevice( SupportedDevices.ResolveDeviceType(type) );
+            return new APDevice(SupportedDevices.ResolveDeviceType(type) );
         }
 
         public override bool CanConvert(Type objectType)

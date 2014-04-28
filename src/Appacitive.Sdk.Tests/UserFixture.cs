@@ -14,6 +14,15 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class UserFixture
     {
+        [TestMethod]
+        public async Task EnsureTypeMappingIsHonoredForUser()
+        {
+            var user = await UserHelper.CreateNewUserAsync();
+            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            var userContext = App.Current.GetCurrentUser();
+            Assert.IsTrue(userContext.User != null);
+            Assert.IsTrue(userContext.User is CustomUser);
+        }
 
         [TestMethod]
         public async Task CreateUserAsyncTest()

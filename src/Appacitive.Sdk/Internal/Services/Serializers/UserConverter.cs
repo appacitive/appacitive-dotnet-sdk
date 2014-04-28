@@ -12,12 +12,20 @@ namespace Appacitive.Sdk.Services
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(APUser) == objectType;
+            return objectType.Is<APUser>();
         }
 
         protected override Entity CreateEntity(JObject json)
         {
-            return new APUser();
+            JToken value;
+            if (json.TryGetValue("__type", out value) == false || value.Type == JTokenType.Null)
+                throw new Exception("Schema type missing.");
+            var type = value.ToString();
+            var mappedType = App.Types.Mapping.GetMappedObjectType(type);
+            if (mappedType == null)
+                return new APUser();
+            else
+                return Activator.CreateInstance(mappedType) as Entity;
         }
 
         protected override Entity ReadJson(Entity entity, Type objectType, JObject json, JsonSerializer serializer)

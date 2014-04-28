@@ -17,9 +17,8 @@ namespace Appacitive.Sdk.Tests
         {
             App.Initialize(Platforms.NonWeb, "appid", TestConfiguration.ApiKey, TestConfiguration.Environment);
             App.Debug.ApiLogging.LogEverything();
-            // App.Debug.ApiLogging.LogSlowCalls(100);
-            // App.Debug.ApiLogging.LogFailures();
-            // App.Debug.ApiLogging.LogIf(x => x.Status.Code == "400");
+            // Base class mappings
+            App.Types.MapObjectType<CustomUser>("user");
         }
 
         
