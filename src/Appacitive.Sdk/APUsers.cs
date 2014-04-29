@@ -121,7 +121,7 @@ namespace Appacitive.Sdk
             query = query ?? Query.None;
             var request = new FindAllUsersRequest()
             {
-                Query = query.AsString(),
+                Query = query.AsString().Escape(),
                 PageNumber = page,
                 PageSize = pageSize,
                 OrderBy = orderBy,

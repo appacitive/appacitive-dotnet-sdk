@@ -32,7 +32,7 @@ namespace Appacitive.Sdk.Services
             writer.StartObject();
             // Write push type
             if (push.Query != null)
-                writer.WriteProperty("query", push.Query.AsString());
+                writer.WriteProperty("query", push.Query.AsString().Escape());
             else if( push.Channels.Count() > 0 )
                 writer.WriteArray("channels", push.Channels);
             else if( push.DeviceIds.Count() > 0 )

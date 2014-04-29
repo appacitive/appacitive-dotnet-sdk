@@ -54,7 +54,7 @@ namespace Appacitive.Sdk
             var request = new FindAllConnectionsRequest()
             {
                 Type = type,
-                Query = query.AsString(),
+                Query = query.AsString().Escape(),
                 PageNumber = page,
                 PageSize = pageSize,
                 OrderBy = orderBy,

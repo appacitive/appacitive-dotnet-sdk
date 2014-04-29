@@ -180,6 +180,25 @@ namespace Appacitive.Sdk.Tests
 
         }
 
+
+        [TestMethod]
+        public async Task FindObjectByDataTimeField()
+        {
+            var time = DateTime.Now;
+            var obj = ObjectHelper.NewInstance();
+            obj.Set("datetimefield", time);
+            await obj.SaveAsync();
+            #if (NET40)
+            await TaskEx.Delay(1000);
+            #else
+            await Task.Delay(1000);
+            #endif
+            var results = await APObjects.FindAllAsync("object", Query.Property("datetimefield").IsGreaterThanEqualTo(time));
+            Assert.IsTrue(results.Count > 0);
+            Assert.IsTrue(results.Exists(x => x.Id == obj.Id));
+
+        }
+
         [TestMethod]
         public async Task BulkDeleteObjectAsyncTest()
         {

@@ -37,7 +37,7 @@ namespace Appacitive.Sdk
 
         public IQuery FreeTextMatches(string freeTextExpression)
         {
-            return FieldQuery.FreeTextMatches(FieldType.Attribute, this.Field, freeTextExpression);
+            return FieldQuery.FreeTextMatches(FieldType.Attribute, this.Field, StringUtils.EscapeSingleQuotes(freeTextExpression));
         }
     }
 }

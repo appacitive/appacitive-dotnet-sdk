@@ -13,6 +13,12 @@ namespace Appacitive.Sdk
 {
     internal static class Extensions
     {
+        public static string Escape(this string value)
+        {
+            if (value == null) return null;
+            return Uri.EscapeDataString(value);
+        }
+
         public static string ToDelimitedList(this IEnumerable<string> list, string delimiter)
         {
             StringBuilder buffer = new StringBuilder();

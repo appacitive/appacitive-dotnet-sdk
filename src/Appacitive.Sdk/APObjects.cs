@@ -40,7 +40,7 @@ namespace Appacitive.Sdk
             var request = new FindAllObjectsRequest()
             {
                 Type = type,
-                Query = query.AsString(),
+                Query = query.AsString().Escape(),
                 PageNumber = page,
                 PageSize = pageSize,
                 OrderBy = orderBy,
@@ -118,13 +118,13 @@ namespace Appacitive.Sdk
         public async static Task<PagedList<APObject>> GetConnectedObjectsAsync(string relation, string type, string objectId, IQuery query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
             query = query ?? Query.None;
-            return await new APObject(type, objectId).GetConnectedObjectsAsync(relation, query.AsString(), label, fields, pageNumber, pageSize);
+            return await new APObject(type, objectId).GetConnectedObjectsAsync(relation, query.AsString().Escape(), label, fields, pageNumber, pageSize);
         }
 
         public async static Task<PagedList<APConnection>> GetConnectionsAsync(string relation, string schemaType, string objectId, IQuery query = null, string label = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20)
         {
             query = query ?? Query.None;
-            return await new APObject(schemaType, objectId).GetConnectionsAsync(relation, query.AsString(), label, fields, pageNumber, pageSize);
+            return await new APObject(schemaType, objectId).GetConnectionsAsync(relation, query.AsString().Escape(), label, fields, pageNumber, pageSize);
         }
     }
 }

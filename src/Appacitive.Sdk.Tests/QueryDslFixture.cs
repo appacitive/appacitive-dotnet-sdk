@@ -16,8 +16,8 @@ namespace Appacitive.Sdk.Tests
         {
             var query = Query.Property("name").IsEqualTo("nikhil");
             var query2 = Query.Property("__id").IsEqualTo("12345");
-            Console.WriteLine(query.ToString());
-            Console.WriteLine(query2.ToString());
+            Console.WriteLine(query.AsString());
+            Console.WriteLine(query2.AsString());
         }
 
         [TestMethod]
@@ -28,7 +28,7 @@ namespace Appacitive.Sdk.Tests
                     Query.Property("name").IsEqualTo("nikhil"),
                     Query.Property("age").IsGreaterThanEqualTo(10),
                 });
-            Console.WriteLine(query.ToString());
+            Console.WriteLine(query.AsString());
         }
 
         [TestMethod]
@@ -100,7 +100,7 @@ namespace Appacitive.Sdk.Tests
                         new Geocode(20,20)
                         )
                 );
-            Console.WriteLine(query.ToString());
+            Console.WriteLine(query.AsString());
         }
 
 

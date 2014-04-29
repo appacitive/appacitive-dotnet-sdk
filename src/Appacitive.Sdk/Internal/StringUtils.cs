@@ -9,13 +9,11 @@ namespace Appacitive.Sdk
 {
     internal static class StringUtils
     {
-        public static string EscapeAndEncode(string value)
+        public static string EscapeSingleQuotes(string value)
         {
             if( string.IsNullOrWhiteSpace(value) ) return value;
             // Escape the ' (single quote)
-            // Url encode data values
-            var final = value.Replace("'", @"\'");
-            return Uri.EscapeDataString(final);
+            return value.Replace("'", @"\'");
         }
     }
 }
