@@ -159,7 +159,12 @@ namespace Appacitive.Sdk
             return users;
         }
 
-
+        /// <summary>
+        /// Changes the password for the given user with the new password.
+        /// </summary>
+        /// <param name="username">Username for the account.</param>
+        /// <param name="oldPassword">Old password for the account.</param>
+        /// <param name="newPassword">New password for the account.</param>
         public static async Task ChangePasswordByUsernameAsync(string username, string oldPassword, string newPassword)
         {
             var response = await new ChangePasswordRequest
@@ -173,6 +178,12 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
         }
 
+        /// <summary>
+        /// Changes the password for the given user with the new password.
+        /// </summary>
+        /// <param name="userId">Id for the user account.</param>
+        /// <param name="oldPassword">Old password for the account.</param>
+        /// <param name="newPassword">New password for the account.</param>
         public static async Task ChangePasswordByIdAsync(string userId, string oldPassword, string newPassword)
         {
             var response = await new ChangePasswordRequest
@@ -185,6 +196,11 @@ namespace Appacitive.Sdk
                 throw response.Status.ToFault();
         }
 
+        /// <summary>
+        /// Changes the password for the logged in user with the new password.
+        /// </summary>
+        /// <param name="oldPassword">Old password for the account.</param>
+        /// <param name="newPassword">New password for the account.</param>
         public static async Task ChangePasswordAsync(string oldPassword, string newPassword)
         {
             if (InternalApp.Current.CurrentUser.IsLoggedIn == false)
