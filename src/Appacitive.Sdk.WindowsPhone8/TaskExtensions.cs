@@ -79,33 +79,49 @@ namespace Appacitive.Sdk.WindowsPhone7
             return completionSource.Task;
         }
 
+        const int BLOCK_SIZE = 4096;
         public static Task UploadDataAsync(this WebClient client, string address, string method, byte[] data)
         {
             var source = new TaskCompletionSource<bool>();
-            OpenWriteCompletedEventHandler handler = null;
-            handler = (s, e) =>
+            client.AllowWriteStreamBuffering = true;
+            OpenWriteCompletedEventHandler openWriteCompletedHandler = (s, args) =>
             {
-                if (e.Error != null)
-                    source.TrySetException(e.Error);
-                else
+                using (var stream = new MemoryStream(data))
                 {
-                    try
+                    using (BinaryReader br = new BinaryReader(stream))
                     {
-                        var uState = e.UserState as byte[];
-                        Stream outputStream = e.Result;
-                        outputStream.Write(uState, 0, uState.Length);
-                        outputStream.Flush();
-                        outputStream.Close();
-                        source.TrySetResult(true);
-                    }
-                    catch (Exception ex)
-                    {
-                        source.TrySetException(ex);
+                        using (BinaryWriter bw = new BinaryWriter(args.Result))
+                        {
+                            long bCount = 0;
+                            long fileSize = stream.Length;
+                            byte[] bytes = new byte[BLOCK_SIZE];
+                            do
+                            {
+                                bytes = br.ReadBytes(BLOCK_SIZE);
+                                bCount += bytes.Length;
+                                bw.Write(bytes);
+                            } while (bCount < fileSize);
+                        }
                     }
                 }
             };
-            client.OpenWriteCompleted += handler;
-            client.OpenWriteAsync(new Uri(address), method, data);
+
+            WriteStreamClosedEventHandler streamClosedHandler = null;
+            streamClosedHandler = (s, args) =>
+            {
+                if (args.Error != null)
+                    source.TrySetException(args.Error);
+                else
+                    source.TrySetResult(true);
+
+                // Unsubscribe the handlers
+                client.OpenWriteCompleted -= openWriteCompletedHandler;
+                client.WriteStreamClosed -= streamClosedHandler;
+            };
+
+            client.OpenWriteCompleted += openWriteCompletedHandler;
+            client.WriteStreamClosed += streamClosedHandler;
+            client.OpenWriteAsync(new Uri(address), method);
             return source.Task;
         }
     }

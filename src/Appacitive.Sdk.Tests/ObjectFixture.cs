@@ -470,7 +470,7 @@ namespace Appacitive.Sdk.Tests
         public async Task FindNonExistantPageTest()
         {
             // Search
-            var objects = await APObjects.FindAllAsync("object", Query.None, APObject.AllFields, 10000, 500);
+            var objects = await APObjects.FindAllAsync("object", Query.None, null, 10000, 500);
             Assert.IsNotNull(objects);
             Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
         }
@@ -488,7 +488,7 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Created apObj with id {0}", saved.Id);
             var index = 1;
             // Search
-            var objects = await APObjects.FindAllAsync("object", Query.None, APObject.AllFields, 1, 100);
+            var objects = await APObjects.FindAllAsync("object", Query.None, null, 1, 100);
             do
             {
                 objects.ForEach(a => Console.WriteLine("{0}) {1}", index++, a.Id));
