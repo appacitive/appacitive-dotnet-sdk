@@ -48,6 +48,7 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="App.cs" />
     <Compile Include="Aspnet\AspnetPlatform.cs" />
     <Compile Include="Aspnet\AspnetApplicationState.cs" />
     <Compile Include="HttpConnector.cs" />

@@ -13,11 +13,11 @@ using Appacitive.Sdk.Wcf;
 
 namespace Appacitive.Sdk.Wcf
 {
-    public class WcfPlatform : NetPlatform, IApplicationPlatform
+    public class WcfPlatform : NetPlatform
     {
         public static readonly WcfPlatform Instance = new WcfPlatform();
 
-        protected override void InitializeContainer(IDependencyContainer container)
+        public override void InitializeContainer(IDependencyContainer container)
         {
             base.InitializeContainer(container);
             container.RegisterInstance<ISession, SessionCleanupProxy>(new SessionCleanupProxy(new InProcSession(), new TimeSpan(0,5,0), new TimeSpan(0,30,0)));

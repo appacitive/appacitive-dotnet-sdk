@@ -8,7 +8,7 @@ namespace Appacitive.Sdk.Internal
 {
     public class AppContext
     {
-        public AppContext(Platform platform, string apiKey, Environment environment, AppacitiveSettings settings)
+        public AppContext(IPlatform platform, string apiKey, Environment environment, AppacitiveSettings settings)
         {
             this.ApiKey = apiKey;
             this.Environment = environment;
@@ -23,12 +23,12 @@ namespace Appacitive.Sdk.Internal
 
         private UserInfo _user;
 
-        public UserInfo GetCurrentUser()
+        public UserInfo CurrentUser
         {
-            return _user;
+            get { return _user; }
         }
 
-        public Platform Platform { get; private set; }
+        public IPlatform Platform { get; private set; }
 
         public AppacitiveSettings Settings { get; private set; }
 

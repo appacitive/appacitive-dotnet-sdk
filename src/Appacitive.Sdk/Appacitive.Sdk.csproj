@@ -36,7 +36,11 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
-    <Compile Include="App.cs" />
+    <Compile Include="Interfaces\IDeviceState.cs" />
+    <Compile Include="Interfaces\IApplicationPlatform.cs" />
+    <Compile Include="Interfaces\IDevicePlatform.cs" />
+    <Compile Include="Interfaces\IPlatform.cs" />
+    <Compile Include="Internal\InternalApp.cs" />
     <Compile Include="APDevice.cs" />
     <Compile Include="Interfaces\ILocalSettings.cs" />
     <Compile Include="Interfaces\ILocalStorage.cs" />
@@ -48,7 +52,6 @@
     <Compile Include="Internal\Enums.cs" />
     <Compile Include="Internal\ErrorCodes.cs" />
     <Compile Include="Internal\LocalSettings.cs" />
-    <Compile Include="Internal\Platform.cs" />
     <Compile Include="Internal\Services\Model\AtomicCountersRequest.cs" />
     <Compile Include="Internal\Services\Model\AtomicCountersResponse.cs" />
     <Compile Include="Internal\Services\Model\UpdateListItemsRequest.cs" />
@@ -68,7 +71,7 @@
     <Compile Include="Interfaces\IHttpConnector.cs" />
     <Compile Include="Interfaces\IJsonSerializer.cs" />
     <Compile Include="Interfaces\IObjectFactory.cs" />
-    <Compile Include="Interfaces\IContextService.cs" />
+    <Compile Include="Interfaces\IApplicationState.cs" />
     <Compile Include="Interfaces\ITraceWriter.cs" />
     <Compile Include="Interfaces\IUploadHandler.cs" />
     <Compile Include="Interfaces\IValueCollection.cs" />

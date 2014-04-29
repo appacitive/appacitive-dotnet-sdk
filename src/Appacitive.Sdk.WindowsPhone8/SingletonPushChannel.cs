@@ -12,9 +12,12 @@ namespace Appacitive.Sdk.WindowsPhone8
 namespace Appacitive.Sdk.WindowsPhone7
 #endif
 {
-    public class SingletonPushChannel : IDisposable, IPushChannel
+    internal class SingletonPushChannel : IDisposable, IPushChannel
     {
-        private SingletonPushChannel() { }
+        private SingletonPushChannel() 
+        {
+            _channel = SetupChannel();
+        }
 
         public event EventHandler<NotificationEventArgs> ShellToastNotificationReceived
         {
@@ -33,7 +36,7 @@ namespace Appacitive.Sdk.WindowsPhone7
         private EventHandler<NotificationEventArgs> _shellToastNotificationReceived;
         private EventHandler<HttpNotificationEventArgs> _httpNotificationReceived;
 
-        private HttpNotificationChannel GetChannel()
+        public HttpNotificationChannel SetupChannel()
         {
             if (_channel == null)
             {
@@ -46,18 +49,23 @@ namespace Appacitive.Sdk.WindowsPhone7
             return _channel;
         }
 
+        public Uri ChannelUri
+        {
+            get { return _channel.ChannelUri; }
+        }
+
         private HttpNotificationChannel CreateNewChannel()
         {
-            var channel = HttpNotificationChannel.Find(App.Current.AppId);
+            var channel = HttpNotificationChannel.Find(App.Context.AppId);
             if (channel == null)
             {
-                channel = new HttpNotificationChannel(App.Current.AppId);
+                channel = new HttpNotificationChannel(App.Context.AppId);
                 SubscribeToEvents(channel);
                 // Open the channel
                 channel.Open();
                 UpdateChannelUri(channel.ChannelUri);
                 // Register for tile notifications
-                var whitelistedDomains = App.Current.Settings.PushSettings.WhitelistedDomains;
+                var whitelistedDomains = App.Context.Settings.PushSettings.WhitelistedDomains;
                 if (whitelistedDomains.Count == 0)
                     channel.BindToShellTile();
                 else
@@ -102,8 +110,6 @@ namespace Appacitive.Sdk.WindowsPhone7
             if (copy != null)
                 copy(this, e);
         }
-
-        
 
         private void OnConnectionStatusChanged(object sender, NotificationChannelConnectionEventArgs e)
         {
@@ -153,13 +159,13 @@ namespace Appacitive.Sdk.WindowsPhone7
 
         private void UpdateChannelUri(Uri uri)
         {
-            var existing = App.Current.GetCurrentDevice().Device.DeviceToken;
+            var existing = App.DeviceContext.CurrentDevice.DeviceToken;
             var newToken = uri.ToString();
             if (string.Equals(newToken, existing) == false)
             {
-                var current = App.Current.GetCurrentDevice();
-                current.Device.DeviceToken = newToken;
-                current.Device.SaveAsync();
+                var current = App.DeviceContext;
+                current.CurrentDevice.DeviceToken = newToken;
+                current.CurrentDevice.SaveAsync().ConfigureAwait(false);
             }
         }
 

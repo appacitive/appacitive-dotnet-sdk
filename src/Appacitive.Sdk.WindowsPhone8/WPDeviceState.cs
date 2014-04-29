@@ -54,6 +54,7 @@ namespace Appacitive.Sdk.WindowsPhone7
                 var json = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
                 this.LocalStorage.SetValue(NamingConvention.LocalDeviceKey(), json);
             }
+            _localDevice = device;
         }
 
         public DeviceType DeviceType

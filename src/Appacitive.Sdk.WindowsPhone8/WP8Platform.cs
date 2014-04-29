@@ -9,11 +9,16 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.WindowsPhone8
 {
-    public class WP8Platform : Platform, IDevicePlatform
+    public class WP8Platform : IDevicePlatform
     {
-        protected override void InitializeContainer(Internal.IDependencyContainer container)
-        {
+        public static readonly IPlatform Instance = new WP8Platform();
 
+        public void Init(AppContext context)
+        {
+        }
+
+        public void InitializeContainer(Internal.IDependencyContainer container)
+        {
             container
                 .Register<IHttpConnector, HttpConnector>(() => new HttpConnector())
                 .Register<IHttpFileHandler, WebClientHttpFileHandler>(() => new WebClientHttpFileHandler())
@@ -27,14 +32,8 @@ namespace Appacitive.Sdk.WindowsPhone8
                 container.Build<ILocalStorage>("wp8"),
                 container.Build<IJsonSerializer>());
             container.RegisterInstance<IApplicationState, WPApplicationState>("wp8", appState);
-            
         }
-
         
-        public static readonly Platform Instance = new WP8Platform();
-
-
-
         public IDeviceState DeviceState
         {
             get { return ObjectFactory.Build<IDeviceState>("wp8"); }
@@ -44,5 +43,6 @@ namespace Appacitive.Sdk.WindowsPhone8
         {
             get { return ObjectFactory.Build<IApplicationState>("wp8"); }
         }
+
     }
 }

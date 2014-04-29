@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
-    public static class Platforms
+    internal static class Platforms
     {
-        public static readonly Platform WP8 = WP8Platform.Instance;
+        public static readonly IPlatform WP8 = WP8Platform.Instance;
     }
 }

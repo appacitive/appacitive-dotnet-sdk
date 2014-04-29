@@ -7,8 +7,8 @@ using System.Text;
 
 namespace Appacitive.Sdk
 {
-    public static class Platforms
+    internal static class Platforms
     {   
-        public static readonly Platform WP7 = WP7Platform.Instance;
+        public static readonly IPlatform WP7 = WP7Platform.Instance;
     }
 }

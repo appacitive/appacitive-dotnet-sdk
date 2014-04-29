@@ -15,7 +15,7 @@ namespace Appacitive.Sdk.Tests
         [AssemblyInitialize]
         public static void Init(TestContext context)
         {
-            App.Initialize(Platforms.NonWeb, "appid", TestConfiguration.ApiKey, TestConfiguration.Environment);
+            App.Initialize("appid", TestConfiguration.ApiKey, TestConfiguration.Environment);
             App.Debug.ApiLogging.LogEverything();
             // Base class mappings
             App.Types.MapObjectType<CustomUser>("user");

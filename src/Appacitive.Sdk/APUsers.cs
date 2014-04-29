@@ -1,4 +1,5 @@
-﻿using Appacitive.Sdk.Services;
+﻿using Appacitive.Sdk.Internal;
+using Appacitive.Sdk.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -171,7 +172,7 @@ namespace Appacitive.Sdk
 
         public static async Task ChangePasswordAsync(string oldPassword, string newPassword)
         {
-            if (App.Current.GetCurrentUser().IsLoggedIn == false)
+            if (InternalApp.Current.CurrentUser.IsLoggedIn == false)
                 throw new AppacitiveRuntimeException("Cannot change password for current user as no user is logged in.");
             var response = await new ChangePasswordRequest
                     {

@@ -15,7 +15,7 @@ namespace Appacitive.Sdk.Internal
 
         private IApplicationPlatform _platform;
 
-        public APUser User
+        public APUser LoggedInUser
         {
             get
             {
@@ -27,7 +27,7 @@ namespace Appacitive.Sdk.Internal
             }
         }
 
-        public string UserToken
+        public string SessionToken
         {
             get
             {
@@ -46,15 +46,15 @@ namespace Appacitive.Sdk.Internal
 
         internal void SetUser(APUser user, string userToken)
         {
-            this.User = user;
-            this.UserToken = userToken;
+            this.LoggedInUser = user;
+            this.SessionToken = userToken;
         }
 
         public bool IsLoggedIn
         {
             get
             {
-                return this.User != null;
+                return this.LoggedInUser != null;
             }
         }
     }

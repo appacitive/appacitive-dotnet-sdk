@@ -117,24 +117,24 @@ namespace Appacitive.Sdk
 
         internal bool ShouldLog(ApiRequest request, ApiResponse response, long responseTimeInMs)
         {
-            if (App.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.None) == true)
+            if (InternalApp.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.None) == true)
                 return false;
-            else if (App.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.Everything) == true)
+            else if (InternalApp.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.Everything) == true)
                 return true;
-            else if (App.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.Conditional) == true)
+            else if (InternalApp.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.Conditional) == true)
             {
                 if (_condition != null && _condition(request, response) == true)
                     return true;
             }
             else
             {
-                if (App.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.FailedCalls))
+                if (InternalApp.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.FailedCalls))
                 {
                     if (response == null) return true;
                     if (response.Status == null) return true;
                     if (response.Status.IsSuccessful == false) return true;
                 }
-                if (App.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.SlowLogs) && responseTimeInMs > _slowLogThresholdInMilliSeconds)
+                if (InternalApp.Debug.ApiLogging.MatchLogLevel(ApiLogFlags.SlowLogs) && responseTimeInMs > _slowLogThresholdInMilliSeconds)
                     return true;
             }
             return false;

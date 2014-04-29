@@ -8,3 +8,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("Appacitive.Sdk")]
 [assembly: AssemblyDescription("")]
+
+// Friend assembly mappings.
+[assembly: InternalsVisibleTo("Appacitive.Sdk.Net45")]
+[assembly: InternalsVisibleTo("Appacitive.Sdk.WindowsPhone8")]

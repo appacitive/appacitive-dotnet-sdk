@@ -11,7 +11,7 @@ namespace Appacitive.Sdk.Net40
 namespace Appacitive.Sdk.Net45
 #endif
 {
-    internal class NonWebPlatform : NetPlatform, IApplicationPlatform
+    internal class NonWebPlatform : NetPlatform
     {
         public override IApplicationState ApplicationState
         {

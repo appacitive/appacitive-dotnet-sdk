@@ -152,9 +152,6 @@
     <Compile Include="..\Appacitive.Sdk\APObjects.cs">
       <Link>APObjects.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\App.cs">
-      <Link>App.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\APUser.cs">
       <Link>APUser.cs</Link>
     </Compile>
@@ -173,8 +170,17 @@
     <Compile Include="..\Appacitive.Sdk\Graph.cs">
       <Link>Graph.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Interfaces\IContextService.cs">
-      <Link>Interfaces\IContextService.cs</Link>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IApplicationPlatform.cs">
+      <Link>Interfaces\IApplicationPlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IApplicationState.cs">
+      <Link>Interfaces\IApplicationState.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IDevicePlatform.cs">
+      <Link>Interfaces\IDevicePlatform.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IDeviceState.cs">
+      <Link>Interfaces\IDeviceState.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IHttpConnector.cs">
       <Link>Interfaces\IHttpConnector.cs</Link>
@@ -193,6 +199,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IObjectFactory.cs">
       <Link>Interfaces\IObjectFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Interfaces\IPlatform.cs">
+      <Link>Interfaces\IPlatform.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\ITraceWriter.cs">
       <Link>Interfaces\ITraceWriter.cs</Link>
@@ -230,6 +239,9 @@
     <Compile Include="..\Appacitive.Sdk\Internal\InProcContainer.cs">
       <Link>Internal\InProcContainer.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\InternalApp.cs">
+      <Link>Internal\InternalApp.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\JsonNetSerializer.cs">
       <Link>Internal\JsonNetSerializer.cs</Link>
     </Compile>
@@ -244,9 +256,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\NullTraceWriter.cs">
       <Link>Internal\NullTraceWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Platform.cs">
-      <Link>Internal\Platform.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model.cs">
       <Link>Internal\Services\Model.cs</Link>
@@ -716,6 +725,7 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="App.cs" />
     <Compile Include="HttpConnector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TraceWriter.cs" />

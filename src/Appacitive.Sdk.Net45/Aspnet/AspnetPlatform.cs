@@ -12,9 +12,9 @@ using Appacitive.Sdk.Net45;
 
 namespace Appacitive.Sdk.Aspnet
 {
-    public class AspnetPlatform : NetPlatform, IApplicationPlatform
+    public class AspnetPlatform : NetPlatform
     {
-        public static new readonly AspnetPlatform Instance = new AspnetPlatform();
+        public static readonly AspnetPlatform Instance = new AspnetPlatform();
 
         public override IApplicationState ApplicationState
         {

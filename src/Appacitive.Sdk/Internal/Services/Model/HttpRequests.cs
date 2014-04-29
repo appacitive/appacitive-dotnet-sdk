@@ -255,7 +255,7 @@ namespace Appacitive.Sdk.Services
         {
             try
             {
-                var logThisRequest = App.Debug.ApiLogging.ShouldLog(requestObj, responseObj, responseTime);
+                var logThisRequest = InternalApp.Debug.ApiLogging.ShouldLog(requestObj, responseObj, responseTime);
                 if (logThisRequest)
                 {
                     var log = new JObject();
@@ -278,7 +278,7 @@ namespace Appacitive.Sdk.Services
                     if (fault != null)
                         log["fault"] = fault.ToString();
 
-                    await App.Debug.LogAsync(log.ToString(Formatting.Indented));
+                    await InternalApp.Debug.LogAsync(log.ToString(Formatting.Indented));
                 }
             }
             catch { /* Suppress fault */ }

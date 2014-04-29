@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Appacitive.Sdk.Internal;
 
 namespace Appacitive.Sdk.Services
 {
@@ -21,7 +22,7 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("__type", out value) == false || value.Type == JTokenType.Null)
                 throw new Exception("Schema type missing.");
             var type = value.ToString();
-            var mappedType = App.Types.Mapping.GetMappedObjectType(type);
+            var mappedType = InternalApp.Types.Mapping.GetMappedObjectType(type);
             if (mappedType == null)
                 return new APUser();
             else

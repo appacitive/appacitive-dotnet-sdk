@@ -19,9 +19,9 @@ namespace Appacitive.Sdk.Tests
         {
             var user = await UserHelper.CreateNewUserAsync();
             await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
-            var userContext = App.Current.GetCurrentUser();
-            Assert.IsTrue(userContext.User != null);
-            Assert.IsTrue(userContext.User is CustomUser);
+            var userContext = App.UserContext;
+            Assert.IsTrue(userContext.LoggedInUser != null);
+            Assert.IsTrue(userContext.LoggedInUser is CustomUser);
         }
 
         [TestMethod]

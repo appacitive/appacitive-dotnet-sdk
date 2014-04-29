@@ -13,15 +13,15 @@ namespace Appacitive.Sdk.Services
     {
         protected ApiRequest()
         {
-            var appContext = App.Current;
+            var appContext = InternalApp.Current;
             this.ApiKey = appContext.ApiKey;
-            var user = appContext.GetCurrentUser().User;
+            var user = appContext.CurrentUser.LoggedInUser;
             if (user != null && user.Location != null)
                 this.CurrentLocation = user.Location;
-            this.UserToken = appContext.GetCurrentUser().UserToken;
+            this.UserToken = appContext.CurrentUser.SessionToken;
             this.Environment = appContext.Environment;
-            this.DebugEnabled = App.Debug.IsProfilingEnabled;
-            this.Verbosity = App.Debug.Verbosity;
+            this.DebugEnabled = InternalApp.Debug.IsProfilingEnabled;
+            this.Verbosity = InternalApp.Debug.Verbosity;
             this.Fields = new List<string>();
         }
 

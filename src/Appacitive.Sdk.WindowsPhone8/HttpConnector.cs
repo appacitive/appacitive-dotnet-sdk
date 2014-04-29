@@ -76,7 +76,7 @@ namespace Appacitive.Sdk.WindowsPhone7
 
         private bool IsNetworkAvailable()
         {
-            var devicePlatform = App.Current.Platform as IDevicePlatform;
+            var devicePlatform = App.Context.Platform as IDevicePlatform;
             if (devicePlatform == null)
                 return true;
             else return devicePlatform.DeviceState.IsNetworkAvailable();

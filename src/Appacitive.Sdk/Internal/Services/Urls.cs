@@ -59,10 +59,10 @@ namespace Appacitive.Sdk.Services
             
             private static string CreateUrl(string suffix)
             {
-                var hostName = App.Current.Settings.HostName;
+                var hostName = InternalApp.Current.Settings.HostName;
                 if (string.IsNullOrWhiteSpace(hostName) == true)
                     hostName = "apis.appacitive.com/v1.0";
-                if (App.Current.Settings.UseHttps == true)
+                if (InternalApp.Current.Settings.UseHttps == true)
                     return string.Format("https://{0}/{1}", hostName, suffix);
                 else
                     return string.Format("http://{0}/{1}", hostName, suffix);
@@ -99,7 +99,7 @@ namespace Appacitive.Sdk.Services
                     url.QueryString["location"] = location.ToString();
                 if (fields != null && fields.Count > 0)
                     url.QueryString["fields"] = fields.Select(x => x.ToLower() ).ToDelimitedList(",");
-                if (App.Debug.ApiLogging.ApiLogFlags != ApiLogFlags.None)
+                if (InternalApp.Debug.ApiLogging.ApiLogFlags != ApiLogFlags.None)
                     url.QueryString["pretty"] = "true";
                 return url;
             }

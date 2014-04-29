@@ -74,7 +74,7 @@ namespace Appacitive.Sdk.Services
             if (json.TryGetValue("__relationtype", out value) == false || value.Type == JTokenType.Null)
                 throw new Exception("Relation type missing.");
             var type = value.ToString();
-            var mappedType = App.Types.Mapping.GetMappedConnectionType(type);
+            var mappedType = InternalApp.Types.Mapping.GetMappedConnectionType(type);
             if (mappedType == null)
                 return new APConnection(type);
             else return Activator.CreateInstance(mappedType) as Entity;

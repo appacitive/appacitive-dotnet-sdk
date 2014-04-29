@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Appacitive.Sdk.WindowsPhone7;
 #else
 using Appacitive.Sdk.WindowsPhone8;
+using Microsoft.Phone.Notification;
 #endif
 
 namespace Appacitive.Sdk
@@ -18,11 +19,12 @@ namespace Appacitive.Sdk
         public DeviceInfo(IDevicePlatform platform)
         {
             _platform = platform;
+            
         }
 
         private IDevicePlatform _platform;
 
-        public APDevice Device
+        public APDevice CurrentDevice
         {
             get { return _platform.DeviceState.GetDevice(); }
         }
@@ -51,25 +53,11 @@ namespace Appacitive.Sdk
             }
         }
 
-
-        public IPushChannel Channel
+        public IPushChannel Notifications
         {
-            get
-            {
-                return SingletonPushChannel.GetInstance();
-            }
-        }
-
-    }
-
-    public static class DeviceInfoExtensions
-    {
-        public static DeviceInfo GetCurrentDevice(this AppContext context)
-        {
-            var devicePlatform = context.Platform as IDevicePlatform;
-            if (devicePlatform != null)
-                return new DeviceInfo(devicePlatform);
-            else return null;
+            get { return SingletonPushChannel.GetInstance(); }
         }
     }
+
+    
 }

@@ -15,10 +15,10 @@ using Appacitive.Sdk.Net45;
 
 namespace Appacitive.Sdk
 {
-    public static class Platforms
+    internal static class Platforms
     {
-        public static readonly Platform Aspnet = new AspnetPlatform();
-        public static readonly Platform Wcf = new WcfPlatform();
-        public static readonly Platform NonWeb = new NonWebPlatform();
+        public static readonly IPlatform Aspnet = new AspnetPlatform();
+        public static readonly IPlatform Wcf = new WcfPlatform();
+        public static readonly IPlatform NonWeb = new NonWebPlatform();
     }
 }

@@ -11,9 +11,11 @@ namespace Appacitive.Sdk.Net40
 namespace Appacitive.Sdk.Net45
 #endif
 {
-    public abstract class NetPlatform : Platform, IApplicationPlatform
+    public abstract class NetPlatform : IApplicationPlatform
     {
-        protected override void InitializeContainer(IDependencyContainer container)
+        public abstract IApplicationState ApplicationState { get; }
+
+        public virtual void InitializeContainer(IDependencyContainer container)
         {
             container
                 .Register<IHttpConnector, HttpConnector>(() => HttpConnector.Instance)
@@ -22,6 +24,8 @@ namespace Appacitive.Sdk.Net45
                 ;
         }
 
-        public abstract IApplicationState ApplicationState { get;}
+        public virtual void Init(AppContext context)
+        {
+        }
     }
 }

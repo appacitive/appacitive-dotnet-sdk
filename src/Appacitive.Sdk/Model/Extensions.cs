@@ -13,6 +13,12 @@ namespace Appacitive.Sdk
 {
     internal static class Extensions
     {
+        public static void Initialize(this IPlatform platform, AppContext context)
+        {
+            platform.InitializeContainer(context.Container);
+            platform.Init(context);
+        }
+
         public static string Escape(this string value)
         {
             if (value == null) return null;

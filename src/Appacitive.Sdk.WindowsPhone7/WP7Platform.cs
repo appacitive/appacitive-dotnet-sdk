@@ -9,9 +9,11 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.WindowsPhone7
 {
-    public class WP7Platform : Platform, IDevicePlatform
+    public class WP7Platform : IDevicePlatform
     {
-        protected override void InitializeContainer(Internal.IDependencyContainer container)
+        public static readonly IPlatform Instance = new WP7Platform();
+
+        public void InitializeContainer(Internal.IDependencyContainer container)
         {
 
             container
@@ -30,10 +32,9 @@ namespace Appacitive.Sdk.WindowsPhone7
 
         }
 
-
-        public static readonly Platform Instance = new WP7Platform();
-
-
+        public void Init(AppContext context)
+        {
+        }
 
         public IDeviceState DeviceState
         {

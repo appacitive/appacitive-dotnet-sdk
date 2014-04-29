@@ -13,5 +13,6 @@ namespace Appacitive.Sdk
     {
         event EventHandler<HttpNotificationEventArgs> HttpNotificationReceived;
         event EventHandler<NotificationEventArgs> ShellToastNotificationReceived;
+        Uri ChannelUri { get; }
     }
 }

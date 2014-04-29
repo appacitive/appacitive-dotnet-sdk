@@ -80,15 +80,15 @@ namespace Appacitive.Sdk.Wcf
         private static bool IsLoggedIn(out string userToken)
         {
             userToken = null;
-            var user = App.Current.GetCurrentUser();
-            if (user == null || string.IsNullOrWhiteSpace(user.UserToken) == true)
+            var user = App.UserContext;
+            if (user == null || string.IsNullOrWhiteSpace(user.SessionToken) == true)
             {
                 userToken = null;
                 return false;
             }
             else
             {
-                userToken = user.UserToken;
+                userToken = user.SessionToken;
                 return true;
             }
         }
