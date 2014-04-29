@@ -11,28 +11,50 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
+    /// <summary>
+    /// Represents an instance of a Device type on the Appacitive platform.
+    /// </summary>
     public class APDevice : APObject
     {
+        /// <summary>
+        /// Creates a new instance of APDevice with the given device type.
+        /// </summary>
+        /// <param name="type">Device type</param>
         public APDevice(DeviceType type) : base("device")
         {
             this.DeviceType = type;
             this.Channels = new MultiValueCollection<string>(this, "channels");
         }
 
+        /// <summary>
+        /// Creates a new instance of APDevice corresponding to an existing device object.
+        /// This does not retrieve the existing device object from the backend.
+        /// </summary>
+        /// <param name="id">Id of the existing device object.</param>
         public APDevice(string id)
             : base("device", id)
         {
             this.Channels = new MultiValueCollection<string>(this, "channels");
         }
 
-        public APDevice(APObject device)
+        /// <summary>
+        /// Creates a new instance of APDevice and copies the internal state from the provided object.
+        /// </summary>
+        /// <param name="device">Device object with the state to be copied.</param>
+        protected APDevice(APObject device)
             : base(device)
         {
             this.Channels = new MultiValueCollection<string>(this, "channels");
         }
 
+        /// <summary>
+        /// Gets the list of channels to which this device is subscribed.
+        /// </summary>
         public IValueCollection<string> Channels { get; private set; }
         
+        /// <summary>
+        /// Gets the device type for this device.
+        /// </summary>
         public DeviceType DeviceType
         {
             get
@@ -49,13 +71,18 @@ namespace Appacitive.Sdk
             }
         }
 
+        /// <summary>
+        /// Gets the push notification device token associated with this device.
+        /// </summary>
         public string DeviceToken
         {
             get { return this.Get<string>("devicetoken"); }
             set { this["devicetoken"] = value; }
         }
 
-        
+        /// <summary>
+        /// Gets the badge count associated with this device.
+        /// </summary>
         public int Badge
         {
             get 
@@ -73,6 +100,9 @@ namespace Appacitive.Sdk
             }
         }
 
+        /// <summary>
+        /// Gets the geo location associated with this device.
+        /// </summary>
         public Geocode Location
         {
             get 
@@ -91,6 +121,9 @@ namespace Appacitive.Sdk
             }
         }
 
+        /// <summary>
+        /// Gets whether this device is active or not. Devices with IsActive = false will not recieve push notifications sent by the platform.
+        /// </summary>
         public bool IsActive
         {
             get
@@ -106,6 +139,9 @@ namespace Appacitive.Sdk
             }
         }
 
+        /// <summary>
+        /// Gets the timezone associated with this device.
+        /// </summary>
         public Timezone TimeZone
         {
             get
@@ -119,6 +155,21 @@ namespace Appacitive.Sdk
             {
                 this["timezone"] = value == null ? null : value.ToString();
             }
+        }
+
+        /// <summary>
+        /// Creates or updates the current APDevice object on the server side.
+        /// </summary>
+        /// <param name="specificRevision">
+        /// Revision number for this connection instance. 
+        /// Used for <a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control">Multiversion Concurrency Control</a>.
+        /// If this version does not match on the server side, the Save operation will fail. Passing 0 disables the revision check.
+        /// </param>
+        /// <returns>Returns the saved device object.</returns>
+        public async Task<APDevice> SaveAsync(int specificRevision = 0, bool throwIfAlreadyExists = false)
+        {
+            await this.SaveEntityAsync(specificRevision);
+            return this;
         }
 
         protected override async Task<Entity> CreateNewAsync()

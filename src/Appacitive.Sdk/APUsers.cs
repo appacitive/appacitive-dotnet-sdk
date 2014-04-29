@@ -9,8 +9,16 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
+    /// <summary>
+    /// Helper class which contains static lookup methods for APUser objects.
+    /// </summary>
     public static class APUsers
     {
+        /// <summary>
+        /// Sends the given user an email to reset their account password.
+        /// </summary>
+        /// <param name="username">Username of the user.</param>
+        /// <param name="emailSubject">Subject of the reset password email.</param>
         public static async Task InitiateResetPasswordAsync(string username, string emailSubject = null)
         {
             var request = new InitiateResetPasswordRequest
@@ -42,6 +50,11 @@ namespace Appacitive.Sdk
             return response.User;
         }
 
+        /// <summary>
+        /// Gets an existing user by user session token.
+        /// </summary>
+        /// <param name="token">User session token.</param>
+        /// <param name="fields">The user fields to be retrieved.</param>
         public static async Task<APUser> GetUserByTokenAsync(string token, IEnumerable<string> fields = null)
         {
             var request = new GetUserRequest { UserIdType = "token", UserToken = token };
@@ -116,6 +129,8 @@ namespace Appacitive.Sdk
         /// <param name="fields">List of fields to return</param>
         /// <param name="page">Page number</param>
         /// <param name="pageSize">Page size</param>
+        /// <param name="orderBy">The field on which to sort.</param>
+        /// <param name="sortOrder">Sort order - Ascending or Descending.</param>
         /// <returns>A paged list of users.</returns>
         public async static Task<PagedList<APUser>> FindAllAsync(IQuery query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
