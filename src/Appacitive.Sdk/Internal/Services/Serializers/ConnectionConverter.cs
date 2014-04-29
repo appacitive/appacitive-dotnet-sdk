@@ -86,10 +86,7 @@ namespace Appacitive.Sdk.Services
             if (conn == null)
                 return null;
             // Parse the relation information
-            // Relation id
             JToken value;
-            if (json.TryGetValue("__relationid", out value) == true && value.Type != JTokenType.Null)
-                conn.RelationId = value.ToString();
 
             // Parse the endpoints
             Endpoint ep1 = null, ep2 = null;

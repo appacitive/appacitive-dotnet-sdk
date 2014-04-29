@@ -8,83 +8,39 @@ using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
-    public class ConnectionBuilder
-    {
-        internal ConnectionBuilder(string relation)
-        {
-            this.RelationName = relation;
-        }
-
-        private string RelationName {get; set;}
-        private string EndpointALabel {get; set;}
-        private string EndpointAId {get; set;}
-        private APObject EndpointAContent {get; set;}
-        private string EndpointBLabel {get; set;}
-        private string EndpointBId {get; set;}
-        private APObject EndpointBContent {get; set;}
-
-
-        public ConnectionBuilder FromNewObject(string endpointLabel, APObject obj )
-        {
-            this.EndpointALabel = endpointLabel;
-            this.EndpointAContent = obj;
-            this.EndpointAId = null;
-            return this;
-        }
-
-        public ConnectionBuilder FromExistingObject(string endpointLabel, string objectId )
-        {
-            this.EndpointALabel = endpointLabel;
-            this.EndpointAContent = null;
-            this.EndpointAId = objectId;
-            return this;
-        }
-
-        public APConnection ToNewObject( string endpointLabel, APObject obj )
-        {
-            this.EndpointBLabel = endpointLabel;
-            this.EndpointBContent = obj;
-            this.EndpointBId = null;
-            return Build();
-        }
-
-        public APConnection ToExistingObject( string endpointLabel, string objectId )
-        {
-            this.EndpointBLabel = endpointLabel;
-            this.EndpointBContent = null;
-            this.EndpointBId = objectId;
-            return Build();
-        }
-
-        private APConnection Build()
-        {
-            APConnection conn = null;
-            if( this.EndpointAContent != null && this.EndpointBContent != null )
-                conn = new APConnection(this.RelationName, EndpointALabel, EndpointAContent, EndpointBLabel, EndpointBContent );
-            else if( this.EndpointAContent == null && this.EndpointBContent != null )
-                conn = new APConnection(this.RelationName, EndpointBLabel, EndpointBContent, EndpointALabel, EndpointAId);
-            else if (this.EndpointAContent != null && this.EndpointBContent == null)
-                conn = new APConnection(this.RelationName, EndpointALabel, EndpointAContent, EndpointBLabel, EndpointBId);
-            else 
-                conn = new APConnection(this.RelationName, EndpointALabel, EndpointAId, EndpointBLabel, EndpointBId);
-            return conn;
-        }
-
-        
-    }
-
+    /// <summary>
+    /// Represents a connection object on the Appacitive platform.
+    /// </summary>
     public class APConnection : Entity
     {
+        /// <summary>
+        /// Creates a new instance of an APConnection for the given relation type.
+        /// </summary>
+        /// <param name="type">The name of the relation for which to create a new connection.</param>
         public APConnection(string type) : base(type) 
         {
             this.Endpoints = new EndpointPair(null, null);
         }
 
+        /// <summary>
+        /// Creates a new APConnection instance corresponding to an existing connection object.
+        /// This does not retrieve the existing instance from the server side.
+        /// </summary>
+        /// <param name="type">The name of the relation for which to create a new connection.</param>
+        /// <param name="id">The id of the existing connection object.</param>
         public APConnection(string type, string id) : base(type, id) 
         {
             this.Endpoints = new EndpointPair(null, null);
         }
 
+        /// <summary>
+        /// Creates a new instance of an APConnection object between two existing APObjects.
+        /// </summary>
+        /// <param name="type">The name of the relation for which to create a new connection.</param>
+        /// <param name="labelA">Label for the first endpoint in the connection.</param>
+        /// <param name="objectIdA">Id of the existing object corresponding to the first endpoint in the connection.</param>
+        /// <param name="labelB">Label for the second endpoint in the connection.</param>
+        /// <param name="objectIdB">Id of the existing object corresponding to the second endpoint in the connection.</param>
         public APConnection(string type, string labelA, string objectIdA, string labelB, string objectIdB) 
             : base(type)
         {
@@ -93,6 +49,14 @@ namespace Appacitive.Sdk
             this.Endpoints = new EndpointPair(ep1, ep2);
         }
 
+        /// <summary>
+        /// Creates a new instance of an APConnection object between a new and an existing APObject instance.
+        /// </summary>
+        /// <param name="type">The name of the relation for which to create a new connection.</param>
+        /// <param name="labelA">Label for the first endpoint in the connection.</param>
+        /// <param name="objectA">The instance of the new object corresponding to the first endpoint in the connection.</param>
+        /// <param name="labelB">Label for the second endpoint in the connection.</param>
+        /// <param name="objectIdB">Id of the existing object corresponding to the second endpoint in the connection.</param>
         public APConnection(string type, string labelA, APObject objectA, string labelB, string objectIdB)
             : base(type)
         {
@@ -112,6 +76,14 @@ namespace Appacitive.Sdk
             this.Endpoints = new EndpointPair(ep1, ep2);
         }
 
+        /// <summary>
+        /// Creates a new instance of an APConnection object between two new APObject instances.
+        /// </summary>
+        /// <param name="type">The name of the relation for which to create a new connection.</param>
+        /// <param name="labelA">Label for the first endpoint in the connection.</param>
+        /// <param name="objectA">The instance of the new object corresponding to the first endpoint in the connection.</param>
+        /// <param name="labelB">Label for the second endpoint in the connection.</param>
+        /// <param name="objectB">The instance of the new object corresponding to the second endpoint in the connection.</param>
         public APConnection(string type, string labelA, APObject objectA, string labelB, APObject objectB)
             : base(type)
         {
@@ -136,12 +108,19 @@ namespace Appacitive.Sdk
             this.Endpoints = new EndpointPair(ep1, ep2);
         }
 
-        public static ConnectionBuilder New(string relationName)
+        /// <summary>
+        /// Fluent method to create a new APConnection instance for the given connection type.
+        /// </summary>
+        /// <param name="connectionType">The name of the relation type for which to create a new connection.</param>
+        public static FluentAPConnection New(string connectionType)
         {
-            return new ConnectionBuilder(relationName);
+            return new FluentAPConnection(connectionType);
         }
 
         
+        /// <summary>
+        /// Indicates whether or not the current connection is associated with an existing connection object on the server side.
+        /// </summary>
         internal bool IsNewInstance
         {
             get 
@@ -150,8 +129,16 @@ namespace Appacitive.Sdk
             }
         }
 
+        /// <summary>
+        /// Gets the pair of endpoints associated with this connection.
+        /// </summary>
         public EndpointPair Endpoints { get; set; }
 
+        /// <summary>
+        /// Gets the APObject associated with the endpoint with the given label.
+        /// </summary>
+        /// <param name="label">Label of the endpoint</param>
+        /// <returns>The APObject instance associated with the specified endpoint.</returns>
         public async Task<APObject> GetEndpointObjectAsync(string label)
         {
             if (string.Compare(this.Endpoints.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
@@ -161,6 +148,11 @@ namespace Appacitive.Sdk
             throw new AppacitiveApiException("Invalid label " + label);
         }
 
+        /// <summary>
+        /// Gets the id of the APObject associated with this connection at the endpoint with the given label.
+        /// </summary>
+        /// <param name="label">The label of the endpoint</param>
+        /// <returns>The id of the APObject for the given endpoint.</returns>
         public string GetEndpointId(string label)
         {
             if (string.Compare(this.Endpoints.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
@@ -170,8 +162,17 @@ namespace Appacitive.Sdk
             throw new AppacitiveApiException("Invalid label " + label);
         }
 
-        public string RelationId { get; set; }
-
+        /// <summary>
+        /// Creates or updates the current APConnection object on the server side.
+        /// Incase any of the endpoints contains a new APObject, then that object will be created as well on the server side.
+        /// </summary>
+        /// <param name="specificRevision">
+        /// Revision number for this connection instance. 
+        /// Used for <a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control">Multiversion Concurrency Control</a>.
+        /// If this version does not match on the server side, the Save operation will fail. Passing 0 disables the revision check.
+        /// </param>
+        /// <param name="throwIfAlreadyExists">Flag indicating that the operation should throw incase a connection is being created when it already exists on the server side. Passing false will return the existing instance of the connection.</param>
+        /// <returns>Returns the saved connection object.</returns>
         public async Task<APConnection> SaveAsync(int specificRevision = 0, bool throwIfAlreadyExists = false)
         {
             try
@@ -188,10 +189,7 @@ namespace Appacitive.Sdk
             }
             // Get existing connection.
             return await APConnections.GetAsync(this.Type, this.Endpoints.EndpointA.ObjectId, this.Endpoints.EndpointB.ObjectId);
-            
         }
-
-        
 
         protected async override Task<Entity> CreateNewAsync()
         {
@@ -261,14 +259,27 @@ namespace Appacitive.Sdk
 
     }
 
+    /// <summary>
+    /// Represents an endpoint in an APConnection.
+    /// </summary>
     public class Endpoint
     {
+        /// <summary>
+        /// Creates a new endpoint corresponding to an existing APObject.
+        /// </summary>
+        /// <param name="label">The label for the endpoint.</param>
+        /// <param name="obectId">The id of the existing APObject.</param>
         public Endpoint(string label, string obectId)
         {
             this.Label = label;
             this.ObjectId = obectId;
         }
 
+        /// <summary>
+        /// Creates a new endpoint corresponding to a new APObject.
+        /// </summary>
+        /// <param name="label">The label for the endpoint.</param>
+        /// <param name="content">The new APObject associated with the endpoint.</param>
         public Endpoint(string label, APObject content)
         {
             this.Label = label;
@@ -284,12 +295,22 @@ namespace Appacitive.Sdk
 
         internal APObject Content { get; set; }
 
+        /// <summary>
+        /// Gets the object id for the APObject associated with this endpoint.
+        /// </summary>
         public string ObjectId { get; set; }
 
+        /// <summary>
+        /// Gets the label for this endpoint.
+        /// </summary>
         public string Label { get; set; }
 
-        public string Type { get; set; }
+        internal string Type { get; set; }
 
+        /// <summary>
+        /// Gets the APObject instance associated with this endpoint.
+        /// </summary>
+        /// <returns>The APObject associated with this endpoint.</returns>
         public async Task<APObject> GetObjectAsync()
         {
             if (this.Content != null)
@@ -299,28 +320,45 @@ namespace Appacitive.Sdk
         }
     }
 
+    /// <summary>
+    /// Represents a pair of endpoints in an APConnection.
+    /// </summary>
     public class EndpointPair
     {
+        /// <summary>
+        /// Creates a new EndpointPair with the given endpoints.
+        /// </summary>
+        /// <param name="ep1">Endpoint 1</param>
+        /// <param name="ep2">Endpoint 2</param>
         public EndpointPair(Endpoint ep1, Endpoint ep2)
         {
             this.EndpointA = ep1;
             this.EndpointB = ep2;
         }
 
+        /// <summary>
+        /// Returns the two endpoints for this instance as an array.
+        /// </summary>
+        /// <returns>Array of endpoints.</returns>
         public Endpoint[] ToArray()
         {
             return new Endpoint[] { this.EndpointA, this.EndpointB };
         }
 
-        public Endpoint this[string name]
+        /// <summary>
+        /// Gets the endpoint with the given label.
+        /// </summary>
+        /// <param name="label">The label for the endpoint to get.</param>
+        /// <returns>The endpoint with the matching label.</returns>
+        public Endpoint this[string label]
         {
             get
             {
                 if( string.Compare( this.EndpointA.Label, this.EndpointB.Label, StringComparison.OrdinalIgnoreCase) == 0 )
-                    throw new Exception("Cannot resolve endpoint as both endpoint labels are the same.");
-                if( string.Compare( this.EndpointA.Label, name, StringComparison.OrdinalIgnoreCase) == 0 )
+                    throw new AppacitiveRuntimeException("Cannot resolve endpoint as both endpoint labels are the same.");
+                if (string.Compare(this.EndpointA.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
                     return this.EndpointA;
-                if( string.Compare( this.EndpointB.Label, name, StringComparison.OrdinalIgnoreCase) == 0 )
+                if (string.Compare(this.EndpointB.Label, label, StringComparison.OrdinalIgnoreCase) == 0)
                     return this.EndpointB;
                 return null;
             }
@@ -329,5 +367,91 @@ namespace Appacitive.Sdk
         internal Endpoint EndpointA { get; set; }
 
         internal Endpoint EndpointB { get; set; }
+    }
+
+    /// <summary>
+    /// Fluent interface for creating a new instance of an APConnection.
+    /// </summary>
+    public class FluentAPConnection
+    {
+        internal FluentAPConnection(string relation)
+        {
+            this.RelationName = relation;
+        }
+
+        private string RelationName { get; set; }
+        private string EndpointALabel { get; set; }
+        private string EndpointAId { get; set; }
+        private APObject EndpointAContent { get; set; }
+        private string EndpointBLabel { get; set; }
+        private string EndpointBId { get; set; }
+        private APObject EndpointBContent { get; set; }
+
+
+        /// <summary>
+        /// Create a connection with a new APObject instance. 
+        /// </summary>
+        /// <param name="endpointLabel">The label for the endpoint.</param>
+        /// <param name="obj">The instance of the new APObject.</param>
+        public FluentAPConnection FromNewObject(string endpointLabel, APObject obj)
+        {
+            this.EndpointALabel = endpointLabel;
+            this.EndpointAContent = obj;
+            this.EndpointAId = null;
+            return this;
+        }
+
+        /// <summary>
+        /// Create a connection with an existing APObject.
+        /// </summary>
+        /// <param name="endpointLabel">The label for the endpoint.</param>
+        /// <param name="objectId">The id of the existing APObject.</param>
+        public FluentAPConnection FromExistingObject(string endpointLabel, string objectId)
+        {
+            this.EndpointALabel = endpointLabel;
+            this.EndpointAContent = null;
+            this.EndpointAId = objectId;
+            return this;
+        }
+
+        /// <summary>
+        /// Create a connection with a new APObject instance.
+        /// </summary>
+        /// <param name="endpointLabel">The label for the endpoint.</param>
+        /// <param name="obj">The instance of the new APObject.</param>
+        public APConnection ToNewObject(string endpointLabel, APObject obj)
+        {
+            this.EndpointBLabel = endpointLabel;
+            this.EndpointBContent = obj;
+            this.EndpointBId = null;
+            return Build();
+        }
+
+        /// <summary>
+        /// Create a connection with an existing APObject.
+        /// </summary>
+        /// <param name="endpointLabel">The label for the endpoint.</param>
+        /// <param name="objectId">The id of the existing APObject.</param>
+        public APConnection ToExistingObject(string endpointLabel, string objectId)
+        {
+            this.EndpointBLabel = endpointLabel;
+            this.EndpointBContent = null;
+            this.EndpointBId = objectId;
+            return Build();
+        }
+
+        private APConnection Build()
+        {
+            APConnection conn = null;
+            if (this.EndpointAContent != null && this.EndpointBContent != null)
+                conn = new APConnection(this.RelationName, EndpointALabel, EndpointAContent, EndpointBLabel, EndpointBContent);
+            else if (this.EndpointAContent == null && this.EndpointBContent != null)
+                conn = new APConnection(this.RelationName, EndpointBLabel, EndpointBContent, EndpointALabel, EndpointAId);
+            else if (this.EndpointAContent != null && this.EndpointBContent == null)
+                conn = new APConnection(this.RelationName, EndpointALabel, EndpointAContent, EndpointBLabel, EndpointBId);
+            else
+                conn = new APConnection(this.RelationName, EndpointALabel, EndpointAId, EndpointBLabel, EndpointBId);
+            return conn;
+        }
     }
 }
