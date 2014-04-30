@@ -72,6 +72,7 @@ namespace Appacitive.Sdk.WindowsPhone7
                 var json = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
                 this.LocalStorage.SetValue(NamingConvention.LocalUserKey(), json);
             }
+            _localUser = user;
         }
 
         public void SetUserToken(string value)
