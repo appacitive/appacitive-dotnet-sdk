@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk
+namespace Appacitive.Sdk.Internal
 {
     public class InProcContainer : IDependencyContainer
     {
@@ -103,14 +103,14 @@ namespace Appacitive.Sdk
             return this.Register<TInterface, TImpl>(name);
         }
 
-        IDependencyContainer IDependencyContainer.Register<TInterface, TImpl>(Func<object> factory)
+        IDependencyContainer IDependencyContainer.Register<TInterface, TImpl>(Func<TImpl> factory)
         {
-            return this.Register<TInterface, TImpl>(factory);
+            return this.Register<TInterface, TImpl>(() => factory());
         }
 
-        IDependencyContainer IDependencyContainer.Register<TInterface, TImpl>(string name, Func<object> factory)
+        IDependencyContainer IDependencyContainer.Register<TInterface, TImpl>(string name, Func<TImpl> factory)
         {
-            return this.Register<TInterface, TImpl>(name, factory);
+            return this.Register<TInterface, TImpl>(name, () => factory());
         }
     }
 

@@ -42,7 +42,6 @@
     <Compile Include="Interfaces\IPlatform.cs" />
     <Compile Include="Internal\InternalApp.cs" />
     <Compile Include="APDevice.cs" />
-    <Compile Include="Interfaces\ILocalSettings.cs" />
     <Compile Include="Interfaces\ILocalStorage.cs" />
     <Compile Include="Interfaces\ITypeMapping.cs" />
     <Compile Include="Internal\ApiLogFlags.cs" />

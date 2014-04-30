@@ -20,9 +20,9 @@ namespace Appacitive.Sdk
             this.PushSettings = new PushSettings();
         }
 
-        public string HostName { get; internal set; }
+        public string HostName { get; set; }
 
-        public bool UseHttps { get; internal set; } 
+        public bool UseHttps { get; set; } 
 
         public IDependencyContainer Factory { get; internal set; }
 

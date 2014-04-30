@@ -7,12 +7,32 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Internal
 {
+    /// <summary>
+    /// Json serializer interface for handling serialization and deserialization for objects to and from json.
+    /// </summary>
     public interface IJsonSerializer
     {
+        /// <summary>
+        /// Returns the json serialized representation for the given object.
+        /// </summary>
+        /// <param name="o">The object to be serialized.</param>
+        /// <returns>Json byte array.</returns>
         byte[] Serialize(object o);
 
+        /// <summary>
+        /// Deserializes the given json into an object instance of the given type.
+        /// </summary>
+        /// <param name="type">Object type.</param>
+        /// <param name="stream">Json data stream.</param>
+        /// <returns>The deserialized object.</returns>
         object Deserialize(Type type, byte[] stream);
 
+        /// <summary>
+        /// Deserializes the given json into an strongly typed object instance of the given type.
+        /// </summary>
+        /// <typeparam name="T">The object type</typeparam>
+        /// <param name="stream">Json data stream.</param>
+        /// <returns>The deserialized object.</returns>
         T Deserialize<T>(byte[] stream);
     }
 

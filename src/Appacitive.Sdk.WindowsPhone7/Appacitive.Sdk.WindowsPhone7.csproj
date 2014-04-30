@@ -155,9 +155,6 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\IJsonSerializer.cs">
       <Link>Interfaces\IJsonSerializer.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Interfaces\ILocalSettings.cs">
-      <Link>Interfaces\ILocalSettings.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\ILocalStorage.cs">
       <Link>Interfaces\ILocalStorage.cs</Link>
     </Compile>

@@ -7,8 +7,18 @@ using Appacitive.Sdk.Services;
 
 namespace Appacitive.Sdk
 {
+    /// <summary>
+    /// Helper class to get canned list data defined on the appacitive platform.
+    /// </summary>
     public static class CannedLists
     {
+        /// <summary>
+        /// Gets a paginated list of items for the given canned list.
+        /// </summary>
+        /// <param name="listName">Name of the canned list.</param>
+        /// <param name="page">Page number.</param>
+        /// <param name="pageSize">Page size.</param>
+        /// <returns>Paginated list of canned list items.</returns>
         public static async Task<PagedList<ListItem>> GetListItemsAsync(string listName, int page = 1, int pageSize = 20)
         {
             var request = new GetListContentRequest
