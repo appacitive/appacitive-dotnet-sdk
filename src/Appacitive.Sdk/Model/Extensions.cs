@@ -13,7 +13,7 @@ namespace Appacitive.Sdk
 {
     internal static class Extensions
     {
-        public static void Initialize(this IPlatform platform, AppContext context)
+        public static void Initialize(this IPlatform platform, IAppContextState context)
         {
             platform.InitializeContainer(context.Container);
             platform.Init(context);

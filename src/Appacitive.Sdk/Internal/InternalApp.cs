@@ -29,7 +29,7 @@ namespace Appacitive.Sdk.Internal
 
         private static void InitOnce(IPlatform platform, string appId, string apikey, Environment environment, AppacitiveSettings settings)
         {
-            var context = new AppContext(platform, apikey, environment, settings);
+            var context = new AppContextState(platform, apikey, environment, settings);
             // Register defaults
             DefaultRegistrations.ConfigureContainer(context.Container);
             // Setup platform specific registrations
@@ -39,8 +39,8 @@ namespace Appacitive.Sdk.Internal
 
         
 
-        private static AppContext _context = null;
-        public static AppContext Current
+        private static IAppContextState _context = null;
+        public static IAppContextState Current
         {
             get
             {

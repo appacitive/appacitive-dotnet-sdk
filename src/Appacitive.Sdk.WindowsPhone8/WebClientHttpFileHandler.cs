@@ -104,8 +104,7 @@ namespace Appacitive.Sdk.WindowsPhone7
             }
             await UploadAsync(url, headers, method, data);
         }
-
-
+        
         private void UnsubscribeFromDownloadEvents(WebClient client)
         {
             client.DownloadProgressChanged -= client_DownloadProgressChanged;
@@ -136,7 +135,6 @@ namespace Appacitive.Sdk.WindowsPhone7
             OnDownloadProgressChanged(e);
         }
 
-        
         private void OnDownloadProgressChanged(System.Net.DownloadProgressChangedEventArgs e)
         {
             var copy = DownloadProgressChanged;
@@ -165,8 +163,6 @@ namespace Appacitive.Sdk.WindowsPhone7
         }
 
         public event EventHandler<DownloadProgressChangedEventArgs> DownloadProgressChanged;
-
-        
 
         public event EventHandler<UploadProgressChangedEventArgs> UploadProgressChanged;
     }

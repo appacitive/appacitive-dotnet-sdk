@@ -13,16 +13,17 @@ namespace Appacitive.Sdk.WindowsPhone8
     {
         public static readonly IPlatform Instance = new WP8Platform();
 
-        public void Init(AppContext context)
+        public void Init(IAppContextState context)
         {
         }
 
-        public void InitializeContainer(Internal.IDependencyContainer container)
+        public void InitializeContainer(IDependencyContainer container)
         {
             container
                 .Register<IHttpConnector, HttpConnector>(() => new HttpConnector())
                 .Register<IHttpFileHandler, WebClientHttpFileHandler>(() => new WebClientHttpFileHandler())
                 .RegisterInstance<ILocalStorage, IsolatedLocalStorage>("wp8", IsolatedLocalStorage.Instance)
+                .RegisterInstance<ITraceWriter, DebugTraceWriter>(new DebugTraceWriter());
                 ;
             var deviceState = new WPDeviceState(
                 container.Build<ILocalStorage>("wp8"),

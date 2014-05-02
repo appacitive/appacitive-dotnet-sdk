@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Internal
 {
-    public class AppContext
+    internal class AppContextState : IAppContextState
     {
-        public AppContext(IPlatform platform, string apiKey, Environment environment, AppacitiveSettings settings)
+        public AppContextState(IPlatform platform, string apiKey, Environment environment, AppacitiveSettings settings)
         {
             this.ApiKey = apiKey;
             this.Environment = environment;
@@ -32,7 +32,7 @@ namespace Appacitive.Sdk.Internal
 
         public AppacitiveSettings Settings { get; private set; }
 
-        internal IDependencyContainer Container { get; private set; }
+        public IDependencyContainer Container { get; private set; }
 
         public string AppId { get; private set; }
     }

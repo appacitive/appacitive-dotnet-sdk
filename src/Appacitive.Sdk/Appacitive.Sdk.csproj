@@ -40,13 +40,14 @@
     <Compile Include="Interfaces\IApplicationPlatform.cs" />
     <Compile Include="Interfaces\IDevicePlatform.cs" />
     <Compile Include="Interfaces\IPlatform.cs" />
+    <Compile Include="Interfaces\IAppContextState.cs" />
     <Compile Include="Internal\InternalApp.cs" />
     <Compile Include="APDevice.cs" />
     <Compile Include="Interfaces\ILocalStorage.cs" />
     <Compile Include="Interfaces\ITypeMapping.cs" />
     <Compile Include="Internal\ApiLogFlags.cs" />
     <Compile Include="Internal\AppacitiveContext.cs" />
-    <Compile Include="Internal\AppContext.cs" />
+    <Compile Include="Internal\AppContextState.cs" />
     <Compile Include="Internal\DefaultRegistrations.cs" />
     <Compile Include="Internal\Enums.cs" />
     <Compile Include="Internal\ErrorCodes.cs" />

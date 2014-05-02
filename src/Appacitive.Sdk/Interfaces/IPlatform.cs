@@ -14,6 +14,6 @@ namespace Appacitive.Sdk
     {
         void InitializeContainer(IDependencyContainer container);
 
-        void Init(AppContext context);
+        void Init(IAppContextState context);
     }
 }

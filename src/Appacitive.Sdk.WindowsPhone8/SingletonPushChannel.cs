@@ -56,16 +56,16 @@ namespace Appacitive.Sdk.WindowsPhone7
 
         private HttpNotificationChannel CreateNewChannel()
         {
-            var channel = HttpNotificationChannel.Find(App.Context.AppId);
+            var channel = HttpNotificationChannel.Find(AppContext.State.AppId);
             if (channel == null)
             {
-                channel = new HttpNotificationChannel(App.Context.AppId);
+                channel = new HttpNotificationChannel(AppContext.State.AppId);
                 SubscribeToEvents(channel);
                 // Open the channel
                 channel.Open();
                 UpdateChannelUri(channel.ChannelUri);
                 // Register for tile notifications
-                var whitelistedDomains = App.Context.Settings.PushSettings.WhitelistedDomains;
+                var whitelistedDomains = AppContext.State.Settings.PushSettings.WhitelistedDomains;
                 if (whitelistedDomains.Count == 0)
                     channel.BindToShellTile();
                 else
@@ -113,7 +113,7 @@ namespace Appacitive.Sdk.WindowsPhone7
 
         private void OnConnectionStatusChanged(object sender, NotificationChannelConnectionEventArgs e)
         {
-            App.Debug.LogAsync(string.Format("Connection status changed to {0}.", e.ConnectionStatus));
+            AppContext.Debug.LogAsync(string.Format("Connection status changed to {0}.", e.ConnectionStatus));
         }
 
         void OnChannelErrorOccurred(object sender, NotificationChannelErrorEventArgs e)
@@ -134,7 +134,7 @@ namespace Appacitive.Sdk.WindowsPhone7
                 }
             }
 
-            App.Debug.LogAsync(string.Format("Channel error- type:{0}, errorCode:{1}, message:{2}, addlData:{3}",
+            AppContext.Debug.LogAsync(string.Format("Channel error- type:{0}, errorCode:{1}, message:{2}, addlData:{3}",
                 e.ErrorType,
                 e.ErrorCode,
                 e.Message,
@@ -159,11 +159,11 @@ namespace Appacitive.Sdk.WindowsPhone7
 
         private void UpdateChannelUri(Uri uri)
         {
-            var existing = App.DeviceContext.CurrentDevice.DeviceToken;
+            var existing = AppContext.DeviceContext.CurrentDevice.DeviceToken;
             var newToken = uri.ToString();
             if (string.Equals(newToken, existing) == false)
             {
-                var current = App.DeviceContext;
+                var current = AppContext.DeviceContext;
                 current.CurrentDevice.DeviceToken = newToken;
                 current.CurrentDevice.SaveAsync().ConfigureAwait(false);
             }

@@ -29,10 +29,23 @@ namespace Appacitive.Sdk.Services
                 throw new Exception("Schema type missing.");
             var type = value.ToString();
             var mappedType = InternalApp.Types.Mapping.GetMappedObjectType(type);
-            if (mappedType == null)
-                return new APObject(type);
-            else 
+            if (mappedType != null)
                 return Activator.CreateInstance(mappedType) as Entity;
+
+            // Handle default types.
+            if (type.Equals("user") == true)
+                return new APUser();
+            else if (type.Equals("device") == true)
+            {
+                string deviceType = string.Empty;
+                if (json.TryGetValue("devicetype", out value) == true && value.Type != JTokenType.Null)
+                {
+                    deviceType = value.ToString();
+                    return new APDevice(SupportedDevices.ResolveDeviceType(deviceType));
+                }
+                else throw new AppacitiveRuntimeException("DeviceType not present in response.");
+            }
+            else return new APObject(type);
         }
 
         protected override Entity ReadJson(Entity entity, Type objectType, JObject json, JsonSerializer serializer)

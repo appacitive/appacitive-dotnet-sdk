@@ -142,7 +142,7 @@ namespace Appacitive.Sdk.Tests
             int intfield = copy.intfield;
             decimal decimalField = copy.decimalfield;
             Assert.IsTrue(intfield == 1);
-            Assert.IsTrue(decimalField == pi);
+            Assert.IsTrue(Math.Abs(decimalField - pi) < 0.0001m );
             Assert.IsTrue(copy.Type == "object");
             Assert.IsTrue(copy.Revision == 1);
             Assert.IsTrue(copy.CreatedAt.Subtract(DateTime.Now).Duration().Seconds < 15);
@@ -290,7 +290,8 @@ namespace Appacitive.Sdk.Tests
             int intfield = copy.intfield;
             decimal decimalField = copy.decimalfield;
             Assert.IsTrue(intfield == 1);
-            Assert.IsTrue(decimalField == pi);
+            Assert.IsTrue( Math.Abs(decimalField - pi) < 0.0001m);
+            
 
             // Update the object
             copy.intfield = 2;
@@ -444,7 +445,6 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public async Task FindAllObjectsAsyncWithNestedQueryTest()
         {
-
             // Create the object
             dynamic apObject = new APObject("object");
             apObject.stringfield = Unique.String;
@@ -459,6 +459,8 @@ namespace Appacitive.Sdk.Tests
                             Query.Property("intfield").IsEqualTo(10)
                         });
 
+            // Delay for index propagation on test bench.
+            await Utilities.Delay(1500);
             var objects = await APObjects.FindAllAsync("object", query);
             Assert.IsNotNull(objects);
             Assert.IsTrue(objects.Count == 1);
@@ -559,6 +561,9 @@ namespace Appacitive.Sdk.Tests
             obj.AddTags(tags);
             await obj.SaveAsync();
 
+            // Delay for index propagation on test bench.
+            await Utilities.Delay(1500);
+
             // Search for the object with tags.
             var matches = await APObjects.FindAllAsync("object", Query.Tags.MatchAll(tags));
             Assert.IsTrue(matches != null);
@@ -600,6 +605,9 @@ namespace Appacitive.Sdk.Tests
             var obj = new APObject("object");
             obj.Set<string>("stringfield", value);
             await obj.SaveAsync();
+            
+            // Delay for index propagation on test bench.
+            await Utilities.Delay(1500);
 
             var results = await APObjects.FreeTextSearchAsync("object", value);
             Assert.IsTrue(results != null);
@@ -659,6 +667,9 @@ namespace Appacitive.Sdk.Tests
             #else
             await Task.WhenAll(obj1.SaveAsync(), obj2.SaveAsync());
             #endif
+
+            // Delay for index propagation on test bench.
+            await Utilities.Delay(1500); 
             var results = await APObjects.FreeTextSearchAsync("object", prefix + "?" + suffix);
             Assert.IsTrue(results != null);
             Assert.IsTrue(results.Count == 2);

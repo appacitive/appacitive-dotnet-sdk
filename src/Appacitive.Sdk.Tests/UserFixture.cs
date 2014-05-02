@@ -60,6 +60,8 @@ namespace Appacitive.Sdk.Tests
         {
             // Create a new user
             var newUser = await UserHelper.CreateNewUserAsync();
+            // Delay for index propagation on test bench.
+            await Utilities.Delay(1500);
             // Get list of users
             var users = await APUsers.FindAllAsync( Query.Property("username").IsEqualTo(newUser.Username) );
             Assert.IsTrue(users != null && users.Count == 1);

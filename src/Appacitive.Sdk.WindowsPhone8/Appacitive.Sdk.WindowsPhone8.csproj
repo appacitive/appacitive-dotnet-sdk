@@ -86,7 +86,8 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
-    <Compile Include="App.cs" />
+    <Compile Include="AppContext.cs" />
+    <Compile Include="DebugTraceWriter.cs" />
     <Compile Include="DeviceInfo.cs" />
     <Compile Include="WPApplicationState.cs" />
     <Compile Include="HttpConnector.cs" />

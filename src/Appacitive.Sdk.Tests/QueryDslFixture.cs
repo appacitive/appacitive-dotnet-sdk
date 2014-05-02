@@ -56,16 +56,7 @@ namespace Appacitive.Sdk.Tests
         public void QueryWithSingleQuoteShouldBeEscapedTest()
         {
             var query = Query.Property("string_field").IsEqualTo("steve's house").ToString();
-            var expected = @"*string_field == '" + Uri.EscapeDataString(@"steve\'s house") + "'";
-            Assert.AreEqual(query, expected);
-        }
-
-
-        [TestMethod]
-        public void NonLiteralsInStringQueryShouldBeEscapedTest()
-        {
-            var query = Query.Property("string_field").IsEqualTo("hello world").ToString();
-            var expected = @"*string_field == '" + Uri.EscapeDataString("hello world") + "'";
+            var expected = @"*string_field == 'steve\'s house'";
             Assert.AreEqual(query, expected);
         }
 
@@ -113,6 +104,10 @@ namespace Appacitive.Sdk.Tests
             await obj.SaveAsync();
 
             var rawQuery = string.Format("*stringfield == '{0}'", propertyValue);
+
+            // Delay for index propagation on test bench.
+            await Utilities.Delay(1500);
+
             var results = await APObjects.FindAllAsync("object", Query.FromRawQuery(rawQuery));
             Assert.IsNotNull(results);
             Assert.IsTrue(results.Count == 1);

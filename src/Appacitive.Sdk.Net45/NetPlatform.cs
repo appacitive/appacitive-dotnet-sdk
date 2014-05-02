@@ -24,7 +24,7 @@ namespace Appacitive.Sdk.Net45
                 ;
         }
 
-        public virtual void Init(AppContext context)
+        public virtual void Init(IAppContextState context)
         {
         }
     }

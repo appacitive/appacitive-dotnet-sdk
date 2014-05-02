@@ -10,5 +10,6 @@ namespace Appacitive.Sdk
     internal static class Platforms
     {   
         public static readonly IPlatform WP7 = WP7Platform.Instance;
+        
     }
 }

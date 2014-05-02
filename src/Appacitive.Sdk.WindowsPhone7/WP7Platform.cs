@@ -3,6 +3,7 @@ using Microsoft.Phone.Net.NetworkInformation;
 using Microsoft.Phone.Notification;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,13 +14,13 @@ namespace Appacitive.Sdk.WindowsPhone7
     {
         public static readonly IPlatform Instance = new WP7Platform();
 
-        public void InitializeContainer(Internal.IDependencyContainer container)
+        public void InitializeContainer(IDependencyContainer container)
         {
-
             container
                 .Register<IHttpConnector, HttpConnector>(() => new HttpConnector())
                 .Register<IHttpFileHandler, WebClientHttpFileHandler>(() => new WebClientHttpFileHandler())
                 .RegisterInstance<ILocalStorage, IsolatedLocalStorage>("wp7", IsolatedLocalStorage.Instance)
+                .RegisterInstance<ITraceWriter, DebugTraceWriter>(new DebugTraceWriter());
                 ;
             var deviceState = new WPDeviceState(
                 container.Build<ILocalStorage>("wp7"),
@@ -32,7 +33,7 @@ namespace Appacitive.Sdk.WindowsPhone7
 
         }
 
-        public void Init(AppContext context)
+        public void Init(IAppContextState context)
         {
         }
 
