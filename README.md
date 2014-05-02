@@ -32,7 +32,7 @@ To access the api key for your app, go to app listing via the [portal](https://p
 ####Initialize your SDK, 
 
 ```c#
-App.Initialize(
+AppContext.Initialize(
     platform,       // Use the Platforms helper class for options. 
     appid,          // Set your application id here.
     apiKey,         // Set your api key here.
@@ -70,9 +70,9 @@ Now you are ready to use the SDK
 
 ## Debugging the SDK
 
-Debugging in the sdk uses standard .NET trace infrastructure via the App.Debug class. To setup debugging for your app
+Debugging in the sdk uses standard .NET trace infrastructure via the AppContext.Debug class. To setup debugging for your app
 
-#### Setup .NET tracing
+#### Setup .NET tracing (For desktop and server hosted apps using the SDK.)
 Add the following configuration to your app.config or web.config. Add a trace listener of your choice. The given configuration will log everything to the console.
 
 ```xml
@@ -92,19 +92,19 @@ The code below shows how to enable debugging for standard scenarios.
 
 ``` C#
 	// To enable logging of all transactions.
-	App.Debug.ApiLogging.LogEverything();
+	AppContext.Debug.ApiLogging.LogEverything();
 
 	// To log only failed calls.
-	App.Debug.ApiLogging.LogFailures();
+	AppContext.Debug.ApiLogging.LogFailures();
 	
 	// To log calls taking more than 600ms.
-	App.Debug.ApiLogging.LogSlowCalls(600);
+	AppContext.Debug.ApiLogging.LogSlowCalls(600);
 
 	// To log calls based on runtime condition.
-	App.Debug.ApiLogging.LogIf((rq, rs) => rs.Status.Code == "400");
+	AppContext.Debug.ApiLogging.LogIf((rq, rs) => rs.Status.Code == "400");
 
 	// To log failed and slow calls.
-	App.Debug.ApiLogging
+	AppContext.Debug.ApiLogging
 			 .LogFailures()
 			 .LogSlowCalls(600);
 
@@ -863,11 +863,11 @@ You can also initialize the app with this token. This will send this token with 
 ```csharp
 // To initialize the app with an existing token.
 var token = "1lqsljkasldjalsu1....";
-await App.LoginAsync(new UserTokenCredentials(token));
+await AppContext.LoginAsync(new UserTokenCredentials(token));
 
 // To authenticate and initialize the app with the logged in user.
 var usernamePassword = new UsernamePasswordCredentials(username, password);
-await App.LoginAsync(usernamePassword);
+await AppContext.LoginAsync(usernamePassword);
 ```
 
 #### Login via username + password
@@ -884,7 +884,7 @@ You can also authenticate the user and set the user as the logged in user for th
 
 ```csharp
 var usernamePassword = new UsernamePasswordCredentials(username, password);
-await App.LoginAsync(usernamePassword);
+await AppContext.LoginAsync(usernamePassword);
 ```
 
 #### Login with Facebook
@@ -903,7 +903,7 @@ facebookCredentials.CreateUserIfNotExists = true;  // This will also create a us
 var session = await facebookCredentials.AuthenticateAsync();
 
 // Alternatively, you could have used the following as well.
-await App.LoginAsync(facebookCredentials);
+await AppContext.LoginAsync(facebookCredentials);
 
 ```
 
@@ -925,10 +925,10 @@ var session = await twitterCredentials.AuthenticateAsync();
 
 #### Current User
 
-Whenever you authenticate a user using the `App.LoginAsync()` method, the user is stored in the platform specific local environment and can be retrieved using `App.Current.GetCurrentUser()`.
+Whenever you authenticate a user using the `AppContext.LoginAsync()` method, the user is stored in the platform specific local environment and can be retrieved using `AppContext.Current.GetCurrentUser()`.
 
 ```csharp
-var userInfo = App.Current.GetCurrentUser();
+var userInfo = AppContext.Current.GetCurrentUser();
 // If user is not logged in, userInfo would be null.
 if( userInfo != null )
 {
@@ -936,9 +936,9 @@ if( userInfo != null )
     var loggedInUser = userInfo.User;
 }
 ```
-You can clear the current logged in user by calling `App.LogoutAsync()` method.
+You can clear the current logged in user by calling `AppContext.LogoutAsync()` method.
 ```csharp
-await App.LogoutAsync();
+await AppContext.LogoutAsync();
 ```
 
 ### Password Management
@@ -1020,6 +1020,38 @@ await NewEmail
 
 ## Push Notifications
 
+### Receiving push notifications
+To receive push notifications via the Appacitive SDK you need to do a one time setup to register the app with the platform for receiving push notifications.
+You can do this using the `AppContext.DeviceContext` helper class.
+
+``` csharp
+/// Registering the device for push
+// This can be called multiple times safely.
+await AppContext.DeviceContext.RegisterCurrentDeviceAsync();
+```
+After registering the device with the platform, you can subscribe to notifications by simply providing event handlers to be triggered
+whenever a push notification is received. The code sample below shows how this can be done.
+
+``` csharp
+/// For http notifications.
+AppContext.DeviceContext.Notifications.HttpNotificationReceived += OnHttpNotificationReceived;
+// event handler.
+void OnHttpNotificationReceived(object sender, HttpNotificationEventArgs e) 
+{ 
+ ...
+}
+
+/// For shell toast notifications.
+AppContext.DeviceContext.Notifications.ShellToastNotificationReceived += OnShellToastNotificationReceived;
+// event handler
+void OnShellToastNotificationReceived(object sender, NotificationEventArgs e)
+{
+	...
+}       
+```
+
+### Sending push notifications
+
 Using Appacitive platform you can send push notification to iOS devices, Android base devices and Windows phone.
  
 You will need to provide some basic one time configurations like certificates, using which we will setup push notification channels for different platforms for you. Also we provide a Push Console using which you can send push notification to the users.
@@ -1036,7 +1068,7 @@ Appacitive provides five ways to select the recipients
 
 First we'll see how to send a push notification and then we will discuss the above methods with their options one by one.
 
-### Broadcast
+#### Broadcast
 
 If you want to send a push notification to all active devices, you can use the following options
 
@@ -1074,7 +1106,7 @@ await PushNotification
 		.SendAsync();
 ```
 
-### Platform specific Devices
+#### Platform specific Devices
 
 If you want to send push notifications to specific platforms, you can use this option. To do so you will need to provide the devicetype in the query.
 
@@ -1091,7 +1123,7 @@ await PushNotification
     .SendAsync();
 ```
 
-### Specific List of Devices
+#### Specific List of Devices
 
 If you want to send push notifications to specific devices, you can use this option. To do so you will need to provide the device ids.
 
@@ -1109,7 +1141,7 @@ await PushNotification
     .SendAsync();
 ```
 
-### To List of Channels
+#### To List of Channels
 
 Device object has a Channel property, using which you can club multiple devices. This is helpful if you want to send push notification using channel.
 
@@ -1126,7 +1158,7 @@ await PushNotification
     .WithExpiry(1000)
     .SendAsync();
 ```
-### Query
+#### Query
 
 You can send push notifications to devices using a Query. All the devices which comes out as result of the query will receive the push notification.
 
@@ -1143,7 +1175,7 @@ await PushNotification
     .WithExpiry(1000)
     .SendAsync();
 ```
-### Platform specific options
+#### Platform specific options
 The `PushNotification` fluent interface provides a `WithPlatformOptions` method to pass different phone platform specific options as shown in the example below.
 ```csharp
 await PushNotification
@@ -1173,7 +1205,7 @@ await PushNotification
         .SendAsync();
 ```
 
-### Different options for windows phone.
+#### Different options for windows phone.
 For windows phone 3 types of notifications are supported.
 1. Toast notifications.
 2. Tile notifications (flip, cyclic and iconic)
