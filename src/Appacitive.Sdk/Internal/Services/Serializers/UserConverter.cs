@@ -19,9 +19,8 @@ namespace Appacitive.Sdk.Services
         protected override Entity CreateEntity(JObject json)
         {
             JToken value;
-            if (json.TryGetValue("__type", out value) == false || value.Type == JTokenType.Null)
-                throw new Exception("Schema type missing.");
-            var type = value.ToString();
+            // As the converter is a user converter, type will always be "user".
+            var type = "user";
             var mappedType = InternalApp.Types.Mapping.GetMappedObjectType(type);
             if (mappedType == null)
                 return new APUser();

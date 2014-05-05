@@ -29,7 +29,7 @@ namespace Appacitive.Sdk.WindowsPhone7
              If local user is not available, check local store and get from there.
              If not available in local store then return null.
              */
-            if (_localUser != null)
+            if (_localUser == null)
                 _localUser = GetLocalUser();
             return _localUser;
         }

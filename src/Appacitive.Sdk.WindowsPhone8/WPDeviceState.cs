@@ -26,7 +26,7 @@ namespace Appacitive.Sdk.WindowsPhone7
         private APDevice _localDevice = null;
         public APDevice GetDevice()
         {
-            if (_localDevice != null)
+            if (_localDevice == null)
                 _localDevice = GetLocalDevice();
             return _localDevice;
         }
