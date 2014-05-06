@@ -166,11 +166,26 @@ namespace Appacitive.Sdk
         /// If this version does not match on the server side, the Save operation will fail. Passing 0 disables the revision check.
         /// </param>
         /// <returns>Returns the saved device object.</returns>
-        public async Task<APDevice> SaveAsync(int specificRevision = 0, bool throwIfAlreadyExists = false)
+        public new async Task<APDevice> SaveAsync(int specificRevision = 0)
         {
             await this.SaveEntityAsync(specificRevision);
+            UpdateIfCurrentDevice(this);
             return this;
         }
+
+
+        private void UpdateIfCurrentDevice(APDevice updatedDevice)
+        {
+            var platform = InternalApp.Current.Platform as IDevicePlatform;
+            if (platform == null )
+                throw new AppacitiveRuntimeException("App is not initialized or platform is not a valid device platform.");
+            var device = platform.DeviceState.GetDevice();
+            if (device == null || device.Id != updatedDevice.Id) return;
+
+            // As the updated device is the same as the current device, then update the current device.
+            platform.DeviceState.SetDevice(updatedDevice);
+        }
+        
 
         protected override async Task<Entity> CreateNewAsync()
         {

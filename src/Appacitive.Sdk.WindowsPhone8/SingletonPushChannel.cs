@@ -76,6 +76,7 @@ namespace Appacitive.Sdk.WindowsPhone7
             else
             {
                 SubscribeToEvents(channel);
+                UpdateChannelUri(channel.ChannelUri);
             }
             return channel;
         }
@@ -159,12 +160,13 @@ namespace Appacitive.Sdk.WindowsPhone7
 
         private void UpdateChannelUri(Uri uri)
         {
+            if (uri == null) return;
             var existing = AppContext.DeviceContext.CurrentDevice.DeviceToken;
             var newToken = uri.ToString();
             if (string.Equals(newToken, existing) == false)
             {
                 var current = AppContext.DeviceContext;
-                current.CurrentDevice.DeviceToken = newToken;
+                current.CurrentDevice.DeviceToken = uri.ToString();
                 current.CurrentDevice.SaveAsync().ConfigureAwait(false);
             }
         }

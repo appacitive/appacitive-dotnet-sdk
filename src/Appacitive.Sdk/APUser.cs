@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Appacitive.Sdk.Services;
+using Appacitive.Sdk.Internal;
 
 namespace Appacitive.Sdk
 {
@@ -176,6 +177,34 @@ namespace Appacitive.Sdk
             // 3. Update the last known state based on the differences
             Debug.Assert(response.User != null, "If status is successful, then updated user should not be null.");
             return response.User;
+        }
+
+        /// <summary>
+        /// Creates or updates the current APUser object on the server side.
+        /// </summary>
+        /// <param name="specificRevision">
+        /// Revision number for this connection instance. 
+        /// Used for <a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control">Multiversion Concurrency Control</a>.
+        /// If this version does not match on the server side, the Save operation will fail. Passing 0 disables the revision check.
+        /// </param>
+        /// <returns>Returns the saved user object.</returns>
+        public new async Task<APUser> SaveAsync(int specificRevision = 0)
+        {
+            await this.SaveEntityAsync(specificRevision);
+            UpdateIfCurrentUser(this);
+            return this;
+        }
+
+        private void UpdateIfCurrentUser(APUser updatedUser)
+        {
+            var platform = InternalApp.Current.Platform as IApplicationPlatform;
+            if (platform == null || platform.ApplicationState == null)
+                throw new AppacitiveRuntimeException("App is not initialized.");
+            var user = platform.ApplicationState.GetUser();
+            if (user == null || user.Id != updatedUser.Id) return;
+
+            // As the updated user is the same as the logged in user, then update the current user.
+            platform.ApplicationState.SetUser(updatedUser);
         }
     }
 }

@@ -8,12 +8,14 @@ namespace Appacitive.Sdk.Internal
 {
     internal class AppContextState : IAppContextState
     {
-        public AppContextState(IPlatform platform, string apiKey, Environment environment, AppacitiveSettings settings)
+        public AppContextState(IPlatform platform, string appId, string apiKey, Environment environment, AppacitiveSettings settings)
         {
             this.ApiKey = apiKey;
             this.Environment = environment;
             _user = new UserInfo(platform as IApplicationPlatform);
             this.Settings = settings ?? AppacitiveSettings.Default;
+            this.AppId = appId;
+            this.Platform = platform;
             this.Container = settings.Factory ?? AppacitiveSettings.Default.Factory;
         }
 

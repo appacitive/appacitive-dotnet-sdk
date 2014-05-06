@@ -62,7 +62,7 @@ namespace Appacitive.Sdk
         /// If this version does not match on the server side, the Save operation will fail. Passing 0 disables the revision check.
         /// </param>
         /// <returns>The current instance of APObject updated with the changes applied.</returns>
-        public async Task<APObject> SaveAsync(int specificRevision = 0)
+        public virtual async Task<APObject> SaveAsync(int specificRevision = 0)
         {
             await this.SaveEntityAsync(specificRevision);
             return this;
