@@ -61,10 +61,11 @@ namespace Appacitive.Sdk
         /// Used for <a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control">Multiversion Concurrency Control</a>.
         /// If this version does not match on the server side, the Save operation will fail. Passing 0 disables the revision check.
         /// </param>
+        /// <param name="forceUpdate">Setting this flag as True will force an update request even when the state of the object may not have changed locally.</param>
         /// <returns>The current instance of APObject updated with the changes applied.</returns>
-        public virtual async Task<APObject> SaveAsync(int specificRevision = 0)
+        public virtual async Task<APObject> SaveAsync(int specificRevision = 0, bool forceUpdate = false)
         {
-            await this.SaveEntityAsync(specificRevision);
+            await this.SaveEntityAsync(specificRevision, forceUpdate);
             return this;
         }
 
@@ -81,13 +82,6 @@ namespace Appacitive.Sdk
             if (removedTags != null)
                 request.RemovedTags.AddRange(removedTags);
 
-            // Check if an update is needed.
-            if (request.PropertyUpdates.Count == 0 &&
-                request.AttributeUpdates.Count == 0 &&
-                request.AddedTags.Count == 0 &&
-                request.RemovedTags.Count == 0)
-                return null;
-
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
@@ -95,6 +89,11 @@ namespace Appacitive.Sdk
             // 3. Update the last known state based on the differences
             Debug.Assert(response.Object != null, "If status is successful, then updated object should not be null.");
             return response.Object;
+        }
+
+        protected override async Task<Entity> FetchAsync()
+        {
+            return await APObjects.GetAsync(this.Type, this.Id);
         }
 
         protected override async Task<Entity> CreateNewAsync()

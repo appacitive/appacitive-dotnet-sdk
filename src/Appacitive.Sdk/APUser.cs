@@ -145,6 +145,11 @@ namespace Appacitive.Sdk
             return response.User;
         }
 
+        protected override async Task<Entity> FetchAsync()
+        {
+            return await APUsers.GetByIdAsync(this.Id);
+        }
+
         protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var request = new UpdateUserRequest()
@@ -187,10 +192,11 @@ namespace Appacitive.Sdk
         /// Used for <a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control">Multiversion Concurrency Control</a>.
         /// If this version does not match on the server side, the Save operation will fail. Passing 0 disables the revision check.
         /// </param>
+        /// <param name="forceUpdate">Setting this flag as True will force an update request even when the state of the object may not have changed locally.</param>
         /// <returns>Returns the saved user object.</returns>
-        public new async Task<APUser> SaveAsync(int specificRevision = 0)
+        public new async Task<APUser> SaveAsync(int specificRevision = 0, bool forceUpdate = false)
         {
-            await this.SaveEntityAsync(specificRevision);
+            await this.SaveEntityAsync(specificRevision, forceUpdate);
             UpdateIfCurrentUser(this);
             return this;
         }

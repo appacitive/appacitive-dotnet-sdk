@@ -101,7 +101,7 @@
     <Compile Include="APObjects.cs" />
     <Compile Include="APConnections.cs" />
     <Compile Include="APDevices.cs" />
-    <Compile Include="Model\Email.cs" />
+    <Compile Include="Email.cs" />
     <Compile Include="PushNotification.cs" />
     <Compile Include="Model\SupportedDevices.cs" />
     <Compile Include="Model\Timezone.cs" />

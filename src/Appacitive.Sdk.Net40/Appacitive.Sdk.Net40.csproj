@@ -164,6 +164,9 @@
     <Compile Include="..\Appacitive.Sdk\CannedLists.cs">
       <Link>CannedLists.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Email.cs">
+      <Link>Email.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\FileDownload.cs">
       <Link>FileDownload.cs</Link>
     </Compile>
@@ -604,9 +607,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\DynamicValue.cs">
       <Link>Model\DynamicValue.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\Email.cs">
-      <Link>Model\Email.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Entity.cs">
       <Link>Model\Entity.cs</Link>

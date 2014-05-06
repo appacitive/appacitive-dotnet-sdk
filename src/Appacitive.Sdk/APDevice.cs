@@ -165,10 +165,11 @@ namespace Appacitive.Sdk
         /// Used for <a href="http://en.wikipedia.org/wiki/Multiversion_concurrency_control">Multiversion Concurrency Control</a>.
         /// If this version does not match on the server side, the Save operation will fail. Passing 0 disables the revision check.
         /// </param>
+        /// <param name="forceUpdate">Setting this flag as True will force an update request even when the state of the object may not have changed locally.</param>
         /// <returns>Returns the saved device object.</returns>
-        public new async Task<APDevice> SaveAsync(int specificRevision = 0)
+        public new async Task<APDevice> SaveAsync(int specificRevision = 0, bool forceUpdate = false)
         {
-            await this.SaveEntityAsync(specificRevision);
+            await this.SaveEntityAsync(specificRevision, forceUpdate);
             UpdateIfCurrentDevice(this);
             return this;
         }
@@ -177,8 +178,7 @@ namespace Appacitive.Sdk
         private void UpdateIfCurrentDevice(APDevice updatedDevice)
         {
             var platform = InternalApp.Current.Platform as IDevicePlatform;
-            if (platform == null )
-                throw new AppacitiveRuntimeException("App is not initialized or platform is not a valid device platform.");
+            if (platform == null) return;
             var device = platform.DeviceState.GetDevice();
             if (device == null || device.Id != updatedDevice.Id) return;
 
@@ -200,6 +200,11 @@ namespace Appacitive.Sdk
             // 3. Update the last known state based on the differences
             Debug.Assert(response.Device != null, "If status is successful, then created device should not be null.");
             return response.Device;
+        }
+
+        protected override async Task<Entity> FetchAsync()
+        {
+            return await APDevices.GetAsync(this.Id);
         }
 
         protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)

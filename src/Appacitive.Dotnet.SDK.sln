@@ -47,8 +47,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appacitive.Sdk.Net40", "App
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appacitive.Sdk.Tests.Net40", "Appacitive.Sdk.Tests.Net40\Appacitive.Sdk.Tests.Net40.csproj", "{23F184D8-451F-467E-A429-F0C05B350433}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp1", "..\..\appacitive-dotnet-sdk-master\src\TestApp1\TestApp1.csproj", "{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,26 +147,6 @@ Global
 		{23F184D8-451F-467E-A429-F0C05B350433}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{23F184D8-451F-467E-A429-F0C05B350433}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{23F184D8-451F-467E-A429-F0C05B350433}.Release|x86.ActiveCfg = Release|Any CPU
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Debug|ARM.ActiveCfg = Debug|ARM
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Debug|ARM.Build.0 = Debug|ARM
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Debug|ARM.Deploy.0 = Debug|ARM
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Debug|Mixed Platforms.Deploy.0 = Debug|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Debug|x86.ActiveCfg = Debug|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Debug|x86.Build.0 = Debug|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Debug|x86.Deploy.0 = Debug|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Release|Any CPU.ActiveCfg = Release|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Release|ARM.ActiveCfg = Release|ARM
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Release|ARM.Build.0 = Release|ARM
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Release|ARM.Deploy.0 = Release|ARM
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Release|Mixed Platforms.Build.0 = Release|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Release|Mixed Platforms.Deploy.0 = Release|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Release|x86.ActiveCfg = Release|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Release|x86.Build.0 = Release|x86
-		{E91A84E0-17A8-463C-BBEC-EFA0E86C1598}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

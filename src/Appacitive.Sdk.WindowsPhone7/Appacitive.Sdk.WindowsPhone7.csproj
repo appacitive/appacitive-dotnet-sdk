@@ -131,6 +131,9 @@
     <Compile Include="..\Appacitive.Sdk\APUsers.cs">
       <Link>APUsers.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Email.cs">
+      <Link>Email.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\FileDownload.cs">
       <Link>FileDownload.cs</Link>
     </Compile>
@@ -565,9 +568,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Credentials.cs">
       <Link>Model\Credentials.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Model\Email.cs">
-      <Link>Model\Email.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Entity.cs">
       <Link>Model\Entity.cs</Link>

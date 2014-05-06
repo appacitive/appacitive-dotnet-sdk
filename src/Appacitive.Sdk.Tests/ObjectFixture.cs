@@ -12,6 +12,36 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class ObjectFixture
     {
+
+        [TestMethod]
+        public async Task ForceUpdateTest()
+        {
+            var obj = await ObjectHelper.CreateNewAsync();
+            obj.Set("stringfield", Unique.String);
+            await obj.SaveAsync();
+            Assert.IsTrue(obj.Revision == 2);
+            await obj.SaveAsync();
+            Assert.IsTrue(obj.Revision == 2);
+            await obj.SaveAsync(forceUpdate: true);
+            Assert.IsTrue(obj.Revision == 3);
+        }
+
+        [TestMethod]
+        public async Task RefreshAsyncTest()
+        {
+            var obj = await ObjectHelper.CreateNewAsync();
+            var copy = await APObjects.GetAsync("object", obj.Id);
+            var updatedValue = Unique.String;
+            copy.Set("stringfield", updatedValue);
+            await copy.SaveAsync();
+
+            Assert.AreNotEqual(obj.Get<string>("stringfield"), updatedValue);
+            await obj.RefreshAsync();
+            Assert.AreEqual(obj.Get<string>("stringfield"), updatedValue);
+
+        }
+
+
         [TestMethod]
         public async Task TypeMappingTest()
         {

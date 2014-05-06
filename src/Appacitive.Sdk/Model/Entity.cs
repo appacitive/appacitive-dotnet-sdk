@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -292,6 +291,18 @@ namespace Appacitive.Sdk
                 FirePropertyChanged(name);
         }
 
+        public async Task RefreshAsync()
+        {
+            if (string.IsNullOrWhiteSpace(this.Id) == true || this.Id == "0") 
+                throw new AppacitiveRuntimeException("Cannot refresh object from server as it has not been saved on the server yet.");
+            // Fetch the object
+            var stateFromServer = await this.FetchAsync();
+            // Update the last known state.
+            UpdateLastKnown(stateFromServer);
+        }
+
+        protected abstract Task<Entity> FetchAsync();
+
         public Value this[string name]
         {
             get
@@ -310,12 +321,12 @@ namespace Appacitive.Sdk
             }
         }
 
-        protected async Task SaveEntityAsync(int specificRevision = 0)
+        protected async Task SaveEntityAsync(int specificRevision = 0, bool forceUpdate = false)
         {
             if (string.IsNullOrWhiteSpace(this.Id) == true)
                 await CreateNewEntityAsync();
             else
-                await UpdateEntityAsync(specificRevision);
+                await UpdateEntityAsync(specificRevision, forceUpdate);
         }
 
         private async Task CreateNewEntityAsync()
@@ -325,7 +336,7 @@ namespace Appacitive.Sdk
             UpdateLastKnown(entity);
         }
 
-        private async Task UpdateEntityAsync(int specificRevision)
+        private async Task UpdateEntityAsync(int specificRevision, bool forceUpdate)
         {
             // 1. Get property differences
             var propertyDifferences = _currentFields.GetModifications(_lastKnownFields, (x, y) =>
@@ -341,6 +352,15 @@ namespace Appacitive.Sdk
             // 2. Get tags changes
             IEnumerable<string> addedTags, removedTags;
             _lastKnownTags.GetDifferences(_currentTags, out addedTags, out removedTags);
+
+            // Check if an update is needed.
+            bool changesExist =
+                ( propertyDifferences != null && propertyDifferences.Count > 0  )  ||
+                (attributeDifferences != null && attributeDifferences.Count > 0  )   ||
+                (addedTags != null && addedTags.Count() > 0  )                                ||
+                (removedTags != null && removedTags.Count() > 0 );
+            if (changesExist == false && forceUpdate == false)
+                return;
 
             // 3. update the object
             var updated = await UpdateAsync(propertyDifferences, attributeDifferences, addedTags, removedTags, specificRevision);
@@ -362,7 +382,7 @@ namespace Appacitive.Sdk
             else throw new ArgumentException(value.GetType().Name + " is not a supported value type.");
         }
 
-        private void UpdateLastKnown(Entity entity)
+        protected virtual void UpdateLastKnown(Entity entity)
         {
             var newLastKnownFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             var newCurrentFields = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -393,13 +413,10 @@ namespace Appacitive.Sdk
                 _currentFields = newCurrentFields;
                 _currentAttributes = newCurrentAttributes;
                 _lastKnownTags = entity.Tags.ToList();
-                UpdateState(entity);
             }
         }
 
-        protected virtual void UpdateState(Entity entity)
-        {
-        }
+        
 
         private void WriteField(string name, object value, bool updateLastKnown)
         {

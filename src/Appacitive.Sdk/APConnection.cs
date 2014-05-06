@@ -172,12 +172,13 @@ namespace Appacitive.Sdk
         /// If this version does not match on the server side, the Save operation will fail. Passing 0 disables the revision check.
         /// </param>
         /// <param name="throwIfAlreadyExists">Flag indicating that the operation should throw incase a connection is being created when it already exists on the server side. Passing false will return the existing instance of the connection.</param>
+        /// <param name="forceUpdate">Setting this flag as True will force an update request even when the state of the object may not have changed locally.</param>
         /// <returns>Returns the saved connection object.</returns>
-        public async Task<APConnection> SaveAsync(int specificRevision = 0, bool throwIfAlreadyExists = false)
+        public async Task<APConnection> SaveAsync(int specificRevision = 0, bool throwIfAlreadyExists = false, bool forceUpdate = false)
         {
             try
             {
-                await this.SaveEntityAsync(specificRevision);
+                await this.SaveEntityAsync(specificRevision, forceUpdate);
                 return this;
             }
             catch (AppacitiveApiException ex)
@@ -189,6 +190,11 @@ namespace Appacitive.Sdk
             }
             // Get existing connection.
             return await APConnections.GetAsync(this.Type, this.Endpoints.EndpointA.ObjectId, this.Endpoints.EndpointB.ObjectId);
+        }
+
+        protected override async Task<Entity> FetchAsync()
+        {
+            return await APConnections.GetAsync(this.Type, this.Id);
         }
 
         protected async override Task<Entity> CreateNewAsync()
@@ -220,14 +226,15 @@ namespace Appacitive.Sdk
             return response.Connection;
         }
 
-        protected override void UpdateState(Entity entity)
+        protected override void UpdateLastKnown(Entity entity)
         {
+            base.UpdateLastKnown(entity);
             var other = entity as APConnection;
             if (other == null) return;
             this.Endpoints.EndpointA = other.Endpoints.EndpointA;
             this.Endpoints.EndpointB = other.Endpoints.EndpointB;
         }
-
+        
         protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
         {
             var request = new UpdateConnectionRequest{ Id = this.Id, Type = this.Type, Revision = specificRevision };
