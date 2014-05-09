@@ -16,15 +16,15 @@ namespace Appacitive.Sdk
         /// Gets a paginated list of items for the given canned list.
         /// </summary>
         /// <param name="listName">Name of the canned list.</param>
-        /// <param name="page">Page number.</param>
+        /// <param name="pageNumber">Page number.</param>
         /// <param name="pageSize">Page size.</param>
         /// <returns>Paginated list of canned list items.</returns>
-        public static async Task<PagedList<ListItem>> GetListItemsAsync(string listName, int page = 1, int pageSize = 20)
+        public static async Task<PagedList<ListItem>> GetListItemsAsync(string listName, int pageNumber = 1, int pageSize = 20)
         {
             var request = new GetListContentRequest
             {
                 Name = listName,
-                PageNumber = page,
+                PageNumber = pageNumber,
                 PageSize = pageSize
             };
             var response = await request.ExecuteAsync();
@@ -35,7 +35,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await GetListItemsAsync(listName, pageSize, page + skip + 1)
+                GetNextPage = async skip => await GetListItemsAsync(listName, pageSize, pageNumber + skip + 1)
             };
             list.AddRange(response.Items);
             return list;

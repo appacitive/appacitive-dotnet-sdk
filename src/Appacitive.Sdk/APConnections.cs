@@ -75,19 +75,19 @@ namespace Appacitive.Sdk
         /// <param name="type">The type (relation name) of the connection.</param>
         /// <param name="query">The search query</param>
         /// <param name="fields">The specific fields of the conection to be retrieved.</param>
-        /// <param name="page">The page number.</param>
+        /// <param name="pageNumber">The page number.</param>
         /// <param name="pageSize">The page size.</param>
         /// <param name="orderBy">The field on which to sort.</param>
         /// <param name="sortOrder">Sort order - Ascending or Descending.</param>
         /// <returns>A paginated list of APConnections for the given search criteria.</returns>
-        public async static Task<PagedList<APConnection>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async static Task<PagedList<APConnection>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
             query = query ?? Query.None;
             var request = new FindAllConnectionsRequest()
             {
                 Type = type,
                 Query = query.AsString().Escape(),
-                PageNumber = page,
+                PageNumber = pageNumber,
                 PageSize = pageSize,
                 OrderBy = orderBy,
                 SortOrder = sortOrder
@@ -101,7 +101,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await FindAllAsync(type, query, fields, page + skip + 1, pageSize, orderBy, sortOrder)
+                GetNextPage = async skip => await FindAllAsync(type, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder)
             };
             connections.AddRange(response.Connections);
             return connections;

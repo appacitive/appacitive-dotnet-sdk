@@ -20,9 +20,9 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public async Task SendRawEmailTest()
         {
-            await NewEmail
+            await Email
                 .Create("This is a raw email test from the .NET SDK.")
-                .To(To, Cc, Bcc)
+                .WithRecipients(To, Cc, Bcc)
                 .From("test@appacitive.com", "noreply@appacitive.com")
                 .WithBody("This is a raw body email.")
                 .SendAsync();
@@ -32,9 +32,9 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public async Task SendTemplatedEmailTest()
         {
-            await NewEmail
+            await Email
                 .Create("This is a raw email test from the .NET SDK.")
-                .To(To, Cc, Bcc)
+                .WithRecipients(To, Cc, Bcc)
                 .From("test@appacitive.com", "noreply@appacitive.com")
                 .WithTemplateBody( "sample", 
                     new Dictionary<string, string> 
@@ -51,9 +51,9 @@ namespace Appacitive.Sdk.Tests
         [TestMethod]
         public async Task SendEmailWithSmtpTest()
         {
-            await NewEmail
+            await Email
                 .Create("This is a raw email test from the .NET SDK.")
-                .To(To, Cc, Bcc)
+                .WithRecipients(To, Cc, Bcc)
                 .From("test@appacitive.com", "noreply@appacitive.com")
                 .WithBody("This is a raw body email.", false)
                 .Using("smtp.gmail.com", 465, Username, Password)

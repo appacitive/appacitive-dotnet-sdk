@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
-    public class Email
+    public partial class Email
     {
         public Email()
         {
@@ -34,6 +34,13 @@ namespace Appacitive.Sdk
         public EmailBody Body { get; set; }
 
         public SmtpServer Server { get; set; }
+
+        public static Email Create(string subject)
+        {
+            Email email = new Email();
+            email.Subject = subject;
+            return email;
+        }
 
         public async Task<string> SendAsync()
         {
@@ -113,15 +120,8 @@ namespace Appacitive.Sdk
     }
 
 
-    public static class NewEmail
+    public static class EmailFluentExtensions
     {
-        public static Email Create(string subject)
-        {
-            Email email = new Email();
-            email.Subject = subject;
-            return email;
-        }
-
         public static Email Using(this Email email, string host, int port, string username = null, string password = null, bool useSsl = true)
         {
             var server = new SmtpServer
@@ -136,7 +136,7 @@ namespace Appacitive.Sdk
             return email;
         }
 
-        public static Email To(this Email email, IEnumerable<string> to, IEnumerable<string> cc = null, IEnumerable<string> bcc = null)
+        public static Email WithRecipients(this Email email, IEnumerable<string> to, IEnumerable<string> cc = null, IEnumerable<string> bcc = null)
         {
             if (to != null)
                 email.To.AddRange(to);

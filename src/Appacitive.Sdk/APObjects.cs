@@ -57,19 +57,19 @@ namespace Appacitive.Sdk
         /// <param name="type">The object type.</param>
         /// <param name="query">The search query for objects to be found.</param>
         /// <param name="fields">The object fields to be returned for the matching list of objects.</param>
-        /// <param name="page">The page number.</param>
+        /// <param name="pageNumber">The page number.</param>
         /// <param name="pageSize">The page size.</param>
         /// <param name="orderBy">The object field on which the results should be sorted.</param>
         /// <param name="sortOrder">The sort order.</param>
         /// <returns>Paginated list of APObject objects matching the given search criteria.</returns>
-        public async static Task<PagedList<APObject>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async static Task<PagedList<APObject>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
             query = query ?? Query.None;
             var request = new FindAllObjectsRequest()
             {
                 Type = type,
                 Query = query.AsString().Escape(),
-                PageNumber = page,
+                PageNumber = pageNumber,
                 PageSize = pageSize,
                 OrderBy = orderBy,
                 SortOrder = sortOrder
@@ -84,7 +84,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await FindAllAsync(type, query, fields, page + skip + 1, pageSize, orderBy, sortOrder)
+                GetNextPage = async skip => await FindAllAsync(type, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder)
             };
             objects.AddRange(response.Objects);
             return objects;
@@ -98,18 +98,18 @@ namespace Appacitive.Sdk
         /// <param name="type">The object type</param>
         /// <param name="freeTextExpression">Freetext expression.</param>
         /// <param name="fields">The specific object fields to be retrieved. </param>
-        /// <param name="page">The page number.</param>
+        /// <param name="pageNumber">The page number.</param>
         /// <param name="pageSize">The page size.</param>
         /// <param name="orderBy">The object field on which the results should be sorted.</param>
         /// <param name="sortOrder">The sort order.</param>
         /// <returns>Paginated list of APObject objects matching the given search criteria.</returns>
-        public async static Task<PagedList<APObject>> FreeTextSearchAsync(string type, string freeTextExpression, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async static Task<PagedList<APObject>> FreeTextSearchAsync(string type, string freeTextExpression, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
             var request = new FreeTextSearchObjectsRequest()
             {
                 Type = type,
                 FreeTextExpression = freeTextExpression,
-                PageNumber = page,
+                PageNumber = pageNumber,
                 PageSize = pageSize,
                 OrderBy = orderBy,
                 SortOrder = sortOrder
@@ -124,7 +124,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await FreeTextSearchAsync(type, freeTextExpression, fields, page + skip + 1, pageSize, orderBy, sortOrder)
+                GetNextPage = async skip => await FreeTextSearchAsync(type, freeTextExpression, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder)
             };
             objects.AddRange(response.Objects);
             return objects;

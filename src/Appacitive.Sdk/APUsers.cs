@@ -127,18 +127,18 @@ namespace Appacitive.Sdk
         /// </summary>
         /// <param name="query">Filter query to filter out a specific list of users. </param>
         /// <param name="fields">List of fields to return</param>
-        /// <param name="page">Page number</param>
+        /// <param name="pageNumber">Page number</param>
         /// <param name="pageSize">Page size</param>
         /// <param name="orderBy">The field on which to sort.</param>
         /// <param name="sortOrder">Sort order - Ascending or Descending.</param>
         /// <returns>A paged list of users.</returns>
-        public async static Task<PagedList<APUser>> FindAllAsync(IQuery query = null, IEnumerable<string> fields = null, int page = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async static Task<PagedList<APUser>> FindAllAsync(IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
         {
             query = query ?? Query.None;
             var request = new FindAllUsersRequest()
             {
                 Query = query.AsString().Escape(),
-                PageNumber = page,
+                PageNumber = pageNumber,
                 PageSize = pageSize,
                 OrderBy = orderBy,
                 SortOrder = sortOrder
@@ -153,7 +153,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await FindAllAsync(query, fields, page + skip + 1, pageSize, orderBy, sortOrder)
+                GetNextPage = async skip => await FindAllAsync(query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder)
             };
             users.AddRange(response.Users);
             return users;
