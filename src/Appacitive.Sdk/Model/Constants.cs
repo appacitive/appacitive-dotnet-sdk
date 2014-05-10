@@ -8,8 +8,6 @@ namespace Appacitive.Sdk
 {
     public static class Formats
     {
-        public static readonly string Date = "yyyy-MM-dd";
-        public static readonly string Time = "HH:mm:ss.fffffff";
         public static readonly string DateTime = "o";
     }
 }

@@ -64,8 +64,10 @@ namespace Appacitive.Sdk.Internal
         {
             var userToken = _context.CurrentUser.SessionToken;
             if (string.IsNullOrWhiteSpace(userToken) == false)
+            {
                 await UserSession.InvalidateAsync(userToken);
-            _context.CurrentUser.Reset();
+                _context.CurrentUser.Reset();
+            }
         }
     }
 }

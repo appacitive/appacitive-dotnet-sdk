@@ -34,7 +34,7 @@ namespace Appacitive.Sdk.Wcf
         {
             try
             {
-                await App.LoginAsync(new UserTokenCredentials(token));
+                await AppContext.LoginAsync(new UserTokenCredentials(token));
             }
             catch (BaseAppacitiveException)
             {
@@ -80,7 +80,7 @@ namespace Appacitive.Sdk.Wcf
         private static bool IsLoggedIn(out string userToken)
         {
             userToken = null;
-            var user = App.UserContext;
+            var user = AppContext.UserContext;
             if (user == null || string.IsNullOrWhiteSpace(user.SessionToken) == true)
             {
                 userToken = null;

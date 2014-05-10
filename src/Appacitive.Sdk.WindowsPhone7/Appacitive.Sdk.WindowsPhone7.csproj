@@ -641,9 +641,6 @@
     <Compile Include="..\Appacitive.Sdk\QueryDsl\BooleanOperator.cs">
       <Link>QueryDsl\BooleanOperator.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\QueryDsl\DateFieldValue.cs">
-      <Link>QueryDsl\DateFieldValue.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\QueryDsl\FieldQuery.cs">
       <Link>QueryDsl\FieldQuery.cs</Link>
     </Compile>
@@ -676,9 +673,6 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\QueryDsl\TagQuery.cs">
       <Link>QueryDsl\TagQuery.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\QueryDsl\TimeFieldValue.cs">
-      <Link>QueryDsl\TimeFieldValue.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\UserSession.cs">
       <Link>UserSession.cs</Link>

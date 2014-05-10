@@ -14,12 +14,43 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class UserFixture
     {
+
+        [TestInitialize()]
+        public void Initialize()
+        {
+            AppContext.LogoutAsync().Wait();
+        }
+
+        [TestMethod]
+        public async Task LogoutTest()
+        {
+            var user =await  UserHelper.CreateNewUserAsync();
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            Assert.IsTrue(AppContext.UserContext.LoggedInUser != null);
+            await AppContext.LogoutAsync();
+            Assert.IsTrue(string.IsNullOrWhiteSpace(AppContext.UserContext.SessionToken) == true);
+            Assert.IsTrue(AppContext.UserContext.LoggedInUser == null);
+        }
+
+        [TestMethod]
+        public async Task IsUserSessionValidAsyncTest()
+        {
+            var user = await UserHelper.CreateNewUserAsync();
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password) { TimeoutInSeconds = 5 });
+            var isValid = await AppContext.IsUserLoggedInAsync();
+            Assert.IsTrue(isValid);
+            await Utilities.Delay(6000);
+            isValid = await AppContext.IsUserLoggedInAsync();
+            Assert.IsFalse(isValid);
+
+        }
+
         [TestMethod]
         public async Task EnsureTypeMappingIsHonoredForUser()
         {
             var user = await UserHelper.CreateNewUserAsync();
-            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
-            var userContext = App.UserContext;
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            var userContext = AppContext.UserContext;
             Assert.IsTrue(userContext.LoggedInUser != null);
             Assert.IsTrue(userContext.LoggedInUser is CustomUser);
         }
@@ -78,7 +109,7 @@ namespace Appacitive.Sdk.Tests
             var newUser = await UserHelper.CreateNewUserAsync();
             // Authenticate
             var creds = new UsernamePasswordCredentials(newUser.Username, newUser.Password);
-            var userSession = await App.LoginAsync(creds);
+            var userSession = await AppContext.LoginAsync(creds);
             Assert.IsNotNull(userSession);
             Assert.IsFalse(string.IsNullOrWhiteSpace(userSession.UserToken));
             Assert.IsNotNull(userSession.LoggedInUser);
@@ -106,7 +137,7 @@ namespace Appacitive.Sdk.Tests
         {
             var user = await UserHelper.CreateNewUserAsync();
             var newPassword = Unique.String;
-            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
             await APUsers.ChangePasswordByUsernameAsync(user.Username, user.Password, newPassword);
             var session = await new UsernamePasswordCredentials(user.Username, newPassword).AuthenticateAsync();
             Assert.IsNotNull(session);
@@ -118,7 +149,7 @@ namespace Appacitive.Sdk.Tests
         {
             var user = await UserHelper.CreateNewUserAsync();
             var wrongPassword = Unique.String;
-            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
             try
             {
                 await APUsers.ChangePasswordAsync(wrongPassword, Unique.String);
@@ -137,7 +168,7 @@ namespace Appacitive.Sdk.Tests
         {
             var user = await UserHelper.CreateNewUserAsync();
             var newPassword = Unique.String;
-            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
             await APUsers.ChangePasswordByIdAsync(user.Id, user.Password, newPassword);
             var session = await new UsernamePasswordCredentials(user.Username, newPassword).AuthenticateAsync();
             Assert.IsNotNull(session);
@@ -149,7 +180,7 @@ namespace Appacitive.Sdk.Tests
         {
             var user = await UserHelper.CreateNewUserAsync();
             var newPassword = Unique.String;
-            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
             await APUsers.ChangePasswordAsync(user.Password, newPassword);
             var session = await new UsernamePasswordCredentials(user.Username, newPassword).AuthenticateAsync();
             Assert.IsNotNull(session);

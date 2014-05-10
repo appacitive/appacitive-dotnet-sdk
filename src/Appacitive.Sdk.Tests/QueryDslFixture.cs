@@ -44,12 +44,6 @@ namespace Appacitive.Sdk.Tests
             Console.WriteLine("Date time query");
             var query = Query.Property("datetime").IsGreaterThan(DateTime.Now);
             Console.WriteLine(query);
-            Console.WriteLine("Date query");
-            query = Query.Property("datetime").IsGreaterThanDate(DateTime.Today);
-            Console.WriteLine(query);
-            Console.WriteLine("Time query");
-            query = Query.Property("datetime").IsGreaterThanTime(DateTime.Now);
-            Console.WriteLine(query);
         }
 
         [TestMethod]

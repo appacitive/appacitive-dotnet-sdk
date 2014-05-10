@@ -13,7 +13,7 @@ namespace Appacitive.Sdk.Net45
     {
         public async Task<byte[]> DownloadAsync(string url, IDictionary<string, string> headers, string method)
         {
-            using (var client = new WebClient())
+            using (var client = new CustomWebClient())
             {
                 SubscribeToDownloadEvents(client);
                 if (headers != null)
@@ -46,7 +46,7 @@ namespace Appacitive.Sdk.Net45
 
         public async Task UploadAsync(string url, IDictionary<string, string> headers, string method, byte[] data)
         {
-            using (var client = new WebClient())
+            using (var client = new CustomWebClient())
             {
                 SubscribeToUploadEvents(client);
                 if (headers != null)
@@ -54,6 +54,7 @@ namespace Appacitive.Sdk.Net45
                     foreach (var header in headers)
                         client.Headers[header.Key] = header.Value;
                 }
+                                
                 await client.UploadDataTaskAsync(url, "PUT", data);
                 UnsubscribeFromUploadEvents(client);
             }

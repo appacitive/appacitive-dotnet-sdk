@@ -59,15 +59,15 @@ namespace Appacitive.Sdk
             {
                 DateTime date;
                 var dob = this.Get<string>("birthdate");
-                if (DateTime.TryParseExact(dob, Formats.Date, null, DateTimeStyles.None, out date) == true)
+                if (DateTime.TryParse(dob, out date) == true )
                     return date;
                 else return null;
                 
             }
             set 
-            { 
-                if( value != null || value.HasValue == true )
-                    base["birthdate"] = value.Value.ToString(Formats.Date); 
+            {
+                if (value != null || value.HasValue == true)
+                    base.Set("birthdate", value.Value.ToString("yyyy-MM-dd"));
             }
         }
 

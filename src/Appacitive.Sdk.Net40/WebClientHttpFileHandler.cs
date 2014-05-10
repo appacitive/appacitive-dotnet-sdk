@@ -13,7 +13,7 @@ namespace Appacitive.Sdk
     {
         public async Task<byte[]> DownloadAsync(string url, IDictionary<string, string> headers, string method)
         {
-            using (var client = new WebClient())
+            using (var client = new CustomWebClient())
             {
                 SubscribeToDownloadEvents(client);
                 if (headers != null)

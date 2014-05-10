@@ -8,38 +8,58 @@ namespace Appacitive.Sdk
 {
     internal class BetweenQuery : IQuery
     {
-        private BetweenQuery(FieldType type, string name, IFieldValue before, IFieldValue after)
+        private BetweenQuery(FieldType type, string name, IFieldValue greaterThanEqualTo, IFieldValue lessThanEqualTo)
         {
         }
 
-        public static BetweenQuery Between(FieldType fieldType, string fieldName, decimal before, decimal after)
+        public static BetweenQuery Between(FieldType fieldType, string fieldName, decimal greaterThanEqualTo, decimal lessThanEqualTo)
         {
-            return new BetweenQuery(fieldType, fieldName, new PrimtiveFieldValue(before), new PrimtiveFieldValue(after));
+            return new BetweenQuery(fieldType, fieldName, new PrimtiveFieldValue(greaterThanEqualTo), new PrimtiveFieldValue(lessThanEqualTo));
         }
 
-        public static BetweenQuery Between(FieldType fieldType, string fieldName, long before, long after)
+        public static BetweenQuery Between(FieldType fieldType, string fieldName, long greaterThanEqualTo, long lessThanEqualTo)
         {
-            return new BetweenQuery(fieldType, fieldName, new PrimtiveFieldValue(before), new PrimtiveFieldValue(after));
+            return new BetweenQuery(fieldType, fieldName, new PrimtiveFieldValue(greaterThanEqualTo), new PrimtiveFieldValue(lessThanEqualTo));
         }
 
-        public static BetweenQuery Between(FieldType fieldType, string fieldName, DateTime before, DateTime after)
+        public static BetweenQuery Between(FieldType fieldType, string fieldName, DateTime greaterThanEqualTo, DateTime lessThanEqualTo)
         {
-            return new BetweenQuery(fieldType, fieldName, new PrimtiveFieldValue(before), new PrimtiveFieldValue(after));
+            return new BetweenQuery(fieldType, fieldName, new PrimtiveFieldValue(greaterThanEqualTo), new PrimtiveFieldValue(lessThanEqualTo));
         }
 
-        public static BetweenQuery BetweenDate(FieldType fieldType, string fieldName, DateTime before, DateTime after)
-        {
-            return new BetweenQuery(fieldType, fieldName, new DateFieldValue(before), new DateFieldValue(after));
-        }
+        public string Field { get; set; }
 
-        public static BetweenQuery BetweenTime(FieldType fieldType, string fieldName, DateTime before, DateTime after)
-        {
-            return new BetweenQuery(fieldType, fieldName, new TimeFieldValue(before), new TimeFieldValue(after));
-        }
+        public FieldType FieldType { get; set; }
+
+        public string Operator { get; set; }
+
+        public IFieldValue GreaterThanEqualTo { get; set; }
+
+        public IFieldValue LessThanEqualTo { get; set; }
 
         public string AsString()
         {
-            throw new NotImplementedException();
+            //*last_read_timestamp between (datetime(‘2012-04-10:00:00:00.0000000z’),datetime(‘2012-05-10:00:00:00.0000000z’))
+            return string.Format("{0}{1} betweeb ({2},{3})",
+                this.GetPrefix(),
+                this.Field,
+                this.GreaterThanEqualTo.GetStringValue(),
+                this.LessThanEqualTo.GetStringValue());
+        }
+
+        // Move this to extension method
+        private string GetPrefix()
+        {
+            switch (this.FieldType)
+            {
+                case FieldType.Property:
+                    return "*";
+                case FieldType.Attribute:
+                    return "@";
+                case FieldType.Aggregate:
+                    return "$";
+                default: throw new Exception("Unsuported field type.");
+            }
         }
 
         public override string ToString()

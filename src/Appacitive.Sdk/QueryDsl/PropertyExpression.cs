@@ -40,11 +40,6 @@ namespace Appacitive.Sdk
             return FieldQuery.IsEqualTo(FieldType.Property, this.Field, value);
         }
 
-        public IQuery IsEqualToDate(DateTime value)
-        {
-            return FieldQuery.IsEqualToDate(FieldType.Property, this.Field, value);
-        }
-
         public IQuery IsEqualTo(DateTime value)
         {
             return FieldQuery.IsEqualTo(FieldType.Property, this.Field, value);
@@ -65,16 +60,6 @@ namespace Appacitive.Sdk
             return FieldQuery.IsGreaterThan(FieldType.Property, this.Field, value);
         }
 
-        public IQuery IsGreaterThanDate(DateTime value)
-        {
-            return FieldQuery.IsGreaterThanDate(FieldType.Property, this.Field, value);
-        }
-
-        public IQuery IsGreaterThanTime(DateTime value)
-        {
-            return FieldQuery.IsGreaterThanTime(FieldType.Property, this.Field, value);
-        }
-
         public IQuery IsGreaterThanEqualTo(long value)
         {
             return FieldQuery.IsGreaterThanEqualTo(FieldType.Property, this.Field, value);
@@ -88,16 +73,6 @@ namespace Appacitive.Sdk
         public IQuery IsGreaterThanEqualTo(DateTime value)
         {
             return FieldQuery.IsGreaterThanEqualTo(FieldType.Property, this.Field, value);
-        }
-
-        public IQuery IsGreaterThanEqualToDate(DateTime value)
-        {
-            return FieldQuery.IsGreaterThanEqualToDate(FieldType.Property, this.Field, value);
-        }
-
-        public IQuery IsGreaterThanEqualToTime(DateTime value)
-        {
-            return FieldQuery.IsGreaterThanEqualToTime(FieldType.Property, this.Field, value);
         }
 
         public IQuery IsLessThan(long value)
@@ -122,16 +97,6 @@ namespace Appacitive.Sdk
             return FieldQuery.IsLessThan(FieldType.Property, this.Field, value);
         }
 
-        public IQuery IsLessThanDate(DateTime value)
-        {
-            return FieldQuery.IsLessThanDate(FieldType.Property, this.Field, value);
-        }
-
-        public IQuery IsLessThanTime(DateTime value)
-        {
-            return FieldQuery.IsLessThanTime(FieldType.Property, this.Field, value);
-        }
-
         public IQuery IsLessThanEqualTo(long value)
         {
             return FieldQuery.IsLessThanEqualTo(FieldType.Property, this.Field, value);
@@ -145,16 +110,6 @@ namespace Appacitive.Sdk
         public IQuery IsLessThanEqualTo(DateTime value)
         {
             return FieldQuery.IsLessThanEqualTo(FieldType.Property, this.Field, value);
-        }
-
-        public IQuery IsLessThanEqualToDate(DateTime value)
-        {
-            return FieldQuery.IsLessThanEqualToDate(FieldType.Property, this.Field, value);
-        }
-
-        public IQuery IsLessThanEqualToTime(DateTime value)
-        {
-            return FieldQuery.IsLessThanEqualToTime(FieldType.Property, this.Field, value);
         }
 
         public IQuery Like(string value)
@@ -201,16 +156,5 @@ namespace Appacitive.Sdk
         {
             return BetweenQuery.Between(FieldType.Property, this.Field, before, after);
         }
-
-        public IQuery BetweenDate(DateTime before, DateTime after)
-        {
-            return BetweenQuery.BetweenDate(FieldType.Property, this.Field, before, after);
-        }
-
-        public IQuery BetweenTime(DateTime before, DateTime after)
-        {   
-            return BetweenQuery.BetweenTime(FieldType.Property, this.Field, before, after);
-        }
-
     }
 }

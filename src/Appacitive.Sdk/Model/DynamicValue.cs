@@ -123,7 +123,7 @@ namespace Appacitive.Sdk
         {
             DateTime date;
             if( DateTime.TryParse(value.StringValue, out date) == false )
-                return DateTime.ParseExact(value.StringValue, new[] { "o", Formats.Date, Formats.Time }, null, System.Globalization.DateTimeStyles.None);
+                return DateTime.Parse(value.StringValue);
             return date;
         }
 

@@ -51,7 +51,7 @@ namespace Appacitive.Sdk.Tests
             await s1.SaveAsync();
             Score s2 = new Score { Points = 100 };
             await s2.SaveAsync();
-            App.Types.MapObjectType<Score>("score");
+            AppContext.Types.MapObjectType<Score>("score");
             var saved = await APObjects.GetAsync("score", s1.Id);
             Assert.IsNotNull(saved);
             Assert.IsTrue(saved is Score);

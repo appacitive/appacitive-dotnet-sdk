@@ -211,8 +211,10 @@ namespace Appacitive.Sdk
         {
             if( SingleValue.IsAllowedValue(value) == false )
                 throw new ArgumentException("value must by a geocode, string, datetime or primitive type.");
-            if( value is DateTime )
+            if (value is DateTime)
                 this.Value = ((DateTime)value).ToString("o");
+            else if (value is bool)
+                this.Value = value.ToString().ToLower();
             else
                 this.Value = value.ToString();
         }

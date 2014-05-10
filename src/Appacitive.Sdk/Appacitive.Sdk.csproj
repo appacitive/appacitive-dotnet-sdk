@@ -163,7 +163,6 @@
     <Compile Include="QueryDsl\AttributeExpression.cs" />
     <Compile Include="QueryDsl\BetweenQuery.cs" />
     <Compile Include="QueryDsl\BooleanOperator.cs" />
-    <Compile Include="QueryDsl\DateFieldValue.cs" />
     <Compile Include="QueryDsl\FieldQuery.cs" />
     <Compile Include="QueryDsl\IFieldValue.cs" />
     <Compile Include="QueryDsl\IQuery.cs" />
@@ -176,7 +175,6 @@
     <Compile Include="QueryDsl\RawQuery.cs" />
     <Compile Include="QueryDsl\TagExpression.cs" />
     <Compile Include="QueryDsl\TagQuery.cs" />
-    <Compile Include="QueryDsl\TimeFieldValue.cs" />
     <Compile Include="Internal\Services\Model.cs" />
     <Compile Include="Internal\Services\Model\ApiRequest.cs" />
     <Compile Include="Internal\Services\Model\ApiResponse.cs" />

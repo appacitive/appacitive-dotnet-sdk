@@ -44,16 +44,6 @@ namespace Appacitive.Sdk
             return new FieldQuery() { Field = name, FieldType = type, Value = new PrimtiveFieldValue(value), Operator = Operators.IsEqualTo };
         }
 
-        public static FieldQuery IsEqualToDate(FieldType type, string name, DateTime value)
-        {
-            return new FieldQuery() { Field = name, FieldType = type, Value = new DateFieldValue(value), Operator = Operators.IsEqualTo };
-        }
-
-        public static FieldQuery IsEqualToTime(FieldType type, string name, DateTime value)
-        {
-            return new FieldQuery() { Field = name, FieldType = type, Value = new TimeFieldValue(value), Operator = Operators.IsEqualTo };
-        }
-
         public static IQuery IsGreaterThan(FieldType type, string name, decimal value)
         {
             return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThan, Value = new PrimtiveFieldValue(value) };
@@ -69,16 +59,7 @@ namespace Appacitive.Sdk
             return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThan, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsGreaterThanDate(FieldType type, string name, DateTime value)
-        {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThan, Value = new DateFieldValue(value) };
-        }
-
-        public static IQuery IsGreaterThanTime(FieldType type, string name, DateTime value)
-        {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThan, Value = new TimeFieldValue(value) };
-        }
-
+        
         public static IQuery IsGreaterThanEqualTo(FieldType type, string name, long value)
         {
             return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThanEqualTo, Value = new PrimtiveFieldValue(value) };
@@ -94,15 +75,7 @@ namespace Appacitive.Sdk
             return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThanEqualTo, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsGreaterThanEqualToDate(FieldType type, string name, DateTime value)
-        {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThanEqualTo, Value = new DateFieldValue(value) };
-        }
-
-        public static IQuery IsGreaterThanEqualToTime(FieldType type, string name, DateTime value)
-        {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThanEqualTo, Value = new TimeFieldValue(value) };
-        }
+        
 
         public static IQuery IsLessThan(FieldType type, string name, long value)
         {
@@ -117,16 +90,6 @@ namespace Appacitive.Sdk
         public static IQuery IsLessThan(FieldType type, string name, DateTime value)
         {
             return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThan, Value = new PrimtiveFieldValue(value) };
-        }
-
-        public static IQuery IsLessThanDate(FieldType type, string name, DateTime value)
-        {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThan, Value = new DateFieldValue(value) };
-        }
-
-        public static IQuery IsLessThanTime(FieldType type, string name, DateTime value)
-        {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThan, Value = new TimeFieldValue(value) };
         }
 
         public static IQuery IsLessThanEqualTo(FieldType type, string name, long value)
@@ -144,16 +107,6 @@ namespace Appacitive.Sdk
             return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThanEqualTo, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsLessThanEqualToDate(FieldType type, string name, DateTime value)
-        {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThanEqualTo, Value = new DateFieldValue(value) };
-        }
-
-        public static IQuery IsLessThanEqualToTime(FieldType type, string name, DateTime value)
-        {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThanEqualTo, Value = new TimeFieldValue(value) };
-        }
-
         public static IQuery Like(FieldType type, string name, string value)
         {
             return new FieldQuery { FieldType = type, Field = name, Operator = Operators.Like, Value = new PrimtiveFieldValue("*" + value + "*") };
@@ -168,7 +121,6 @@ namespace Appacitive.Sdk
         {
             return new FieldQuery { FieldType = type, Field = name, Operator = Operators.Like, Value = new PrimtiveFieldValue(value + "*") };
         }
-
 
         public string Field { get; set; }
 
