@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
-    public static class App
+    public static class AppContext
     {
         /// <summary>
         /// Initialize the Appacitive SDK with a customized platform implementation for server or desktop.
@@ -90,6 +90,20 @@ namespace Appacitive.Sdk
         public static async Task<UserSession> LoginAsync(Credentials credentials)
         {
             return await InternalApp.LoginAsync(credentials);
+        }
+
+        /// <summary>
+        /// Check if the current user session is still valid.
+        /// </summary>
+        /// <returns>True or false.</returns>
+        public static async Task<bool> IsUserLoggedInAsync()
+        {
+            if (AppContext.UserContext == null) 
+                return false;
+            var sessionToken = AppContext.UserContext.SessionToken;
+            if (string.IsNullOrWhiteSpace(sessionToken) == true)
+                return false;
+            return await UserSession.IsValidAsync(sessionToken);
         }
 
         /// <summary>
