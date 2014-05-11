@@ -21,6 +21,24 @@ namespace Appacitive.Sdk.Tests
             AppContext.LogoutAsync().Wait();
         }
 
+
+        [TestMethod]
+        public async Task InvalidTokenShouldResetLoggedInUserTest()
+        {
+            var user = await UserHelper.CreateNewUserAsync();
+            await AppContext.LoginAsync(
+                new UsernamePasswordCredentials(user.Username, user.Password)
+                {
+                    TimeoutInSeconds = 3
+                });
+            Assert.IsNotNull(AppContext.UserContext.LoggedInUser);
+            await Utilities.Delay(4000);
+            // Session should now be invalidated
+            Assert.IsFalse(await UserSession.IsValidAsync(AppContext.UserContext.SessionToken));
+            Assert.IsNull(AppContext.UserContext.LoggedInUser);
+            Assert.IsTrue(string.IsNullOrWhiteSpace(AppContext.UserContext.SessionToken) == true);
+        }
+
         [TestMethod]
         public async Task LogoutTest()
         {

@@ -62,10 +62,16 @@ namespace Appacitive.Sdk.Internal
 
         public static async Task LogoutAsync()
         {
+            await LogoutAsync(true);
+        }
+
+        internal static async Task LogoutAsync(bool invalidateSessionOnServer)
+        {
             var userToken = _context.CurrentUser.SessionToken;
             if (string.IsNullOrWhiteSpace(userToken) == false)
             {
-                await UserSession.InvalidateAsync(userToken);
+                if( invalidateSessionOnServer == true )
+                    await UserSession.InvalidateAsync(userToken);
                 _context.CurrentUser.Reset();
             }
         }

@@ -97,6 +97,7 @@ namespace Appacitive.Sdk.Services
                 elasedTimeInMs = Convert.ToInt64(DateTime.Now.Subtract(startTime).TotalMilliseconds);
 #endif
                 response = Parse<T>(responseBytes);
+                await HandleExpiredUserToken(response);
             }
             catch (Exception ex)
             {
@@ -141,6 +142,7 @@ namespace Appacitive.Sdk.Services
 #endif
 
                 response = Parse<T>(responseBytes);
+                await HandleExpiredUserToken(response);
             }
             catch (Exception ex)
             {
@@ -185,6 +187,7 @@ namespace Appacitive.Sdk.Services
                 elasedTimeInMs = Convert.ToInt64(DateTime.Now.Subtract(startTime).TotalMilliseconds);
 #endif          
                 response = Parse<T>(responseBytes);
+                await HandleExpiredUserToken(response);
             }
             catch (Exception ex)
             {
@@ -229,6 +232,7 @@ namespace Appacitive.Sdk.Services
                 elasedTimeInMs = Convert.ToInt64(DateTime.Now.Subtract(startTime).TotalMilliseconds);
 #endif          
                 response = Parse<T>(responseBytes);
+                await HandleExpiredUserToken(response);
             }
             catch (Exception ex)
             {
@@ -282,6 +286,34 @@ namespace Appacitive.Sdk.Services
                 }
             }
             catch { /* Suppress fault */ }
+        }
+
+        /// <summary>
+        /// Reset the logged in user incase of user token expired errors from the server
+        /// </summary>
+        /// <param name="response">The api response.</param>
+        /// <returns></returns>
+        private static async Task HandleExpiredUserToken(ApiResponse response)
+        {
+            var isUserTokenExpired = IsUserTokenExpired(response);
+            if (isUserTokenExpired == true)
+                await InternalApp.LogoutAsync( invalidateSessionOnServer : false);        // Logout the user without invalidating the session on the server since the session is already expired.
+        }
+
+        /// <summary>
+        /// Check if the api returns a session expired error code.
+        /// </summary>
+        /// <param name="response">The api response.</param>
+        /// <returns></returns>
+        private static bool IsUserTokenExpired(ApiResponse response)
+        {
+            var expiredSessionErrorCodes = new string[] 
+            {
+                "19036",  // Old version error code
+                "421"       // v1.0 version error code.
+            };
+            var isExpired = expiredSessionErrorCodes.Contains(response.Status.Code);
+            return isExpired;
         }
 
         private static JObject GetJObject(byte[] bytes)
