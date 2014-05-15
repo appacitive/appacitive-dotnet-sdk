@@ -23,6 +23,61 @@ namespace Appacitive.Sdk.Tests
 
 
         [TestMethod]
+        public async Task LoginAndLogoutEventTest()
+        {
+            string sessionToken = string.Empty;
+            APUser loggedIn = null;
+            var user = await UserHelper.CreateNewUserAsync();
+            AppContext.UserContext.UserLoggedIn += (s,e) => 
+                {
+                    Console.WriteLine("User is logged in.");
+                    sessionToken = e.SessionToken;
+                    loggedIn = e.User;
+                };
+            AppContext.UserContext.UserLoggedOut += (s, e) =>
+                {
+                    Console.WriteLine("User is logged out.");
+                    sessionToken = null;
+                    loggedIn = null;
+                };
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            Assert.IsTrue(sessionToken == AppContext.UserContext.SessionToken);
+            Assert.IsTrue(loggedIn.Id == AppContext.UserContext.LoggedInUser.Id);
+            await AppContext.LogoutAsync();
+            Assert.IsNull(sessionToken);
+            Assert.IsNull(loggedIn);
+        }
+
+        [TestMethod]
+        public async Task InvalidTokenLogoutEventTest()
+        {
+            string sessionToken = string.Empty;
+            APUser loggedIn = null;
+            var user = await UserHelper.CreateNewUserAsync();
+            AppContext.UserContext.UserLoggedIn += (s, e) =>
+            {
+                Console.WriteLine("User is logged in.");
+                sessionToken = e.SessionToken;
+                loggedIn = e.User;
+            };
+            AppContext.UserContext.UserLoggedOut += (s, e) =>
+            {
+                Console.WriteLine("User is logged out.");
+                sessionToken = null;
+                loggedIn = null;
+            };
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password) { TimeoutInSeconds = 3 } );
+            Assert.IsTrue(sessionToken == AppContext.UserContext.SessionToken);
+            Assert.IsTrue(loggedIn.Id == AppContext.UserContext.LoggedInUser.Id);
+            await Utilities.Delay(5000);
+            var isValid = await UserSession.IsValidAsync(AppContext.UserContext.SessionToken);
+            Assert.IsFalse(isValid);
+            Assert.IsNull(sessionToken);
+            Assert.IsNull(loggedIn);
+        }
+
+
+        [TestMethod]
         public async Task InvalidTokenShouldResetLoggedInUserTest()
         {
             var user = await UserHelper.CreateNewUserAsync();
