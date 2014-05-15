@@ -10,6 +10,13 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class AclFixture
     {
+
+        [TestInitialize()]
+        public void Initialize()
+        {
+            AppContext.LogoutAsync().Wait();
+        }
+
         [TestMethod]
         public async Task NewObjectShouldHaveBlankAclTest()
         {
@@ -22,7 +29,7 @@ namespace Appacitive.Sdk.Tests
         {
             var obj = await ObjectHelper.CreateNewAsync();
             var user = await UserHelper.CreateNewUserAsync();
-            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
             var obj1 = await ObjectHelper.CreateNewAsync();
             var obj2 = await ObjectHelper.CreateNewAsync();
             await Task.Delay(1500);
@@ -37,7 +44,7 @@ namespace Appacitive.Sdk.Tests
         {
             var user = await UserHelper.CreateNewUserAsync();
             var obj = await ObjectHelper.CreateNewAsync();
-            await App.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(user.Username, user.Password));
             
             try
             {

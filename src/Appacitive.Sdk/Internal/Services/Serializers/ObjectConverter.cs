@@ -38,30 +38,11 @@ namespace Appacitive.Sdk.Services
 
         private APObject BuildNewInstance(JObject json, Type objectType)
         {
-            if (objectType == typeof(APDevice))
-            {
-                JToken value;
-                string type = string.Empty;
-                if (json.TryGetValue("devicetype", out value) == true && value.Type != JTokenType.Null)
-                    type = value.ToString();
-                else throw new Exception("DeviceType not present in response.");
-                return new APDevice(SupportedDevices.ResolveDeviceType(type));
-            }
-            else
-            {
-                string type;
-                if (objectType.Is<APUser>() == true)
-                    type = "user";
-                else 
-                    type = GetType(json);
-                var mappedType = InternalApp.Types.Mapping.GetMappedObjectType(type);
-                if (mappedType == null)
-                    return new APObject(type);
-                else
-                    return Activator.CreateInstance(mappedType) as APObject;
-            }
+            string type;
+            type = GetType(json);
+            ICreateInstanceBehaviorFactory factory = ObjectFactory.Build<ICreateInstanceBehaviorFactory>();
+            return factory.GetBehavior(type, objectType).CreateInstance(type, json);
         }
-
 
         private string GetType(JObject json)
         {
@@ -72,7 +53,6 @@ namespace Appacitive.Sdk.Services
             return type;
         }
         
-
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             // Manage the open and closing of the object.
@@ -88,6 +68,66 @@ namespace Appacitive.Sdk.Services
             EntityParser.WriteJson(writer, obj, serializer);
             AclParser.WriteAcl(writer, obj, serializer);
             writer.WriteEndObject();
+        }
+    }
+
+    public interface ICreateInstanceBehavior
+    {
+        APObject CreateInstance(string type, JObject json);
+    }
+
+    public interface ICreateInstanceBehaviorFactory
+    {
+        ICreateInstanceBehavior GetBehavior(string type, Type instanceType);
+    }
+
+    public class CreateInstanceBehaviorFactory : ICreateInstanceBehaviorFactory
+    {
+        public ICreateInstanceBehavior GetBehavior(string type, Type instanceType)
+        {
+            if (type.Equals("device") == true || instanceType.Is<APDevice>() == true)
+                return new CreateDeviceBehavior();
+            else if (type.Equals("user") == true || instanceType.Is<APUser>() == true)
+                return new CreateUserBehavior();
+            else return new CreateObjectBehavior();
+        }
+    }
+
+    public class CreateDeviceBehavior : ICreateInstanceBehavior
+    {
+        public APObject CreateInstance(string type, JObject json)
+        {
+            JToken value;
+            var deviceType = string.Empty;
+            if (json.TryGetValue("devicetype", out value) == true && value.Type != JTokenType.Null)
+                deviceType = value.ToString();
+            else throw new Exception("DeviceType not present in response.");
+            return new APDevice(SupportedDevices.ResolveDeviceType(deviceType));
+        }
+    }
+
+    public class CreateUserBehavior : ICreateInstanceBehavior
+    {
+        public APObject CreateInstance(string type, JObject json)
+        {
+            type = string.IsNullOrWhiteSpace(type) ? "user" : type;
+            var mappedType = InternalApp.Types.Mapping.GetMappedObjectType(type);
+            if (mappedType == null)
+                return new APUser();
+            else
+                return Activator.CreateInstance(mappedType) as APUser;
+        }
+    }
+
+    public class CreateObjectBehavior : ICreateInstanceBehavior
+    {
+        public APObject CreateInstance(string type, JObject json)
+        {
+            var mappedType = InternalApp.Types.Mapping.GetMappedObjectType(type);
+            if (mappedType == null)
+                return new APObject(type);
+            else
+                return Activator.CreateInstance(mappedType) as APObject;
         }
     }
 

@@ -52,7 +52,7 @@ namespace Appacitive.Sdk.Tests
             }
 
             // Login as the admin user and try to add the user to the group
-            await App.LoginAsync(new UsernamePasswordCredentials(adminUser.Username, adminUser.Password));
+            await AppContext.LoginAsync(new UsernamePasswordCredentials(adminUser.Username, adminUser.Password));
             await UserGroup.AddMembersAsync("all", new[] { otherUser.Username }, new ApiOptions { ApiKey = TestConfiguration.ClientApiKey });
             var user2 = await APUsers.GetByIdAsync(otherUser.Id);
             Assert.IsTrue(user2.UserGroups.Count() == 1);

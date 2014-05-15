@@ -199,6 +199,7 @@ namespace Appacitive.Sdk
                     ex = new BadRequestException(status.Message);
                     break;
                 case "401":
+                case "25002":
                     ex = new AccessDeniedException(status.Message);
                     break;
                 case "402":
@@ -211,6 +212,7 @@ namespace Appacitive.Sdk
                     ex = new ObjectNotFoundException(status.Message);
                     break;
                 case "409":
+                case "14008":
                     ex = new UpdateConflictException(status.Message);
                     break;
                 case "412":
@@ -223,6 +225,7 @@ namespace Appacitive.Sdk
                     ex = new UserAuthenticationFailureException(status.Message);
                     break;
                 case "435":
+                case "21006" :
                     ex = new DuplicateObjectException(status.Message);
                     break;
                 case "436":

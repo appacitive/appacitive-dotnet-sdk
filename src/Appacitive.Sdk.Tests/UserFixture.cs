@@ -175,6 +175,10 @@ namespace Appacitive.Sdk.Tests
             catch( UserAuthenticationFailureException ex )
             {   
             }
+            catch( UnExpectedSystemException uex)
+            {
+                Assert.IsTrue(uex.Code == "25001");
+            }
             var session = await new UsernamePasswordCredentials(user.Username, user.Password).AuthenticateAsync();
             Assert.IsNotNull(session);
             Assert.IsTrue(string.IsNullOrWhiteSpace(session.UserToken) == false);

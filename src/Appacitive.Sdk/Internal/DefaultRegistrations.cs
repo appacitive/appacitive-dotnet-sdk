@@ -14,6 +14,7 @@ namespace Appacitive.Sdk.Internal
             container
                     .Register<IJsonSerializer, JsonDotNetSerializer>(() => new JsonDotNetSerializer())
                     .Register<ITraceWriter, NullTraceWriter>(() => NullTraceWriter.Instance)
+                    .RegisterInstance<Services.ICreateInstanceBehaviorFactory, Services.CreateInstanceBehaviorFactory>(new Services.CreateInstanceBehaviorFactory())
                     ;
         }
     }

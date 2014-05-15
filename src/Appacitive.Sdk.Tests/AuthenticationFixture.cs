@@ -28,10 +28,11 @@ namespace Appacitive.Sdk.Tests
             Assert.AreEqual(userSession.LoggedInUser.Id, user.Id, "Logged in user ids do not match as expected.");
         }
 
+        [Ignore]
         [TestMethod]
         public async Task AuthenticateWithFacebookAsyncTest()
         {
-            var cred = new OAuth2Credentials("CAAEJx3OyvusBALKhTVGbmecf4GjpTQCLtjoFqjR4r6YChPoHpwj5VIbHLF8jHFMiA5zBReCr5IABjKuf6qwXiU8oLyAheDjRYj59QzIhYytiCH7NzKthJCe36mTkglpBJgJJfwGpt1qZBGqN8GkhqV5YyQZCguUTpBWIJfEsJ8W3PFNfEpsUvxvNwoOAgZD", "facebook");
+            var cred = new OAuth2Credentials("CAAEJx3OyvusBAFEEHwXPc1oFofA8mXryZCfJhLWJZAH7ysb5jL0prHPtAhpCKgtLM76jczuw7wJfCE5ZAaU9yrNZAz7tAZCwKf7jFtMUZB2ICUC8lElwtSdobfbOk63NvcWwoaOZCNY0nvs24NDf1rzh3LKnZB0hfUIJS2gKLC9HH2WmYd3WXZA1uX13rVZAAZCgccZD", "facebook");
             cred.CreateUserIfNotExists = true;
             var session = await cred.AuthenticateAsync();
             Assert.IsTrue(string.IsNullOrWhiteSpace(session.UserToken) == false);
