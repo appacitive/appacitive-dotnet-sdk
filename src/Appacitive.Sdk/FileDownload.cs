@@ -57,27 +57,31 @@ namespace Appacitive.Sdk
         /// </summary>
         public IHttpFileHandler FileHandler { get; set; }
 
+
         /// <summary>
         /// Returns the public download url for the file associated with this download instance.
         /// Generating a public url for a file will flag the file as a public file.
         /// </summary>
+        /// <param name="cacheControlMaxAgeInSeconds">The value to be set as the cache-control max age for the file.</param>
         /// <returns>Public (non-expiring) download url for the file.</returns>
-        public async Task<string> GetPublicUrlAsync()
+        public async Task<string> GetPublicUrlAsync(long cacheControlMaxAgeInSeconds = 2592000 )
         {
-            return await this.GetDownloadUrlAsync(-1);
+            return await this.GetDownloadUrlAsync(-1, cacheControlMaxAgeInSeconds);
         }
 
         /// <summary>
         /// Returns a limited time validity download url for the file associated with this FileDownload object.
         /// </summary>
         /// <param name="expiryTimeInMinutes">The validity interval for the download url (in minutes)."</param>
+        /// <param name="cacheControlMaxAgeInSeconds">The value to be returned in the cache-control header for the file.</param>
         /// <returns>Download url.</returns>
-        public async Task<string> GetDownloadUrlAsync(int expiryTimeInMinutes = 5)
+        public async Task<string> GetDownloadUrlAsync(int expiryTimeInMinutes = 5, long cacheControlMaxAgeInSeconds = 2592000)
         {
             var request = new GetDownloadUrlRequest
             {
                 FileName = this.FileName,
-                ExpiryInMinutes = expiryTimeInMinutes
+                ExpiryInMinutes = expiryTimeInMinutes,
+                CacheControlMaxAge = cacheControlMaxAgeInSeconds
             };
             ApiOptions.Apply(request, this.Options);
             var response = await request.ExecuteAsync();

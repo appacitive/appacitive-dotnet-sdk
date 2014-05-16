@@ -227,7 +227,7 @@ namespace Appacitive.Sdk.Tests
             {
                 await APUsers.ChangePasswordAsync(wrongPassword, Unique.String);
             }
-            catch( UserAuthenticationFailureException ex )
+            catch( UserAuthenticationFailureException )
             {   
             }
             catch( UnExpectedSystemException uex)

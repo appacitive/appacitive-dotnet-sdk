@@ -347,11 +347,12 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string GetDownloadUrl(string filename, int expiry)
+            public static string GetDownloadUrl(string filename, int expiry, long cacheControlMaxAge)
             {
                 // e.g., ../download/{fileid}?expires={minutes}
                 var url = new Url(FileServiceBase).Append("download").Append(filename);
                 url.QueryString["expires"] = expiry.ToString();
+                url.QueryString["cache-control"] = cacheControlMaxAge.ToString();
                 return url.ToString();
             }
 

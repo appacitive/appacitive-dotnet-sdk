@@ -197,7 +197,7 @@ namespace Appacitive.Sdk.Tests
                                 .SaveAsync(throwIfAlreadyExists: true);
                 Assert.Fail("Duplicate connection creation did not fault.");
             }
-            catch (DuplicateObjectException ex)
+            catch (DuplicateObjectException)
             {   
             }
         }

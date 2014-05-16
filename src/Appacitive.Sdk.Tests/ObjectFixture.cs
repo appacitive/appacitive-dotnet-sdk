@@ -773,7 +773,6 @@ namespace Appacitive.Sdk.Tests
             await obj.SaveAsync();
             // This should fail as I am trying to update with an older revision
             obj.Set<string>("stringfield", Unique.String);
-            bool isFault = false;
             try
             {
                 await obj.SaveAsync(obj.Revision - 1);

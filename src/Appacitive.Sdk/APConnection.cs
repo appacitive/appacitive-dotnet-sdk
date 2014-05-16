@@ -182,7 +182,7 @@ namespace Appacitive.Sdk
                 await this.SaveEntityAsync(specificRevision, forceUpdate, options);
                 return this;
             }
-            catch (DuplicateObjectException ex)
+            catch (DuplicateObjectException)
             {
                 if (throwIfAlreadyExists == true)
                     throw;
