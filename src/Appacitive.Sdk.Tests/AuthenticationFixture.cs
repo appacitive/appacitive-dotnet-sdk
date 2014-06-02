@@ -39,5 +39,21 @@ namespace Appacitive.Sdk.Tests
             Assert.IsNotNull(session.LoggedInUser);
         }
 
+
+        [Ignore]
+        [TestMethod]
+        public async Task AuthenticateWithTwitterAsyncTest()
+        {
+            var cred = new OAuth1Credentials(
+                "consumerKey", "consumer secret",
+                "oauthtoken", "oauthtokensecret",
+                "twitter"
+                );
+            cred.CreateUserIfNotExists = true;
+            var session = await cred.AuthenticateAsync();
+            Assert.IsTrue(string.IsNullOrWhiteSpace(session.UserToken) == false);
+            Assert.IsNotNull(session.LoggedInUser);
+        }
+
     }
 }

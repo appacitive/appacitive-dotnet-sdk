@@ -126,8 +126,8 @@ namespace Appacitive.Sdk
         public OAuth1Credentials(string consumerKey, string consumerSecret, string accessToken, string accessTokenSecret, string type)
         {
             this.Type = type;
-            this.ConsumerKey = consumerSecret;
-            this.ConsumerSecret = ConsumerSecret;
+            this.ConsumerKey = consumerKey;
+            this.ConsumerSecret = consumerSecret;
             this.AccessToken = accessToken;
             this.AccessTokenSecret = accessTokenSecret;
         }
@@ -148,7 +148,7 @@ namespace Appacitive.Sdk
             if (string.IsNullOrWhiteSpace(this.ConsumerKey) == false)
                 request["consumerkey"] = this.ConsumerKey;
             if (string.IsNullOrWhiteSpace(this.ConsumerSecret) == false)
-                request["consumerkey"] = this.ConsumerSecret;
+                request["consumersecret"] = this.ConsumerSecret;
             request["oauthtoken"] = this.AccessToken;
             request["oauthtokensecret"] = this.AccessTokenSecret;
             if (this.CreateUserIfNotExists == true)
