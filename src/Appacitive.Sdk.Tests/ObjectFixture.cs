@@ -26,7 +26,25 @@ namespace Appacitive.Sdk.Tests
                                 .ToList();
             var updated = updateProperties.Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString())).ToList();
             Assert.IsTrue(updated.Count == existing.Count);
-            
+        }
+
+
+        [TestMethod]
+        public async Task StartsWithAndEndsWithFiltersTest()
+        {
+            var prefix = Unique.String;
+            var suffix = Unique.String;
+            var obj = new APObject("object");
+            obj.Set<string>("stringfield", prefix + suffix);
+            await obj.SaveAsync();
+
+            var found = (await APObjects.FindAllAsync("object", Query.Property("stringfield").StartsWith(prefix))).SingleOrDefault();
+            Assert.IsTrue(found != null);
+            Assert.IsTrue(found.Id == obj.Id);
+
+            found = (await APObjects.FindAllAsync("object", Query.Property("stringfield").EndsWith(suffix))).SingleOrDefault();
+            Assert.IsTrue(found != null);
+            Assert.IsTrue(found.Id == obj.Id);
         }
 
         [TestMethod]

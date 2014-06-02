@@ -114,12 +114,12 @@ namespace Appacitive.Sdk
 
         public static IQuery StartsWith(FieldType type, string name, string value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.Like, Value = new PrimtiveFieldValue("*" + value) };
+            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.Like, Value = new PrimtiveFieldValue(value + "*") };
         }
 
         public static IQuery EndsWith(FieldType type, string name, string value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.Like, Value = new PrimtiveFieldValue(value + "*") };
+            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.Like, Value = new PrimtiveFieldValue("*" + value) };
         }
 
         public string Field { get; set; }
