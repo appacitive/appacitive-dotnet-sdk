@@ -160,6 +160,11 @@ namespace Appacitive.Sdk
         {
             return value.GetValue<char>();
         }
+
+        public override string ToString()
+        {
+            return this.GetValue<string>();
+        }
     }
 
     public enum ValueType

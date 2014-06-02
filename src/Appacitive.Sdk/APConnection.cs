@@ -232,10 +232,10 @@ namespace Appacitive.Sdk
             if (other == null) return;
             this.Endpoints.EndpointA = other.Endpoints.EndpointA;
             this.Endpoints.EndpointB = other.Endpoints.EndpointB;
-        } 
-        
+        }
 
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, bool forceUpdate, ApiOptions options)
+
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, ApiOptions options, bool forceUpdate)
         {
             var request = new UpdateConnectionRequest{ Id = this.Id, Type = this.Type, Revision = specificRevision };
             ApiOptions.Apply(request, options);
@@ -253,7 +253,7 @@ namespace Appacitive.Sdk
             if (request.PropertyUpdates.Count == 0 &&
                 request.AttributeUpdates.Count == 0 &&
                 request.AddedTags.Count == 0         &&
-                request.RemovedTags.Count == 0    && 
+                request.RemovedTags.Count == 0  &&
                 forceUpdate == false )
                 return null;
 

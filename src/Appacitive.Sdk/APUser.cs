@@ -164,7 +164,7 @@ namespace Appacitive.Sdk
             return await APUsers.GetByIdAsync(this.Id, options:options);
         }
 
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, bool forceUpdate, ApiOptions options)
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, ApiOptions options, bool forceUpdate)
         {
             var request = new UpdateUserRequest()
             {
@@ -195,7 +195,7 @@ namespace Appacitive.Sdk
                 request.AllowClaims.Count == 0 &&
                 request.DenyClaims.Count == 0 &&
                 request.ResetClaims.Count == 0 && 
-                forceUpdate == false )
+                forceUpdate == false)
                 return null;
 
             var response = await request.ExecuteAsync();

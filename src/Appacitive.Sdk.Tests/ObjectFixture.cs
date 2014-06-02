@@ -12,6 +12,22 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class ObjectFixture
     {
+        [TestMethod]
+        public async Task ForceUpdateEmptyShouldUpdateNothingTest()
+        {
+            var obj = await ObjectHelper.CreateNewAsync();
+            var copy = new APObject("object", obj.Id);
+            await copy.SaveAsync(forceUpdate: true);
+            var existingProperties = obj.Properties.ToList();
+            var updateProperties = copy.Properties.ToList();
+            
+            var existing = existingProperties
+                                .Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString()))
+                                .ToList();
+            var updated = updateProperties.Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString())).ToList();
+            Assert.IsTrue(updated.Count == existing.Count);
+            
+        }
 
         [TestMethod]
         public async Task ForceUpdateTest()
