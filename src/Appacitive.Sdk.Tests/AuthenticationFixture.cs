@@ -55,5 +55,27 @@ namespace Appacitive.Sdk.Tests
             Assert.IsNotNull(session.LoggedInUser);
         }
 
+
+        [TestMethod]
+        public async Task GetFriendsTestAsync()
+        {
+            // Refer http://stackoverflow.com/a/19800733/2563331 for creating extended token from short term token.
+            var johnToken = "CAAEJx3OyvusBAIoqOJB350QRT6XDOJ3VAdJCJ5Vdz5IKIaHnNUhn29Yi96Cxg997sggJd0clxDiNkodZACSwZC6xZAEotQY9gNc3ZCbQxBenpCMZBZBqFQOCqUegRjXxLirFIi7R1ikhBveQJXshi2CBaqUbZCd3ZCJ0RWESFsPqtqd4bOITOZBi2";
+            var janeToken = "CAAEJx3OyvusBAKmFeJcL9Ki7goEhfHiGZBtwZAVBpPrGn0Lfee6X7PLYUwACdNXUcxL7v6cZAZBZCCrYpkKT0FNHMiBaBBobjYEVDQjqxrHO5mjuUnpbZBa0Qnwx77DJEZChwzDkZCPBSWmyvTph6QVuEPOBqFHL8qLq2dPAGIrR31iL5AzjIzJu";
+            var jackToken = "CAAEJx3OyvusBANJl6NPiktrkalZAogJXW8E6CQaGwbZAdT1Fp2nPKZCG1PX9DtwhboFfSit9M0h8aNcViX7Y6VofSiBgxEZBYeh8QOYK7N8DyqotD9UpaZCg8pVzXRieAH5TVC6ubvAKQAswfG1VDkBHExF3KbnZBKUX8OxSL4zcK0d9caaJK7";
+
+            //Ensure users exist
+            var john = (await new OAuth2Credentials(johnToken, "facebook") { CreateUserIfNotExists = true }.AuthenticateAsync()).LoggedInUser;
+            var jane = (await new OAuth2Credentials(janeToken, "facebook") { CreateUserIfNotExists = true }.AuthenticateAsync()).LoggedInUser;
+            var jack = (await new OAuth2Credentials(jackToken, "facebook") { CreateUserIfNotExists = true }.AuthenticateAsync()).LoggedInUser;
+
+            var friends = await john.GetFriendsAsync("facebook");
+            Assert.IsTrue(friends.Count == 2);
+            Assert.IsTrue(friends.Exists(f => f.Id == jane.Id));
+            Assert.IsTrue(friends.Exists(f => f.Id == jack.Id));
+
+            //TODO: Add test to check that other users are not returned.
+        }
+
     }
 }

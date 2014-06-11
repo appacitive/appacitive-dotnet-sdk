@@ -207,6 +207,24 @@ namespace Appacitive.Sdk
             return response.User;
         }
 
+
+        public async Task<List<FriendInfo>> GetFriendsAsync(string socialNetwork, ApiOptions options = null)
+        {
+            if (string.IsNullOrWhiteSpace(socialNetwork) == true)
+                throw new AppacitiveRuntimeException("Social network cannot be null or empty.");
+            var request = new GetFriendsRequest
+            {
+                UserId = this.Id,
+                SocialNetwork = socialNetwork
+            };
+            ApiOptions.Apply(request, options);
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            return response.Friends;
+        }
+
+
         /// <summary>
         /// Creates or updates the current APUser object on the server side.
         /// </summary>

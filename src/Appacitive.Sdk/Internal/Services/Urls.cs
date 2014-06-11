@@ -496,6 +496,15 @@ namespace Appacitive.Sdk.Services
                 HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
                 return url.ToString();
             }
+
+            public static string GetFriends(string userId, string socialNetwork, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
+            {   
+                //https://apis.appacitive.com/v1.0/user/{user id}/friends/facebook
+                var url = new Url(UserServiceBase).Append(userId).Append("friends").Append(socialNetwork);
+                HandleDefaults(url, location, enableDebug, verbosity, fields);
+                return url.ToString();
+            }
+            
         }
     }
 
