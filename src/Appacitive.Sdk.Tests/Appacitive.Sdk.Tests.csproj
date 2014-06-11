@@ -57,6 +57,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AclFixture.cs" />
     <Compile Include="EntityFixture.cs" />
     <Compile Include="Helpers\Utilities.cs" />
     <Compile Include="ObjectFixture.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="SubClasses.cs" />
     <Compile Include="TestConfiguration.cs" />
     <Compile Include="UserFixture.cs" />
+    <Compile Include="UserGroupFixture.cs" />
     <Compile Include="UserServiceFixture.cs" />
     <Compile Include="ValueFixture.cs" />
   </ItemGroup>

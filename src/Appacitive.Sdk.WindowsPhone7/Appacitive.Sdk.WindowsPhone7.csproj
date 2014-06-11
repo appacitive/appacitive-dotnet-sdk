@@ -158,6 +158,9 @@
     <Compile Include="..\Appacitive.Sdk\Interfaces\IDeviceState.cs">
       <Link>Interfaces\IDeviceState.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\GroupInfo.cs">
+      <Link>GroupInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Interfaces\IHttpConnector.cs">
       <Link>Interfaces\IHttpConnector.cs</Link>
     </Compile>
@@ -413,6 +416,9 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\InvalidateUserSessionResponse.cs">
       <Link>Internal\Services\Model\InvalidateUserSessionResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\IObjectUpdateRequest.cs">
+      <Link>Internal\Services\Model\IObjectUpdateRequest.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\MultiGetObjectsRequest.cs">
       <Link>Internal\Services\Model\MultiGetObjectsRequest.cs</Link>
     </Compile>
@@ -458,6 +464,12 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateDeviceResponse.cs">
       <Link>Internal\Services\Model\UpdateDeviceResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateGroupMembersRequest.cs">
+      <Link>Internal\Services\Model\UpdateGroupMembersRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateGroupMembersResponse.cs">
+      <Link>Internal\Services\Model\UpdateGroupMembersResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\UpdateListItemsRequest.cs">
       <Link>Internal\Services\Model\UpdateListItemsRequest.cs</Link>
     </Compile>
@@ -491,14 +503,8 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\ConnectionConverter.cs">
       <Link>Internal\Services\Serializers\ConnectionConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\DeviceConverter.cs">
-      <Link>Internal\Services\Serializers\DeviceConverter.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\EmailConverter.cs">
       <Link>Internal\Services\Serializers\EmailConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\EntityConverter.cs">
-      <Link>Internal\Services\Serializers\EntityConverter.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\FindConnectedObjectsResponseConverter.cs">
       <Link>Internal\Services\Serializers\FindConnectedObjectsResponseConverter.cs</Link>
@@ -536,9 +542,6 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UpdateUserRequestConverter.cs">
       <Link>Internal\Services\Serializers\UpdateUserRequestConverter.cs</Link>
     </Compile>
-    <Compile Include="..\Appacitive.Sdk\Internal\Services\Serializers\UserConverter.cs">
-      <Link>Internal\Services\Serializers\UserConverter.cs</Link>
-    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Urls.cs">
       <Link>Internal\Services\Urls.cs</Link>
     </Compile>
@@ -553,6 +556,12 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\ValueConverter.cs">
       <Link>Internal\ValueConverter.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\Acl.cs">
+      <Link>Model\Acl.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\ApiOptions.cs">
+      <Link>Model\ApiOptions.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\AppacitiveException.cs">
       <Link>Model\AppacitiveException.cs</Link>

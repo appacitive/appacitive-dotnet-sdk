@@ -14,16 +14,20 @@ namespace Appacitive.Sdk
     {
         public APUser() : base("user")
         {
+            this.Groups = new List<GroupInfo>();
         }
 
         public APUser(string id)
             : base("user", id)
         {
+            this.Groups = new List<GroupInfo>();
         }
 
         protected APUser(APUser user)
             : base(user)
         {   
+
+            this.Groups = new List<GroupInfo>();
         }
 
         protected APUser(APObject obj)
@@ -121,7 +125,7 @@ namespace Appacitive.Sdk
                     return null;
                 if (Geocode.TryParse(geocode, out geo) == true)
                     return geo;
-                else throw new AppacitiveApiException(string.Format("Location property ({0}) is not a valid geocode.", geocode));
+                else throw new AppacitiveRuntimeException(string.Format("Location property ({0}) is not a valid geocode.", geocode));
             }
             set
             {
@@ -130,13 +134,22 @@ namespace Appacitive.Sdk
             }
         }
 
-        protected override async Task<Entity> CreateNewAsync()
+        internal List<GroupInfo> Groups { get; private set; }
+
+        public IEnumerable<GroupInfo> UserGroups
         {
-            // Create a new object
-            var response = await new CreateUserRequest()
+            get
             {
-                User = this
-            }.ExecuteAsync();
+                return this.Groups;
+            }
+        }
+
+        protected override async Task<Entity> CreateNewAsync(ApiOptions options)
+        {
+            var request = new CreateUserRequest() { User = this };
+            ApiOptions.Apply(request, options);
+            // Create a new object
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 
@@ -145,19 +158,20 @@ namespace Appacitive.Sdk
             return response.User;
         }
 
-        protected override async Task<Entity> FetchAsync()
+
+        protected override async Task<Entity> FetchAsync(ApiOptions options)
         {
-            return await APUsers.GetByIdAsync(this.Id);
+            return await APUsers.GetByIdAsync(this.Id, options:options);
         }
 
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, ApiOptions options, bool forceUpdate)
         {
             var request = new UpdateUserRequest()
             {
                 Revision = specificRevision,
-                UserId = this.Id
+                Id = this.Id
             };
-
+            ApiOptions.Apply(request, options);
             if (propertyUpdates != null && propertyUpdates.Count > 0)
                 propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
             if (attributeUpdates != null && attributeUpdates.Count > 0)
@@ -168,11 +182,20 @@ namespace Appacitive.Sdk
             if (removedTags != null)
                 request.RemovedTags.AddRange(removedTags);
 
+            // Check if acls are to be added
+            request.AllowClaims.AddRange(this.Acl.Allowed);
+            request.DenyClaims.AddRange(this.Acl.Denied);
+            request.ResetClaims.AddRange(this.Acl.Reset);
+
             // Check if an update is needed.
             if (request.PropertyUpdates.Count == 0 &&
                 request.AttributeUpdates.Count == 0 &&
                 request.AddedTags.Count == 0 &&
-                request.RemovedTags.Count == 0)
+                request.RemovedTags.Count == 0 &&
+                request.AllowClaims.Count == 0 &&
+                request.DenyClaims.Count == 0 &&
+                request.ResetClaims.Count == 0 && 
+                forceUpdate == false)
                 return null;
 
             var response = await request.ExecuteAsync();
@@ -184,6 +207,24 @@ namespace Appacitive.Sdk
             return response.User;
         }
 
+
+        public async Task<List<FriendInfo>> GetFriendsAsync(string socialNetwork, ApiOptions options = null)
+        {
+            if (string.IsNullOrWhiteSpace(socialNetwork) == true)
+                throw new AppacitiveRuntimeException("Social network cannot be null or empty.");
+            var request = new GetFriendsRequest
+            {
+                UserId = this.Id,
+                SocialNetwork = socialNetwork
+            };
+            ApiOptions.Apply(request, options);
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            return response.Friends;
+        }
+
+
         /// <summary>
         /// Creates or updates the current APUser object on the server side.
         /// </summary>
@@ -193,10 +234,11 @@ namespace Appacitive.Sdk
         /// If this version does not match on the server side, the Save operation will fail. Passing 0 disables the revision check.
         /// </param>
         /// <param name="forceUpdate">Setting this flag as True will force an update request even when the state of the object may not have changed locally.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
         /// <returns>Returns the saved user object.</returns>
-        public new async Task<APUser> SaveAsync(int specificRevision = 0, bool forceUpdate = false)
+        public new async Task<APUser> SaveAsync(int specificRevision = 0, bool forceUpdate = false, ApiOptions options = null)
         {
-            await this.SaveEntityAsync(specificRevision, forceUpdate);
+            await this.SaveEntityAsync(specificRevision, forceUpdate, options);
             UpdateIfCurrentUser(this);
             return this;
         }

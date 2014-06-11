@@ -18,8 +18,9 @@ namespace Appacitive.Sdk
         /// <param name="listName">Name of the canned list.</param>
         /// <param name="pageNumber">Page number.</param>
         /// <param name="pageSize">Page size.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
         /// <returns>Paginated list of canned list items.</returns>
-        public static async Task<PagedList<ListItem>> GetListItemsAsync(string listName, int pageNumber = 1, int pageSize = 20)
+        public static async Task<PagedList<ListItem>> GetListItemsAsync(string listName, int pageNumber = 1, int pageSize = 20, ApiOptions options = null)
         {
             var request = new GetListContentRequest
             {
@@ -27,6 +28,7 @@ namespace Appacitive.Sdk
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };
+            ApiOptions.Apply(request, options);
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
@@ -35,7 +37,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await GetListItemsAsync(listName, pageSize, pageNumber + skip + 1)
+                GetNextPage = async skip => await GetListItemsAsync(listName, pageSize, pageNumber + skip + 1, options)
             };
             list.AddRange(response.Items);
             return list;

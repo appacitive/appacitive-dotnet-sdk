@@ -43,6 +43,7 @@
     <Compile Include="Interfaces\IAppContextState.cs" />
     <Compile Include="Internal\InternalApp.cs" />
     <Compile Include="APDevice.cs" />
+    <Compile Include="GroupInfo.cs" />
     <Compile Include="Interfaces\ILocalStorage.cs" />
     <Compile Include="Interfaces\ITypeMapping.cs" />
     <Compile Include="Internal\ApiLogFlags.cs" />
@@ -54,12 +55,19 @@
     <Compile Include="Internal\LocalSettings.cs" />
     <Compile Include="Internal\Services\Model\AtomicCountersRequest.cs" />
     <Compile Include="Internal\Services\Model\AtomicCountersResponse.cs" />
+    <Compile Include="Internal\Services\Model\GetFriendsRequest.cs" />
+    <Compile Include="Internal\Services\Model\GetFriendsResponse.cs" />
+    <Compile Include="Internal\Services\Model\UpdateGroupMembersResponse.cs" />
+    <Compile Include="Internal\Services\Model\UpdateGroupMembersRequest.cs" />
+    <Compile Include="Internal\Services\Model\IObjectUpdateRequest.cs" />
     <Compile Include="Internal\Services\Model\UpdateListItemsRequest.cs" />
     <Compile Include="Internal\Services\Model\UpdateListItemsResponse.cs" />
     <Compile Include="Internal\Services\Serializers\AtomicCountersRequestConverter.cs" />
     <Compile Include="Internal\Services\Serializers\UpdateListItemsRequestConverter.cs" />
     <Compile Include="Internal\TypeMapping.cs" />
     <Compile Include="Internal\UserInfo.cs" />
+    <Compile Include="Model\Acl.cs" />
+    <Compile Include="Model\ApiOptions.cs" />
     <Compile Include="Model\AppacitiveSettings.cs" />
     <Compile Include="CannedLists.cs" />
     <Compile Include="Model\EventArgs.cs" />
@@ -93,7 +101,9 @@
     <Compile Include="Internal\Services\Serializers\GraphProjectResponseConverter.cs" />
     <Compile Include="Internal\Services\Model\HttpRequests.cs" />
     <Compile Include="Internal\Services\Serializers\GraphNodeConverter.cs" />
+    <Compile Include="Model\FriendInfo.cs" />
     <Compile Include="Model\GraphNode.cs" />
+    <Compile Include="Model\IEquatable.cs" />
     <Compile Include="Model\ListItem.cs" />
     <Compile Include="Model\MultiValueCollection.cs" />
     <Compile Include="Internal\Services\Serializers\JsonPayloadConverter.cs" />
@@ -130,7 +140,6 @@
     <Compile Include="Internal\Services\Model\ValidateUserSessionRequest.cs" />
     <Compile Include="Internal\Services\Model\ValidateUserSessionResponse.cs" />
     <Compile Include="Internal\Services\Serializers\UpdateDeviceRequestConverter.cs" />
-    <Compile Include="Internal\Services\Serializers\DeviceConverter.cs" />
     <Compile Include="Internal\Services\Serializers\EmailConverter.cs" />
     <Compile Include="Internal\Services\Serializers\PushNotificationConverter.cs" />
     <Compile Include="Internal\Services\Serializers\UpdateConnectionRequestConverter.cs" />
@@ -226,12 +235,11 @@
     <Compile Include="Internal\Services\Serializers\ObjectConverter.cs" />
     <Compile Include="Internal\Services\Serializers\AuthenticateUserRequestConverter.cs" />
     <Compile Include="Internal\Services\Serializers\ConnectionConverter.cs" />
-    <Compile Include="Internal\Services\Serializers\EntityConverter.cs" />
     <Compile Include="Internal\Services\Serializers\SerializerExtensions.cs" />
     <Compile Include="Internal\Services\Serializers\UpdateObjectRequestConverter.cs" />
     <Compile Include="Internal\Services\Serializers\UpdateUserRequestConverter.cs" />
-    <Compile Include="Internal\Services\Serializers\UserConverter.cs" />
     <Compile Include="Model\Urls.cs" />
+    <Compile Include="UserGroup.cs" />
     <Compile Include="UserSession.cs" />
     <Compile Include="Model\Value.cs" />
   </ItemGroup>

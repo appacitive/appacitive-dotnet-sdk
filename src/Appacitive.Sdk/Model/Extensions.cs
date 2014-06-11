@@ -187,17 +187,63 @@ namespace Appacitive.Sdk
             return properties;
         }
 
+        private static readonly string[] Empty = new string[] { };
         public static Exception ToFault(this Status status)
         {
             if (status == null || status.IsSuccessful == true)
                 return null;
-            return new AppacitiveApiException(status.Message)
+            AppacitiveApiException ex = null;
+            switch (status.Code)
             {
-                Code = status.Code,
-                ReferenceId = status.ReferenceId,
-                FaultType = status.FaultType,
-                AdditionalMessages = status.AdditionalMessages == null ? null : status.AdditionalMessages.ToArray()
-            };
+                case "400":
+                    ex = new BadRequestException(status.Message);
+                    break;
+                case "401":
+                case "25002":
+                    ex = new AccessDeniedException(status.Message);
+                    break;
+                case "402":
+                    ex = new InvalidSubscriptionException(status.Message);
+                    break;
+                case "403":
+                    ex = new UsageLimitExceededException(status.Message);
+                    break;
+                case "404":
+                    ex = new ObjectNotFoundException(status.Message);
+                    break;
+                case "409":
+                case "14008":
+                    ex = new UpdateConflictException(status.Message);
+                    break;
+                case "412":
+                    ex = new PreconditionFailedException(status.Message);
+                    break;
+                case "420":
+                    ex = new ApiAuthenticationFailureException(status.Message);
+                    break;
+                case "421":
+                    ex = new UserAuthenticationFailureException(status.Message);
+                    break;
+                case "435":
+                case "21006" :
+                    ex = new DuplicateObjectException(status.Message);
+                    break;
+                case "436":
+                    ex = new IncorrectConfigurationException(status.Message);
+                    break;
+                case "500":
+                    ex = new InternalServerException(status.Message);
+                    break;
+                case "512":
+                    ex = new DataAccessException(status.Message);
+                    break;
+                default:
+                    ex = new UnExpectedSystemException(status.Code, status.Message);
+                    break;
+            }
+            ex.ReferenceId = status.ReferenceId;
+            ex.AdditionalMessages = status.AdditionalMessages == null ? Empty : status.AdditionalMessages.ToArray();
+            return ex;
         }
 
         public static HttpOperation WithApiKey(this HttpOperation client, string apiKey)

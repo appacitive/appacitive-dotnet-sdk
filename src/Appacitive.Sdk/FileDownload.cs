@@ -20,7 +20,8 @@ namespace Appacitive.Sdk
         /// Creates a new instance of the file download helper class with the given file name.
         /// </summary>
         /// <param name="filename">The name of the file to be downloaded. This name must match the name on the appacitive file store.</param>
-        public FileDownload(string filename)
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        public FileDownload(string filename, ApiOptions options = null)
         {
             this.FileName = filename;
             this.FileHandler = ObjectFactory.Build<IHttpFileHandler>();
@@ -30,6 +31,7 @@ namespace Appacitive.Sdk
         /// The name of the file to be downloaded.
         /// </summary>
         public string FileName { get; private set; }
+        private ApiOptions Options { get; set; }
 
         /// <summary>
         /// Occurs then the download for the specified file has been completed. 
@@ -55,28 +57,33 @@ namespace Appacitive.Sdk
         /// </summary>
         public IHttpFileHandler FileHandler { get; set; }
 
+
         /// <summary>
         /// Returns the public download url for the file associated with this download instance.
         /// Generating a public url for a file will flag the file as a public file.
         /// </summary>
+        /// <param name="cacheControlMaxAgeInSeconds">The value to be set as the cache-control max age for the file.</param>
         /// <returns>Public (non-expiring) download url for the file.</returns>
-        public async Task<string> GetPublicUrlAsync()
+        public async Task<string> GetPublicUrlAsync(long cacheControlMaxAgeInSeconds = 2592000 )
         {
-            return await this.GetDownloadUrlAsync(-1);
+            return await this.GetDownloadUrlAsync(-1, cacheControlMaxAgeInSeconds);
         }
 
         /// <summary>
         /// Returns a limited time validity download url for the file associated with this FileDownload object.
         /// </summary>
         /// <param name="expiryTimeInMinutes">The validity interval for the download url (in minutes)."</param>
+        /// <param name="cacheControlMaxAgeInSeconds">The value to be returned in the cache-control header for the file.</param>
         /// <returns>Download url.</returns>
-        public async Task<string> GetDownloadUrlAsync(int expiryTimeInMinutes = 5)
+        public async Task<string> GetDownloadUrlAsync(int expiryTimeInMinutes = 5, long cacheControlMaxAgeInSeconds = 2592000)
         {
             var request = new GetDownloadUrlRequest
             {
                 FileName = this.FileName,
-                ExpiryInMinutes = expiryTimeInMinutes
+                ExpiryInMinutes = expiryTimeInMinutes,
+                CacheControlMaxAge = cacheControlMaxAgeInSeconds
             };
+            ApiOptions.Apply(request, this.Options);
             var response = await request.ExecuteAsync();
             return response.Url;
         }
@@ -96,7 +103,7 @@ namespace Appacitive.Sdk
             {
                 var response = wex.Response as HttpWebResponse;
                 if (response != null && response.StatusCode == HttpStatusCode.NotFound)
-                    throw new AppacitiveApiException("File not found.", wex);
+                    throw new AppacitiveRuntimeException("File not found.", wex);
                 else throw;
             }
         }

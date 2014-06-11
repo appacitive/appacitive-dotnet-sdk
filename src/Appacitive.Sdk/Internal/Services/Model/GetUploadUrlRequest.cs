@@ -10,7 +10,7 @@ namespace Appacitive.Sdk.Services
     {
         public GetUploadUrlRequest()
             : base()
-        {
+        {   
         }
 
         public string MimeType { get; set; }

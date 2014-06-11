@@ -32,6 +32,12 @@ namespace Appacitive.Sdk.Services
                 get { return CreateUrl("user"); }
             }
 
+            private static string UserGroupServiceBase
+            {
+                //{{hostname}}/v1.0/usergroup/
+                get { return CreateUrl("usergroup"); }
+            }
+
             private static string SessionServiceBase
             {
                 get { return CreateUrl("application/session"); }
@@ -108,6 +114,7 @@ namespace Appacitive.Sdk.Services
             {
                 var url = new Url(ObjectServiceBase);
                 url.Append(type);
+                url.QueryString["returnacls"] = "true";
                 HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
@@ -121,11 +128,13 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string UpdateObject(string type, string id, int revision, Geocode geocode, bool enableDebug, Verbosity verbosity, List<string> fields)
+            public static string UpdateObject(string type, string id, int revision, bool returnAcls, Geocode geocode, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ObjectServiceBase).Append(type).Append(id);
                 if (revision > 0)
                     url.QueryString["revision"] = revision.ToString();
+                if (returnAcls == true)
+                    url.QueryString["returnacls"] = "true";
                 HandleDefaults(url, geocode, enableDebug, verbosity, fields);
                 return url.ToString();
             }
@@ -134,6 +143,7 @@ namespace Appacitive.Sdk.Services
             {
                 var url = new Url(UserServiceBase);
                 url.Append("create");
+                url.QueryString["returnacls"] = "true";
                 HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
@@ -183,7 +193,7 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string UpdateUser(string userId, string idType, int revision, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
+            public static string UpdateUser(string userId, string idType, int revision, bool returnAcls, Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(UserServiceBase);
                 if (string.IsNullOrWhiteSpace(idType))
@@ -203,6 +213,8 @@ namespace Appacitive.Sdk.Services
 
                 if (revision > 0)
                     url.QueryString["revision"] = revision.ToString();
+                if (returnAcls == true)
+                    url.QueryString["returnacls"] = "true";
                 HandleDefaults(url, geocode, debugEnabled, verbosity, fields);
                 return url.ToString();
             }
@@ -335,11 +347,12 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string GetDownloadUrl(string filename, int expiry)
+            public static string GetDownloadUrl(string filename, int expiry, long cacheControlMaxAge)
             {
                 // e.g., ../download/{fileid}?expires={minutes}
                 var url = new Url(FileServiceBase).Append("download").Append(filename);
                 url.QueryString["expires"] = expiry.ToString();
+                url.QueryString["cache-control"] = cacheControlMaxAge.ToString();
                 return url.ToString();
             }
 
@@ -393,6 +406,7 @@ namespace Appacitive.Sdk.Services
                 //https://apis.appacitive.com/connection/userlist/bulkdelete
                 var url = new Url(DeviceServiceBase);
                 url.Append("register");
+                url.QueryString["returnacls"] = "true";
                 HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
                 return url.ToString();
             }
@@ -474,6 +488,23 @@ namespace Appacitive.Sdk.Services
                 HandleDefaults(url, location, enableDebug, verbosity, fields);
                 return url.ToString();
             }
+
+            public static string UpdateGroupMembersRequest(string group, Geocode geocode, bool enableDebugging, Verbosity verbosity, List<string> fields)
+            {
+                //{{hostname}}/v1.0/usergroup/g10/members
+                var url = new Url(UserGroupServiceBase).Append(group).Append("members");
+                HandleDefaults(url, geocode, enableDebugging, verbosity, fields);
+                return url.ToString();
+            }
+
+            public static string GetFriends(string userId, string socialNetwork, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
+            {   
+                //https://apis.appacitive.com/v1.0/user/{user id}/friends/facebook
+                var url = new Url(UserServiceBase).Append(userId).Append("friends").Append(socialNetwork);
+                HandleDefaults(url, location, enableDebug, verbosity, fields);
+                return url.ToString();
+            }
+            
         }
     }
 

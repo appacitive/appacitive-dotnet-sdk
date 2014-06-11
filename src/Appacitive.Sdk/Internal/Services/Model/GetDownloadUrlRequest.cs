@@ -12,9 +12,11 @@ namespace Appacitive.Sdk.Services
 
         public int ExpiryInMinutes { get; set; }
 
+        public long CacheControlMaxAge { get; set; }
+
         protected override string GetUrl()
         {
-            return Urls.For.GetDownloadUrl(this.FileName, this.ExpiryInMinutes);
+            return Urls.For.GetDownloadUrl(this.FileName, this.ExpiryInMinutes, this.CacheControlMaxAge);
         }
     }
 

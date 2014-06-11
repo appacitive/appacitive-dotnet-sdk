@@ -7,22 +7,37 @@ using Newtonsoft.Json;
 
 namespace Appacitive.Sdk.Services
 {
-    public class UpdateUserRequest : PostOperation<UpdateUserResponse>
+    public class UpdateUserRequest : PostOperation<UpdateUserResponse>, IObjectUpdateRequest
     {
         public UpdateUserRequest() : base()
         {
             this.PropertyUpdates = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             this.AttributeUpdates = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            this.AllowClaims = new List<Claim>();
+            this.DenyClaims = new List<Claim>();
+            this.ResetClaims = new List<ResetRequest>();
             this.AddedTags = new List<string>();
             this.RemovedTags = new List<string>();
             this.Revision = 0;
         }
 
         [JsonIgnore]
+        public bool ReturnAcls { get; set; }
+
+        [JsonIgnore]
+        public List<Claim> AllowClaims { get; private set; }
+
+        [JsonIgnore]
+        public List<Claim> DenyClaims { get; private set; }
+
+        [JsonIgnore]
+        public List<ResetRequest> ResetClaims { get; private set; }
+
+        [JsonIgnore]
         public int Revision { get; set; }
 
         [JsonIgnore]
-        public string UserId { get; set; }
+        public string Id { get; set; }
 
         [JsonIgnore]
         public string IdType { get; set; }
@@ -41,7 +56,16 @@ namespace Appacitive.Sdk.Services
 
         protected override string GetUrl()
         {
-            return Urls.For.UpdateUser(this.UserId, this.IdType, this.Revision, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+            bool returnAcls = false;
+            if (this.AllowClaims.Count > 0 || this.DenyClaims.Count > 0 || this.ResetClaims.Count > 0)
+                returnAcls = true;
+            return Urls.For.UpdateUser(this.Id, this.IdType, this.Revision, returnAcls, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+        }
+
+        public string Type
+        {
+            get { return "user"; }
+            set { return;  }
         }
     }
 }

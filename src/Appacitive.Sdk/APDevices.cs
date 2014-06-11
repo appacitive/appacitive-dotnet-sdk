@@ -16,6 +16,7 @@ namespace Appacitive.Sdk
     /// </summary>
     public static class APDevices
     {
+
         /// <summary>
         /// Finds a paginated list of APDevices for the given type and search criteria.
         /// </summary>
@@ -25,17 +26,18 @@ namespace Appacitive.Sdk
         /// <param name="pageSize">The page size.</param>
         /// <param name="orderBy">The field on which to sort.</param>
         /// <param name="sortOrder">Sort order - Ascending or Descending.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
         /// <returns>A paginated list of APDevice objects for the given search criteria.</returns>
-        public async static Task<PagedList<APDevice>> FindAllAsync(IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending)
+        public async static Task<PagedList<APDevice>> FindAllAsync(IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
         {
-            var objects = await APObjects.FindAllAsync("device", query, fields, pageNumber, pageSize, orderBy, sortOrder);
+            var objects = await APObjects.FindAllAsync("device", query, fields, pageNumber, pageSize, orderBy, sortOrder, options);
             var devices = objects.Select(x => x as APDevice);
             var list =  new PagedList<APDevice>()
             {
                 PageNumber = objects.PageNumber,
                 PageSize = objects.PageSize,
                 TotalRecords = objects.TotalRecords,
-                GetNextPage = async skip => await FindAllAsync(query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder)
+                GetNextPage = async skip => await FindAllAsync(query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
             };
             list.AddRange(devices);
             return list;
@@ -45,15 +47,16 @@ namespace Appacitive.Sdk
         /// Delets the device with the given id.
         /// </summary>
         /// <param name="id">Device id</param>
-        public async static Task DeleteAsync(string id)
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        public async static Task DeleteAsync(string id, ApiOptions options = null)
         {
-            var response = await (new DeleteDeviceRequest()
-            {
-                Id = id
-            }).ExecuteAsync();
+            var request = new DeleteDeviceRequest() { Id = id };
+            ApiOptions.Apply(request, options);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
         }
+
 
         /// <summary>
         /// Gets an existing APDevice object by its id.
@@ -61,11 +64,12 @@ namespace Appacitive.Sdk
         /// <param name="id">Device id</param>
         /// <param name="fields">The device object fields to be retrieved.</param>
         /// <returns>The APDevice object with the given id.</returns>
-        public async static Task<APDevice> GetAsync(string id, IEnumerable<string> fields = null)
+        public async static Task<APDevice> GetAsync(string id, IEnumerable<string> fields = null, ApiOptions options = null)
         {
             var request = new GetDeviceRequest() { Id = id};
             if (fields != null)
                 request.Fields.AddRange(fields);
+            ApiOptions.Apply(request, options);
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();

@@ -37,14 +37,17 @@ namespace Appacitive.Sdk.Internal
             _context = context;
         }
 
-        
+        internal static bool IsInitialized
+        {
+            get { return _context != null; }
+        }
 
         private static IAppContextState _context = null;
         public static IAppContextState Current
         {
             get
             {
-                if (_context == null)
+                if( IsInitialized == false )
                     throw new AppacitiveRuntimeException("Appacitive runtime is not initialized.");
                 else return _context;
             }

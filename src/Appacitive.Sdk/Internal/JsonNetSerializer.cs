@@ -24,12 +24,8 @@ namespace Appacitive.Sdk
             serializer.Converters.Add(new UpdateListItemsRequestConverter());
             serializer.Converters.Add(new UpdateObjectRequestConverter());
             serializer.Converters.Add(new AtomicCountersRequestConverter());
-            serializer.Converters.Add(new UserConverter());
             serializer.Converters.Add(new PushNotificationConverter());
-            serializer.Converters.Add(new DeviceConverter());
             serializer.Converters.Add(new AuthenticateUserRequestConverter());
-            serializer.Converters.Add(new UpdateUserRequestConverter());
-            serializer.Converters.Add(new UpdateDeviceRequestConverter());
             serializer.Converters.Add(new ConnectionConverter());
             serializer.Converters.Add(new UpdateConnectionRequestConverter());
             serializer.Converters.Add(new GraphNodeConverter());

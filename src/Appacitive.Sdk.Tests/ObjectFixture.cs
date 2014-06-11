@@ -12,6 +12,40 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class ObjectFixture
     {
+        [TestMethod]
+        public async Task ForceUpdateEmptyShouldUpdateNothingTest()
+        {
+            var obj = await ObjectHelper.CreateNewAsync();
+            var copy = new APObject("object", obj.Id);
+            await copy.SaveAsync(forceUpdate: true);
+            var existingProperties = obj.Properties.ToList();
+            var updateProperties = copy.Properties.ToList();
+            
+            var existing = existingProperties
+                                .Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString()))
+                                .ToList();
+            var updated = updateProperties.Select(x => new KeyValuePair<string, string>(x.Key, x.Value.ToString())).ToList();
+            Assert.IsTrue(updated.Count == existing.Count);
+        }
+
+
+        [TestMethod]
+        public async Task StartsWithAndEndsWithFiltersTest()
+        {
+            var prefix = Unique.String;
+            var suffix = Unique.String;
+            var obj = new APObject("object");
+            obj.Set<string>("stringfield", prefix + suffix);
+            await obj.SaveAsync();
+
+            var found = (await APObjects.FindAllAsync("object", Query.Property("stringfield").StartsWith(prefix))).SingleOrDefault();
+            Assert.IsTrue(found != null);
+            Assert.IsTrue(found.Id == obj.Id);
+
+            found = (await APObjects.FindAllAsync("object", Query.Property("stringfield").EndsWith(suffix))).SingleOrDefault();
+            Assert.IsTrue(found != null);
+            Assert.IsTrue(found.Id == obj.Id);
+        }
 
         [TestMethod]
         public async Task ForceUpdateTest()
@@ -773,19 +807,14 @@ namespace Appacitive.Sdk.Tests
             await obj.SaveAsync();
             // This should fail as I am trying to update with an older revision
             obj.Set<string>("stringfield", Unique.String);
-            bool isFault = false;
             try
             {
                 await obj.SaveAsync(obj.Revision - 1);
-            }
-            catch (AppacitiveApiException ex)
-            {
-                if (ex.Code == "14008")
-                    isFault = true;
-                else Assert.Fail(ex.Message);
-            }
-            if (isFault == false) 
                 Assert.Fail("No fault was raised on a bad revision update.");
+            }
+            catch (UpdateConflictException)
+            {
+            }   
         }
 
     }

@@ -14,7 +14,7 @@ namespace Appacitive.Sdk.Services
     {
         public override bool CanConvert(Type objectType)
         {
-            return typeof(UpdateObjectRequest) == objectType;
+            return objectType.Is<IObjectUpdateRequest>();
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -45,7 +45,7 @@ namespace Appacitive.Sdk.Services
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var request = value as UpdateObjectRequest;
+            var request = value as IObjectUpdateRequest;
             if (request == null)
             {
                 writer.WriteNull();
@@ -67,6 +67,13 @@ namespace Appacitive.Sdk.Services
                              .EndObject();
                         }
                     })
+                // Write acls
+                .WithWriter( w => 
+                    {
+                        if (request.AllowClaims.Count == 0 && request.DenyClaims.Count == 0) return;
+                        w.WritePropertyName("__acls");
+                        WriteAcls(w, request.AllowClaims, request.DenyClaims, request.ResetClaims);
+                    })
                 // Write add tags
                 .WithWriter( w => 
                     {
@@ -81,6 +88,96 @@ namespace Appacitive.Sdk.Services
                 })
                 .EndObject();
         }
+
+        private void WriteAcls(JsonWriter writer, List<Claim> allowed, List<Claim> denied, List<ResetRequest> reset)
+        {
+            var map = new Dictionary<SidTypeKey, ClaimGroup>();
+            allowed.For(x =>
+                {
+                    ClaimGroup group;
+                    var key = new SidTypeKey { Sid = x.Sid, Type = x.ClaimType };
+                    if (map.TryGetValue(key, out group) == false)
+                        group = new ClaimGroup { Sid = x.Sid, Type = x.ClaimType };
+                    group.Allowed.Add(x.AccessType);
+                    map[key] = group;
+                });
+            denied.For(x =>
+            {
+                ClaimGroup group;
+                var key = new SidTypeKey { Sid = x.Sid, Type = x.ClaimType };
+                if (map.TryGetValue(key, out group) == false)
+                    group = new ClaimGroup { Sid = x.Sid, Type = x.ClaimType };
+                group.Denied.Add(x.AccessType);
+                map[key] = group;
+            });
+            reset.For(x =>
+            {
+                ClaimGroup group;
+                var key = new SidTypeKey { Sid = x.Sid, Type = x.Type };
+                if (map.TryGetValue(key, out group) == false)
+                    group = new ClaimGroup { Sid = x.Sid, Type = x.Type };
+                group.Reset.Add(x.Access);
+                map[key] = group;
+            });
+
+            writer.WriteStartArray();
+            map.Values.For(x =>
+                {
+                    writer.WriteStartObject();
+                    writer.WriteProperty("sid", x.Sid);
+                    writer.WriteProperty("type", x.Type.ToString().ToLower());
+                    if( x.Allowed.Count > 0)
+                        writer.WriteArray("allow", x.Allowed.Select(y => y.ToString().ToLower()));
+                    if (x.Denied.Count > 0)
+                        writer.WriteArray("deny", x.Denied.Select(y => y.ToString().ToLower()));
+                    if (x.Reset.Count > 0)
+                        writer.WriteArray("dontcare", x.Reset.Select(y => y.ToString().ToLower()));
+                    writer.WriteEndObject();
+                });
+            writer.WriteEndArray();
+        }
+
+        
+    }
+
+    public class SidTypeKey
+    {
+        public string Sid { get; set; }
+
+        public ClaimType Type { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as SidTypeKey;
+            if (other == null) return false;
+            return this.Sid.Equals(other.Sid, StringComparison.OrdinalIgnoreCase) && this.Type == other.Type;
+        }
+
+        public override int GetHashCode()
+        {
+            var value = (this.Sid ?? string.Empty).ToLower();
+            return value.GetHashCode() ^ this.Type.GetHashCode();
+        }
+    }
+
+    public class ClaimGroup
+    {
+        public ClaimGroup()
+        {
+            this.Allowed = new List<Access>();
+            this.Denied = new List<Access>();
+            this.Reset = new List<Access>();
+        }
+
+        public string Sid { get; set; }
+
+        public ClaimType Type { get; set; }
+
+        public List<Access> Allowed { get; private set; }
+
+        public List<Access> Denied { get; private set; }
+
+        public List<Access> Reset { get; private set; }
     }
 
 }

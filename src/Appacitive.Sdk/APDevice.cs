@@ -166,10 +166,11 @@ namespace Appacitive.Sdk
         /// If this version does not match on the server side, the Save operation will fail. Passing 0 disables the revision check.
         /// </param>
         /// <param name="forceUpdate">Setting this flag as True will force an update request even when the state of the object may not have changed locally.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
         /// <returns>Returns the saved device object.</returns>
-        public new async Task<APDevice> SaveAsync(int specificRevision = 0, bool forceUpdate = false)
+        public new async Task<APDevice> SaveAsync(int specificRevision = 0, bool forceUpdate = false, ApiOptions options = null)
         {
-            await this.SaveEntityAsync(specificRevision, forceUpdate);
+            await this.SaveEntityAsync(specificRevision, forceUpdate, options);
             UpdateIfCurrentDevice(this);
             return this;
         }
@@ -185,15 +186,13 @@ namespace Appacitive.Sdk
             // As the updated device is the same as the current device, then update the current device.
             platform.DeviceState.SetDevice(updatedDevice);
         }
-        
 
-        protected override async Task<Entity> CreateNewAsync()
+        protected override async Task<Entity> CreateNewAsync(ApiOptions options)
         {
             // Create a new object
-            var response = await (new RegisterDeviceRequest()
-            {
-                Device = this
-            }).ExecuteAsync();
+            var request = new RegisterDeviceRequest() { Device = this };
+            ApiOptions.Apply(request, options);
+            var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
                 throw response.Status.ToFault();
 
@@ -202,19 +201,19 @@ namespace Appacitive.Sdk
             return response.Device;
         }
 
-        protected override async Task<Entity> FetchAsync()
+        protected override async Task<Entity> FetchAsync(ApiOptions options)
         {
-            return await APDevices.GetAsync(this.Id);
+            return await APDevices.GetAsync(this.Id, options:options);
         }
 
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision)
+        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, ApiOptions options, bool forceUpdate)
         {
             var request = new UpdateDeviceRequest()
             {
                 Revision = specificRevision,
                 Id = this.Id
             };
-
+            ApiOptions.Apply(request, options);    
 
             if (propertyUpdates != null && propertyUpdates.Count > 0)
                 propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
@@ -229,8 +228,9 @@ namespace Appacitive.Sdk
             // Check if an update is needed.
             if (request.PropertyUpdates.Count == 0 &&
                 request.AttributeUpdates.Count == 0 &&
-                request.AddedTags.Count == 0 &&
-                request.RemovedTags.Count == 0)
+                request.AddedTags.Count == 0           &&
+                request.RemovedTags.Count == 0 && 
+                forceUpdate == false )
                 return null;
 
             var response = await request.ExecuteAsync();

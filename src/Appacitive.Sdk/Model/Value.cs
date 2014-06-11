@@ -40,6 +40,8 @@ namespace Appacitive.Sdk
 
         public static implicit operator Value(string value)
         {
+            if (value == null)
+                return null;
             return new SingleValue(value);
         }
 
@@ -157,6 +159,11 @@ namespace Appacitive.Sdk
         public static implicit operator char(Value value)
         {
             return value.GetValue<char>();
+        }
+
+        public override string ToString()
+        {
+            return this.GetValue<string>();
         }
     }
 

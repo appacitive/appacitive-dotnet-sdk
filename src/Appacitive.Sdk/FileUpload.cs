@@ -22,17 +22,27 @@ namespace Appacitive.Sdk
         /// <param name="mimeType">The mime type for the file to be uploaded.</param>
         /// <param name="filename">Name of the file to be downloaded. This name should match the name of the file on Appacitive.</param>
         /// <param name="expiryInMinutes">The duration in minutes for which the upload session would be valid. After this duration, this object cannot be used to upload a file.</param>
-        public FileUpload(string mimeType, string filename = null, int expiryInMinutes = 5)
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        public FileUpload(string mimeType, string filename = null, int expiryInMinutes = 5, ApiOptions options = null)
         {
             this.MimeType = mimeType;
             this.FileName = filename;
             this.FileHandler = ObjectFactory.Build<IHttpFileHandler>();
+            this.CacheControlMaxAge = TimeSpan.MinValue;
         }
 
         /// <summary>
         /// Mime type of the file to be uploaded.
         /// </summary>
         public string MimeType { get; private set; }
+
+        /// <summary>
+        /// The max-age to be set in the cache control header for this file.
+        /// This is set to 30 days by default on the backend.
+        /// </summary>
+        public TimeSpan CacheControlMaxAge { get; set; }
+
+        private ApiOptions Options { get; set; }
 
         /// <summary>
         /// Name of the file to be uploaded. This is the name of the file on Appacitive and does not need to match the actual file name.
@@ -102,6 +112,7 @@ namespace Appacitive.Sdk
                 FileName = this.FileName,
                 ExpiryInMinutes = expiryInMinutes
             };
+            ApiOptions.Apply(request, this.Options);
             var response = await request.ExecuteAsync();
             return new FileUrl(response.Filename, response.Url);
         }
