@@ -374,6 +374,12 @@
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetDownloadUrlResponse.cs">
       <Link>Internal\Services\Model\GetDownloadUrlResponse.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetFriendsRequest.cs">
+      <Link>Internal\Services\Model\GetFriendsRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetFriendsResponse.cs">
+      <Link>Internal\Services\Model\GetFriendsResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\GetObjectRequest.cs">
       <Link>Internal\Services\Model\GetObjectRequest.cs</Link>
     </Compile>
@@ -601,6 +607,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\FileUrl.cs">
       <Link>Model\FileUrl.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Model\FriendInfo.cs">
+      <Link>Model\FriendInfo.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Model\Geocode.cs">
       <Link>Model\Geocode.cs</Link>
