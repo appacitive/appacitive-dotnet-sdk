@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Appacitive</id>
+        <version>1.0.0.1</version>
+        <title>Appacitive .NET SDK</title>
+        <authors>Appacitive</authors>
+        <owners>Appacitive</owners>
+        <projectUrl>https://github.com/appacitive/appacitive-dotnet-sdk</projectUrl>
+        <iconUrl>https://secure.gravatar.com/avatar/427d3a6813f7cfa60d6ce0f36085665c?s=32&amp;r=g&amp;d=retro</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Client SDK for the Appacitive platform.</description>
+        <releaseNotes>RTM Release.</releaseNotes>
+        <copyright>Copyright 2014</copyright>
+        <tags>appacitive sdk cloud wp7 wp8 api mobile platform</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.0">
+                <dependency id="Microsoft.Bcl.Async" version="1.0.165" />
+                <dependency id="Newtonsoft.Json" version="6.0.1" />
+            </group>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Newtonsoft.Json" version="6.0.1" />
+            </group>
+            <group targetFramework="Silverlight3.0-WindowsPhone">
+                <dependency id="Newtonsoft.Json" version="5.0.8" />
+                <dependency id="Microsoft.Bcl.Async" version="1.0.16" />
+            </group>
+            <group targetFramework="WindowsPhone8.0">
+                <dependency id="Newtonsoft.Json" version="6.0.1" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\bin\net40\Appacitive.Sdk.dll" target="lib\net40\Appacitive.Sdk.dll" />
+        <file src="..\bin\net45\Appacitive.Sdk.dll" target="lib\net45\Appacitive.Sdk.dll" />
+        <file src="..\bin\net45\Appacitive.Sdk.Net45.dll" target="lib\net45\Appacitive.Sdk.Net45.dll" />
+        <file src="..\bin\wp7\Appacitive.Sdk.dll" target="lib\sl3-wp\Appacitive.Sdk.dll" />
+        <file src="..\bin\wp8\Appacitive.Sdk.dll" target="lib\wp8\Appacitive.Sdk.dll" />
+        <file src="..\bin\wp8\Appacitive.Sdk.WindowsPhone8.dll" target="lib\wp8\Appacitive.Sdk.WindowsPhone8.dll" />
+        <file src="tools\install.ps1" target="tools\install.ps1" />
+    </files>
+</package>
