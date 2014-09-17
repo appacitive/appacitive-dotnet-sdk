@@ -77,6 +77,7 @@ namespace Appacitive.Sdk
         /// Finds a paginated list of APConnections for the given type and search criteria.
         /// </summary>
         /// <param name="type">The type (relation name) of the connection.</param>
+        /// <param name="freeTextExpression">Free text search expression over all fields of the given type.</param>
         /// <param name="query">The search query</param>
         /// <param name="fields">The specific fields of the conection to be retrieved.</param>
         /// <param name="pageNumber">The page number.</param>
@@ -85,12 +86,13 @@ namespace Appacitive.Sdk
         /// <param name="sortOrder">Sort order - Ascending or Descending.</param>
         /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
         /// <returns>A paginated list of APConnections for the given search criteria.</returns>
-        public async static Task<PagedList<APConnection>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
+        public async static Task<PagedList<APConnection>> FindAllAsync(string type, string freeTextExpression, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
         {
             query = query ?? Query.None;
             var request = new FindAllConnectionsRequest()
             {
                 Type = type,
+                FreeTextExpression = freeTextExpression,
                 Query = query.AsString().Escape(),
                 PageNumber = pageNumber,
                 PageSize = pageSize,
@@ -111,6 +113,23 @@ namespace Appacitive.Sdk
             connections.AddRange(response.Connections);
             return connections;
 
+        }
+
+        /// <summary>
+        /// Finds a paginated list of APConnections for the given type and search criteria.
+        /// </summary>
+        /// <param name="type">The type (relation name) of the connection.</param>
+        /// <param name="query">The search query</param>
+        /// <param name="fields">The specific fields of the conection to be retrieved.</param>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
+        /// <param name="orderBy">The field on which to sort.</param>
+        /// <param name="sortOrder">Sort order - Ascending or Descending.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        /// <returns>A paginated list of APConnections for the given search criteria.</returns>
+        public async static Task<PagedList<APConnection>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
+        {
+            return await FindAllAsync(type, null, query, fields, pageNumber, pageSize, orderBy, sortOrder, options);
         }
 
         /// <summary>

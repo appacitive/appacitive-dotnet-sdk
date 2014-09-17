@@ -638,6 +638,43 @@ namespace Appacitive.Sdk.Tests
 
 
         [TestMethod]
+        public async Task FreetextAndQueryWithTagsMatchOneOrMoreTest()
+        {
+            var tag1 = Unique.String;
+            var tag2 = Unique.String;
+            var field1 = Unique.String;
+            var field2 = Unique.String;
+            // Create the test object 1.
+            APObject obj1 = new APObject("object");
+            obj1.Set<string>("stringfield", field1);
+            obj1.AddTag(tag1);
+            await obj1.SaveAsync();
+
+            APObject obj2 = new APObject("object");
+            obj2.Set<string>("stringfield", field2);
+            obj2.AddTag(tag2);
+            await obj2.SaveAsync();
+
+            // Search for the object with tags and freetext as field1.
+            var matches = await APObjects.FindAllAsync("object", field1, Query.Tags.MatchOneOrMore(tag1, tag2));
+            Assert.IsTrue(matches != null);
+            Assert.IsTrue(matches.Count == 1);
+            Assert.IsTrue(matches[0] != null);
+            Assert.IsTrue(matches[0].Id == obj1.Id);
+
+            // Search for the object with tag1 and freetext as field2.
+            matches = await APObjects.FindAllAsync("object", field2, Query.Tags.MatchOneOrMore(tag1));
+            Assert.IsTrue(matches == null || matches.Count == 0);
+
+            // Search for the object with tag2 and freetext as field2.
+            matches = await APObjects.FindAllAsync("object", field2, Query.Tags.MatchOneOrMore(tag2));
+            Assert.IsTrue(matches != null);
+            Assert.IsTrue(matches.Count == 1);
+            Assert.IsTrue(matches[0] != null);
+            Assert.IsTrue(matches[0].Id == obj2.Id);
+        }
+
+        [TestMethod]
         public async Task QueryWithTagsMatchOneOrMoreTest()
         {
             var tag1 = Unique.String;
@@ -657,7 +694,7 @@ namespace Appacitive.Sdk.Tests
             var matches = await APObjects.FindAllAsync("object", Query.Tags.MatchOneOrMore(tag1, tag2));
             Assert.IsTrue(matches != null);
             Assert.IsTrue(matches.Count == 2);
-            Assert.IsTrue(matches[0] != null && matches[1] != null );
+            Assert.IsTrue(matches[0] != null && matches[1] != null);
             Assert.IsTrue(matches[0].Id == obj1.Id || matches[1].Id == obj1.Id);
             Assert.IsTrue(matches[0].Id == obj2.Id || matches[1].Id == obj2.Id);
         }

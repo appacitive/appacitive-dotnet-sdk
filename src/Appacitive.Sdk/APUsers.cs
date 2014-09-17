@@ -132,6 +132,7 @@ namespace Appacitive.Sdk
         /// <summary>
         /// Gets a paged list of all matching users.
         /// </summary>
+        /// <param name="freeTextExpression">Free text search expression over all fields of the given type.</param>
         /// <param name="query">Filter query to filter out a specific list of users. </param>
         /// <param name="fields">List of fields to return</param>
         /// <param name="pageNumber">Page number</param>
@@ -140,11 +141,12 @@ namespace Appacitive.Sdk
         /// <param name="sortOrder">Sort order - Ascending or Descending.</param>
         /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
         /// <returns>A paged list of users.</returns>
-        public async static Task<PagedList<APUser>> FindAllAsync(IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
+        public async static Task<PagedList<APUser>> FindAllAsync(string freeTextExpression, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
         {
             query = query ?? Query.None;
             var request = new FindAllUsersRequest()
             {
+                FreeTextExpression = freeTextExpression,
                 Query = query.AsString().Escape(),
                 PageNumber = pageNumber,
                 PageSize = pageSize,
@@ -162,12 +164,27 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await FindAllAsync(query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
+                GetNextPage = async skip => await FindAllAsync(freeTextExpression, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
             };
             users.AddRange(response.Users);
             return users;
         }
 
+        /// <summary>
+        /// Gets a paged list of all matching users.
+        /// </summary>
+        /// <param name="query">Filter query to filter out a specific list of users. </param>
+        /// <param name="fields">List of fields to return</param>
+        /// <param name="pageNumber">Page number</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="orderBy">The field on which to sort.</param>
+        /// <param name="sortOrder">Sort order - Ascending or Descending.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        /// <returns>A paged list of users.</returns>
+        public async static Task<PagedList<APUser>> FindAllAsync(IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
+        {
+            return await FindAllAsync(null, query, fields, pageNumber, pageSize, orderBy, sortOrder, options);
+        }
 
 
         /// <summary>

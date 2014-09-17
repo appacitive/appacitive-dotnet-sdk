@@ -12,6 +12,8 @@ namespace Appacitive.Sdk.Services
 
         public string Query { get; set; }
 
+        public string FreeTextExpression { get; set; }
+
         public string OrderBy { get; set; }
 
         public SortOrder SortOrder { get; set; }
@@ -22,7 +24,7 @@ namespace Appacitive.Sdk.Services
 
         protected override string GetUrl()
         {
-            return Urls.For.FindAllConnectionsAsync(this.Type, this.Query, this.PageNumber, this.PageSize, this.OrderBy, this.SortOrder, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+            return Urls.For.FindAllConnectionsAsync(this.Type, this.FreeTextExpression, this.Query, this.PageNumber, this.PageSize, this.OrderBy, this.SortOrder, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }
