@@ -168,7 +168,44 @@ namespace Appacitive.Sdk
             return users;
         }
 
-
+        /// <summary>
+        /// Gets a paged list of all matching users.
+        /// </summary>
+        /// <param name="query">Filter query to filter out a specific list of users. </param>
+        /// <param name="fields">List of fields to return</param>
+        /// <param name="pageNumber">Page number</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="orderBy">The field on which to sort.</param>
+        /// <param name="sortOrder">Sort order - Ascending or Descending.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        /// <returns>A paged list of users.</returns>
+        public async static Task<PagedList<APUser>> FindAllAsync(string freeTextExpression, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
+        {
+            query = query ?? Query.None;
+            var request = new FindAllUsersRequest()
+            {
+                Query = query.AsString().Escape(),
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                OrderBy = orderBy,
+                SortOrder = sortOrder
+            };
+            if (fields != null)
+                request.Fields.AddRange(fields);
+            ApiOptions.Apply(request, options);
+            var response = await request.ExecuteAsync();
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            var users = new PagedList<APUser>()
+            {
+                PageNumber = response.PagingInfo.PageNumber,
+                PageSize = response.PagingInfo.PageSize,
+                TotalRecords = response.PagingInfo.TotalRecords,
+                GetNextPage = async skip => await FindAllAsync(freeTextExpression, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
+            };
+            users.AddRange(response.Users);
+            return users;
+        }
 
         /// <summary>
         /// Changes the password for the given user with the new password.
