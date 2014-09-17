@@ -108,7 +108,7 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await FindAllAsync(type, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
+                GetNextPage = async skip => await FindAllAsync(type, freeTextExpression, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
             };
             connections.AddRange(response.Connections);
             return connections;
