@@ -101,8 +101,6 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(objects.Select(a => a.Id).Intersect(new[] { child1.Id, child2.Id }).Count() == 2);
         }
 
-
-
         [TestMethod]
         public async Task GetConnectionsOnConnectionWithSameTypeAndDifferentLabels()
         {
@@ -357,6 +355,58 @@ namespace Appacitive.Sdk.Tests
             var connections = await APConnections.FindAllAsync("sibling");
             Assert.IsTrue(connections != null);
             Assert.IsTrue(connections.Count > 0);
+            Console.WriteLine("Total connections: {0}", connections.TotalRecords);
+        }
+
+        [TestMethod]
+        public async Task FindAllConnectionsWithFreetextAndQueryAsyncTest()
+        {
+            var tag = Unique.String;
+            var field = Unique.String;
+            var field2 = Unique.String;
+
+            // Create a new connection
+            var conn1 = APConnection.New("sibling").FromNewObject("object", ObjectHelper.NewInstance()).ToNewObject("object", ObjectHelper.NewInstance());
+            conn1.AddTag(tag);
+            conn1.Set<string>("field1", field);
+            conn1 = await ConnectionHelper.CreateNew(conn1);
+            var conn2 = APConnection.New("sibling").FromNewObject("object", ObjectHelper.NewInstance()).ToNewObject("object", ObjectHelper.NewInstance());
+            conn2.AddTag(tag);
+            conn2.Set<string>("field1", field);
+            conn2 = await ConnectionHelper.CreateNew(conn2);
+            var conn3 = APConnection.New("sibling").FromNewObject("object", ObjectHelper.NewInstance()).ToNewObject("object", ObjectHelper.NewInstance());
+            conn3.AddTag(tag);
+            conn3.Set<string>("field1", field2);
+            conn3 = await ConnectionHelper.CreateNew(conn3);
+
+            // Search for the object with tag and freetext as field.
+            var connections = await APConnections.FindAllAsync("sibling", field, Query.Tags.MatchOneOrMore(tag), pageNumber:1, pageSize:1);
+            Assert.IsTrue(connections != null);
+            Assert.IsTrue(connections.Count == 1);
+            Assert.IsTrue(connections.TotalRecords == 2);
+            Assert.IsTrue(connections[0] != null);
+            Assert.IsTrue(connections[0].Id == conn1.Id || connections[0].Id == conn2.Id);
+            Console.WriteLine("Total connections: {0}", connections.TotalRecords);
+
+            connections = await APConnections.FindAllAsync("sibling", field, Query.Tags.MatchOneOrMore(tag), pageNumber: 2, pageSize: 1);
+            Assert.IsTrue(connections != null);
+            Assert.IsTrue(connections.Count == 1);
+            Assert.IsTrue(connections.TotalRecords == 2);
+            Assert.IsTrue(connections[0] != null);
+            Assert.IsTrue(connections[0].Id == conn1.Id || connections[0].Id == conn2.Id);
+            Console.WriteLine("Total connections: {0}", connections.TotalRecords);
+
+            // Search for the object with tag1 and freetext as field.
+            connections = await APConnections.FindAllAsync("sibling", field, Query.Tags.MatchOneOrMore(Unique.String));
+            Assert.IsTrue(connections == null || connections.Count == 0);
+
+            // Search for the object with tag and freetext as field2.
+            connections = await APConnections.FindAllAsync("sibling", field2, Query.Tags.MatchOneOrMore(tag));
+            Assert.IsTrue(connections != null);
+            Assert.IsTrue(connections.Count == 1);
+            Assert.IsTrue(connections.TotalRecords == 1);
+            Assert.IsTrue(connections[0] != null);
+            Assert.IsTrue(connections[0].Id == conn3.Id);
             Console.WriteLine("Total connections: {0}", connections.TotalRecords);
         }
 

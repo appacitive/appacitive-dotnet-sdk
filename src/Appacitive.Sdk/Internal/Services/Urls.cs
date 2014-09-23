@@ -272,11 +272,13 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string FindAllObjects(string type, string query, int pageNumber, int pageSize, string orderBy, SortOrder sortOrder, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
+            public static string FindAllObjects(string type, string freeTextExpression, string query, int pageNumber, int pageSize, string orderBy, SortOrder sortOrder, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ObjectServiceBase).Append(type).Append("find").Append("all");
                 if (string.IsNullOrWhiteSpace(query) == false)
                     url.QueryString["query"] = query;
+                if (string.IsNullOrWhiteSpace(freeTextExpression) == false)
+                    url.QueryString["freetext"] = freeTextExpression;
                 if (pageNumber > 0)
                     url.QueryString["pnum"] = pageNumber.ToString();
                 if (pageSize > 0)
@@ -364,11 +366,13 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string FindAllConnectionsAsync(string type, string query, int pageNumber, int pageSize, string orderBy, SortOrder sortOrder, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
+            public static string FindAllConnectionsAsync(string type, string freeTextExpression, string query, int pageNumber, int pageSize, string orderBy, SortOrder sortOrder, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ConnectionServiceBase).Append(type).Append("find").Append("all");
                 if (string.IsNullOrWhiteSpace(query) == false)
                     url.QueryString["query"] = query;
+                if (string.IsNullOrWhiteSpace(freeTextExpression) == false)
+                    url.QueryString["freetext"] = freeTextExpression;
                 if (pageNumber > 0)
                     url.QueryString["pnum"] = pageNumber.ToString();
                 if (pageSize > 0)
