@@ -369,6 +369,16 @@ namespace Appacitive.Sdk
 
         private async Task UpdateDeltaState(int specificRevision, ApiOptions options)
         {
+            var updated = await UpdateAsync(GetDeltaChanges(), specificRevision , options, false );
+            if (updated != null)
+            {
+                // 4. Update the last known state based on the differences
+                UpdateLastKnown(updated, options);
+            }
+        }
+
+        internal EntityChanges GetDeltaChanges()
+        {
             // 1. Get property differences
             var propertyDifferences = _currentFields.GetModifications(_lastKnownFields, (x, y) =>
             {
@@ -384,16 +394,17 @@ namespace Appacitive.Sdk
             IEnumerable<string> addedTags, removedTags;
             _lastKnownTags.GetDifferences(_currentTags, out addedTags, out removedTags);
 
-            // 3. update the object
-            var updated = await UpdateAsync(propertyDifferences, attributeDifferences, addedTags, removedTags, specificRevision , options, false );
-            if (updated != null)
-            {
-                // 4. Update the last known state based on the differences
-                UpdateLastKnown(updated, options);
-            }
+
+            var changes = new EntityChanges();
+            changes.PropertyUpdates = new Dictionary<string,object>(propertyDifferences, StringComparer.OrdinalIgnoreCase);
+            changes.AttributeUpdates = new Dictionary<string, string>(attributeDifferences, StringComparer.OrdinalIgnoreCase);
+            changes.AddedTags.AddRange(addedTags);
+            changes.RemovedTags.AddRange(removedTags);
+            return changes;
+            
         }
 
-        private async Task UpdateCompleteState(int specificRevision, ApiOptions options)
+        internal EntityChanges GetAllChanges()
         {
             // 1. Get property differences
             var propertyDifferences = _currentFields;
@@ -402,9 +413,19 @@ namespace Appacitive.Sdk
             // 2. Get tags changes
             IEnumerable<string> removedTags = _lastKnownTags;
             IEnumerable<string> addedTags = _currentTags;
-            
+
+            var changes = new EntityChanges();
+            changes.PropertyUpdates = new Dictionary<string, object>(propertyDifferences, StringComparer.OrdinalIgnoreCase);
+            changes.AttributeUpdates = new Dictionary<string, string>(attributeDifferences, StringComparer.OrdinalIgnoreCase);
+            changes.AddedTags.AddRange(addedTags);
+            changes.RemovedTags.AddRange(removedTags);
+            return changes;
+        }
+
+        private async Task UpdateCompleteState(int specificRevision, ApiOptions options)
+        {
             // 3. update the object
-            var updated = await UpdateAsync(propertyDifferences, attributeDifferences, addedTags, removedTags, specificRevision, options, true);
+            var updated = await UpdateAsync(GetAllChanges(), specificRevision, options, true);
             if (updated != null)
             {
                 // 4. Update the last known state based on the differences
@@ -543,7 +564,9 @@ namespace Appacitive.Sdk
 
         protected abstract Task<Entity> CreateNewAsync(ApiOptions options);
 
-        protected abstract Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, ApiOptions options, bool forceUpdate );
+        //protected abstract Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, ApiOptions options, bool forceUpdate );
+
+        protected abstract Task<Entity> UpdateAsync(EntityChanges changes, int specificRevision, ApiOptions options, bool forceUpdate);
 
         public void ClearList(string property)
         {

@@ -366,6 +366,11 @@ namespace Appacitive.Sdk.Services
             // Write id
             if (string.IsNullOrWhiteSpace(entity.Id) == false)
                 writer.WriteProperty("__id", entity.Id);
+            // Write type
+            if( entity is APConnection )
+                writer.WriteProperty("__relationtype", entity.Type);
+            else 
+                writer.WriteProperty("__type", entity.Type);
             // Write properties.
             WriteProperties(writer, entity, serializer);
             // Write attributes

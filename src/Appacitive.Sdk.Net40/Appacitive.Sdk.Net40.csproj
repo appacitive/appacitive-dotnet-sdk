@@ -141,6 +141,9 @@
     <Compile Include="..\Appacitive.Sdk.Net45\Wcf\WcfPlatform.cs">
       <Link>Wcf\WcfPlatform.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\APBatch.cs">
+      <Link>APBatch.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\APConnection.cs">
       <Link>APConnection.cs</Link>
     </Compile>
@@ -170,6 +173,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Email.cs">
       <Link>Email.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\EntityInfo.cs">
+      <Link>EntityInfo.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\FileDownload.cs">
       <Link>FileDownload.cs</Link>
@@ -242,6 +248,9 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\DefaultRegistrations.cs">
       <Link>Internal\DefaultRegistrations.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\EntityStateChanges.cs">
+      <Link>Internal\EntityStateChanges.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\ErrorCodes.cs">
       <Link>Internal\ErrorCodes.cs</Link>
@@ -464,6 +473,12 @@
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\IObjectUpdateRequest.cs">
       <Link>Internal\Services\Model\IObjectUpdateRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\MultiCallerRequest.cs">
+      <Link>Internal\Services\Model\MultiCallerRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\MultiCallerResponse.cs">
+      <Link>Internal\Services\Model\MultiCallerResponse.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\Internal\Services\Model\MultiGetObjectsRequest.cs">
       <Link>Internal\Services\Model\MultiGetObjectsRequest.cs</Link>

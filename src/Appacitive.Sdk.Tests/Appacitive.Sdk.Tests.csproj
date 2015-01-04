@@ -90,6 +90,7 @@
     <Compile Include="SerializationFixture.cs" />
     <Compile Include="SubClasses.cs" />
     <Compile Include="TestConfiguration.cs" />
+    <Compile Include="MultiCallerFixture.cs" />
     <Compile Include="UserFixture.cs" />
     <Compile Include="UserGroupFixture.cs" />
     <Compile Include="UserServiceFixture.cs" />

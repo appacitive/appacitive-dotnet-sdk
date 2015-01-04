@@ -36,11 +36,15 @@
     <Compile Include="..\CommonAssembly.cs">
       <Link>Properties\CommonAssembly.cs</Link>
     </Compile>
+    <Compile Include="APBatch.cs" />
+    <Compile Include="EntityInfo.cs" />
+    <Compile Include="IConnectionUpdateRequest.cs" />
     <Compile Include="Interfaces\IDeviceState.cs" />
     <Compile Include="Interfaces\IApplicationPlatform.cs" />
     <Compile Include="Interfaces\IDevicePlatform.cs" />
     <Compile Include="Interfaces\IPlatform.cs" />
     <Compile Include="Interfaces\IAppContextState.cs" />
+    <Compile Include="Internal\EntityStateChanges.cs" />
     <Compile Include="Internal\InternalApp.cs" />
     <Compile Include="APDevice.cs" />
     <Compile Include="GroupInfo.cs" />
@@ -55,6 +59,8 @@
     <Compile Include="Internal\LocalSettings.cs" />
     <Compile Include="Internal\Services\Model\AtomicCountersRequest.cs" />
     <Compile Include="Internal\Services\Model\AtomicCountersResponse.cs" />
+    <Compile Include="Internal\Services\Model\MultiCallerRequest.cs" />
+    <Compile Include="Internal\Services\Model\MultiCallerResponse.cs" />
     <Compile Include="Internal\Services\Model\GetFriendsRequest.cs" />
     <Compile Include="Internal\Services\Model\GetFriendsResponse.cs" />
     <Compile Include="Internal\Services\Model\UpdateGroupMembersResponse.cs" />

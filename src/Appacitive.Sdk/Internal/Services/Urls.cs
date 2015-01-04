@@ -15,6 +15,10 @@ namespace Appacitive.Sdk.Services
     {
         public static class For
         {
+            private static string MultiCallerBase
+            {
+                get { return CreateUrl("multi"); }
+            }
             private static string ObjectServiceBase 
             {
                 get { return CreateUrl("object"); }
@@ -138,6 +142,14 @@ namespace Appacitive.Sdk.Services
                 HandleDefaults(url, geocode, enableDebug, verbosity, fields);
                 return url.ToString();
             }
+
+            public static string MultiCaller(Geocode geocode, bool enableDebug, Verbosity verbosity)
+            {
+                var url = new Url(MultiCallerBase);
+                HandleDefaults(url, geocode, enableDebug, verbosity, null);
+                return url.ToString();
+            }
+
 
             public static string CreateUser(Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
