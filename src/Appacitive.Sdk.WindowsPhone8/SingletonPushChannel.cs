@@ -114,7 +114,9 @@ namespace Appacitive.Sdk.WindowsPhone7
 
         private void OnConnectionStatusChanged(object sender, NotificationChannelConnectionEventArgs e)
         {
+#pragma warning disable 4014
             AppContext.Debug.LogAsync(string.Format("Connection status changed to {0}.", e.ConnectionStatus));
+#pragma warning restore 4014
         }
 
         void OnChannelErrorOccurred(object sender, NotificationChannelErrorEventArgs e)
@@ -134,13 +136,14 @@ namespace Appacitive.Sdk.WindowsPhone7
                     }
                 }
             }
-
+#pragma warning disable 4014
             AppContext.Debug.LogAsync(string.Format("Channel error- type:{0}, errorCode:{1}, message:{2}, addlData:{3}",
                 e.ErrorType,
                 e.ErrorCode,
                 e.Message,
                 e.ErrorAdditionalData
                 ));
+#pragma warning restore 4014
         }
 
         private void CloseChannel(HttpNotificationChannel channel)

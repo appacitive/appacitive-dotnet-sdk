@@ -234,20 +234,31 @@ namespace Appacitive.Sdk
             this.Endpoints.EndpointB = other.Endpoints.EndpointB;
         }
 
-
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, ApiOptions options, bool forceUpdate)
+        internal UpdateConnectionRequest CreateUpdateRequest(int specificRevision, ApiOptions options = null)
         {
-            var request = new UpdateConnectionRequest{ Id = this.Id, Type = this.Type, Revision = specificRevision };
+            return CreateUpdateRequest(this.GetDeltaChanges(), specificRevision, options);
+        }
+
+        private UpdateConnectionRequest CreateUpdateRequest(EntityChanges changes, int specificRevision, ApiOptions options)
+        {
+            var request = new UpdateConnectionRequest { Id = this.Id, Type = this.Type, Revision = specificRevision };
             ApiOptions.Apply(request, options);
             request.Revision = specificRevision;
-            if (propertyUpdates != null && propertyUpdates.Count > 0)
-                propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
-            if (attributeUpdates != null && attributeUpdates.Count > 0)
-                attributeUpdates.For(x => request.AttributeUpdates[x.Key] = x.Value);
-            if (addedTags != null)
-                request.AddedTags.AddRange(addedTags);
-            if (removedTags != null)
-                request.RemovedTags.AddRange(removedTags);
+            if (changes.PropertyUpdates != null && changes.PropertyUpdates.Count > 0)
+                changes.PropertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
+            if (changes.AttributeUpdates != null && changes.AttributeUpdates.Count > 0)
+                changes.AttributeUpdates.For(x => request.AttributeUpdates[x.Key] = x.Value);
+            if (changes.AddedTags != null)
+                request.AddedTags.AddRange(changes.AddedTags);
+            if (changes.RemovedTags != null)
+                request.RemovedTags.AddRange(changes.RemovedTags);
+
+            return request;
+        }
+
+        protected override async Task<Entity> UpdateAsync(EntityChanges changes, int specificRevision, ApiOptions options, bool forceUpdate)
+        {
+            var request = CreateUpdateRequest(changes, specificRevision, options);
 
             // Check if an update is needed.
             if (request.PropertyUpdates.Count == 0 &&
@@ -255,7 +266,7 @@ namespace Appacitive.Sdk
                 request.AddedTags.Count == 0         &&
                 request.RemovedTags.Count == 0  &&
                 forceUpdate == false )
-                return null;
+                return this;
 
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)
