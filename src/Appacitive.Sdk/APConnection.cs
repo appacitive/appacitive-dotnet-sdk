@@ -109,6 +109,52 @@ namespace Appacitive.Sdk
         }
 
         /// <summary>
+        /// Creates a new instance of an APConnection objects for use inside a batch api.
+        /// This api will create a connection between a new object and a new object via its batch api reference.
+        /// </summary>
+        /// <param name="type">The name of the relation for which to create a new connection.</param>
+        /// <param name="labelA">Label for the first endpoint in the connection.</param>
+        /// <param name="objectA">The instance of the new object corresponding to the first endpoint in the connection.</param>
+        /// <param name="labelB">Label for the second endpoint in the connection.</param>
+        /// <param name="objectReferenceB">Batch object reference to the APObject associated with endpoint B.</param>
+        public APConnection(string type, string labelA, APObject objectA, string labelB, APObjectReference objectReferenceB)
+            : base(type)
+        {
+            this.Endpoints = new EndpointPair(new Endpoint(labelA, objectA),new Endpoint(labelB, objectReferenceB));
+        }
+
+        /// <summary>
+        /// Creates a new instance of an APConnection objects for use inside a batch api.
+        /// This api will create a connection between an existing object and a new object via its batch api reference.
+        /// </summary>
+        /// <param name="type">The name of the relation for which to create a new connection.</param>
+        /// <param name="labelA">Label for the first endpoint in the connection.</param>
+        /// <param name="objectIdA">Id of the existing object corresponding to the first endpoint in the connection.</param>
+        /// <param name="labelB">Label for the second endpoint in the connection.</param>
+        /// <param name="objectReferenceB">Batch object reference to the APObject associated with endpoint B.</param>
+        public APConnection(string type, string labelA, string objectIdA, string labelB, APObjectReference objectReferenceB)
+            : base(type)
+        {
+            this.Endpoints = new EndpointPair(new Endpoint(labelA, objectIdA), new Endpoint(labelB, objectReferenceB));
+        }
+
+        /// <summary>
+        /// Creates a new instance of an APConnection objects for use inside a batch api.
+        /// This api will create a connection between a two new object via their batch api reference.
+        /// </summary>
+        /// <param name="type">The name of the relation for which to create a new connection.</param>
+        /// <param name="labelA">Label for the first endpoint in the connection.</param>
+        /// <param name="objectReferenceA">Batch object reference to the APObject associated with endpoint A.</param>
+        /// <param name="labelB">Label for the second endpoint in the connection.</param>
+        /// <param name="objectReferenceB">Batch object reference to the APObject associated with endpoint B.</param>
+        public APConnection(string type, string labelA, APObjectReference objectReferenceA, string labelB, APObjectReference objectReferenceB)
+            : base(type)
+        {
+            this.Endpoints = new EndpointPair(new Endpoint(labelA, objectReferenceA), new Endpoint(labelB, objectReferenceB));
+        }
+
+
+        /// <summary>
         /// Fluent method to create a new APConnection instance for the given connection type.
         /// </summary>
         /// <param name="connectionType">The name of the relation type for which to create a new connection.</param>
@@ -133,7 +179,6 @@ namespace Appacitive.Sdk
         /// Gets the pair of endpoints associated with this connection.
         /// </summary>
         public EndpointPair Endpoints { get; set; }
-
 
         /// <summary>
         /// Gets the APObject associated with the endpoint with the given label.
@@ -179,6 +224,7 @@ namespace Appacitive.Sdk
         {
             try
             {
+                EnsureNoBatchReferences();
                 await this.SaveEntityAsync(specificRevision, forceUpdate, options);
                 return this;
             }
@@ -189,6 +235,13 @@ namespace Appacitive.Sdk
             }
             // Get existing connection.
             return await APConnections.GetAsync(this.Type, this.Endpoints.EndpointA.ObjectId, this.Endpoints.EndpointB.ObjectId);
+        }
+
+        private void EnsureNoBatchReferences()
+        {
+            // Ensure that the endpoints used in this connections are not object references to objects created in a batch api.
+            if (this.Endpoints.HasBatchReference == true )
+                throw new AppacitiveRuntimeException("Connections with batch object references can only be saved via the batch api.");
         }
 
         protected override async Task<Entity> FetchAsync(ApiOptions options = null)
@@ -288,11 +341,11 @@ namespace Appacitive.Sdk
         /// Creates a new endpoint corresponding to an existing APObject.
         /// </summary>
         /// <param name="label">The label for the endpoint.</param>
-        /// <param name="obectId">The id of the existing APObject.</param>
-        public Endpoint(string label, string obectId)
+        /// <param name="objectId">The id of the existing APObject.</param>
+        public Endpoint(string label, string objectId)
         {
             this.Label = label;
-            this.ObjectId = obectId;
+            this.ObjectId = objectId;
         }
 
         /// <summary>
@@ -306,6 +359,17 @@ namespace Appacitive.Sdk
             this.Content = content; 
             if( content != null )
                 this.ObjectId = content.Id;
+        }
+
+        /// <summary>
+        /// Creates a new endpoint corresponding to a new APObject.
+        /// </summary>
+        /// <param name="label">The label for the endpoint.</param>
+        /// <param name="objReference">Batch api reference to an APObject associated with the endpoint.</param>
+        public Endpoint(string label, APObjectReference objReference)
+        {
+            this.Label = label;
+            this.ObjectReference = objReference;
         }
 
         internal bool CreateEndpoint
@@ -325,6 +389,8 @@ namespace Appacitive.Sdk
         /// </summary>
         public string Label { get; set; }
 
+        internal APObjectReference ObjectReference { get; set; }
+
         internal string Type { get; set; }
 
 
@@ -339,6 +405,15 @@ namespace Appacitive.Sdk
                 return this.Content;
             else 
                 return await APObjects.GetAsync(this.Type, this.ObjectId, options: options);
+        }
+
+
+        internal bool HasBatchReference
+        {
+            get
+            {
+                return this.ObjectReference != null;
+            }
         }
     }
 
@@ -389,6 +464,14 @@ namespace Appacitive.Sdk
         internal Endpoint EndpointA { get; set; }
 
         internal Endpoint EndpointB { get; set; }
+
+        public bool HasBatchReference 
+        {
+            get
+            {
+                return this.EndpointA.HasBatchReference == true || this.EndpointB.HasBatchReference == true;
+            }
+        }
     }
 
     /// <summary>
@@ -404,6 +487,8 @@ namespace Appacitive.Sdk
         private string RelationName { get; set; }
         private string EndpointALabel { get; set; }
         private string EndpointAId { get; set; }
+        private APObjectReference EndpointAObjectReference { get; set; }
+        private APObjectReference EndpointBObjectReference { get; set; }
         private APObject EndpointAContent { get; set; }
         private string EndpointBLabel { get; set; }
         private string EndpointBId { get; set; }
@@ -436,6 +521,15 @@ namespace Appacitive.Sdk
             return this;
         }
 
+        public FluentAPConnection FromBatchObjectReference(string endpointLabel, APObjectReference reference)
+        {
+            this.EndpointALabel = endpointLabel;
+            this.EndpointAContent = null;
+            this.EndpointAId = null;
+            this.EndpointAObjectReference = reference;
+            return this;
+        }
+
         /// <summary>
         /// Create a connection with a new APObject instance.
         /// </summary>
@@ -462,9 +556,40 @@ namespace Appacitive.Sdk
             return Build();
         }
 
+        public APConnection ToBatchObjectReference(string endpointLabel, APObjectReference reference)
+        {
+            this.EndpointBLabel = endpointLabel;
+            this.EndpointBContent = null;
+            this.EndpointBId = null;
+            this.EndpointBObjectReference = reference;
+            return Build();
+        }
+
         private APConnection Build()
         {
             APConnection conn = null;
+            // Handle object references.
+            if (this.EndpointAObjectReference != null && this.EndpointBObjectReference != null)
+                return new APConnection(this.RelationName, this.EndpointALabel, this.EndpointAObjectReference, this.EndpointBLabel, this.EndpointBObjectReference);
+            if (this.EndpointAObjectReference != null)
+            {
+                if( this.EndpointBContent != null )
+                    return new APConnection(this.RelationName, this.EndpointBLabel, this.EndpointBContent, this.EndpointALabel, this.EndpointAObjectReference);
+                else
+                    return new APConnection(this.RelationName, this.EndpointBLabel, this.EndpointBId, this.EndpointALabel, this.EndpointAObjectReference);
+            }
+            if (this.EndpointBObjectReference != null)
+            {
+                if (this.EndpointAContent != null)
+                    return new APConnection(this.RelationName, this.EndpointALabel, this.EndpointAContent, this.EndpointBLabel, this.EndpointBObjectReference);
+                else
+                    return new APConnection(this.RelationName, this.EndpointALabel, this.EndpointAId, this.EndpointBLabel, this.EndpointBObjectReference);
+            }
+
+
+
+
+            
             if (this.EndpointAContent != null && this.EndpointBContent != null)
                 conn = new APConnection(this.RelationName, EndpointALabel, EndpointAContent, EndpointBLabel, EndpointBContent);
             else if (this.EndpointAContent == null && this.EndpointBContent != null)
@@ -473,6 +598,8 @@ namespace Appacitive.Sdk
                 conn = new APConnection(this.RelationName, EndpointALabel, EndpointAContent, EndpointBLabel, EndpointBId);
             else
                 conn = new APConnection(this.RelationName, EndpointALabel, EndpointAId, EndpointBLabel, EndpointBId);
+            conn.Endpoints.EndpointA.ObjectReference = this.EndpointAObjectReference;
+            conn.Endpoints.EndpointB.ObjectReference = this.EndpointAObjectReference;
             return conn;
         }
     }

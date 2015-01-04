@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk
 {
+    /// <summary>
+    /// Class to execute batch operations against the appacitive api platform.
+    /// </summary>
     public class APBatch
     {
         private Dictionary<string, APObject> _objectsToCreate = new Dictionary<string, APObject>();
@@ -17,52 +20,83 @@ namespace Appacitive.Sdk
         private List<Tuple<EntityInfo, bool>> _objectsToDelete = new List<Tuple<EntityInfo, bool>>();
         private List<EntityInfo> _connectionsToDelete = new List<EntityInfo>();
 
-        private List<APObject> _updatedObjects = new List<APObject>();
-        private List<APConnection> _updatedConnections = new List<APConnection>();
-        private List<APObject> _createdObjects = new List<APObject>();
-        private List<APConnection> _createdConnections = new List<APConnection>();
+        private Dictionary<APObjectReference, APObject> _updatedObjects = new Dictionary<APObjectReference, APObject>();
+        private Dictionary<APConnectionReference, APConnection> _updatedConnections = new Dictionary<APConnectionReference, APConnection>();
+        private Dictionary<APObjectReference, APObject> _createdObjects = new Dictionary<APObjectReference, APObject>();
+        private Dictionary<APConnectionReference, APConnection> _createdConnections = new Dictionary<APConnectionReference, APConnection>();
         private List<EntityInfo> _deletedObjects = new List<EntityInfo>();
         private List<EntityInfo> _deletedConnections = new List<EntityInfo>();
-
         private int _isExecuted = 0;
 
-        public APBatch AddObjectsToCreate(params APObject[] objects)
+        /// <summary>
+        /// Add a new object to be created when the batch is executed.
+        /// </summary>
+        /// <param name="obj">New object to be created</param>
+        /// <returns>Returns a reference to the object inside the batch. This can be used to get the created object from the batch once it is executed.</returns>
+        public APObjectReference AddObjectToCreate(APObject obj)
         {
-            if (objects == null) return this;
-            foreach (var obj in objects)
+            // Check if already added and return existing handle.
+            var existing = _objectsToCreate.Where(x => Object.ReferenceEquals(x.Value, obj) == true).Select(x => x.Key).SingleOrDefault();
+            if (existing != null)
+                return new APObjectReference(existing);
+            else
             {
-                if (obj == null) continue;
-                obj.Id = string.Empty;
-                _objectsToCreate[GenerateName()] = obj;
+                if (string.IsNullOrWhiteSpace(obj.Id) == false)
+                    throw new AppacitiveRuntimeException("Cannot add pre created objects inside a batch create operation.");
+                var handle = new APObjectReference(GenerateName());
+                _objectsToCreate[handle.ObjectHandle] = obj;
+                return handle;
             }
-            return this;
         }
 
-        public APBatch AddConnectionsToCreate(params APConnection[] connections)
+        /// <summary>
+        /// Add a new connection to be created when the batch is executed.
+        /// </summary>
+        /// <param name="connection">New connection to be created</param>
+        /// <returns>Returns a reference to the connection inside the batch. This can be used to get the created connection from the batch once it is executed.</returns>
+        public APConnectionReference AddConnectionToCreate( APConnection connection)
         {
-            if (connections == null) return this;
-            foreach (var connection in connections)
+            // Check if already added and return existing handle.
+            var existing = _connectionsToCreate.Where(x => Object.ReferenceEquals(x.Value, connection) == true).Select(x => x.Key).SingleOrDefault();
+            if (existing != null)
+                return new APConnectionReference(existing);
+            else
             {
-                if (connection == null) continue;
+                var handle = new APConnectionReference(GenerateName());
                 connection.Id = string.Empty;
-                _connectionsToCreate[GenerateName()] = connection;
+                _connectionsToCreate[handle.ObjectHandle] = connection;
+                return handle;
             }
-            return this;
+            
         }
 
-        public APBatch AddObjectToUpdate(string id, APObject obj, int specificRevision = 0)
+        /// <summary>
+        /// Add an existing object to the batch to be updated when the batch is executed.
+        /// </summary>
+        /// <param name="id">Id of the object to be updated.</param>
+        /// <param name="obj">The object to be updated with the updated fields.</param>
+        /// <param name="specificRevision">Any specific revision</param>
+        /// <returns>Returns a reference to the object inside the batch. This can be used to get the updated object from the batch once it is executed.</returns>
+        public APObjectReference AddObjectToUpdate(string id, APObject obj, int specificRevision = 0)
         {
             if (obj == null)
                 throw new ArgumentNullException("obj");
             if (string.IsNullOrWhiteSpace(id) == true)
                 throw new ArgumentNullException("id");
-
+            var handle = new APObjectReference(id);
             obj.Id = id;
-            _objectsToUpdate[GenerateName()] = GetUpdateRequest(obj, specificRevision);
-            return this;
+            _objectsToUpdate[handle.ObjectHandle] = GetUpdateRequest(obj, specificRevision);
+            return handle;
         }
 
-        public APBatch AddConnectionToUpdate(string id, APConnection conn, int specificRevision = 0)
+        /// <summary>
+        /// Add an existing connection to the batch to be updated when the batch is executed.
+        /// </summary>
+        /// <param name="id">Id of the connection to be updated.</param>
+        /// <param name="conn">The connection to be updated with the updated fields.</param>
+        /// <param name="specificRevision">Any specific revision</param>
+        /// <returns></returns>
+        public APConnectionReference AddConnectionToUpdate(string id, APConnection conn, int specificRevision = 0)
         {
             if (conn == null)
                 throw new ArgumentNullException("conn");
@@ -70,8 +104,9 @@ namespace Appacitive.Sdk
                 throw new ArgumentNullException("id");
 
             conn.Id = id;
-            _connectionsToUpdate[GenerateName()] = GetUpdateRequest(conn, specificRevision);
-            return this;
+            var handle = new APConnectionReference(id);
+            _connectionsToUpdate[handle.ObjectHandle] = GetUpdateRequest(conn, specificRevision);
+            return handle;
         }
 
         private UpdateConnectionRequest GetUpdateRequest(APConnection conn, int specificRevision)
@@ -79,7 +114,13 @@ namespace Appacitive.Sdk
             return conn.CreateUpdateRequest(specificRevision);
         }
 
-        public APBatch AddObjectToDelete(string type, string id, bool deleteEdge = true)
+        /// <summary>
+        /// Add an existing object to be deleted when the batch api is executed.
+        /// </summary>
+        /// <param name="type">Type of the object</param>
+        /// <param name="id">The id of the object</param>
+        /// <param name="deleteEdge">Boolean flag indicating if the delete operation should delete existing connections if any.</param>
+        public void AddObjectToDelete(string type, string id, bool deleteEdge = true)
         {
             if (string.IsNullOrWhiteSpace(type) == true)
                 throw new ArgumentNullException("type");
@@ -87,17 +128,20 @@ namespace Appacitive.Sdk
                 throw new ArgumentNullException("id");
 
             this._objectsToDelete.Add(new Tuple<EntityInfo, bool>(new EntityInfo { Type = type, Id = id }, deleteEdge));
-            return this;
         }
 
-        public APBatch AddConnectionToDelete(string type, string id)
+        /// <summary>
+        /// Add an existing connection to be deleted when the batch api is executed.
+        /// </summary>
+        /// <param name="type">Type of the connection</param>
+        /// <param name="id">The id of the connection</param>
+        public void AddConnectionToDelete(string type, string id)
         {
             if (string.IsNullOrWhiteSpace(type) == true)
                 throw new ArgumentNullException("type");
             if (string.IsNullOrWhiteSpace(id) == true)
                 throw new ArgumentNullException("id");
             this._connectionsToDelete.Add(new EntityInfo { Type = type, Id = id });
-            return this;
         }
 
         public async Task ExecuteAsync(ApiOptions options = null)
@@ -117,22 +161,26 @@ namespace Appacitive.Sdk
             _objectsToDelete.For(x => request.ObjectDeleteCommands.Add(new ObjectDeleteCommand { Type = x.Item1.Type, Id = x.Item1.Id, DeleteConnection = x.Item2 }));
             _connectionsToDelete.For(x => request.ConnectionDeleteCommands.Add(new ConnectionDeleteCommand { Type = x.Type, Id = x.Id }));
             var response = await request.ExecuteAsync();
-
-            foreach (var item in _objectsToCreate)
+            if (response.Status.IsSuccessful == false)
+                throw response.Status.ToFault();
+            foreach (var item in response.AffectedObjects)
             {
-                var match = response.AffectedObjects.SingleOrDefault(x => x.Name.Equals(item.Key));
-                if (match != null)
-                    _createdObjects.Add(match.Object);
+                var handle = new APObjectReference(item.Name);
+                if (_objectsToCreate.ContainsKey(item.Name) == true)
+                    _createdObjects[handle] = item.Object;
+                else
+                    _updatedObjects[handle] = item.Object;
             }
-            _updatedObjects.AddRange(response.AffectedObjects.Select( x => x.Object).Except(_createdObjects));
 
-            foreach( var item in _connectionsToCreate )
+            foreach (var item in response.AffectedConnections)
             {
-                var match = response.AffectedConnections.SingleOrDefault(x => x.Name.Equals(item.Key));
-                if (match != null)
-                    _createdConnections.Add(match.Connection);
+                var handle = new APConnectionReference(item.Name);
+                if (_connectionsToCreate.ContainsKey(item.Name) == true)
+                    _createdConnections[handle] = item.Connection;
+                else
+                    _updatedConnections[handle] = item.Connection;
             }
-            _updatedConnections.AddRange(response.AffectedConnections.Select(x => x.Connection).Except(_createdConnections));
+
 
             if (response.DeletedConnections != null)
                 _deletedConnections.AddRange(response.DeletedConnections.Select(x => new EntityInfo { Type = x.Type, Id = x.Id }));
@@ -155,34 +203,110 @@ namespace Appacitive.Sdk
                 return obj.CreateUpdateRequest(specificRevision);
         }
 
-        public IEnumerable<APObject> CreatedObjects
+        /// <summary>
+        /// Map of all newly created objects keyed by the batch object references.
+        /// </summary>
+        public IDictionary<APObjectReference, APObject> CreatedObjects
         {
             get { return _createdObjects; }
         }
 
-        public IEnumerable<APConnection> CreatedConnections
+        /// <summary>
+        /// Map of all newly created connections keyed by their batch connection references.
+        /// </summary>
+        public IDictionary<APConnectionReference, APConnection> CreatedConnections
         {
             get { return _createdConnections; }
         }
 
-        public IEnumerable<APObject> UpdatedObjects
+        /// <summary>
+        /// Map of all updated objects keyed by the batch object references.
+        /// </summary>
+        public IDictionary<APObjectReference, APObject> UpdatedObjects
         {
             get { return _updatedObjects; }
         }
 
-        public IEnumerable<APConnection> UpdatedConnections
+        /// <summary>
+        /// Map of all updated connections keyed by their batch connection references.
+        /// </summary>
+        public IDictionary<APConnectionReference, APConnection> UpdatedConnections
         {
             get { return _updatedConnections; }
         }
 
+        /// <summary>
+        /// List of all objects deleted when this batch is executed.
+        /// </summary>
         public IEnumerable<EntityInfo> DeletedObjects
         {
             get { return _deletedObjects; }
         }
 
+        /// <summary>
+        /// List of all connections deleted when this batch is executed.
+        /// </summary>
         public IEnumerable<EntityInfo> DeletedConnections
         {
             get { return _deletedConnections; }
+        }
+    }
+
+    public class APObjectReference
+    {
+        internal APObjectReference(string handle)
+        {
+            this.ObjectHandle = handle;
+        }
+
+        public string ObjectHandle { get; private set; }
+
+        public override string ToString()
+        {
+            return this.ObjectHandle;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is APObjectReference)
+            {
+                return StringComparer.OrdinalIgnoreCase.Equals(this.ObjectHandle, (obj as APObjectReference).ObjectHandle);
+            }
+            else return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return StringComparer.OrdinalIgnoreCase.GetHashCode(this.ObjectHandle);
+        }
+    }
+
+    public class APConnectionReference
+    {
+        internal APConnectionReference(string handle)
+        {
+            this.ObjectHandle = handle;
+        }
+
+        public string ObjectHandle { get; private set; }
+
+        public override string ToString()
+        {
+            return this.ObjectHandle;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is APConnectionReference)
+            {
+                return StringComparer.OrdinalIgnoreCase.Equals(this.ObjectHandle, (obj as APConnectionReference).ObjectHandle);
+            }
+            else return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return StringComparer.OrdinalIgnoreCase.GetHashCode(this.ObjectHandle);
         }
     }
 }

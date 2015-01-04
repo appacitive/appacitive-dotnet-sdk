@@ -116,49 +116,29 @@ namespace Appacitive.Sdk.Services
             writer.WriteEndObject();
         }
 
+        private void WriteEndpoint(string property, JsonWriter writer, Endpoint endpoint)
+        {
+            writer
+                .WriteProperty(property)
+                .StartObject()
+                .WriteProperty("label", endpoint.Label);
+
+            if (endpoint.HasBatchReference == true)
+                writer.WriteProperty("name", endpoint.ObjectReference.ObjectHandle);
+            else if (endpoint.CreateEndpoint == false)
+                writer.WriteProperty("objectid", endpoint.ObjectId);
+            else
+                writer
+                    .WriteProperty("object")
+                    .WithWriter(w => WriteObject(w, endpoint.Content));
+
+            writer.EndObject();
+        }
+
         private void WriteEndpoints(JsonWriter writer, APConnection conn, JsonSerializer serializer)
         {
-            // Write endpoint A
-            if (conn.Endpoints.EndpointA.CreateEndpoint == false)
-            {
-                writer
-                    .WriteProperty("__endpointa")
-                    .StartObject()
-                    .WriteProperty("label", conn.Endpoints.EndpointA.Label)
-                    .WriteProperty("objectid", conn.Endpoints.EndpointA.ObjectId)
-                    .EndObject();
-            }
-            else
-            {
-                writer
-                    .WriteProperty("__endpointa")
-                    .StartObject()
-                    .WriteProperty("label", conn.Endpoints.EndpointA.Label)
-                    .WriteProperty("object")
-                    .WithWriter(w => WriteObject(w, conn.Endpoints.EndpointA.Content))
-                    .EndObject();
-            }
-
-            // Write endpoint B
-            if (conn.Endpoints.EndpointB.CreateEndpoint == false)
-            {
-                writer
-                    .WriteProperty("__endpointb")
-                    .StartObject()
-                    .WriteProperty("label", conn.Endpoints.EndpointB.Label)
-                    .WriteProperty("objectid", conn.Endpoints.EndpointB.ObjectId)
-                    .EndObject();
-            }
-            else
-            {
-                writer
-                    .WriteProperty("__endpointb")
-                    .StartObject()
-                    .WriteProperty("label", conn.Endpoints.EndpointB.Label)
-                    .WriteProperty("object")
-                    .WithWriter(w => WriteObject(w, conn.Endpoints.EndpointB.Content))
-                    .EndObject();
-            }
+            WriteEndpoint("__endpointa", writer, conn.Endpoints.EndpointA);
+            WriteEndpoint("__endpointb", writer, conn.Endpoints.EndpointB);
         }
 
         private void WriteObject(JsonWriter writer, APObject obj)
