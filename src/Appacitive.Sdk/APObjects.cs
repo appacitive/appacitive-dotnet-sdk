@@ -57,48 +57,7 @@ namespace Appacitive.Sdk
         /// Gets a paginated list of APObjects matching the given search criteria.
         /// </summary>
         /// <param name="type">The object type.</param>
-        /// <param name="query">The search query for objects to be found.</param>
-        /// <param name="fields">The object fields to be returned for the matching list of objects.</param>
-        /// <param name="pageNumber">The page number.</param>
-        /// <param name="pageSize">The page size.</param>
-        /// <param name="orderBy">The object field on which the results should be sorted.</param>
-        /// <param name="sortOrder">The sort order.</param>
-        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
-        /// <returns>Paginated list of APObject objects matching the given search criteria.</returns>
-        public async static Task<PagedList<APObject>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
-        {
-            query = query ?? Query.None;
-            var request = new FindAllObjectsRequest()
-            {
-                Type = type,
-                Query = query.AsString().Escape(),
-                PageNumber = pageNumber,
-                PageSize = pageSize,
-                OrderBy = orderBy,
-                SortOrder = sortOrder
-            };
-            if( fields != null )
-                request.Fields.AddRange(fields);
-            ApiOptions.Apply(request, options);
-            var response = await request.ExecuteAsync();
-            if (response.Status.IsSuccessful == false)
-                throw response.Status.ToFault();
-            var objects = new PagedList<APObject>()
-            {
-                PageNumber = response.PagingInfo.PageNumber,
-                PageSize = response.PagingInfo.PageSize,
-                TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await FindAllAsync(type, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
-            };
-            objects.AddRange(response.Objects);
-            return objects;
-
-        }
-
-        /// <summary>
-        /// Gets a paginated list of APObjects matching the given search criteria.
-        /// </summary>
-        /// <param name="type">The object type.</param>
+        /// <param name="freeTextExpression">Free text search expression over all fields of the given type.</param>
         /// <param name="query">The search query for objects to be found.</param>
         /// <param name="fields">The object fields to be returned for the matching list of objects.</param>
         /// <param name="pageNumber">The page number.</param>
@@ -120,7 +79,7 @@ namespace Appacitive.Sdk
                 OrderBy = orderBy,
                 SortOrder = sortOrder
             };
-            if (fields != null)
+            if( fields != null )
                 request.Fields.AddRange(fields);
             ApiOptions.Apply(request, options);
             var response = await request.ExecuteAsync();
@@ -131,11 +90,28 @@ namespace Appacitive.Sdk
                 PageNumber = response.PagingInfo.PageNumber,
                 PageSize = response.PagingInfo.PageSize,
                 TotalRecords = response.PagingInfo.TotalRecords,
-                GetNextPage = async skip => await FindAllAsync(type, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
+                GetNextPage = async skip => await FindAllAsync(type, freeTextExpression, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
             };
             objects.AddRange(response.Objects);
             return objects;
 
+        }
+
+        /// <summary>
+        /// Gets a paginated list of APObjects matching the given search criteria.
+        /// </summary>
+        /// <param name="type">The object type.</param>
+        /// <param name="query">The search query for objects to be found.</param>
+        /// <param name="fields">The object fields to be returned for the matching list of objects.</param>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
+        /// <param name="orderBy">The object field on which the results should be sorted.</param>
+        /// <param name="sortOrder">The sort order.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        /// <returns>Paginated list of APObject objects matching the given search criteria.</returns>
+        public async static Task<PagedList<APObject>> FindAllAsync(string type, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
+        {
+            return await FindAllAsync(type, null, query, fields, pageNumber, pageSize, orderBy, sortOrder, options);
         }
 
         /// <summary>

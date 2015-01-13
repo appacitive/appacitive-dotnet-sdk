@@ -54,6 +54,9 @@ namespace Appacitive.Sdk.Services
             
             writer
                 .StartObject()
+                // Write id and type
+                .WriteProperty("__id", request.Id)
+                .WriteProperty("__relationtype", request.Type)
                 // Write properties
                 .WithWriter( w => request.PropertyUpdates.For( p => WriteProperty(w, p.Key, p.Value)))
                 // Write atttributes

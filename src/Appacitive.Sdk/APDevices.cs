@@ -20,6 +20,33 @@ namespace Appacitive.Sdk
         /// <summary>
         /// Finds a paginated list of APDevices for the given type and search criteria.
         /// </summary>
+        /// <param name="freeTextExpression">Free text search expression over all fields of the given type.</param>
+        /// <param name="query">The search query</param>
+        /// <param name="fields">The device specific fields to be retrieved.</param>
+        /// <param name="pageNumber">The page number.</param>
+        /// <param name="pageSize">The page size.</param>
+        /// <param name="orderBy">The field on which to sort.</param>
+        /// <param name="sortOrder">Sort order - Ascending or Descending.</param>
+        /// <param name="options">Request specific api options. These will override the global settings for the app for this request.</param>
+        /// <returns>A paginated list of APDevice objects for the given search criteria.</returns>
+        public async static Task<PagedList<APDevice>> FindAllAsync(string freeTextExpression, IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
+        {
+            var objects = await APObjects.FindAllAsync("device", freeTextExpression, query, fields, pageNumber, pageSize, orderBy, sortOrder, options);
+            var devices = objects.Select(x => x as APDevice);
+            var list =  new PagedList<APDevice>()
+            {
+                PageNumber = objects.PageNumber,
+                PageSize = objects.PageSize,
+                TotalRecords = objects.TotalRecords,
+                GetNextPage = async skip => await FindAllAsync(freeTextExpression, query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
+            };
+            list.AddRange(devices);
+            return list;
+        }
+
+        /// <summary>
+        /// Finds a paginated list of APDevices for the given type and search criteria.
+        /// </summary>
         /// <param name="query">The search query</param>
         /// <param name="fields">The device specific fields to be retrieved.</param>
         /// <param name="pageNumber">The page number.</param>
@@ -30,17 +57,7 @@ namespace Appacitive.Sdk
         /// <returns>A paginated list of APDevice objects for the given search criteria.</returns>
         public async static Task<PagedList<APDevice>> FindAllAsync(IQuery query = null, IEnumerable<string> fields = null, int pageNumber = 1, int pageSize = 20, string orderBy = null, SortOrder sortOrder = SortOrder.Descending, ApiOptions options = null)
         {
-            var objects = await APObjects.FindAllAsync("device", query, fields, pageNumber, pageSize, orderBy, sortOrder, options);
-            var devices = objects.Select(x => x as APDevice);
-            var list =  new PagedList<APDevice>()
-            {
-                PageNumber = objects.PageNumber,
-                PageSize = objects.PageSize,
-                TotalRecords = objects.TotalRecords,
-                GetNextPage = async skip => await FindAllAsync(query, fields, pageNumber + skip + 1, pageSize, orderBy, sortOrder, options)
-            };
-            list.AddRange(devices);
-            return list;
+            return await FindAllAsync(null, query, fields, pageNumber, pageSize, orderBy, sortOrder, options);
         }
 
         /// <summary>

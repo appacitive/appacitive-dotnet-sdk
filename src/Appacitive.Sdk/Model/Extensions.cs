@@ -19,6 +19,8 @@ namespace Appacitive.Sdk
             platform.Init(context);
         }
 
+        
+
         public static string Escape(this string value)
         {
             if (value == null) return null;

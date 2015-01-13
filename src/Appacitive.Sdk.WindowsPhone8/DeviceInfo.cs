@@ -31,7 +31,7 @@ namespace Appacitive.Sdk
             { 
                 var device = _platform.DeviceState.GetDevice();
                 if (device == null)
-                    throw new AppacitiveRuntimeException("The current device is not initialized. Use App.DeviceContext.RegisterCurrentDeviceAsync() to initialize the device.");
+                    throw new AppacitiveRuntimeException("The current device is not initialized. Use AppContext.DeviceContext.RegisterCurrentDeviceAsync() to initialize the device.");
                 return device;
             }
         }
@@ -74,5 +74,7 @@ namespace Appacitive.Sdk
         }
     }
 
+
+    
     
 }

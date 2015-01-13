@@ -164,28 +164,41 @@ namespace Appacitive.Sdk
             return await APUsers.GetByIdAsync(this.Id, options:options);
         }
 
-        protected override async Task<Entity> UpdateAsync(IDictionary<string, object> propertyUpdates, IDictionary<string, string> attributeUpdates, IEnumerable<string> addedTags, IEnumerable<string> removedTags, int specificRevision, ApiOptions options, bool forceUpdate)
+        internal new IObjectUpdateRequest CreateUpdateRequest(int specificRevision, ApiOptions options = null)
+        {
+            return CreateUpdateRequest(this.GetDeltaChanges(), specificRevision, options);
+        }
+
+        private UpdateUserRequest CreateUpdateRequest(EntityChanges changes, int specificRevision, ApiOptions options)
         {
             var request = new UpdateUserRequest()
             {
                 Revision = specificRevision,
                 Id = this.Id
             };
-            ApiOptions.Apply(request, options);
-            if (propertyUpdates != null && propertyUpdates.Count > 0)
-                propertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
-            if (attributeUpdates != null && attributeUpdates.Count > 0)
-                attributeUpdates.For(x => request.AttributeUpdates[x.Key] = x.Value);
 
-            if (addedTags != null)
-                request.AddedTags.AddRange(addedTags);
-            if (removedTags != null)
-                request.RemovedTags.AddRange(removedTags);
+            ApiOptions.Apply(request, options);
+            if (changes.PropertyUpdates != null && changes.PropertyUpdates.Count > 0)
+                changes.PropertyUpdates.For(x => request.PropertyUpdates[x.Key] = x.Value);
+            if (changes.AttributeUpdates != null && changes.AttributeUpdates.Count > 0)
+                changes.AttributeUpdates.For(x => request.AttributeUpdates[x.Key] = x.Value);
+
+            if (changes.AddedTags != null)
+                request.AddedTags.AddRange(changes.AddedTags);
+            if (changes.RemovedTags != null)
+                request.RemovedTags.AddRange(changes.RemovedTags);
 
             // Check if acls are to be added
             request.AllowClaims.AddRange(this.Acl.Allowed);
             request.DenyClaims.AddRange(this.Acl.Denied);
             request.ResetClaims.AddRange(this.Acl.Reset);
+
+            return request;
+        }
+
+        protected override async Task<Entity> UpdateAsync(EntityChanges changes, int specificRevision, ApiOptions options, bool forceUpdate)
+        {
+            var request = CreateUpdateRequest(changes, specificRevision, options);
 
             // Check if an update is needed.
             if (request.PropertyUpdates.Count == 0 &&
@@ -196,7 +209,7 @@ namespace Appacitive.Sdk
                 request.DenyClaims.Count == 0 &&
                 request.ResetClaims.Count == 0 && 
                 forceUpdate == false)
-                return null;
+                return this;
 
             var response = await request.ExecuteAsync();
             if (response.Status.IsSuccessful == false)

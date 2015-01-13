@@ -24,7 +24,7 @@ namespace Appacitive.Sdk.Services
 
         protected override string GetUrl()
         {
-            return Urls.For.FindAllObjects(this.Type, this.Query, this.FreeTextExpression, this.PageNumber, this.PageSize, this.OrderBy, this.SortOrder, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
+            return Urls.For.FindAllObjects(this.Type, this.FreeTextExpression, this.Query, this.PageNumber, this.PageSize, this.OrderBy, this.SortOrder, this.CurrentLocation, this.DebugEnabled, this.Verbosity, this.Fields);
         }
     }
 }

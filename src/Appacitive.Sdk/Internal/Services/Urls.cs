@@ -15,6 +15,10 @@ namespace Appacitive.Sdk.Services
     {
         public static class For
         {
+            private static string MultiCallerBase
+            {
+                get { return CreateUrl("multi"); }
+            }
             private static string ObjectServiceBase 
             {
                 get { return CreateUrl("object"); }
@@ -138,6 +142,14 @@ namespace Appacitive.Sdk.Services
                 HandleDefaults(url, geocode, enableDebug, verbosity, fields);
                 return url.ToString();
             }
+
+            public static string MultiCaller(Geocode geocode, bool enableDebug, Verbosity verbosity)
+            {
+                var url = new Url(MultiCallerBase);
+                HandleDefaults(url, geocode, enableDebug, verbosity, null);
+                return url.ToString();
+            }
+
 
             public static string CreateUser(Geocode geocode, bool debugEnabled, Verbosity verbosity, List<string> fields)
             {
@@ -272,7 +284,7 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string FindAllObjects(string type, string query, string freeTextExpression, int pageNumber, int pageSize, string orderBy, SortOrder sortOrder, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
+            public static string FindAllObjects(string type, string freeTextExpression, string query, int pageNumber, int pageSize, string orderBy, SortOrder sortOrder, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ObjectServiceBase).Append(type).Append("find").Append("all");
                 if (string.IsNullOrWhiteSpace(query) == false)
@@ -366,11 +378,13 @@ namespace Appacitive.Sdk.Services
                 return url.ToString();
             }
 
-            public static string FindAllConnectionsAsync(string type, string query, int pageNumber, int pageSize, string orderBy, SortOrder sortOrder, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
+            public static string FindAllConnectionsAsync(string type, string freeTextExpression, string query, int pageNumber, int pageSize, string orderBy, SortOrder sortOrder, Geocode location, bool enableDebug, Verbosity verbosity, List<string> fields)
             {
                 var url = new Url(ConnectionServiceBase).Append(type).Append("find").Append("all");
                 if (string.IsNullOrWhiteSpace(query) == false)
                     url.QueryString["query"] = query;
+                if (string.IsNullOrWhiteSpace(freeTextExpression) == false)
+                    url.QueryString["freetext"] = freeTextExpression;
                 if (pageNumber > 0)
                     url.QueryString["pnum"] = pageNumber.ToString();
                 if (pageSize > 0)

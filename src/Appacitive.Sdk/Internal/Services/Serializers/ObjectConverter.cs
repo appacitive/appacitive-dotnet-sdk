@@ -38,6 +38,8 @@ namespace Appacitive.Sdk.Services
 
         private APObject BuildNewInstance(JObject json, Type objectType)
         {
+            // What is the spec for building a new instance
+            // We look for type in the json. If it does not exist then we defer to the type passed.
             string type;
             type = GetType(json);
             ICreateInstanceBehaviorFactory factory = ObjectFactory.Build<ICreateInstanceBehaviorFactory>();
@@ -48,7 +50,7 @@ namespace Appacitive.Sdk.Services
         {
             JToken value;
             if (json.TryGetValue("__type", out value) == false || value.Type == JTokenType.Null)
-                throw new Exception("Object type is missing.");
+                return null;
             var type = value.ToString();
             return type;
         }
@@ -85,9 +87,9 @@ namespace Appacitive.Sdk.Services
     {
         public ICreateInstanceBehavior GetBehavior(string type, Type instanceType)
         {
-            if (type.Equals("device") == true || instanceType.Is<APDevice>() == true)
+            if ("device".Equals(type) == true || instanceType.Is<APDevice>() == true)
                 return new CreateDeviceBehavior();
-            else if (type.Equals("user") == true || instanceType.Is<APUser>() == true)
+            else if ("user".Equals(type) == true || instanceType.Is<APUser>() == true)
                 return new CreateUserBehavior();
             else return new CreateObjectBehavior();
         }
@@ -364,6 +366,11 @@ namespace Appacitive.Sdk.Services
             // Write id
             if (string.IsNullOrWhiteSpace(entity.Id) == false)
                 writer.WriteProperty("__id", entity.Id);
+            // Write type
+            if( entity is APConnection )
+                writer.WriteProperty("__relationtype", entity.Type);
+            else 
+                writer.WriteProperty("__type", entity.Type);
             // Write properties.
             WriteProperties(writer, entity, serializer);
             // Write attributes
