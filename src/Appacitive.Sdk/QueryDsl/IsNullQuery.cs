@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Internal
 {
-    internal class RawQuery : IQuery
+    internal class IsNullQuery : IQuery
     {
-        public RawQuery(string query)
+        public IsNullQuery(Field field)
         {
-            this.Query = query;
+            this.Field = field;
         }
-
-        public string Query { get; private set; }
 
         public string AsString()
         {
-            return this.Query;
+            return string.Format("{0} is null", this.Field);    
         }
+
+        public Field Field { get; set; }
     }
 }

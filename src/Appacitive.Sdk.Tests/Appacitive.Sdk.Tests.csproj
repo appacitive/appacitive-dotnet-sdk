@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="AclFixture.cs" />
     <Compile Include="EntityFixture.cs" />
+    <Compile Include="FieldFixture.cs" />
     <Compile Include="Helpers\Utilities.cs" />
     <Compile Include="ObjectFixture.cs" />
     <Compile Include="ObjectServiceFixture.cs" />

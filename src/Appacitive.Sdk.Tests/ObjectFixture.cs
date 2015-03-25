@@ -12,6 +12,51 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class ObjectFixture
     {
+
+        [TestMethod]
+        public async Task FindObjectsWithInQueryTest()
+        {   
+            var value = Unique.String;
+            var queryValues = new[] { Unique.String, value, Unique.String, Unique.String };
+            var obj = new APObject("object");
+            obj.Set("stringfield", value);
+            obj = await ObjectHelper.CreateNewAsync(obj);
+            var results = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsIn(queryValues), sortOrder: SortOrder.Descending, orderBy: "__id", pageSize: 5);
+            Assert.IsTrue(results.Count == 1);
+            Assert.IsTrue(results.Single().Id == obj.Id);
+        }
+
+        [TestMethod]
+        public async Task FindObjectsWithInQueryForMultiValuedPropertyTest()
+        {
+            var value = Unique.String;
+            var queryValues = new[] { Unique.String, value, Unique.String, Unique.String };
+            var obj = new APObject("object");
+            obj.SetList("multifield", new [] { value, Unique.String });
+            obj = await ObjectHelper.CreateNewAsync(obj);
+            var results = await APObjects.FindAllAsync("object", Query.Property("multifield").IsIn(queryValues), sortOrder: SortOrder.Descending, orderBy: "__id", pageSize: 5);
+            Assert.IsTrue(results.Count == 1);
+            Assert.IsTrue(results.Single().Id == obj.Id);
+        }
+
+        [TestMethod]
+        public async Task FindObjectsWithNullPropertiesTest()
+        {
+            var obj = new APObject("object");
+            obj = await ObjectHelper.CreateNewAsync(obj);
+            var results = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsNull(), sortOrder: SortOrder.Descending, orderBy: "__id", pageSize: 5);
+            Assert.IsTrue( results.Exists( x => x.Id ==obj.Id));
+        }
+
+        [TestMethod]
+        public async Task FindObjectsWithNullAttributesTest()
+        {
+            var obj = new APObject("object");
+            obj = await ObjectHelper.CreateNewAsync(obj);
+            var results = await APObjects.FindAllAsync("object", Query.Attribute("stringfield").IsNull(), sortOrder: SortOrder.Descending, orderBy: "__id", pageSize: 5);
+            Assert.IsTrue(results.Exists(x => x.Id == obj.Id));
+        }
+
         [TestMethod]
         public async Task ForceUpdateEmptyShouldUpdateNothingTest()
         {
