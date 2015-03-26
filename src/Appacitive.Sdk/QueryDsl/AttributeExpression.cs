@@ -18,12 +18,12 @@ namespace Appacitive.Sdk.Internal
 
         public IQuery IsNull()
         {
-            return new IsNullQuery(Field.Property(this.Name));
+            return new IsNullQuery(Field.Attribute(this.Name));
         }
 
         public IQuery IsIn(IEnumerable<string> values)
         {
-            return new InQuery(Field.Property(this.Name), values);
+            return new InQuery(Field.Attribute(this.Name), values);
         }
 
         public IQuery IsEqualTo(string value)

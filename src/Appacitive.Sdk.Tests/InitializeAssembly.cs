@@ -18,7 +18,7 @@ namespace Appacitive.Sdk.Tests
             AppContext.Initialize("appid", TestConfiguration.ApiKey, TestConfiguration.Environment,
                 settings: new AppacitiveSettings
                 {
-                    HostName = "bapis.appacitive.com/v1.0"
+                    HostName = "apis.appacitive.com/v1.0"
                 });
             AppContext.Debug.ApiLogging.LogEverything();
             // Base class mappings

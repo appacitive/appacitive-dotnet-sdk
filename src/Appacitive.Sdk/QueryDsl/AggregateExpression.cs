@@ -18,7 +18,7 @@ namespace Appacitive.Sdk.Internal
 
         public IQuery IsNull()
         {
-            return new IsNullQuery(Field.Property(this.Name));
+            return new IsNullQuery(Field.Aggregate(this.Name));
         }
         
         public IQuery IsEqualTo(decimal value)

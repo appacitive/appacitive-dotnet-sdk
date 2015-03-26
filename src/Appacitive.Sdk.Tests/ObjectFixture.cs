@@ -14,6 +14,19 @@ namespace Appacitive.Sdk.Tests
     {
 
         [TestMethod]
+        public async Task FindObjectsWithInQueryForAttributeTest()
+        {
+            var value = Unique.String;
+            var queryValues = new[] { Unique.String, value, Unique.String, Unique.String };
+            var obj = new APObject("object");
+            obj.SetAttribute("attr1", value);
+            obj = await ObjectHelper.CreateNewAsync(obj);
+            var results = await APObjects.FindAllAsync("object", Query.Attribute("attr1").IsIn(queryValues), sortOrder: SortOrder.Descending, orderBy: "__id", pageSize: 5);
+            Assert.IsTrue(results.Count == 1);
+            Assert.IsTrue(results.Single().Id == obj.Id);
+        }
+
+        [TestMethod]
         public async Task FindObjectsWithInQueryTest()
         {   
             var value = Unique.String;
@@ -24,6 +37,18 @@ namespace Appacitive.Sdk.Tests
             var results = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsIn(queryValues), sortOrder: SortOrder.Descending, orderBy: "__id", pageSize: 5);
             Assert.IsTrue(results.Count == 1);
             Assert.IsTrue(results.Single().Id == obj.Id);
+        }
+
+        [TestMethod]
+        public async Task FindObjectsWithInWithIntegerQueryTest()
+        {
+            var value = Unique.String;
+            long[] queryValues = new long[] { 1,2,3 };
+            var obj = new APObject("object");
+            obj.Set("intfield", 1);
+            obj = await ObjectHelper.CreateNewAsync(obj);
+            var results = await APObjects.FindAllAsync("object", Query.Property("intfield").IsIn(queryValues), sortOrder: SortOrder.Descending, orderBy: "__id", pageSize: 5);
+            Assert.IsTrue(results.Exists(x => x.Id == obj.Id));
         }
 
         [TestMethod]
@@ -849,6 +874,8 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(results.Count == 1);
             Assert.IsTrue(results[0].Id == obj1.Id);
         }
+
+        
 
         [TestMethod]
         public async Task GetConnectedObjectsWithSortingSupportTest()
