@@ -56,6 +56,7 @@ namespace Appacitive.Sdk.Tests
         }
 
 
+        [Ignore]
         [TestMethod]
         public async Task GetFriendsTestAsync()
         {

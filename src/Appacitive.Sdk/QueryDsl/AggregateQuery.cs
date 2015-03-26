@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Appacitive.Sdk
+namespace Appacitive.Sdk.Internal
 {
-    public class AggregateQuery : IQuery
+    internal class AggregateQuery : IQuery
     {
         public AggregateQuery(BoolOperator op, IEnumerable<IQuery> innerQueries)
         {

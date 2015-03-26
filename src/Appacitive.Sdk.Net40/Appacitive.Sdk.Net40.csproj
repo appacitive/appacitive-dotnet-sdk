@@ -720,14 +720,23 @@
     <Compile Include="..\Appacitive.Sdk\QueryDsl\BooleanOperator.cs">
       <Link>QueryDsl\BooleanOperator.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\Field.cs">
+      <Link>QueryDsl\Field.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\QueryDsl\FieldQuery.cs">
       <Link>QueryDsl\FieldQuery.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\QueryDsl\IFieldValue.cs">
       <Link>QueryDsl\IFieldValue.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\InQuery.cs">
+      <Link>QueryDsl\InQuery.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\QueryDsl\IQuery.cs">
       <Link>QueryDsl\IQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\IsNullQuery.cs">
+      <Link>QueryDsl\IsNullQuery.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\QueryDsl\PolygonSearchQuery.cs">
       <Link>QueryDsl\PolygonSearchQuery.cs</Link>
