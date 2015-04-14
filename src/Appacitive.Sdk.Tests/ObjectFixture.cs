@@ -14,6 +14,23 @@ namespace Appacitive.Sdk.Tests
     {
 
         [TestMethod]
+        public async Task AggregateGetTest()
+        {
+            var objA = new APObject("object");
+            objA.Set("decimalfield", 100.0m);
+            var root = new APObject("object");
+            root.Set("decimalfield", 50m);
+            await APConnection
+                .New("sibling")
+                .FromNewObject("object", root)
+                .ToNewObject("object", objA)
+                .SaveAsync();
+            await Task.Delay(5000);
+            var rootCopy = await APObjects.GetAsync("object", root.Id);
+            Assert.AreEqual(100.0m, rootCopy.GetAggregate("decimal_aggregate"));
+        }
+
+        [TestMethod]
         public async Task FindObjectsWithInQueryForAttributeTest()
         {
             var value = Unique.String;
