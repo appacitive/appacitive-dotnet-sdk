@@ -21,6 +21,11 @@ namespace Appacitive.Sdk.Internal
             return new IsNullQuery(this.Field);
         }
 
+        public IQuery IsNotNull()
+        {
+            return new IsNotNullQuery(this.Field);
+        }
+
         public IQuery IsIn(IEnumerable<string> values)
         {
             return new InQuery(this.Field, values);
@@ -29,6 +34,16 @@ namespace Appacitive.Sdk.Internal
         public IQuery IsIn(IEnumerable<long> values)
         {
             return new InQuery(this.Field, values);
+        }
+
+        public IQuery IsNotIn(IEnumerable<string> values)
+        {
+            return new NotInQuery(this.Field, values);
+        }
+
+        public IQuery IsNotIn(IEnumerable<long> values)
+        {
+            return new NotInQuery(this.Field, values);
         }
 
         public IQuery IsEqualTo(string value)

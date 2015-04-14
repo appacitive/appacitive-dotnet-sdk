@@ -20,6 +20,11 @@ namespace Appacitive.Sdk.Internal
         {
             return new IsNullQuery(this.Field);
         }
+
+        public IQuery IsNotNull()
+        {
+            return new IsNotNullQuery(this.Field);
+        }
         
         public IQuery IsEqualTo(decimal value)
         {
