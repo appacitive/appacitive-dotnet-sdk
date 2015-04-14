@@ -8,28 +8,29 @@ namespace Appacitive.Sdk.Internal
 {
     internal class BetweenQuery : IQuery
     {
-        private BetweenQuery(FieldType type, string name, IFieldValue greaterThanEqualTo, IFieldValue lessThanEqualTo)
+        private BetweenQuery(Field field, IFieldValue greaterThanEqualTo, IFieldValue lessThanEqualTo)
         {
+            this.Field = field;
+            this.GreaterThanEqualTo = greaterThanEqualTo;
+            this.LessThanEqualTo = lessThanEqualTo;
         }
 
-        public static BetweenQuery Between(FieldType fieldType, string fieldName, decimal greaterThanEqualTo, decimal lessThanEqualTo)
+        public static BetweenQuery Between(Field field, decimal greaterThanEqualTo, decimal lessThanEqualTo)
         {
-            return new BetweenQuery(fieldType, fieldName, new PrimtiveFieldValue(greaterThanEqualTo), new PrimtiveFieldValue(lessThanEqualTo));
+            return new BetweenQuery(field, new PrimtiveFieldValue(greaterThanEqualTo), new PrimtiveFieldValue(lessThanEqualTo));
         }
 
-        public static BetweenQuery Between(FieldType fieldType, string fieldName, long greaterThanEqualTo, long lessThanEqualTo)
+        public static BetweenQuery Between(Field field, long greaterThanEqualTo, long lessThanEqualTo)
         {
-            return new BetweenQuery(fieldType, fieldName, new PrimtiveFieldValue(greaterThanEqualTo), new PrimtiveFieldValue(lessThanEqualTo));
+            return new BetweenQuery(field, new PrimtiveFieldValue(greaterThanEqualTo), new PrimtiveFieldValue(lessThanEqualTo));
         }
 
-        public static BetweenQuery Between(FieldType fieldType, string fieldName, DateTime greaterThanEqualTo, DateTime lessThanEqualTo)
+        public static BetweenQuery Between(Field field, DateTime greaterThanEqualTo, DateTime lessThanEqualTo)
         {
-            return new BetweenQuery(fieldType, fieldName, new PrimtiveFieldValue(greaterThanEqualTo), new PrimtiveFieldValue(lessThanEqualTo));
+            return new BetweenQuery(field, new PrimtiveFieldValue(greaterThanEqualTo), new PrimtiveFieldValue(lessThanEqualTo));
         }
 
-        public string Field { get; set; }
-
-        public FieldType FieldType { get; set; }
+        public Field Field { get; set; }
 
         public string Operator { get; set; }
 
@@ -40,27 +41,13 @@ namespace Appacitive.Sdk.Internal
         public string AsString()
         {
             //*last_read_timestamp between (datetime(‘2012-04-10:00:00:00.0000000z’),datetime(‘2012-05-10:00:00:00.0000000z’))
-            return string.Format("{0}{1} betweeb ({2},{3})",
-                this.GetPrefix(),
-                this.Field,
+            return string.Format("{0} between ({1},{2})",
+                this.Field.ToString(),
                 this.GreaterThanEqualTo.GetStringValue(),
                 this.LessThanEqualTo.GetStringValue());
         }
 
-        // Move this to extension method
-        private string GetPrefix()
-        {
-            switch (this.FieldType)
-            {
-                case FieldType.Property:
-                    return "*";
-                case FieldType.Attribute:
-                    return "@";
-                case FieldType.Aggregate:
-                    return "$";
-                default: throw new Exception("Unsuported field type.");
-            }
-        }
+        
 
         public override string ToString()
         {

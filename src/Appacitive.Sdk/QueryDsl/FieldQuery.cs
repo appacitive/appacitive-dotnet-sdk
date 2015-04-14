@@ -19,112 +19,108 @@ namespace Appacitive.Sdk.Internal
             public static readonly string Match = "match";
         }
 
-        public static FieldQuery IsEqualTo(FieldType type, string name, string value)
+        public static FieldQuery IsEqualTo(Field field, string value)
         {
-            return new FieldQuery() { Field = name, FieldType = type, Value = new PrimtiveFieldValue(value), Operator = Operators.IsEqualTo };
+            return new FieldQuery() { Field = field, Value = new PrimtiveFieldValue(value), Operator = Operators.IsEqualTo };
         }
 
-        public static FieldQuery IsEqualTo(FieldType type, string name, long value)
+        public static FieldQuery IsEqualTo(Field field, long value)
         {
-            return new FieldQuery() { Field = name, FieldType = type, Value = new PrimtiveFieldValue(value), Operator = Operators.IsEqualTo };
+            return new FieldQuery() { Field = field, Value = new PrimtiveFieldValue(value), Operator = Operators.IsEqualTo };
         }
 
-        public static FieldQuery IsEqualTo(FieldType type, string name, decimal value)
+        public static FieldQuery IsEqualTo(Field field, decimal value)
         {
-            return new FieldQuery() { Field = name, FieldType = type, Value = new PrimtiveFieldValue(value), Operator = Operators.IsEqualTo };
+            return new FieldQuery() { Field = field, Value = new PrimtiveFieldValue(value), Operator = Operators.IsEqualTo };
         }
 
-        public static FieldQuery IsEqualTo(FieldType type, string name, bool value)
+        public static FieldQuery IsEqualTo(Field field, bool value)
         {
-            return new FieldQuery() { Field = name, FieldType = type, Value = new PrimtiveFieldValue(value), Operator = Operators.IsEqualTo };
+            return new FieldQuery() { Field = field, Value = new PrimtiveFieldValue(value), Operator = Operators.IsEqualTo };
         }
 
-        public static FieldQuery IsEqualTo(FieldType type, string name, DateTime value)
+        public static FieldQuery IsEqualTo(Field field, DateTime value)
         {
-            return new FieldQuery() { Field = name, FieldType = type, Value = new PrimtiveFieldValue(value), Operator = Operators.IsEqualTo };
+            return new FieldQuery() { Field = field, Value = new PrimtiveFieldValue(value), Operator = Operators.IsEqualTo };
         }
 
-        public static IQuery IsGreaterThan(FieldType type, string name, decimal value)
+        public static IQuery IsGreaterThan(Field field, decimal value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThan, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsGreaterThan, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsGreaterThan(FieldType type, string name, long value)
+        public static IQuery IsGreaterThan(Field field, long value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThan, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsGreaterThan, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsGreaterThan(FieldType type, string name, DateTime value)
+        public static IQuery IsGreaterThan(Field field, DateTime value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThan, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsGreaterThan, Value = new PrimtiveFieldValue(value) };
         }
 
-        
-        public static IQuery IsGreaterThanEqualTo(FieldType type, string name, long value)
+
+        public static IQuery IsGreaterThanEqualTo(Field field, long value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThanEqualTo, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsGreaterThanEqualTo, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsGreaterThanEqualTo(FieldType type, string name, decimal value)
+        public static IQuery IsGreaterThanEqualTo(Field field, decimal value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThanEqualTo, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsGreaterThanEqualTo, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsGreaterThanEqualTo(FieldType type, string name, DateTime value)
+        public static IQuery IsGreaterThanEqualTo(Field field, DateTime value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsGreaterThanEqualTo, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsGreaterThanEqualTo, Value = new PrimtiveFieldValue(value) };
         }
 
-        
-
-        public static IQuery IsLessThan(FieldType type, string name, long value)
+        public static IQuery IsLessThan(Field field, long value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThan, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsLessThan, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsLessThan(FieldType type, string name, decimal value)
+        public static IQuery IsLessThan(Field field, decimal value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThan, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsLessThan, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsLessThan(FieldType type, string name, DateTime value)
+        public static IQuery IsLessThan(Field field, DateTime value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThan, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsLessThan, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsLessThanEqualTo(FieldType type, string name, long value)
+        public static IQuery IsLessThanEqualTo(Field field, long value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThanEqualTo, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsLessThanEqualTo, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsLessThanEqualTo(FieldType type, string name, decimal value)
+        public static IQuery IsLessThanEqualTo(Field field, decimal value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThanEqualTo, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsLessThanEqualTo, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery IsLessThanEqualTo(FieldType type, string name, DateTime value)
+        public static IQuery IsLessThanEqualTo(Field field, DateTime value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.IsLessThanEqualTo, Value = new PrimtiveFieldValue(value) };
+            return new FieldQuery { Field = field, Operator = Operators.IsLessThanEqualTo, Value = new PrimtiveFieldValue(value) };
         }
 
-        public static IQuery Like(FieldType type, string name, string value)
+        public static IQuery Like(Field field, string value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.Like, Value = new PrimtiveFieldValue("*" + value + "*") };
+            return new FieldQuery { Field = field, Operator = Operators.Like, Value = new PrimtiveFieldValue("*" + value + "*") };
         }
 
-        public static IQuery StartsWith(FieldType type, string name, string value)
+        public static IQuery StartsWith(Field field, string value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.Like, Value = new PrimtiveFieldValue(value + "*") };
+            return new FieldQuery { Field = field, Operator = Operators.Like, Value = new PrimtiveFieldValue(value + "*") };
         }
 
-        public static IQuery EndsWith(FieldType type, string name, string value)
+        public static IQuery EndsWith(Field field, string value)
         {
-            return new FieldQuery { FieldType = type, Field = name, Operator = Operators.Like, Value = new PrimtiveFieldValue("*" + value) };
+            return new FieldQuery { Field = field, Operator = Operators.Like, Value = new PrimtiveFieldValue("*" + value) };
         }
 
-        public string Field { get; set; }
-
-        public FieldType FieldType { get; set; }
+        public Field Field { get; set; }
 
         public string Operator { get; set; }
 
@@ -137,32 +133,17 @@ namespace Appacitive.Sdk.Internal
 
 
 
-        private string GetPrefix()
-        {
-            switch (this.FieldType)
-            {
-                case FieldType.Property:
-                    return "*";
-                case FieldType.Attribute:
-                    return "@";
-                case FieldType.Aggregate:
-                    return "$";
-                default: throw new Exception("Unsuported field type.");
-            }
-        }
-
         public string AsString()
         {
-            return string.Format("{0}{1} {2} {3}",
-                this.GetPrefix(),
-                this.Field.ToLower(),
+            return string.Format("{0} {1} {2}",
+                this.Field.ToString(),
                 this.Operator,
                 this.Value.GetStringValue());
         }
 
-        internal static IQuery FreeTextMatches(Sdk.FieldType fieldType, string name, string freeTextExpression)
+        internal static IQuery FreeTextMatches(Field field, string freeTextExpression)
         {
-            return new FieldQuery { FieldType = fieldType, Field = name, Operator = Operators.Match, Value = new PrimtiveFieldValue(freeTextExpression) };
+            return new FieldQuery { Field = field, Operator = Operators.Match, Value = new PrimtiveFieldValue(freeTextExpression) };
         }
     }
 }
