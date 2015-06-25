@@ -178,9 +178,12 @@
     <Compile Include="QueryDsl\AttributeExpression.cs" />
     <Compile Include="QueryDsl\BetweenQuery.cs" />
     <Compile Include="QueryDsl\BooleanOperator.cs" />
+    <Compile Include="QueryDsl\Field.cs" />
     <Compile Include="QueryDsl\FieldQuery.cs" />
     <Compile Include="QueryDsl\IFieldValue.cs" />
+    <Compile Include="QueryDsl\InQuery.cs" />
     <Compile Include="QueryDsl\IQuery.cs" />
+    <Compile Include="QueryDsl\IsNullQuery.cs" />
     <Compile Include="QueryDsl\PolygonSearchQuery.cs" />
     <Compile Include="QueryDsl\PrimitiveFieldValue.cs" />
     <Compile Include="QueryDsl\PropertyExpression.cs" />

@@ -18,12 +18,17 @@ namespace Appacitive.Sdk
             else
                 this.Value = o.ToString();
         }
-
+    
         public string Value { get; private set; }
 
         public string GetStringValue()
         {
             return this.Value;
+        }
+
+        public override string ToString()
+        {
+            return this.GetStringValue();
         }
     }
 }

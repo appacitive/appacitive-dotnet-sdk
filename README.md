@@ -2,6 +2,9 @@
 .NET SDK for appacitive
 =====================
 
+[![Build status](https://ci.appveyor.com/api/projects/status/4a862ngsh8m8nxpy?svg=true)](https://ci.appveyor.com/project/sirius17/appacitive-dotnet-sdk)
+
+
 This open source library allows you to integrate applications built using Microsoft .NET or Mono with the Appacitive platform.
 To learn more about the Appacitive platform, please visit [www.appacitive.com][1].
 
