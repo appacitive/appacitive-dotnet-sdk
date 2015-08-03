@@ -62,14 +62,18 @@ namespace Appacitive.Sdk.WindowsPhone7
 
             var response = await request.GetResponseAsync();
             byte[] responseData = null;
-            using (var responseStream = response.GetResponseStream())
+            using (response)
             {
-                using (var memStream = new MemoryStream())
+                using (var responseStream = response.GetResponseStream())
                 {
-                    await responseStream.CopyToAsync(memStream);
-                    responseData = memStream.ToArray();
+                    using (var memStream = new MemoryStream())
+                    {
+                        await responseStream.CopyToAsync(memStream);
+                        responseData = memStream.ToArray();
+                    }
                 }
             }
+            
             return responseData;
 
         }

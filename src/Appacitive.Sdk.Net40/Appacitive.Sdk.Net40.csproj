@@ -735,8 +735,14 @@
     <Compile Include="..\Appacitive.Sdk\QueryDsl\IQuery.cs">
       <Link>QueryDsl\IQuery.cs</Link>
     </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\IsNotNullQuery.cs">
+      <Link>QueryDsl\IsNotNullQuery.cs</Link>
+    </Compile>
     <Compile Include="..\Appacitive.Sdk\QueryDsl\IsNullQuery.cs">
       <Link>QueryDsl\IsNullQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Appacitive.Sdk\QueryDsl\NotInQuery.cs">
+      <Link>QueryDsl\NotInQuery.cs</Link>
     </Compile>
     <Compile Include="..\Appacitive.Sdk\QueryDsl\PolygonSearchQuery.cs">
       <Link>QueryDsl\PolygonSearchQuery.cs</Link>

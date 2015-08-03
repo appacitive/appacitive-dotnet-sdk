@@ -28,8 +28,8 @@ namespace Appacitive.Sdk.Services
                 return null;
             var instance = BuildNewInstance(json, objectType);
             EntityParser.ReadJson(instance, json, serializer);
-            // The only field only available in ap object is acl.
-            AclParser.ReadAcl(instance, json, serializer);
+            // The only field only available in ap object is acl and aggregates.
+            ObjectParser.ReadObject(instance, json, serializer);
             // Read any type specific fields
             if (instance is APUser)
                 UserParser.ReadJson(instance as APUser, json);
@@ -267,6 +267,25 @@ namespace Appacitive.Sdk.Services
                 writer.WriteEndObject();
             });
             writer.WriteEndArray();
+        }
+    }
+
+    internal static class ObjectParser
+    {
+
+        internal static void ReadObject(APObject instance, JObject json, JsonSerializer serializer)
+        {
+            // Parse acls
+            AclParser.ReadAcl(instance, json, serializer);
+            // Parse aggregates
+            var aggregates = json.Properties().Where(p => p.Name.StartsWith("$") == true).ToList();
+            foreach (var aggregate in aggregates)
+            {
+                JToken all;
+                var value = aggregate.Value as JObject;
+                if (value.TryGetValue("all", out all) == true)
+                    instance.Aggregates[aggregate.Name.Substring(1)] = decimal.Parse(all.ToString());
+            }
         }
     }
 

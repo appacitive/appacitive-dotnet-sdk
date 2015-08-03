@@ -24,6 +24,7 @@ namespace Appacitive.Sdk
         {
             this.Acl = new Acl();
             this.Acl.SetInternal(existing.Acl.Claims);
+            this.Aggregates = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -33,6 +34,7 @@ namespace Appacitive.Sdk
         public APObject(string type) : base(type)
         {
             this.Acl = new Acl();
+            this.Aggregates = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -45,6 +47,7 @@ namespace Appacitive.Sdk
             : base(type, id)
         {
             this.Acl = new Acl();
+            this.Aggregates = new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase);
         }
 
 
@@ -78,6 +81,15 @@ namespace Appacitive.Sdk
             return this;
         }
 
+        internal Dictionary<string, decimal> Aggregates { get; private set; }
+        public decimal GetAggregate(string name)
+        {
+            decimal value;
+            if (this.Aggregates.TryGetValue(name, out value) == true)
+                return value;
+            else
+                throw new AppacitiveRuntimeException("No aggregate found with the given name.");
+        }
 
         internal IObjectUpdateRequest CreateUpdateRequest(int specificRevision, ApiOptions options = null)
         {

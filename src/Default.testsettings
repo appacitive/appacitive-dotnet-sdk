@@ -4,7 +4,7 @@
   <Deployment>
     <DeploymentItem filename="Appacitive.Sdk.Tests\logo.png" />
   </Deployment>
-  <Execution>
+  <Execution hostProcessPlatform="MSIL" parallelTestCount="5">
     <TestTypeSpecific>
       <UnitTestRunConfig testTypeId="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b">
         <AssemblyResolution>

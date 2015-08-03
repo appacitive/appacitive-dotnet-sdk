@@ -11,49 +11,54 @@ namespace Appacitive.Sdk.Internal
     {
         internal AggregateExpression(string name)
         {
-            this.Name = name;
+            this.Field = Field.Aggregate(name);
         }
 
-        public string Name { get; private set; }
+        public Field Field { get; private set; }
 
         public IQuery IsNull()
         {
-            return new IsNullQuery(Field.Aggregate(this.Name));
+            return new IsNullQuery(this.Field);
+        }
+
+        public IQuery IsNotNull()
+        {
+            return new IsNotNullQuery(this.Field);
         }
         
         public IQuery IsEqualTo(decimal value)
         {
-            return FieldQuery.IsEqualTo(FieldType.Aggregate, this.Name, value);
+            return FieldQuery.IsEqualTo( this.Field, value);
         }
 
         public IQuery IsGreaterThan(decimal value)
         {
-            return FieldQuery.IsGreaterThan(FieldType.Aggregate, this.Name, value);
+            return FieldQuery.IsGreaterThan(this.Field, value);
         }
 
         public IQuery IsGreaterThanEqualTo(decimal value)
         {
-            return FieldQuery.IsGreaterThanEqualTo(FieldType.Aggregate, this.Name, value);
+            return FieldQuery.IsGreaterThanEqualTo(this.Field, value);
         }
 
         public IQuery IsLessThan(decimal value)
         {
-            return FieldQuery.IsLessThan(FieldType.Aggregate, this.Name, value);
+            return FieldQuery.IsLessThan(this.Field, value);
         }
 
         public IQuery IsLessThanEqualTo(decimal value)
         {
-            return FieldQuery.IsLessThanEqualTo(FieldType.Aggregate, this.Name, value);
+            return FieldQuery.IsLessThanEqualTo(this.Field, value);
         }
 
         public IQuery Between(decimal before, decimal after)
         {
-            return BetweenQuery.Between(FieldType.Aggregate, this.Name, before, after);
+            return BetweenQuery.Between(this.Field, before, after);
         }
 
         public IQuery Between(long before, long after)
         {
-            return BetweenQuery.Between(FieldType.Aggregate, this.Name, before, after);
+            return BetweenQuery.Between(this.Field, before, after);
         }
     }
 }
