@@ -59,7 +59,7 @@ namespace Appacitive.Sdk.Tests
                 .FromNewObject("object", root)
                 .ToNewObject("object", objA)
                 .SaveAsync();
-            await Task.Delay(5000);
+            await Task.Delay(20000);
             var rootCopy = await APObjects.GetAsync("object", root.Id);
             Assert.AreEqual(100.0m, rootCopy.GetAggregate("decimal_aggregate"));
         }
