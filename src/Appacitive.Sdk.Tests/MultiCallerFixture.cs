@@ -30,12 +30,12 @@ namespace Appacitive.Sdk.Tests
             existing.Set("textfield", Guid.NewGuid().ToString());
             existingConn.SetAttribute("testAttr", Guid.NewGuid().ToString());
             APBatch batch = new APBatch();
-            batch.AddObjectToCreate(newObj);
-            batch.AddObjectToUpdate(existing.Id, existing);
-            batch.AddConnectionToCreate(newConn);
-            batch.AddConnectionToUpdate(existingConn.Id, existingConn);
-            batch.AddObjectToDelete("object", objToBeDeleted.Id);
-            batch.AddConnectionToDelete(toBeDeletedConn.Type, toBeDeletedConn.Id);
+            batch.SaveObject(newObj);
+            batch.SaveObject(existing);
+            batch.SaveConnection(newConn);
+            batch.SaveConnection(existingConn);
+            batch.DeleteObject(objToBeDeleted);
+            batch.DeleteConnection(toBeDeletedConn);
             await batch.ExecuteAsync();
 
             Assert.AreEqual(1, batch.CreatedObjects.Count());
@@ -53,7 +53,7 @@ namespace Appacitive.Sdk.Tests
         {
             var newObj = ObjectHelper.NewInstance();
             APBatch batch = new APBatch();
-            batch.AddObjectToCreate(newObj);
+            batch.SaveObject(newObj);
             await batch.ExecuteAsync();
             try
             {
@@ -71,7 +71,7 @@ namespace Appacitive.Sdk.Tests
             var user = await UserHelper.CreateNewUserAsync();
             user.SetAttribute("IsTestUser", "true");
             APBatch batch = new APBatch();
-            batch.AddObjectToUpdate(user.Id, user);
+            batch.SaveObject(user);
             await batch.ExecuteAsync();
             Assert.AreEqual(1, batch.UpdatedObjects.Count());
         }
@@ -82,7 +82,7 @@ namespace Appacitive.Sdk.Tests
         {
             APBatch batch = new APBatch();
             var obj = ObjectHelper.NewInstance();
-            var objReference = batch.AddObjectToCreate(obj);
+            var objReference = batch.SaveObject(obj);
             var connA = new APConnection("type", "labelA", "IdA", "labelB", "idB");
             var connB = new APConnection("type", "labelA", obj, "labelB", obj);
             var connC = new APConnection("type", "labelA", obj, "labelB", "IdB");
@@ -104,7 +104,7 @@ namespace Appacitive.Sdk.Tests
         {
             APBatch batch = new APBatch();
             var obj = ObjectHelper.NewInstance();
-            var objReference = batch.AddObjectToCreate(obj);
+            var objReference = batch.SaveObject(obj);
             var conn = APConnection
                 .New("siblings")
                 .FromNewObject("object", ObjectHelper.NewInstance())
@@ -125,11 +125,11 @@ namespace Appacitive.Sdk.Tests
         {
             APBatch batch = new APBatch();
             var newObj = ObjectHelper.NewInstance();
-            var objReference = batch.AddObjectToCreate(newObj);
+            var objReference = batch.SaveObject(newObj);
             var newConn = APConnection.New("sibling")
                             .FromNewObject("object", ObjectHelper.NewInstance())
                             .ToBatchObjectReference("object", objReference);
-            var connReference = batch.AddConnectionToCreate(newConn);
+            var connReference = batch.SaveConnection(newConn);
             
             await batch.ExecuteAsync();
 
