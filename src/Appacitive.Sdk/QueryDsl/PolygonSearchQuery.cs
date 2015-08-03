@@ -8,13 +8,13 @@ namespace Appacitive.Sdk.Internal
 {
     internal class PolygonSearchQuery : IQuery
     {
-        public PolygonSearchQuery(string fieldName, IEnumerable<Geocode> points)
+        public PolygonSearchQuery(Field field, IEnumerable<Geocode> points)
         {
-            this.Field = fieldName;
+            this.Field = field;
             this.Points = new List<Geocode>(points);
         }
 
-        public string Field { get; set; }
+        public Field Field { get; set; }
 
         public IEnumerable<Geocode> Points { get; private set; }
 
@@ -37,8 +37,8 @@ namespace Appacitive.Sdk.Internal
 
         public string AsString()
         {
-            return string.Format("*{0} within_polygon {1}", // 0,0 | 10,0 | 0,10",
-                this.Field,
+            return string.Format("{0} within_polygon {1}", // 0,0 | 10,0 | 0,10",
+                this.Field.ToString(),
                 this.GetPipeSeparatedList(this.Points));
         }
     }

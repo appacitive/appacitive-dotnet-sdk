@@ -12,19 +12,59 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class ObjectFixture
     {
-
         [TestMethod]
-        public async Task FindObjectsWithInQueryForAttributeTest()
+        public async Task PropertyNotInStringTest()
         {
             var value = Unique.String;
-            var queryValues = new[] { Unique.String, value, Unique.String, Unique.String };
             var obj = new APObject("object");
-            obj.SetAttribute("attr1", value);
-            obj = await ObjectHelper.CreateNewAsync(obj);
-            var results = await APObjects.FindAllAsync("object", Query.Attribute("attr1").IsIn(queryValues), sortOrder: SortOrder.Descending, orderBy: "__id", pageSize: 5);
-            Assert.IsTrue(results.Count == 1);
-            Assert.IsTrue(results.Single().Id == obj.Id);
+            obj.Set("stringfield", value);
+            await obj.SaveAsync();
+            var objects = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsNotIn(new[] { Unique.String }), orderBy: "__id", sortOrder: SortOrder.Descending, pageSize: 1);
+            Assert.AreEqual(obj.Id, objects.Single().Id);
+            objects = await APObjects.FindAllAsync("object", Query.Property("stringfield").IsNotIn(new [] { value }), orderBy: "__id", sortOrder: SortOrder.Descending, pageSize: 1);
+            Assert.AreNotEqual(obj.Id, objects.Single().Id);
         }
+
+        [TestMethod]
+        public async Task PropertyNotInIntegerTest()
+        {
+            var value = DateTime.UtcNow.Ticks;
+            var obj = new APObject("object");
+            obj.Set("intfield", value);
+            await obj.SaveAsync();
+            var objects = await APObjects.FindAllAsync("object", Query.Property("intfield").IsNotIn(new[] { 100L }), orderBy: "__id", sortOrder: SortOrder.Descending, pageSize: 1);
+            Assert.AreEqual(obj.Id, objects.Single().Id);
+            objects = await APObjects.FindAllAsync("object", Query.Property("intfield").IsNotIn(new[] { value }), orderBy: "__id", sortOrder: SortOrder.Descending, pageSize: 1);
+            Assert.AreNotEqual(obj.Id, objects.Single().Id);
+        }
+
+
+        [TestMethod]
+        public async Task IsNotNullQueryTest()
+        {
+            var obj = await ObjectHelper.CreateNewAsync();
+            var objects = await APObjects.FindAllAsync("object", Query.Property("intfield").IsNotNull(), orderBy: "__id", sortOrder: SortOrder.Descending, pageSize: 1);
+            Assert.AreEqual(obj.Id, objects.Single().Id);
+        }
+
+        [TestMethod]
+        public async Task AggregateGetTest()
+        {
+            var objA = new APObject("object");
+            objA.Set("decimalfield", 100.0m);
+            var root = new APObject("object");
+            root.Set("decimalfield", 50m);
+            await APConnection
+                .New("sibling")
+                .FromNewObject("object", root)
+                .ToNewObject("object", objA)
+                .SaveAsync();
+            await Task.Delay(20000);
+            var rootCopy = await APObjects.GetAsync("object", root.Id);
+            Assert.AreEqual(100.0m, rootCopy.GetAggregate("decimal_aggregate"));
+        }
+
+        
 
         [TestMethod]
         public async Task FindObjectsWithInQueryTest()

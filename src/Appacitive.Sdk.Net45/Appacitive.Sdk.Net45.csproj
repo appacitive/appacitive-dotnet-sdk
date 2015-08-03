@@ -51,6 +51,7 @@
     <Compile Include="AppContext.cs" />
     <Compile Include="Aspnet\AspnetPlatform.cs" />
     <Compile Include="Aspnet\AspnetApplicationState.cs" />
+    <Compile Include="HttpClientConnector.cs" />
     <Compile Include="CustomWebClient.cs">
       <SubType>Component</SubType>
     </Compile>

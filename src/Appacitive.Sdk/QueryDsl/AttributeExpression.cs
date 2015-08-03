@@ -11,44 +11,44 @@ namespace Appacitive.Sdk.Internal
     {
         internal AttributeExpression(string name)
         {
-            this.Name = name;
+            this.Field = Field.Attribute(name);
         }
 
-        public string Name { get; private set; }
+        public Field Field { get; private set; }
 
         public IQuery IsNull()
         {
-            return new IsNullQuery(Field.Attribute(this.Name));
+            return new IsNullQuery(this.Field);
         }
 
-        public IQuery IsIn(IEnumerable<string> values)
+        public IQuery IsNotNull()
         {
-            return new InQuery(Field.Attribute(this.Name), values);
+            return new IsNotNullQuery(this.Field);
         }
 
         public IQuery IsEqualTo(string value)
         {
-            return FieldQuery.IsEqualTo(FieldType.Attribute, this.Name, value);
+            return FieldQuery.IsEqualTo(this.Field, value);
         }
 
         public IQuery Like(string value)
         {
-            return FieldQuery.Like(FieldType.Attribute, this.Name, value);
+            return FieldQuery.Like(this.Field, value);
         }
 
         public IQuery StartsWith(string value)
         {
-            return FieldQuery.StartsWith(FieldType.Attribute, this.Name, value);
+            return FieldQuery.StartsWith(this.Field, value);
         }
 
         public IQuery EndsWith(string value)
         {
-            return FieldQuery.EndsWith(FieldType.Attribute, this.Name, value);
+            return FieldQuery.EndsWith(this.Field, value);
         }
 
         public IQuery FreeTextMatches(string freeTextExpression)
         {
-            return FieldQuery.FreeTextMatches(FieldType.Attribute, this.Name, StringUtils.EscapeSingleQuotes(freeTextExpression));
+            return FieldQuery.FreeTextMatches(this.Field, StringUtils.EscapeSingleQuotes(freeTextExpression));
         }
     }
 }

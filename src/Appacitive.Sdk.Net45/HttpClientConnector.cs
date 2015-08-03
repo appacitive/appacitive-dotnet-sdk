@@ -1,7 +1,6 @@
 ﻿using Appacitive.Sdk.Internal;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -9,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace Appacitive.Sdk.Net45
 {
-    public class HttpConnector : IHttpConnector
+    public class HttpClientConnector : IHttpConnector
     {
         public static readonly HttpConnector Instance = new HttpConnector();
 
+        public HttpClient _client = new HttpClient();
+
         public async Task<byte[]> GetAsync(string url, IDictionary<string, string> headers)
-        {
+        {   
             return await ExecuteAsync("GET", url, headers, null);
         }
 
@@ -36,39 +37,38 @@ namespace Appacitive.Sdk.Net45
         private static readonly byte[] Empty = new byte[0];
         private async Task<byte[]> ExecuteAsync(string httpMethod, string url, IDictionary<string, string> headers, byte[] data)
         {
-            var request = HttpWebRequest.Create(url) as HttpWebRequest;
+            var request = new HttpRequestMessage(GetHttpMethod(httpMethod), url);
 
-            // Write the headers
+            if (data != null)
+            {
+                var contents = new ByteArrayContent(data);
+                contents.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                request.Content = contents;
+            }
             if (headers != null)
             {
                 foreach (var key in headers.Keys)
-                    request.Headers[key] = headers[key];
+                    request.Headers.Add(key, headers[key]);
             }
-            request.Method = httpMethod;
-            if (data != null)
-            {
-                using (var stream = await request.GetRequestStreamAsync())
-                {
-                    await stream.WriteAsync(data, 0, data.Length);
-                }
-            }
-
-            var response = await request.GetResponseAsync();
-            byte[] responseData = null;
-            using (response)
-            {
-                using (var responseStream = response.GetResponseStream())
-                {
-                    using (var memStream = new MemoryStream())
-                    {
-                        await responseStream.CopyToAsync(memStream);
-                        responseData = memStream.ToArray();
-                    }
-                }
-            }
+            
+            HttpResponseMessage response = await _client.SendAsync(request);
+            var responseData = await response.Content.ReadAsByteArrayAsync();
             return responseData;
         }
 
-        
+        private static readonly Dictionary<string, HttpMethod> HttpMethods = new Dictionary<string, HttpMethod>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "GET", HttpMethod.Get },
+            { "POST", HttpMethod.Post },
+            { "PUT", HttpMethod.Put },
+            { "DELETE", HttpMethod.Delete },
+            { "HEAD", HttpMethod.Head },
+            { "OPTIONS", HttpMethod.Options },
+        };
+
+        private HttpMethod GetHttpMethod(string httpMethod)
+        {
+            return HttpMethods[httpMethod];
+        }
     }
 }

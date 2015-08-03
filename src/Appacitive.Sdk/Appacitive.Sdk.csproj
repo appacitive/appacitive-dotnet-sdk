@@ -178,6 +178,8 @@
     <Compile Include="QueryDsl\AttributeExpression.cs" />
     <Compile Include="QueryDsl\BetweenQuery.cs" />
     <Compile Include="QueryDsl\BooleanOperator.cs" />
+    <Compile Include="QueryDsl\NotInQuery.cs" />
+    <Compile Include="QueryDsl\IsNotNullQuery.cs" />
     <Compile Include="QueryDsl\Field.cs" />
     <Compile Include="QueryDsl\FieldQuery.cs" />
     <Compile Include="QueryDsl\IFieldValue.cs" />
