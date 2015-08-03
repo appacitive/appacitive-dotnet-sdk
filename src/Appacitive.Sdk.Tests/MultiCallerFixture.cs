@@ -8,6 +8,84 @@ namespace Appacitive.Sdk.Tests
     [TestClass]
     public class MultiCallerFixture
     {
+
+        [Ignore]
+        [TestMethod]
+        public async Task DeleteObjectsAndConnectionsSeparatelyTest()
+        {
+            // Create 10 new connections and delete them using multicaller.
+            var tasks = Enumerable.Range(1, 2).Select(x => CreateNewConnection()).ToArray();
+            await Task.WhenAll(tasks);
+            var conns = tasks
+                                        .Select(x => x.Result)
+                                        .ToList();
+            var objectTasks = conns
+                                        .SelectMany(c => c.Endpoints.ToArray())
+                                        .Select(x => x.GetObjectAsync());
+            await Task.WhenAll(objectTasks);
+            var objects = objectTasks.Select(t => t.Result).ToList();
+            APBatch batch = new APBatch();
+            objects.ForEach(x => batch.DeleteObject(x, false));
+            conns.ForEach(c => batch.DeleteConnection(c));
+            // Should delete all 4 records.
+            await batch.ExecuteAsync();
+            var results = await APObjects.FindAllAsync("object", Query.Property("__id").IsIn(objects.Select(x => x.Id)));
+            // Should return zero.. but actuall returns all 4.
+            Assert.IsTrue(results.Count == 0);
+        }
+
+        [Ignore]
+        [TestMethod]
+        public async Task DeleteConnectedObjectsTest()
+        {
+            // Create 10 new connections and delete them using multicaller.
+            var tasks = Enumerable.Range(1, 2).Select(x => CreateNewConnection()).ToArray();
+            await Task.WhenAll(tasks);
+            var objectTasks = tasks
+                                        .Select(x => x.Result)
+                                        .SelectMany(c => c.Endpoints.ToArray())
+                                        .Select(x => x.GetObjectAsync());
+            await Task.WhenAll(objectTasks);
+            var objects = objectTasks.Select(t => t.Result).ToList();
+            APBatch batch = new APBatch();
+            objects.ForEach(x => batch.DeleteObject(x, true));
+            // Should delete all 4 records.
+            await batch.ExecuteAsync();
+            var results = await APObjects.FindAllAsync("object", Query.Property("__id").IsIn(objects.Select(x => x.Id)));
+            // Should return zero.. but actuall returns 3.
+            Assert.IsTrue(results.Count == 0);
+        }
+
+        private async Task<APConnection> CreateNewConnection()
+        {
+            APConnection conn = APConnection
+                                                    .New("sibling")
+                                                    .FromNewObject("object", ObjectHelper.NewInstance())
+                                                    .ToNewObject("object", ObjectHelper.NewInstance());
+            await conn.SaveAsync();
+            Assert.IsTrue(string.IsNullOrWhiteSpace(conn.Id) == false);
+            Console.WriteLine("Created connection with id: {0}", conn.Id);
+            return conn;
+        }
+
+        [Ignore]
+        [TestMethod]
+        public async Task DeleteDisconnectedObjectsTest()
+        {
+            // Create 10 new connections and delete them using multicaller.
+            var tasks = Enumerable.Range(1, 2).Select(x => ObjectHelper.CreateNewAsync()).ToArray();
+            await Task.WhenAll(tasks);
+            var objects = tasks
+                                        .Select(x => x.Result)
+                                        .ToList();
+            APBatch batch = new APBatch();
+            objects.ForEach(x => batch.DeleteObject(x, true));
+            await batch.ExecuteAsync();
+            var results = await APObjects.FindAllAsync("object", Query.Property("__id").IsIn(objects.Select(x => x.Id)));
+            Assert.IsTrue(results.Count == 0);
+        }
+
+
         [TestMethod]
         public async Task AllMultiCallerOperationsTest()
         {
