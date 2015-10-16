@@ -20,6 +20,11 @@ namespace Appacitive.Sdk.Internal
             this.Field = field;
         }
 
+        public override string ToString()
+        {
+            return this.AsString();
+        }
+
         public string AsString()
         {
             return string.Format("{0} in {1}",

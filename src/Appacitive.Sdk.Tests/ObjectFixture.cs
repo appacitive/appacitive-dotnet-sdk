@@ -279,8 +279,8 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(string.IsNullOrWhiteSpace(saved.Id) == false);
             Assert.IsTrue(saved.Type == "object");
             Assert.IsTrue(saved.Revision == 1);
-            Assert.IsTrue(saved.CreatedAt.Subtract(DateTime.Now).Duration().Seconds < 15);
-            Assert.IsTrue(saved.LastUpdatedAt.Subtract(DateTime.Now).Duration().Seconds < 15);
+            Assert.IsTrue(saved.CreatedAt.Subtract(DateTime.Now).Duration().Seconds < 60);
+            Assert.IsTrue(saved.LastUpdatedAt.Subtract(DateTime.Now).Duration().Seconds < 60);
             Console.WriteLine("Created apObject with id {0}.", saved.Id);
         }
 
@@ -319,8 +319,8 @@ namespace Appacitive.Sdk.Tests
             Assert.IsTrue(Math.Abs(decimalField - pi) < 0.0001m );
             Assert.IsTrue(copy.Type == "object");
             Assert.IsTrue(copy.Revision == 1);
-            Assert.IsTrue(copy.CreatedAt.Subtract(DateTime.Now).Duration().Seconds < 15);
-            Assert.IsTrue(copy.LastUpdatedAt.Subtract(DateTime.Now).Duration().Seconds < 15);
+            Assert.IsTrue(copy.CreatedAt.Subtract(DateTime.Now).Duration().Seconds < 60);
+            Assert.IsTrue(copy.LastUpdatedAt.Subtract(DateTime.Now).Duration().Seconds < 60);
 
         }
 
@@ -630,6 +630,38 @@ namespace Appacitive.Sdk.Tests
             var query = Query.And(new[] 
                         {
                             Query.Property("stringfield").IsEqualTo(stringToSearch),
+                            Query.Property("intfield").IsEqualTo(10)
+                        });
+
+            // Delay for index propagation on test bench.
+            await Utilities.Delay(1500);
+            var objects = await APObjects.FindAllAsync("object", query);
+            Assert.IsNotNull(objects);
+            Assert.IsTrue(objects.Count == 1);
+            Console.WriteLine("page:{0} pageSize:{1} total: {2}", objects.PageNumber, objects.PageSize, objects.TotalRecords);
+
+        }
+
+        [TestMethod]
+        public async Task FindAllObjectsAsyncWithInNestedQueryTest()
+        {
+            // Create the object
+            dynamic apObject = new APObject("object");
+            apObject.stringfield = Unique.String;
+            apObject.intfield = 10;
+            dynamic obj = await ObjectHelper.CreateNewAsync(apObject as APObject);
+
+            dynamic apObject2 = new APObject("object");
+            apObject2.stringfield = Unique.String;
+            apObject2.intfield = 20;
+            dynamic obj2 = await ObjectHelper.CreateNewAsync(apObject2 as APObject);
+
+            // Search
+            string string1ToSearch = obj.stringfield;
+            string string2ToSearch = obj2.stringfield;
+            var query = Query.And(new[] 
+                        {
+                            Query.Property("stringfield").IsIn(new List<string>{string1ToSearch, string2ToSearch}),
                             Query.Property("intfield").IsEqualTo(10)
                         });
 
