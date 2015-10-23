@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>Appacitive</id>
-        <version>1.0.2.0</version>
+        <version>1.0.4.0</version>
         <title>Appacitive .NET SDK</title>
         <authors>Appacitive</authors>
         <owners>Appacitive</owners>
@@ -10,8 +10,9 @@
         <iconUrl>https://secure.gravatar.com/avatar/427d3a6813f7cfa60d6ce0f36085665c?s=32&amp;r=g&amp;d=retro</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Client SDK for the Appacitive platform.</description>
-        <releaseNotes>RTM Release.</releaseNotes>
-        <copyright>Copyright 2014</copyright>
+        <releaseNotes>Bug fixes:
+1. In, Not in, Is Null and Is not null queries were breaking in composite queries.</releaseNotes>
+        <copyright>Copyright 2015</copyright>
         <tags>appacitive sdk cloud wp7 wp8 api mobile platform</tags>
         <dependencies>
             <group targetFramework=".NETFramework4.0">
